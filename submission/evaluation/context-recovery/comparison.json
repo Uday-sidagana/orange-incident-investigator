@@ -1,0 +1,17 @@
+{
+  "status": "complete",
+  "cases": [
+    {
+      "id": "github-token-036",
+      "ticket_id": "312dd75b-5c86-4813-8994-f974a495ebc6",
+      "status": "needs_review",
+      "run_status": "completed",
+      "outcome": "probable_cause",
+      "top_cause": "redacted_token_relay_design",
+      "input_tokens": 55274,
+      "output_tokens": 5966,
+      "latency_seconds": 94.63943687395658,
+      "original_benchmark_result_retained": true
+    }
+  ]
+}

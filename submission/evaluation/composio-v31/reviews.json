@@ -1,0 +1,32 @@
+{
+  "sheets-discovery-039": {
+    "verdict": "accepted",
+    "notes": "Assistant validation of data v3.1: pagination diagnosis and remedy remain correct. The corrected control now records completed pagination, no more pages, and a coherent combined tool count. Current evidence still does not prove every blocked operation shared this cause; no production change is claimed.",
+    "ticket_id": "c96ec4bc-9252-4516-a2e7-e18415306702",
+    "published": true
+  },
+  "airtable-expiry-041": {
+    "verdict": "accepted",
+    "notes": "Assistant validation of data v3.1: expired initiation remains the supported mechanism and a fresh link is the appropriate remedy. The successful ACTIVE control now records a token exchange, resolving the stale-field contradiction. Broader issuance/expiry history remains an explicit limitation.",
+    "ticket_id": "6e21eac4-0bd7-4cdd-859a-b68c3f5c45a2",
+    "published": true
+  },
+  "slack-user-043": {
+    "verdict": "accepted",
+    "notes": "Assistant validation of data v3.1: the user-scope configuration diagnosis is supported and the corrected successful control clears its error field. Targeted user-scope configuration and reconnect are appropriate; account selection is a scope caveat rather than an observed alternate cause.",
+    "ticket_id": "daf6136c-a2dc-4aec-88a4-97234f715d3a",
+    "published": true
+  },
+  "slack-redirect-046": {
+    "verdict": "accepted",
+    "notes": "Assistant validation of data v3.1: callback URI mismatch remains supported and the successful matched-URI control no longer carries the old error. Verify the actual auth-config callback rather than copying the synthetic example URI. The report should say the auth flow reports the error unless upstream emission is directly traced.",
+    "ticket_id": "10755f3b-2110-4253-8e49-ce51f9747826",
+    "published": true
+  },
+  "gmail-shape-047": {
+    "verdict": "accepted",
+    "notes": "Assistant validation of data v3.1: signed-URL versus uploaded-file-object validation is correctly diagnosed before provider execution. The successful control now clears validation_error and records provider execution. Proposed upload/serialization correction is appropriate, and no deployed fix is claimed.",
+    "ticket_id": "2c4ec441-3ca1-4af6-b448-4bd74d7a1416",
+    "published": true
+  }
+}

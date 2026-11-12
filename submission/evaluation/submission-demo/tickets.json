@@ -1,0 +1,26 @@
+[
+  {
+    "scenario_id": "gmail-001",
+    "ticket_id": "73a86fc1-17d3-4d17-a7d9-bae4cdcce447",
+    "payload": {
+      "name": "Demo Reviewer",
+      "email": "submission-demo@example.com",
+      "company": "Atlas Demo",
+      "scenario_id": "gmail-001",
+      "title": "[VIDEO REHEARSAL] Gmail send failures across tenants",
+      "description": "Send failures rose around 10:00 UTC. Customers suspect authentication; executor and auth changes occurred nearby."
+    }
+  },
+  {
+    "scenario_id": "unknown-012",
+    "ticket_id": "14a7ab29-14ed-42c8-9a29-14c3cd9f344c",
+    "payload": {
+      "name": "Demo Reviewer",
+      "email": "submission-demo@example.com",
+      "company": "Atlas Demo",
+      "scenario_id": "unknown-012",
+      "title": "[VIDEO REHEARSAL] Intermittent execution failures with missing telemetry",
+      "description": "A customer reports sporadic 502 responses; traces and metrics are unavailable."
+    }
+  }
+]

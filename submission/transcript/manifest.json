@@ -1,0 +1,25 @@
+{
+  "source_filename": "rollout-2026-11-11T23-51-49-01a1cbd8-40c1-7e33-b930-9930353e2387.jsonl",
+  "source_sha256": "8d03b27b14975eb653cda79314057a10198284babc71dd03616e2023df2ec498",
+  "source_bytes": 24159476,
+  "visible_messages": 195,
+  "by_role": {
+    "user": 49,
+    "assistant": 146
+  },
+  "tool_records": 890,
+  "last_visible_message_timestamp": "2026-11-12T20:17:02.798Z",
+  "coverage": "Persisted original response_item messages only; compaction summaries are not substituted for dialogue. No invented messages. Current active turn may not yet be complete.",
+  "exclusions": [
+    "system/developer messages",
+    "private reasoning",
+    "environment-only user messages",
+    "image binaries"
+  ],
+  "redaction": "Configured credential values and common API-token patterns, without rewriting substantive dialogue.",
+  "files": {
+    "conversation.jsonl": "2f4a0b1b15b7cd59ddb6c19f56c0c199bfaba3bbe6c5e10893b8c4e072d4672d",
+    "tool-audit.jsonl": "263808c8d834de1efaba088f2c7ae512a4f4aa59179588dc2b7c546550c2a5da",
+    "conversation.md": "5976937c601915a025b018cc0875f88ef962c15213eff62d62d3053fa036b5da"
+  }
+}

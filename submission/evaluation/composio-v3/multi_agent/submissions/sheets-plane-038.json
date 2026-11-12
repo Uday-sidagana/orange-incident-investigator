@@ -1,0 +1,526 @@
+{
+  "incident_id": "sheets-plane-038",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "sheets-plane-038",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause: Cedar's failed Google Sheets executions on MCP required an MCP-scoped Sheets connection, but only a Platform-surface connection was active. The observed request failed on connect_mcp with zero MCP connections available even though the Platform connection was active, and the controlled synthetic comparison reproduced failure in that state and success once a connect_mcp connection existed.",
+        "supporting_evidence": [
+          "ev_aefad6f5dea8",
+          "ev_45fee10ce9dc",
+          "ev_afb0d9c7104d",
+          "ev_67af2dd10c48",
+          "ev_3b897096197e"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The failing production request fields accurately reflect the connection lookup state for req-38.",
+          "The synthetic controlled comparison is representative of the observed production mechanism but does not prove every failed request in the window had the identical subtype."
+        ]
+      },
+      {
+        "description": "Secondary explanation: MCP may have been targeting a different or absent connected account identity than the one visible in Platform, so the customer experienced this as 'connected in Platform, disconnected in MCP.' This fits the missing MCP connection state but is not directly proven because no canonical account-id or connection-id selection records were supplied.",
+        "supporting_evidence": [
+          "ev_aefad6f5dea8",
+          "ev_45fee10ce9dc"
+        ],
+        "contradicting_evidence": [
+          "ev_45fee10ce9dc"
+        ],
+        "confidence": "medium",
+        "assumptions": [
+          "MCP and Platform may maintain separate connected-account inventories or explicit selection context.",
+          "No canonical identity mapping records were supplied to separate absent MCP connection from wrong MCP account selection."
+        ]
+      },
+      {
+        "description": "Lower-confidence alternative: a shared auth/grant problem such as missing grant, revoked consent, or refresh failure. Current evidence does not support this as the leading cause because the observed failure appears to occur before provider execution and another tenant succeeded against the same provider in the same window.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_aefad6f5dea8",
+          "ev_45fee10ce9dc",
+          "ev_67af2dd10c48",
+          "ev_afb0d9c7104d",
+          "ev_3b897096197e"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "If a shared Sheets credential path were failing broadly, additional canonical grant/refresh or provider-egress errors would likely be present.",
+          "An active Platform connection flag alone does not fully prove grant health for all uses, only that shared-auth failure is less consistent with this observed pre-provider 401."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry supports treating this as connection_surface_isolation first: have the customer authenticate Google Sheets through the MCP flow used by this client rather than assuming the existing Platform connection is shared.",
+      "Collect missing canonical production telemetry for failing req-38-class requests: MCP connection lookup/selection, workspace/project mapping, and any auth-service grant/refresh lineage, to distinguish surface isolation from wrong connected account or project/context mismatch. These actions are proposed only and have not been executed.",
+      "If multiple Sheets identities are possible, verify the MCP workflow is bound to the intended connected account and not only to the Platform-visible account.",
+      "Continue to monitor tenant-scoped impact for Cedar versus unaffected tenants; observed impact was substantial in Cedar and not service-wide.",
+      "Do not attribute this incident to provider outage or broad tool-executor regression based on the supplied evidence alone."
+    ],
+    "limitations": [
+      "The reproduce records are synthetic controlled observations, useful for discrimination but not independent proof of all production failures.",
+      "No canonical MCP connection lookup internals, account-id selection logs, or project/workspace boundary records were supplied, so wrong_connected_account and project-boundary subtypes cannot be fully separated.",
+      "No canonical auth-service grant/refresh or provider-egress attempt records were supplied for the failing execution, so shared credential failure remains an unverified alternative.",
+      "Empty deployment/dependency search results cannot prove absence of all relevant changes; they only limit what was observed in supplied telemetry."
+    ]
+  },
+  "ranked_cause_codes": [
+    "connection_surface_isolation",
+    "wrong_connected_account",
+    "missing_grant"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The canonical Cedar failure was a 401 on request_surface=connect_mcp while connection_surface=platform, with zero MCP connections available even though a Platform connection was active.",
+      "citations": [
+        {
+          "evidence_id": "ev_aefad6f5dea8",
+          "record_id": "sheets-plane-038:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In synthetic controlled comparison, the same request failed when MCP had zero connections and only the Platform connection was active, but succeeded when a connect_mcp connection existed while the Platform connection still remained active.",
+      "citations": [
+        {
+          "evidence_id": "ev_45fee10ce9dc",
+          "record_id": "sheets-plane-038:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_45fee10ce9dc",
+          "record_id": "sheets-plane-038:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "The observed failure is more consistent with connection availability or selection before provider execution than with a provider outage: provider API reachability was generally true, and another tenant had a same-window successful same-provider read.",
+      "citations": [
+        {
+          "evidence_id": "ev_3b897096197e",
+          "record_id": "sheets-plane-038:dependencies:0"
+        },
+        {
+          "evidence_id": "ev_67af2dd10c48",
+          "record_id": "sheets-plane-038:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact was substantial but tenant-scoped: Cedar had 585 requests with 375 failures, 375 business operations blocked, queue depth 105, and p95 latency 1400 ms, while Maple had 505 requests with 0 failures, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_afb0d9c7104d",
+          "record_id": "sheets-plane-038:metrics:0"
+        },
+        {
+          "evidence_id": "ev_afb0d9c7104d",
+          "record_id": "sheets-plane-038:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_isolation",
+      "statement": "Observed impact was tenant-isolated rather than service-wide: Maple remained healthy and completed an unrelated successful read against the same provider during the same window.",
+      "citations": [
+        {
+          "evidence_id": "ev_afb0d9c7104d",
+          "record_id": "sheets-plane-038:metrics:1"
+        },
+        {
+          "evidence_id": "ev_67af2dd10c48",
+          "record_id": "sheets-plane-038:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "account_selection_mismatch",
+      "statement": "The failed MCP request resolved against a Platform-surface connection state, which is consistent with MCP targeting a different or absent connected account/context than the one the customer sees in Platform.",
+      "citations": [
+        {
+          "evidence_id": "ev_aefad6f5dea8",
+          "record_id": "sheets-plane-038:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "The supplied evidence does not include canonical MCP connection lookup internals, account-id selection records, workspace/project boundary records, or auth grant/refresh lineage for the failing execution, so surface isolation versus account/context subtype cannot be fully separated from telemetry alone.",
+      "citations": [
+        {
+          "evidence_id": "ev_aefad6f5dea8",
+          "record_id": "sheets-plane-038:logs:0"
+        },
+        {
+          "evidence_id": "ev_45fee10ce9dc",
+          "record_id": "sheets-plane-038:reproduce:0"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "The only observed deployment record in the supplied evidence was an unrelated support-dashboard release, which does not support attributing the incident to a contemporaneous tool-executor rollout.",
+      "citations": [
+        {
+          "evidence_id": "ev_a392479ede3a",
+          "record_id": "sheets-plane-038:deployments:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "connection_surface_isolation_remediation",
+    "select_intended_connected_account",
+    "collect_missing_telemetry",
+    "monitor_provider"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_3b897096197e",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-plane-038:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_a392479ede3a",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-plane-038:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_45fee10ce9dc",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-plane-038:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "sheets_configuration",
+          "check_passed": false,
+          "toolkit": "googlesheets",
+          "status": 401,
+          "request_surface": "connect_mcp",
+          "connection_surface": "platform",
+          "connect_mcp_connection_count": 0,
+          "platform_connection_active": true
+        },
+        {
+          "record_id": "sheets-plane-038:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "sheets_configuration",
+          "check_passed": true,
+          "toolkit": "googlesheets",
+          "status": 200,
+          "request_surface": "connect_mcp",
+          "connection_surface": "connect_mcp",
+          "connect_mcp_connection_count": 1,
+          "platform_connection_active": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_67af2dd10c48",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-plane-038:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-38",
+          "toolkit": "googlesheets",
+          "status": 401,
+          "request_surface": "connect_mcp",
+          "connection_surface": "platform",
+          "connect_mcp_connection_count": 0,
+          "platform_connection_active": true
+        },
+        {
+          "record_id": "sheets-plane-038:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_afb0d9c7104d",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-plane-038:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 585,
+          "failures": 375,
+          "business_operations_blocked": 375,
+          "queue_depth": 105,
+          "p95_latency_ms": 1400
+        },
+        {
+          "record_id": "sheets-plane-038:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 505,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_aefad6f5dea8",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-plane-038:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-38",
+          "toolkit": "googlesheets",
+          "status": 401,
+          "request_surface": "connect_mcp",
+          "connection_surface": "platform",
+          "connect_mcp_connection_count": 0,
+          "platform_connection_active": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_e4c85dd3f365",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:50:00Z",
+        "end": "2026-11-12T10:30:00Z",
+        "search": "auth",
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_ecc05a57894e",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "mcp",
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_d5def1711d53",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "connection",
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_0ee702f0950a",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "googlesheets",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-plane-038:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-38",
+          "toolkit": "googlesheets",
+          "status": 401,
+          "request_surface": "connect_mcp",
+          "connection_surface": "platform",
+          "connect_mcp_connection_count": 0,
+          "platform_connection_active": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_0f8f87bf4c6d",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:50:00Z",
+        "end": "2026-11-12T10:30:00Z",
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 165.93597878701985,
+  "input_tokens": 76804,
+  "output_tokens": 9647
+}

@@ -1,0 +1,1853 @@
+{
+  "source": "Preserved local run artifacts; copied without selecting best-of retries. Credentials, if present, redacted explicitly. Historical frozen snapshots are evaluation evidence, not the current operational implementation.",
+  "files": [
+    {
+      "path": "composio-v3/WORKLOG.md",
+      "sha256": "35ea35891c1f7544397f3390853a41285c82af2728fe27bca61c40a84c0f16d7"
+    },
+    {
+      "path": "composio-v3/comparison-original.json",
+      "sha256": "7af41ca3fc63e4e3822956d52772adb981b3fa1bca1a98e9b79cb28ec168a503"
+    },
+    {
+      "path": "composio-v3/comparison-portal-text-preliminary.json",
+      "sha256": "a69256023c0d279ef14a4da3d8b2a83b5d4c0ab7c2b769acaf921bc2fc0dec00"
+    },
+    {
+      "path": "composio-v3/comparison.csv",
+      "sha256": "7a988b72c46d007f085bc38a3177293f96c352fcff4333c4eaf22cad9d17038c"
+    },
+    {
+      "path": "composio-v3/comparison.json",
+      "sha256": "5b05fc6796099c0b99f7fd265cbfed4b9b495ee4ff31b091645187ee9b022832"
+    },
+    {
+      "path": "composio-v3/context-recovery-prototype.json",
+      "sha256": "c2a6a5e57319525fc8465133b357eff2bf9746072fc9163b9e1f5228b3456783"
+    },
+    {
+      "path": "composio-v3/frozen-v30/config/slack-app-manifest.json",
+      "sha256": "22043f6f8be2579aff6cdd64334c1f227944a8e1abd1b8b298d45231cc9ed1ec"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/account-017.json",
+      "sha256": "cdc0571079bead7d2d9b71a67c132d7c7ec23d26e54cb94ff81832f81c67a58c"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/airtable-batch-042.json",
+      "sha256": "8ac39678b40053f1f9ae7a3c0dfedd7a2972faefd073cf573c8d582d63d1c324"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/airtable-expiry-041.json",
+      "sha256": "c02aed38fd1bcdd5d7b4c880b4d2a2b1311328356210f8059753f64fd5c9429b"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/allowlist-024.json",
+      "sha256": "d4e11873830337f337cfefda0324ccc3c4e6904fa6f5864b2108409839ef20fb"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/auth-002.json",
+      "sha256": "bc04b608a4b522c9943f996d5eca70c5288b83567d1fab8ad26e265a6f8c1ef7"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/body-029.json",
+      "sha256": "51818511b419c9e419fc1fb83c7a25854b6529ee5279ed8102746e04e20028e3"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/clock-025.json",
+      "sha256": "bb29990781c2c665fc379e72ad766499e6d244f7c706ba2e9d111312bfbdd861"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/conflict-032.json",
+      "sha256": "202b8d519f6eb4236c92a829445553e695e0f13606f11957d5f8ccb2bf12b338"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/cursor-010.json",
+      "sha256": "334fd1692f2502a5fb80b1f7a87394bf6616dffff0bc1c45a627c8340a6dd109"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/delivery-dedupe-051.json",
+      "sha256": "554bc83b8bac7e457607539a0fdc8a80aed69a2f92a7d0cb6c1ea4411a228254"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/dns-030.json",
+      "sha256": "2c578918712507ea6aba9cbd8c2c205eb1cd078546f9f7202bc00e3134793541"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/duplicate-011.json",
+      "sha256": "379ee6ddfd862b635e1de2ed89401231d23e97dd6d6086b2f8e2af094417c425"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/github-org-035.json",
+      "sha256": "96798e06310cb6f1b79acdd41c8b706edb384d67330204fe2d13a35ec6135a03"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/github-setup-037.json",
+      "sha256": "e973912ac109639f124a9799a529e9e01a7fc8f5ac784d2548fb31967d6e3c11"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/github-token-036.json",
+      "sha256": "e4ce1246938d42c470e6735a3d89daa9cff5687fb0f341c2fbc66830c381171b"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/gmail-001.json",
+      "sha256": "76707b7fe2294be95bb8a6946583efa714f2d5eb7b2d80d801103865bc7c36de"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/gmail-file-048.json",
+      "sha256": "c47700ec7328b468954eb0d9f9236cef6881e2d2ccf6168fc60fe137ae895391"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/gmail-shape-047.json",
+      "sha256": "121416ca962efac67699687cc80029f64126cdb13b0e8490026a130ec28b211f"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/history-028.json",
+      "sha256": "4b1b7111f3d53adeb714eb3dcf3505fe3bd3a9a177263c0ae933223b0605f42c"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/log-gap-050.json",
+      "sha256": "10831482fa8884c126be39860a7b48ee60688baeeb09a448ba8a8a0c96caa586"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/member-019.json",
+      "sha256": "815631c99d1dea52a5c85db972dd592e856d1d14cc896aa029377742bb9623c9"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/notion-access-033.json",
+      "sha256": "f2bbed49297f506d08c1367f46a7861ec2f8be313c7e43f05a8eed1b7b9b960e"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/notion-event-034.json",
+      "sha256": "82c74f9f06ca37d933e0fa941200a1a722e950e30a5f137daeb7e79cd1832ad3"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/oauth-013.json",
+      "sha256": "999d4b2c5ab628eddf95486a6b1ac1a5bc7e53fd6d2fb3c095f30d5183d5b3f2"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/payload-031.json",
+      "sha256": "6f962fa4f748c2b49d5981906b12965f13f9dccfdcdeb6d25cafdb41cf3565e4"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/policy-014.json",
+      "sha256": "3f651bac6dd6f8b03e1ad8c4074511a851bf0352e65e121bc1ba4d80d9624aca"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/polling-027.json",
+      "sha256": "7ed314392f6926bc1d2876963c19ecc44af659833e0fb769ed0e9a0159282859"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/pool-008.json",
+      "sha256": "04cb09654bc0473d58b56be013d2c9c4706bbdde995dd4ca97cd864ec2025534"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/provider-003.json",
+      "sha256": "b752ac19e56f599023f2fa7c5d8f773d717e629b698bdce93c67ab8d06cedbf4"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/quota-004.json",
+      "sha256": "8254abc46f08e3b0dad3e25c47479d4e5e9b7c810a309e66a9ea1c107d73218f"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/race-016.json",
+      "sha256": "bdba037b2a3c9844f443ad87cd000c250daa62fe2de694d6a4d3dab3d6c55e5b"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/refresh-007.json",
+      "sha256": "8c79cdb3cf2b21bdceeb275fb0c0cdd1dd82893fecd44f933d0b337d62b39abe"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/region-023.json",
+      "sha256": "f61f3803aea5767a0c8dac5a91187faa55ea70a850e985591842baea6209fdb3"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/revoked-015.json",
+      "sha256": "16c726aeff86044a6641a68116759e31cec7305692d35c7745b26752c389d0ee"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/role-018.json",
+      "sha256": "97e30a5e59dc050393dfc84cf7a969ee01793863adf63210dfb9e393d35f79fb"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/schema-020.json",
+      "sha256": "0d5d7013bb3fac0b71f704ffbc313513a8be2a4a55b69ea34e49025c54acb16b"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/secret-022.json",
+      "sha256": "2ff10997801e19acbf1d4e130b4a6bc90b39240757dff579e46018f0f259de5b"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/session-policy-049.json",
+      "sha256": "96371a9719bfaae88a4304e97298559d2150e2609e5fff850b3ff540927b7dde"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/sheets-discovery-039.json",
+      "sha256": "a19742df8882f81728db0c58b6c2cb98a377436d9c0ebe88a3028ae4ebf76d19"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/sheets-id-040.json",
+      "sha256": "070c61e059083380fddfdf603f51f6e1b47617226b4ffe15e5cbb7c81fa42143"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/sheets-plane-038.json",
+      "sha256": "2856cc8f7191a2ed1f5b54b0db7fe011c8eebf87c0df634bdd53433cfd4ac6b1"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/signature-006.json",
+      "sha256": "b1ddf2eb9021abae3b5ee71a98a7c8e49bde0f97dc8bc93c262e642d675f57df"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/slack-ingress-045.json",
+      "sha256": "a8daab238aac8b5cfcb06b400dda1001dfe7cf65290104ea3a41bc38196598b9"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/slack-plan-044.json",
+      "sha256": "d5a3efd9dfb02562c6fcb803f5bf48bb54e8a809518a00d654a61c35010ee706"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/slack-redirect-046.json",
+      "sha256": "266ee1b94a532c807726fa43bcba6dde3677708a2d6ab39ab68c519b7461d2f5"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/slack-schedule-052.json",
+      "sha256": "6eea3f8ee136c0ef801d119849075235afde3841a8500871133906056fa0515f"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/slack-user-043.json",
+      "sha256": "4f9f7ddeae40aaa1e418c7f9de49bada67307d95a3bac55913c246554c0cfe82"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/subscription-026.json",
+      "sha256": "4e4283eaba3b2c6caedd9e20a2d14cdea05fdedfa55d7d4dbc1d28153c7d42b4"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/tenant-009.json",
+      "sha256": "ad764ec1159f7601cd7289b509bdd5b192cf0fa911ac317d6612612dee9379ff"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/unknown-012.json",
+      "sha256": "179b24ac98ed7b5f45dd0b3153ffc6c6c3a16fcfb1e62646513b4a55a72aef5c"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/version-021.json",
+      "sha256": "cde445eaff02ba958c616022ffbea0acbc84275194c459f70ae0f4072bf288d3"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/incidents/webhook-005.json",
+      "sha256": "898b4f2e25104d1e3d3c8fe075e86dc7a16c906a61c37867d5d12a2c06ac5a47"
+    },
+    {
+      "path": "composio-v3/frozen-v30/data/rubric.json",
+      "sha256": "092acdd23f99fc1005146436f988568bf4e7d15bd1b35d327ddc4d689763d5e1"
+    },
+    {
+      "path": "composio-v3/frozen-v30/evaluation/dataset-v2.json",
+      "sha256": "3bfaa123f237dcf72f0250dbb1d3e8c2a1578f8f42bdb10bcb4df5275542f314"
+    },
+    {
+      "path": "composio-v3/frozen-v30/evaluation/dataset.json",
+      "sha256": "e541982d270e33c66794ad12e78c732d450aef9410dca92d767da4a5146214c5"
+    },
+    {
+      "path": "composio-v3/frozen-v30/evaluation/ground_truth.json",
+      "sha256": "799db5f7fb778a4b1f594f11fde93d0b7d88c115d2887c3087fdc8ce558db6cc"
+    },
+    {
+      "path": "composio-v3/frozen-v30/evaluation/prospective-v3.json",
+      "sha256": "4bfc815ced3d59be706e50f4c07df365f651a37ed821cdadd9300b1eaaae372e"
+    },
+    {
+      "path": "composio-v3/frozen-v30/evaluation/splits.json",
+      "sha256": "4dc92226c73070c86e4dc4fa7d7412d7c1651dd4e7700a94b2b26decb2b7abdd"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/__init__.py",
+      "sha256": "9e9c302fe4f4f07ea013fa1272aa6be8d435575bb68d4ad15437dea69804bd37"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/activity.py",
+      "sha256": "fccb253162992196146f0e270984373c029daa28d90f60a55a322b563cec2859"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/baseline.py",
+      "sha256": "3a9d0d6bff7059540c5f2f456acd914329f783f3fa1daf68ed9bd95a9c35323f"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/benchmark.py",
+      "sha256": "11c13aae2628b85d9068ab26a1d21a6b2f83e47fab24cb41984068b2ee259aaa"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/channels.py",
+      "sha256": "318aeab3cef28665480b21d6219411dde5b47ec6dffe197698b4de98f022d65d"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/cli.py",
+      "sha256": "b1e6fc634d8a3308594fb48feebb8e9c243d78d24b5d2333acfe6ea2c82c2d14"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/codex_provider.py",
+      "sha256": "8d885d8dc36254c6ce2b63ed9189433a580fc98a89fa3fa7a2013e04aca9b503"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/connection_views.py",
+      "sha256": "470c7ef5a800f01576fc931f5998374c1338a60cf9c92d6695c2435f18887562"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/context_projection.py",
+      "sha256": "4944bde1e2328a4ac5ae1a13ae48c5ebfbd422a8bd2c1b3a0bbc6d66c7668327"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/contracts.py",
+      "sha256": "50263b97919e16be08fcaff4fe69a69c8e660514d14815e916a33474dba43de4"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/demo.py",
+      "sha256": "85d66fc2d799e8aee2877c671123ec63f71906b09adecea01648227fd98b716c"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/engine.py",
+      "sha256": "3902808ba036ec014b1b8ad75aee55a777011d76b53af40ff1ee44e2b4f6599b"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/extended_diagnostics.py",
+      "sha256": "60dfae5f305843c35019ba3195262c787ce27face943f2e96f189a395cb1e18c"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/investigation.py",
+      "sha256": "c8b6b0623ac6771c913b51dccf85df16c7c093d99cf1af4143ab48598b26184f"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/llm_agents.py",
+      "sha256": "dc7399be17fe279ddfd7391fffd129683e2c7f0d45bd7520417f307037973e5b"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/models.py",
+      "sha256": "3d88e44d0eb365ccacb7ef9623397616698d4edef1e16a96502d0cd4899d905a"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/outbound.py",
+      "sha256": "285ec42a64dd07c8fe51dec61fd36f06bfd1f0e6ab99315610acfca23282d75b"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/plain.py",
+      "sha256": "ef4acd75779fe3c7f3a06a5c697ae0a0f4c1752af0c1d80f623e47d4dfd975ff"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/presentation.py",
+      "sha256": "ae7b4da1c1468b65c44f828886c654c537375b4f948d00a9b83bca4ba9b7afef"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/provider.py",
+      "sha256": "bbfccac5bbdb13d5efc4b25815361edc1f9b6440fcdf24ec6481a65e4a11f5f2"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/server.py",
+      "sha256": "aadf1a61c07b248d96bb3456c4e33761a0c301a041d510e4db67a52e2bc50f6a"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/single_agent.py",
+      "sha256": "7da4e2d9cad0dd86131bbd8b59724d064dd2b09ee5ccf26e559a3202888833f7"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/tickets.py",
+      "sha256": "92af81b723d6fa51db2285070b91f034e3581e7e6d6fdb574c2a713408c3cd7d"
+    },
+    {
+      "path": "composio-v3/frozen-v30/src/orange_incident/tools.py",
+      "sha256": "10a5d1e3460d2db77c5e560e2d80ea2a259d1902fbb5048c44cf393925cf8bc8"
+    },
+    {
+      "path": "composio-v3/integrity-verification.json",
+      "sha256": "bd82c3d1883204f17cee142dbf7dfc6e2ebe35e0575da3013691435b5d8a34a0"
+    },
+    {
+      "path": "composio-v3/manifest.json",
+      "sha256": "c43a781624ac2d45a02f8addf108cef82a76c2d7c789d02b9130d9958a1bc683"
+    },
+    {
+      "path": "composio-v3/model-profile-before.json",
+      "sha256": "9ba6a9331834d33425e35f6bc1ba0ffa79e211b3b6d5e239001909e69f37b63d"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-batch-042/agent-log.json",
+      "sha256": "11eebd46f311681b1f423ffaf3c4199d86a1c5eeb63b9d6b9b1547ec4cbd52e3"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-batch-042/first-attempt-traces/events.jsonl",
+      "sha256": "28251be9c2de5ad6dcdd27f2b34f904370c133eeae8dcac49ef794671d158c9c"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-batch-042/first-attempt-traces/model-calls.json",
+      "sha256": "f634e741a21aaefb9817678ba256fa1199e8ff44d2b5f0e9160075d7b63df99e"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-batch-042/first-attempt-traces/workflow.json",
+      "sha256": "f8fa94e436f901e30a1eddb4ecba31a9a71f4466c64535047f34fc2b80de797c"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-batch-042/ticket.json",
+      "sha256": "548231bf3cb60bc7c75b4926252497f3044bcd32586ef8b45838b4a1f877bfa8"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-expiry-041/agent-log.json",
+      "sha256": "df304177f94567c22591bcac1448c13c435dae001a736c7e003c5bf9d4f009cd"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-expiry-041/first-attempt-traces/events.jsonl",
+      "sha256": "f8d2e1ad266a838473d1011c540bb303e5fab1b9b3163bfa5475889e6d730f5f"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-expiry-041/first-attempt-traces/model-calls.json",
+      "sha256": "e7152f5d9c16a55a4b1d8f749fd613c0212fa67630f26c44eadb2d3200753364"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-expiry-041/first-attempt-traces/workflow.json",
+      "sha256": "e47e4c3f286df541c3fedcd502b01971e61a6456e96c5a4ee523e485d2acf868"
+    },
+    {
+      "path": "composio-v3/multi_agent/airtable-expiry-041/ticket.json",
+      "sha256": "ab93845cac6fff03a6a80d836bc41023eabffbddc5ec57e8d64ed2ad3cc00544"
+    },
+    {
+      "path": "composio-v3/multi_agent/delivery-dedupe-051/agent-log.json",
+      "sha256": "8838ee04f88a7433f691283d507045a197e86cff7ce03f2bd2348fd9a5e114b5"
+    },
+    {
+      "path": "composio-v3/multi_agent/delivery-dedupe-051/first-attempt-traces/events.jsonl",
+      "sha256": "1ad13f7fddd055f9053a51549088bc16f3347131c50699d05d25baf9075a649c"
+    },
+    {
+      "path": "composio-v3/multi_agent/delivery-dedupe-051/first-attempt-traces/model-calls.json",
+      "sha256": "0409527cc8c24e751ccea8af774f7a89f410a85626caf6748e346d57356e2ae7"
+    },
+    {
+      "path": "composio-v3/multi_agent/delivery-dedupe-051/first-attempt-traces/workflow.json",
+      "sha256": "210bf5113a226cf7f75a25be9d80af38e2a3eb3d3dcf5a7e28f0e7e714d81a27"
+    },
+    {
+      "path": "composio-v3/multi_agent/delivery-dedupe-051/ticket.json",
+      "sha256": "bf8fc97c277b426051961d52d5f559c531ef324cd5eeafb04bf24b38649ba0d3"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-org-035/agent-log.json",
+      "sha256": "f99bd5ed76c271575ff42f8e2fe1cb5f44f8be0f77d3e124371957496cb0ee2f"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-org-035/first-attempt-traces/events.jsonl",
+      "sha256": "b4c37c0025ca5a640c4e16e84c11256587ac1bb40cbf8f7c0ce76ede03a71c9b"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-org-035/first-attempt-traces/model-calls.json",
+      "sha256": "7372a070c1922a775c3896f78c4b21797d41b213d2bca3d1e2a5a6fddbae149f"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-org-035/first-attempt-traces/workflow.json",
+      "sha256": "a9a64519539b585070f65bc0f453e1bdd6bf9f183733ac623fba8f38f32414a8"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-org-035/ticket.json",
+      "sha256": "34e5aa4bc77dd5927db0619b9237427b7d09e4b38b2e585184ad1b6e83002763"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-setup-037/agent-log.json",
+      "sha256": "37664f5e69cf3935a176ef52eafb3db029e80cda773c26f9a399b8841646200a"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-setup-037/first-attempt-traces/events.jsonl",
+      "sha256": "8db238e79947d4e606514f034d1d878cba94e19e21e225249231820bf881bf79"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-setup-037/first-attempt-traces/model-calls.json",
+      "sha256": "64392f16add73e786f8e545e3cf0b39f48ccac33abcf7bff63acdbeede44491f"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-setup-037/first-attempt-traces/workflow.json",
+      "sha256": "e7c9976a49ae082e03fb585be870729bc315117543b3c8c42b1dde3e012a638c"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-setup-037/ticket.json",
+      "sha256": "2d4e209eeae7a7cb6741bd6645b26f709aba6c56d676e33fc34f9814811fce19"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-token-036/agent-log.json",
+      "sha256": "14ef18e182c4f99a1c47d677a238ce8581e92b5d93cbb21f5d9211decffe10b8"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-token-036/first-attempt-traces/events.jsonl",
+      "sha256": "b151d22922c507986e22a5793b2111ef10ef84d2e5e720f31bada186df541339"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-token-036/first-attempt-traces/model-calls.json",
+      "sha256": "372d8eb5010edf7fcc4884c7bbee264bc30dd9436aa0e82fe7cbf0ff2c046d06"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-token-036/first-attempt-traces/workflow.json",
+      "sha256": "2795db8854281918a6ab2004fe166633f2fd5987c24aa2c7be43b9ac0476e23e"
+    },
+    {
+      "path": "composio-v3/multi_agent/github-token-036/ticket.json",
+      "sha256": "f58f6d948296b8ca1bc78783afd27d468678aadb656f8d3bc502eaaccfe22080"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-file-048/agent-log.json",
+      "sha256": "727586814b45a919317e05ba30d0cd502fdcd9764f3882981569c6bf3ba31ffb"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-file-048/first-attempt-traces/events.jsonl",
+      "sha256": "e389d771bdf0f95e3ad67c26a7181a7165876655837454666c9d1aea135489e1"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-file-048/first-attempt-traces/model-calls.json",
+      "sha256": "7c0ad7e4e775b0c29240846ddc610ff42cd589287d08fa28858bf932a47612f6"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-file-048/first-attempt-traces/workflow.json",
+      "sha256": "bca89a69c5749dfde581d377198eae7918daf04a1eb4c496d52fd8ff8446f65b"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-file-048/ticket.json",
+      "sha256": "5e08e3c243d0149d09b6c8d02a3ea164fcb7a967fd34ebdb327056bbc6a34582"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-shape-047/agent-log.json",
+      "sha256": "da33b7de0cf787d5f4609b28eb55178067cc7f2c3352336b93419a9830ad4903"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-shape-047/first-attempt-traces/events.jsonl",
+      "sha256": "79127fe0ede46b0cdbe22dba0b82234d7072b2a87ce83a12f18b165b039c4cbc"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-shape-047/first-attempt-traces/model-calls.json",
+      "sha256": "13623d1d167b8511c31bdea82c2ba1a0fccca2554b8f7cbf0ba46c71d5c07a68"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-shape-047/first-attempt-traces/workflow.json",
+      "sha256": "1788190481ef75c96997eb3f1bd3a024c5c23d6ee88bb0ccc36134568d8480ab"
+    },
+    {
+      "path": "composio-v3/multi_agent/gmail-shape-047/ticket.json",
+      "sha256": "4c211c720d158b4b904b332a19acff79ccb9040cc4bf098a8c7e66c325d76ab4"
+    },
+    {
+      "path": "composio-v3/multi_agent/log-gap-050/agent-log.json",
+      "sha256": "e9a843db49b429635761ce9e6f6e3e84e620e599f050bf22f16d530e6b4e94d4"
+    },
+    {
+      "path": "composio-v3/multi_agent/log-gap-050/first-attempt-traces/events.jsonl",
+      "sha256": "fc806f07a4a0db2ac66aca2e4108ab35a07aad760d0d4059a14a3e04879a1be1"
+    },
+    {
+      "path": "composio-v3/multi_agent/log-gap-050/first-attempt-traces/model-calls.json",
+      "sha256": "dee94073f1be212fb2185de04d33766d152ed3559ba38256ffde2e4c51a1e84d"
+    },
+    {
+      "path": "composio-v3/multi_agent/log-gap-050/first-attempt-traces/workflow.json",
+      "sha256": "a56e6a0bab9500f6a8abaa37e248a53b3e715365331e16e57d965669c29f8d9f"
+    },
+    {
+      "path": "composio-v3/multi_agent/log-gap-050/ticket.json",
+      "sha256": "8fde1afaf6bb030330adb866854d72dab9277a02db292346d0048bd34d0a5451"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-access-033/agent-log.json",
+      "sha256": "9b29ae917bf2b20fe33bc307ebfefc9c235dc962b81a95c740181798f3c5dc79"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-access-033/first-attempt-traces/events.jsonl",
+      "sha256": "e8ee03558f680fa8e45b099994d83caa5df1f3b4b11712b662b50e111f602704"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-access-033/first-attempt-traces/model-calls.json",
+      "sha256": "0995b1377156de8c69b12245a43ea42ba9d8dba1d6ca0362d918f62848e8abb6"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-access-033/first-attempt-traces/workflow.json",
+      "sha256": "fe15ecc051dcdc7c5e886040ab89a18edc4bf03901a265b9829856b1ea048ebf"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-access-033/ticket.json",
+      "sha256": "5b8fa6666573a9f8de668c589a95665a398afa51ddcc20a92e3d255fc6150467"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-event-034/agent-log.json",
+      "sha256": "75f32c8f7896f99eebf4d8621c132f10edb7964f981ead5c111613ba24432e9c"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-event-034/first-attempt-traces/events.jsonl",
+      "sha256": "5e47bc6483581f6a8d7677dcd35fd05448c50445a65c5b3ffd22299664c749e8"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-event-034/first-attempt-traces/model-calls.json",
+      "sha256": "6d311fea865852ddf4c964a4d9e695ca254666832e3a7307de069caa72928fd3"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-event-034/first-attempt-traces/workflow.json",
+      "sha256": "c415d376be4c173167954155d90f82d2826ea94fd3d6057a1c9ceb2cc5391bd6"
+    },
+    {
+      "path": "composio-v3/multi_agent/notion-event-034/ticket.json",
+      "sha256": "54d45d0b13098ac84f82ff3fe8e304cf3731c9009809d6b7645c9a9832af9226"
+    },
+    {
+      "path": "composio-v3/multi_agent/session-policy-049/agent-log.json",
+      "sha256": "be530c0e4872c9157db62e452a5f58e4ab1dfd200c77141e919df7f02249f3dc"
+    },
+    {
+      "path": "composio-v3/multi_agent/session-policy-049/first-attempt-traces/events.jsonl",
+      "sha256": "13e9cd834ee094ef2fb503ef0f16268b4cd449c0608ad0f53e7db5147486655d"
+    },
+    {
+      "path": "composio-v3/multi_agent/session-policy-049/first-attempt-traces/model-calls.json",
+      "sha256": "e5ef183fd65e24453af25c5b00520c25a53fa1c9cf9f717bf4a9e26f86c6bc1c"
+    },
+    {
+      "path": "composio-v3/multi_agent/session-policy-049/first-attempt-traces/workflow.json",
+      "sha256": "789a623b36148872185f5c4b9f4957dc099f7aa26433470c4a832365faeb5264"
+    },
+    {
+      "path": "composio-v3/multi_agent/session-policy-049/ticket.json",
+      "sha256": "c298edce8e77596781cb5341126c5a0582ba0f3a76e2ac5a7618a94a581880a2"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-discovery-039/agent-log.json",
+      "sha256": "4498680aec27900d40771a5bbe37caa82be1cfe3b37c4f753a187469c3f55176"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-discovery-039/first-attempt-traces/events.jsonl",
+      "sha256": "f3d923f19698d0b63bd12b4baca46c78dd36ffa04d844e40683cfee63380b4ae"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-discovery-039/first-attempt-traces/model-calls.json",
+      "sha256": "0d784cc44ff432e44f0fe75389ecad8e8a9a54248413366810b7159ab6a91d2a"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-discovery-039/first-attempt-traces/workflow.json",
+      "sha256": "6dfbb3765054c48c17d2ac41dc74773a31ad1bc957eaae6e7b5bef14111b9017"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-discovery-039/ticket.json",
+      "sha256": "a1b5e473565c3b193bfda9fabd27bf1b2493056d0a4b0ac6d87852a541342436"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-id-040/agent-log.json",
+      "sha256": "ca6a8df66785aba35d69aaf0e38fdf17a4ba7347ef7870809322068832f95515"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-id-040/first-attempt-traces/events.jsonl",
+      "sha256": "3842ce90fec880ef3bc98cc42cb61c1bec22cc603311f3d453c40accf28ac335"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-id-040/first-attempt-traces/model-calls.json",
+      "sha256": "abc09723e7c0aee2e209d3bd71edb21f04edd112aa7c56063298774bf0eb381e"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-id-040/first-attempt-traces/workflow.json",
+      "sha256": "be61ab0260a63e13063b302f3ee18aa61482f8215ed5c8dda8f90cece45285b6"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-id-040/ticket.json",
+      "sha256": "1be7ee5121c1799fc34c2f1c6586db4ca63ea4d8e479c1944c2f70c6890c6e2a"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-plane-038/agent-log.json",
+      "sha256": "831a8fb4469e54ddfbc95f3cbe9b986c8b52d70353b7d44655f62edbfc951422"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-plane-038/first-attempt-traces/events.jsonl",
+      "sha256": "c6e345da9fa2239beda1cb6c796e86c674784136635b3ecd8a259254f3592861"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-plane-038/first-attempt-traces/model-calls.json",
+      "sha256": "c11b0b404002d49404371f1c6e785405e4ea20049f59f6c651c96289e87f6012"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-plane-038/first-attempt-traces/workflow.json",
+      "sha256": "455bdf96befb08636767a5c50b12d56397a8f1593b1fcad29fd1774d250db052"
+    },
+    {
+      "path": "composio-v3/multi_agent/sheets-plane-038/ticket.json",
+      "sha256": "6848770b6dc83cc558e0603baa529ebaa003ab5e3d61fb8662b830908e172f0c"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-ingress-045/agent-log.json",
+      "sha256": "3b5b8ace763bdc3f445886b15a028154f6cd379d50e862221ca4261575a673a0"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-ingress-045/first-attempt-traces/events.jsonl",
+      "sha256": "8ad482056c196e0c0a2c24462b3998d57566cd1b1beacc2b55c7fea1d1ba1f36"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-ingress-045/first-attempt-traces/model-calls.json",
+      "sha256": "8498ba4158a864fdfd755af8cdfe61d4b397fa7f3ef5f690e1d6497bc78f8582"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-ingress-045/first-attempt-traces/workflow.json",
+      "sha256": "a07d4864cf553372ba6a0d03a6ed5614868f42df9b78189f776a00e30a1e11ba"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-ingress-045/ticket.json",
+      "sha256": "526c17ab1ec4f5def7a84469e8b2d3a591c9dbd5d9a7ee38296e22c6197a5268"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-plan-044/agent-log.json",
+      "sha256": "6e6db8238d9ab82e12ac7d40bfb921c63f1be560a332c214e43868cba7e3caf4"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-plan-044/first-attempt-traces/events.jsonl",
+      "sha256": "df2ab332bd14251656082dbdf1772345240a58e9a822908b0ebe7baae32ed5da"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-plan-044/first-attempt-traces/model-calls.json",
+      "sha256": "a85e8e6b27c6d2e9263bc02beae6d876379cf3007ff2c89f3e4dc81692cc742a"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-plan-044/first-attempt-traces/workflow.json",
+      "sha256": "3bacc07331cc2b64b503723eca25f8a1e0e02425c249db1252241a0473533bc9"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-plan-044/ticket.json",
+      "sha256": "2d30f54b346c6fc31a2944e518c38f32b8f5117687febff3d212bb453b48ed61"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-redirect-046/agent-log.json",
+      "sha256": "6b9151c3059eeb5594afc78072255b0fdbcb220747c5f3d0de0f5e0b97ff56ba"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-redirect-046/first-attempt-traces/events.jsonl",
+      "sha256": "3f119060613a5d38b9ca93ac6f538447fa042e54b98a525c39f6ed3135605181"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-redirect-046/first-attempt-traces/model-calls.json",
+      "sha256": "273e9654f02ec1943359b5a6d36db5617dc03576a4379f44afeb121dc423d64a"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-redirect-046/first-attempt-traces/workflow.json",
+      "sha256": "a4d9a9935db70c9085bfa3760f02fb79c24197a6340650654ab1535f9e130da6"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-redirect-046/ticket.json",
+      "sha256": "3b9ffe47353e8ec0ca5d68d2860a80fe4a704969b0d0e1b56041e7538a8034a5"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-schedule-052/agent-log.json",
+      "sha256": "7a2129e853fd48853b4c80484d866bdab0e539db1689267c0df31a4afeee2587"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-schedule-052/first-attempt-traces/events.jsonl",
+      "sha256": "03abd035822d71876c8ae0ac385fe514a6fd52eac3b6f093174cf764971b6e13"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-schedule-052/first-attempt-traces/model-calls.json",
+      "sha256": "e8b03362606f9e87a27d6dd438cc8b8b831a9074d2b276d59cd4d200d277220a"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-schedule-052/first-attempt-traces/workflow.json",
+      "sha256": "d0e1dda2027aa69a4e7053a2469eeea42a9267517b3cc0b3e2a212ba7598e53f"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-schedule-052/ticket.json",
+      "sha256": "33f1277ebbcc130ab92c34508545fbe97ce6c16e1a2c1e40ce006811813883b4"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-user-043/agent-log.json",
+      "sha256": "c08c44bf820a916d9fb8cfb418088077a25540734fff90d5a0cb707ef4738b4c"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-user-043/first-attempt-traces/events.jsonl",
+      "sha256": "14b6b446119924474d88842abc56d60bfb98264e9995a4f9130cf89d2b5bbbc1"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-user-043/first-attempt-traces/model-calls.json",
+      "sha256": "531eb819b4f0c07adbb8a5acd4bcc93963271d00f4330efb317f2851e1116887"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-user-043/first-attempt-traces/workflow.json",
+      "sha256": "2309c9dd8187aa9d74cf24ac4cd69535fcb6200de83110a4e852e9d2371eea0d"
+    },
+    {
+      "path": "composio-v3/multi_agent/slack-user-043/ticket.json",
+      "sha256": "9ea07f98da7c3a66af04d7035419a53d9305739462b534561222bcf91f7fe89e"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/airtable-batch-042.json",
+      "sha256": "5ad4bf5917186766acc6c8c8b32243a80d3d5534bb6dd235ad8ff5a0ce3ba59c"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/airtable-expiry-041.json",
+      "sha256": "f4c584c6d48d4ee389870616d0cdb5f376dc4914037d71efcd9f7f57979bd5f1"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/delivery-dedupe-051.json",
+      "sha256": "1a576d1d7ece3b0a6c2305d899de14060bec0f00509097ae23cb724bcd09b29c"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/github-org-035.json",
+      "sha256": "91931802ea3359db69b87265a85ebc79d1feab623a7eba7a853cdefbee77df5a"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/github-setup-037.json",
+      "sha256": "0a6d66caf9f709360230b8e3539f888e9f7600aac30d085bcddd2c1c7a2f365f"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/github-token-036.json",
+      "sha256": "ac42b08bbb6038fcd3539c5fffea0238014e4280b7972adf7dc0daf96729f7f8"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/gmail-file-048.json",
+      "sha256": "a7bd550227e2190196626196ee6570e0b4dd3336f2332237c39efc200034fc2e"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/gmail-shape-047.json",
+      "sha256": "dc642d0255afa0902d917b87da9f31d4ccbe866245c2e10a46e06b470236333b"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/log-gap-050.json",
+      "sha256": "1a63dfc0cff5a68e4717347c2bc957b638b01b8c678663c3497e6ad9907208bd"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/notion-access-033.json",
+      "sha256": "b8fa0ff156474dd294d57f2ceb82333732dc1d5f0f1272876232b6e068188021"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/notion-event-034.json",
+      "sha256": "3f47c5855bcbf9486f00d9996ed8134107f483a5cbe74f85e4a3b70c3a555f33"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/session-policy-049.json",
+      "sha256": "34f23ec03a235e40269448502213dcd0d6f29e1f846588095ee825e22620f7bc"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/sheets-discovery-039.json",
+      "sha256": "43fe3ab2a53f854d46f3b37bd463fc6ddd85c9a0d1ce6214a7248d65f60c8ffc"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/sheets-id-040.json",
+      "sha256": "9a54525af6fbbdbbc3aef81770a7e4a5e11481ada2e78d60528c645f3626360e"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/sheets-plane-038.json",
+      "sha256": "47d3c90dc9034020ad606ce391e8c8a6d0f6df84bb50462280cd976edc10ca05"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/slack-ingress-045.json",
+      "sha256": "7251637bf4ea0e9befe745b8fd75a320e2fbe16a508c628da950ee32b4c63642"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/slack-plan-044.json",
+      "sha256": "d24fa7de37a5b91c3c70c1fd4ec55181cf2e2c4610a8c1e086ef3b9ab6e6be56"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/slack-redirect-046.json",
+      "sha256": "3ae70d0f3050c8cbce9bcc4fb827d6329d0ada4f258be6d46db6b3f444243e23"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/slack-schedule-052.json",
+      "sha256": "568471b99dd9bc5f24987f6f6a86f7b38c0923e474c6a7942bfb95aa30998479"
+    },
+    {
+      "path": "composio-v3/multi_agent/submissions/slack-user-043.json",
+      "sha256": "e33362f4d038198704fe5bc35a8db90f166fcc4effe351279669b1cefb11a81f"
+    },
+    {
+      "path": "composio-v3/reviews-original.json",
+      "sha256": "357e60fcecc021a850ef36b9434065cba412b21dbc5ec417d881894b920fae07"
+    },
+    {
+      "path": "composio-v3/reviews.json",
+      "sha256": "357e60fcecc021a850ef36b9434065cba412b21dbc5ec417d881894b920fae07"
+    },
+    {
+      "path": "composio-v3/single_agent/airtable-batch-042/airtable-batch-042.json",
+      "sha256": "c0e827e7168a994015ea15f6e5bf9a52c1ff44c722f6e16ec222e05ef59c92f8"
+    },
+    {
+      "path": "composio-v3/single_agent/airtable-batch-042/traces/events.jsonl",
+      "sha256": "24b1673a01f375f7b7a16f4fccfca4f454f6bfb81df3114b4db42ee5eb95b2a5"
+    },
+    {
+      "path": "composio-v3/single_agent/airtable-batch-042/traces/model-calls.json",
+      "sha256": "008fbc983cbfe255bfeecaa4c2fe79d0472cedb68150b9532f9361e5d0a3727a"
+    },
+    {
+      "path": "composio-v3/single_agent/airtable-expiry-041/airtable-expiry-041.json",
+      "sha256": "002c1239fa7345ee412513aed52169da306a65ed9fbd15adf2e2022e43e17a47"
+    },
+    {
+      "path": "composio-v3/single_agent/airtable-expiry-041/traces/events.jsonl",
+      "sha256": "63e40df2b8e889e8940a98b90b3707fed164d8d2a5395964b0a9831b2ca4da11"
+    },
+    {
+      "path": "composio-v3/single_agent/airtable-expiry-041/traces/model-calls.json",
+      "sha256": "de7848b92b7523380a307ed11d6786bffbdd4c9febadc803eacd67ac68fe7dd4"
+    },
+    {
+      "path": "composio-v3/single_agent/delivery-dedupe-051/delivery-dedupe-051.json",
+      "sha256": "58fda76c766c98285fa067f53d42180d371202366c9a406572e9d2b247090cbd"
+    },
+    {
+      "path": "composio-v3/single_agent/delivery-dedupe-051/traces/events.jsonl",
+      "sha256": "870d9a56f2a5d15ce7d94cb365cec3c7c1936535dded0a7706f9432555cb1e46"
+    },
+    {
+      "path": "composio-v3/single_agent/delivery-dedupe-051/traces/model-calls.json",
+      "sha256": "08b11dd5a1e26c2fe0a988d96e12a861b6cef07fa119bb75f80ba8cd54e60125"
+    },
+    {
+      "path": "composio-v3/single_agent/github-org-035/github-org-035.json",
+      "sha256": "9169519f38e3758781a020472ff8ad18dca42a5c466081327f809f427ce1e2ce"
+    },
+    {
+      "path": "composio-v3/single_agent/github-org-035/traces/events.jsonl",
+      "sha256": "a3fcd91bfbbf3cb2dd6ec1d941cec80b11bfb0f1490e76bf1e8f87319d01c0b2"
+    },
+    {
+      "path": "composio-v3/single_agent/github-org-035/traces/model-calls.json",
+      "sha256": "4bb6fc9003e73da06b7a2a66008a1df4043cc80a8ef06408206c898561a822db"
+    },
+    {
+      "path": "composio-v3/single_agent/github-setup-037/github-setup-037.json",
+      "sha256": "37999c8f647203105ddfd33ee644bcd7040fb13d1a90b5a106b3abe92cde18d8"
+    },
+    {
+      "path": "composio-v3/single_agent/github-setup-037/traces/events.jsonl",
+      "sha256": "fd6a40f866a7522a0367be286f28ac506030de5cba3dea5a43a02dd7f3d20205"
+    },
+    {
+      "path": "composio-v3/single_agent/github-setup-037/traces/model-calls.json",
+      "sha256": "6f75a4f8b68464f7cc90a1c018fb5afa74d63ba684a4bb2604a14872f21b5545"
+    },
+    {
+      "path": "composio-v3/single_agent/github-token-036/github-token-036.json",
+      "sha256": "4769d52917ed2d2e7ab9b83e7776b6797249f7f1897ff6bb1f4113a9fb54ed11"
+    },
+    {
+      "path": "composio-v3/single_agent/github-token-036/traces/events.jsonl",
+      "sha256": "979667e91be4846e8d7a563c4e45ae13b17c929f2a5acb27566aed999564870b"
+    },
+    {
+      "path": "composio-v3/single_agent/github-token-036/traces/model-calls.json",
+      "sha256": "e9619f49763619af88180fda965f34971a328c9a75756aeecc3da0786020ae87"
+    },
+    {
+      "path": "composio-v3/single_agent/gmail-file-048/gmail-file-048.json",
+      "sha256": "dcf734f9d1d6d42abfc9762020761a1b4ffb0d860303ba7d5fd96ccefb40a788"
+    },
+    {
+      "path": "composio-v3/single_agent/gmail-file-048/traces/events.jsonl",
+      "sha256": "e0fd92423de499b90435f9554ea8c2a9347e44c47caca5b0ca4fea45c3b2d1d9"
+    },
+    {
+      "path": "composio-v3/single_agent/gmail-file-048/traces/model-calls.json",
+      "sha256": "d3f15688f22ecf06e6cc13d8bcccd35396e3df7166b453518cc361cf879f50f6"
+    },
+    {
+      "path": "composio-v3/single_agent/gmail-shape-047/gmail-shape-047.json",
+      "sha256": "fca065f697af2ee9a39aff51d51d6c1331d5808132011a790449fb92d6cb6e6f"
+    },
+    {
+      "path": "composio-v3/single_agent/gmail-shape-047/traces/events.jsonl",
+      "sha256": "bbab0e34b453e94a2ed475c7972dd2e706308e5a8047735c8205d4e3dcfe1681"
+    },
+    {
+      "path": "composio-v3/single_agent/gmail-shape-047/traces/model-calls.json",
+      "sha256": "1de760695babf47263120d6bc592e8cb41c3ac62959bb079a0fff0ae1c89e30d"
+    },
+    {
+      "path": "composio-v3/single_agent/log-gap-050/log-gap-050.json",
+      "sha256": "1ba3e035dd7bd6fef1eba22dd8f4369f88357ef5d782bcabcbf153a10bdaacc5"
+    },
+    {
+      "path": "composio-v3/single_agent/log-gap-050/traces/events.jsonl",
+      "sha256": "273d167aac8b1cdca0bab7ed3808370ad46b478a2ea966a81e2b7f44f4436a9b"
+    },
+    {
+      "path": "composio-v3/single_agent/log-gap-050/traces/model-calls.json",
+      "sha256": "46b7ecac99ff34001720277a8ae208992fa08531111831cccd0705f49b7bff11"
+    },
+    {
+      "path": "composio-v3/single_agent/notion-access-033/notion-access-033.json",
+      "sha256": "18ae5595a0e835da9edec99baba70c25a11c4158523ba21081f95f926f7ab0bb"
+    },
+    {
+      "path": "composio-v3/single_agent/notion-access-033/traces/events.jsonl",
+      "sha256": "b677c60606d9de240244ff2d7f4618a5f8fc3ce65c5a95089ddce47cdcac67e6"
+    },
+    {
+      "path": "composio-v3/single_agent/notion-access-033/traces/model-calls.json",
+      "sha256": "d6cb766438e5abf448e18f840d3dff14593b10d2f03dac99f8601a83c4f9b61a"
+    },
+    {
+      "path": "composio-v3/single_agent/notion-event-034/notion-event-034.json",
+      "sha256": "e9034e50c7d1d5b6d5cfe94c736b8e3301c72f10cc844d7e6ca10d8f620b6728"
+    },
+    {
+      "path": "composio-v3/single_agent/notion-event-034/traces/events.jsonl",
+      "sha256": "ae44f6a5f8ec43ea5f4dbbd832a5b31afb52a4b45e8f758972900d9702e28737"
+    },
+    {
+      "path": "composio-v3/single_agent/notion-event-034/traces/model-calls.json",
+      "sha256": "1fa929783d84a9302d0c516a9137353ba5276f5a9492436cbd6feb02ecd0c204"
+    },
+    {
+      "path": "composio-v3/single_agent/session-policy-049/session-policy-049.json",
+      "sha256": "a6006cbbea9fe6d0fa7b44b2c2cc94707507254cd156d9ae8b53d9bba3d0bf9b"
+    },
+    {
+      "path": "composio-v3/single_agent/session-policy-049/traces/events.jsonl",
+      "sha256": "a67c0435a11ebeb7242c2ba6a90ba90cd0fe95f47deb3c529fdd193f1d811781"
+    },
+    {
+      "path": "composio-v3/single_agent/session-policy-049/traces/model-calls.json",
+      "sha256": "926bd550818514594f8fd74953d2aa08e55ffaaa16f4c08adca0ac54251f2017"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-discovery-039/sheets-discovery-039.json",
+      "sha256": "43e8a97dd539d5239c3dc37d5a1a580587a695180389f38112baaf86efb2cb49"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-discovery-039/traces/events.jsonl",
+      "sha256": "398d4e1859aa6ae9babeb49372015a317ff7bbb9f9b1595ac6140c558e1d1de8"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-discovery-039/traces/model-calls.json",
+      "sha256": "3e9c03c21b0a5a36decd900f1874a2adab6a0b8fc6939e16b270d8c1d3f5ddff"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-id-040/sheets-id-040.json",
+      "sha256": "2a5b42e4dd59a157b7cf0bb4dfc889620e55ade85f183509de89c7a276f439a4"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-id-040/traces/events.jsonl",
+      "sha256": "255c89053ebbafff25eff46f7f4f6656525252d2b837c7ce96f954b90ac56c95"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-id-040/traces/model-calls.json",
+      "sha256": "4ce7a5b37e1d23afeb88b0bac43ce9f27e93211046c56a3877fc8d50c2b1d5c5"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-plane-038/sheets-plane-038.json",
+      "sha256": "f8e596ae7160330a173dfba0f0b6f731ebe0fb6e242bf5a64b8ea9aa33465798"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-plane-038/traces/events.jsonl",
+      "sha256": "7b702ecdd51c9c2b179a48f19be89ebea047f4b1495ac520ff981a4a58ab66a8"
+    },
+    {
+      "path": "composio-v3/single_agent/sheets-plane-038/traces/model-calls.json",
+      "sha256": "6e0409f24ba08a112c5fbd114fb8d77474f45a0ccc37ffc3c302d2e6df643bd0"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-ingress-045/slack-ingress-045.json",
+      "sha256": "59426d119744efbba67e1aca1dc79cabbf19c19d11fe818c62877532968d3be7"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-ingress-045/traces/events.jsonl",
+      "sha256": "031261750c5b1f4fbe2ee21451c67715bdc9da32692c221f7cd5f5d7b24e5a5f"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-ingress-045/traces/model-calls.json",
+      "sha256": "31a7290d0552bbb62bc2e6c0ec338f36c7423590d41b01f55d5c89ed13ecb4b8"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-plan-044/slack-plan-044.json",
+      "sha256": "bb7cc76999e09b3e695bf444fdc9307ca7761fd4e68b23630577158837faab14"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-plan-044/traces/events.jsonl",
+      "sha256": "91e6c6bc4cb594f49e79256e468019bc4524c6758d9dd4fd3464275f6c89ae96"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-plan-044/traces/model-calls.json",
+      "sha256": "f1a959172614e8fee3b5ff6f933f17a46f7c9e4295930e3c529c222f0192816d"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-redirect-046/slack-redirect-046.json",
+      "sha256": "f5423ff1ca5a040b6e7ef5d114d6a74294daf42266455c48e4d9ad6636068534"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-redirect-046/traces/events.jsonl",
+      "sha256": "5476e276225c50c951eeeacfc2a34c3b1a2da2d0488e3ab87a08bdd33d197f5a"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-redirect-046/traces/model-calls.json",
+      "sha256": "8e693b19f6512583720ff72c73a87de7d7227a0d5e1d31734d24d7fe345ce468"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-schedule-052/slack-schedule-052.json",
+      "sha256": "4e5e756d47c0d861ac62be2c72eaedec587c3e4e8c5bdd5a4a5c59a00a418698"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-schedule-052/traces/events.jsonl",
+      "sha256": "70b2a84541fc09a777eb7bd26ef1e915b8cc00297a9d415b48c626ad246b4eec"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-schedule-052/traces/model-calls.json",
+      "sha256": "5cb939f4787fc37e660446673a28b3f50af23ba5f60847ddc03b865f65196e20"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-user-043/slack-user-043.json",
+      "sha256": "56d336858830dedf05d28d6862d484b42ee336ae7d89688f9d03add43823de57"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-user-043/traces/events.jsonl",
+      "sha256": "11ec733f2de89d664bacf9cd0224b06e6a9276d1917f4e519fd13b878baf720d"
+    },
+    {
+      "path": "composio-v3/single_agent/slack-user-043/traces/model-calls.json",
+      "sha256": "b3677b28da03ebebf6c3a2523d46095a8e9c44f879efb00509e476bc477bd689"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/airtable-batch-042.json",
+      "sha256": "c0e827e7168a994015ea15f6e5bf9a52c1ff44c722f6e16ec222e05ef59c92f8"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/airtable-expiry-041.json",
+      "sha256": "002c1239fa7345ee412513aed52169da306a65ed9fbd15adf2e2022e43e17a47"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/delivery-dedupe-051.json",
+      "sha256": "58fda76c766c98285fa067f53d42180d371202366c9a406572e9d2b247090cbd"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/github-org-035.json",
+      "sha256": "9169519f38e3758781a020472ff8ad18dca42a5c466081327f809f427ce1e2ce"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/github-setup-037.json",
+      "sha256": "37999c8f647203105ddfd33ee644bcd7040fb13d1a90b5a106b3abe92cde18d8"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/github-token-036.json",
+      "sha256": "4769d52917ed2d2e7ab9b83e7776b6797249f7f1897ff6bb1f4113a9fb54ed11"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/gmail-file-048.json",
+      "sha256": "dcf734f9d1d6d42abfc9762020761a1b4ffb0d860303ba7d5fd96ccefb40a788"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/gmail-shape-047.json",
+      "sha256": "fca065f697af2ee9a39aff51d51d6c1331d5808132011a790449fb92d6cb6e6f"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/log-gap-050.json",
+      "sha256": "1ba3e035dd7bd6fef1eba22dd8f4369f88357ef5d782bcabcbf153a10bdaacc5"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/notion-access-033.json",
+      "sha256": "18ae5595a0e835da9edec99baba70c25a11c4158523ba21081f95f926f7ab0bb"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/notion-event-034.json",
+      "sha256": "e9034e50c7d1d5b6d5cfe94c736b8e3301c72f10cc844d7e6ca10d8f620b6728"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/session-policy-049.json",
+      "sha256": "a6006cbbea9fe6d0fa7b44b2c2cc94707507254cd156d9ae8b53d9bba3d0bf9b"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/sheets-discovery-039.json",
+      "sha256": "43e8a97dd539d5239c3dc37d5a1a580587a695180389f38112baaf86efb2cb49"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/sheets-id-040.json",
+      "sha256": "2a5b42e4dd59a157b7cf0bb4dfc889620e55ade85f183509de89c7a276f439a4"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/sheets-plane-038.json",
+      "sha256": "f8e596ae7160330a173dfba0f0b6f731ebe0fb6e242bf5a64b8ea9aa33465798"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/slack-ingress-045.json",
+      "sha256": "59426d119744efbba67e1aca1dc79cabbf19c19d11fe818c62877532968d3be7"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/slack-plan-044.json",
+      "sha256": "bb7cc76999e09b3e695bf444fdc9307ca7761fd4e68b23630577158837faab14"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/slack-redirect-046.json",
+      "sha256": "f5423ff1ca5a040b6e7ef5d114d6a74294daf42266455c48e4d9ad6636068534"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/slack-schedule-052.json",
+      "sha256": "4e5e756d47c0d861ac62be2c72eaedec587c3e4e8c5bdd5a4a5c59a00a418698"
+    },
+    {
+      "path": "composio-v3/single_agent/submissions/slack-user-043.json",
+      "sha256": "56d336858830dedf05d28d6862d484b42ee336ae7d89688f9d03add43823de57"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/airtable-batch-042/airtable-batch-042.json",
+      "sha256": "62545e3563e9e36607c0db2f6b057d4db9cf88f0fca22c2e15580ec883b41e7e"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/airtable-batch-042/traces/events.jsonl",
+      "sha256": "72223602888e5998199c34306ddec0c13c548fdff794d54cb799f7c46b290a14"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/airtable-batch-042/traces/model-calls.json",
+      "sha256": "0217bc19649f744d2b1bee7b39a112ca3bf98e592e45041fdc8f145fcc2207cc"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/airtable-expiry-041/airtable-expiry-041.json",
+      "sha256": "1eb21d2f65a7f92fb813b10bd05aacf2f28e3c91ab653381bbc2c7060d0137c0"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/airtable-expiry-041/traces/events.jsonl",
+      "sha256": "d391788d9d36aa1f13c850ea04c9071c260a02ac2fd5b1137d2ef5c87b3bce31"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/airtable-expiry-041/traces/model-calls.json",
+      "sha256": "b139c77d2b521a4d32408e35676c3a5c0280ebb7543247ade9a3b5a159407d24"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/delivery-dedupe-051/delivery-dedupe-051.json",
+      "sha256": "9ce80519e401dcdc2de36002b8c97498e65e27d0722c224b48f454dbc49204b5"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/delivery-dedupe-051/traces/events.jsonl",
+      "sha256": "877f5ccd54bdc9b28bfaeba725a2999020d0472dc5a22b4afeb4a0280ae1df93"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/delivery-dedupe-051/traces/model-calls.json",
+      "sha256": "5e84f804a6abbf1d33f6a4e54b07023c453d1539ddc009f93ee8ac7ad45c361f"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-org-035/github-org-035.json",
+      "sha256": "88f989f39f20f18424af3b8fd01241f0814052cec478e712dba0d1624d8c91c9"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-org-035/traces/events.jsonl",
+      "sha256": "f9893ba3f12cf2861f2fdde1652f176e64c770ee9921175865f7cbaf200cbcdc"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-org-035/traces/model-calls.json",
+      "sha256": "fa20f4f823c048557d15ed3b9e710fdfd6ce9c12097db725a039be3c19ad8c06"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-setup-037/github-setup-037.json",
+      "sha256": "3b6af214795580ffef0ea57ae69205ec58b63768240b5cc42f787ae40b26fcb7"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-setup-037/traces/events.jsonl",
+      "sha256": "0366b88a36a1ed6c612841770a3922bdfe3d2aa595b155f7ffd485307237f386"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-setup-037/traces/model-calls.json",
+      "sha256": "218f23e77b8c1757f1d276e8b030349082ffe416f42b411ce39e175fefc1e55c"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-token-036/github-token-036.json",
+      "sha256": "43ca1065df9e3f1cb514053138d691680b6d97c8c03724b8c050e8db4b741fc4"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-token-036/traces/events.jsonl",
+      "sha256": "9e7e2c11c26717e44eb2578bcb4b4c9e37454b00a1e9db6efef8d99fbe7421e3"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/github-token-036/traces/model-calls.json",
+      "sha256": "b3182bba79642c3378cd6e4b4b14124636bbf37257cd1ebddc553c1771b48253"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/gmail-file-048/gmail-file-048.json",
+      "sha256": "85af8d30abb789d8d8c0dc8f8462f9eb717c54c21997b9a3fc9f2354d4fb7c9b"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/gmail-file-048/traces/events.jsonl",
+      "sha256": "5aa58dcfa212bf5c3758f288779c4bb792659458a724846f5213d834c190e31f"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/gmail-file-048/traces/model-calls.json",
+      "sha256": "6c619b76afed51bb34b23672fa3972272ce3c1fa91e899b46848e5bb64ea32f2"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/gmail-shape-047/gmail-shape-047.json",
+      "sha256": "ad37cfa013f425b982f2248c34ee3a6f881e88ec4264ed25365c9fb945ad3f90"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/gmail-shape-047/traces/events.jsonl",
+      "sha256": "cca1201d201cf6360ad5cb7cafa5017df37151d0899835b658a5fac7204ebb03"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/gmail-shape-047/traces/model-calls.json",
+      "sha256": "006ada0f80bda5c2610801dc1b20c3178269bbba2439e1cfdb6a33f90792b5e1"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/log-gap-050/log-gap-050.json",
+      "sha256": "32159e81a373c4b1d6e7c059ad9e21bda304e51f705ac880762db1dae1a1859e"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/log-gap-050/traces/events.jsonl",
+      "sha256": "9c0c5381206f0e549e62f58fb588bf0e4848596bee7afd0b6ed96559c3203a8c"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/log-gap-050/traces/model-calls.json",
+      "sha256": "29f2beeb6b55f1ee7d867c609560343c2d1186239e56742f16d188f8bfacaef8"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/notion-access-033/notion-access-033.json",
+      "sha256": "18ae5595a0e835da9edec99baba70c25a11c4158523ba21081f95f926f7ab0bb"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/notion-event-034/notion-event-034.json",
+      "sha256": "e9034e50c7d1d5b6d5cfe94c736b8e3301c72f10cc844d7e6ca10d8f620b6728"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/session-policy-049/session-policy-049.json",
+      "sha256": "85638fe93c0e6b51be0f8a05d80dc2c6cfc9e696a723dc0994b0a3ec96736232"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/session-policy-049/traces/events.jsonl",
+      "sha256": "13e9d2d1f8de6d0a18114be8c6a39ee11d71530dfb45f095e741f3bb352670d6"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/session-policy-049/traces/model-calls.json",
+      "sha256": "44fc145e3a8cf5e3a7dec937cc929fe4fc6eb32fa83962e1589045372c15a1c8"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-discovery-039/sheets-discovery-039.json",
+      "sha256": "22203083075e2529815983249ea10ca847a237a117a30e39574d662a6f880321"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-discovery-039/traces/events.jsonl",
+      "sha256": "d41b411e5af67de060d3bfed8e2dc2311380291e16b35684ba87d61522517a14"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-discovery-039/traces/model-calls.json",
+      "sha256": "81eda82343ad477181f61b45f26182d5be486ed33903dd0dee48ba7b197beb07"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-id-040/sheets-id-040.json",
+      "sha256": "d66220b8a05c234383ff40a277ea773e16b20b0ac1d23d0b275cc90c7f93bbac"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-id-040/traces/events.jsonl",
+      "sha256": "7519be2b13dc0470fb9d15fe8b4b9cd3a0be274280aaa9abb07ee5b92da02cbd"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-id-040/traces/model-calls.json",
+      "sha256": "eace4e74113df31b3102594d97d703f6a5dc280235a09782aedff9989f48952c"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-plane-038/sheets-plane-038.json",
+      "sha256": "56163478e16b2a58da7989c211ae323ea49b05f376fefda0399950156dd45bf1"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-plane-038/traces/events.jsonl",
+      "sha256": "f981c4f4914caea156f3145da681527cb2625c38480cd74c7c2d5d22e0e3bc8c"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/sheets-plane-038/traces/model-calls.json",
+      "sha256": "c659fd6a213f15d18962a239ea07d2035d3e6da6352b2a373c685db756622d3e"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-ingress-045/slack-ingress-045.json",
+      "sha256": "ca0ab09b01f40fa66f20ba7e70095cebc040be59d988c01f257ab84cb08a63fa"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-ingress-045/traces/events.jsonl",
+      "sha256": "45f7d2623d905ae45577a905055e615d4f1a201af0716c871fd94b3855756837"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-ingress-045/traces/model-calls.json",
+      "sha256": "3ea15e95034f7b8381529ec8cb9823209994bb2ac607a9d3339a8cb5969f1b24"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-plan-044/slack-plan-044.json",
+      "sha256": "0768741bf9163f80e6eeff86004f85d63b4ff597cb0f8ff06881c95ac327564e"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-plan-044/traces/events.jsonl",
+      "sha256": "7edbb0154977d2a55acb9af6826efcd532b050003306c6d33c7a1b11372c40d5"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-plan-044/traces/model-calls.json",
+      "sha256": "623f2f64b8620955493f29e8bc5786c4a2a551e73cb03fdcb36572acca629477"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-redirect-046/slack-redirect-046.json",
+      "sha256": "667640b54760fc73d5058b9f9a95bd128ef6e97510e7844dc748452a8a43bdbb"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-redirect-046/traces/events.jsonl",
+      "sha256": "0ab0869fe6bda88934f90ae5d95187590a30371182813831c647e595cfdccbe8"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-redirect-046/traces/model-calls.json",
+      "sha256": "46f17a725794e25a3349523e2c3f86cb11492a09b1eee442108da5c08cb53103"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-schedule-052/slack-schedule-052.json",
+      "sha256": "3af04fb26d6ed147e1e450a345716deafe2f39d43f800232145c40417fd0ef13"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-schedule-052/traces/events.jsonl",
+      "sha256": "9c962fedc6b3ab67d804332eb4422fb312d09651254d8e994a6efb55f76df5da"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-schedule-052/traces/model-calls.json",
+      "sha256": "6b349aa2c57579035c580f769a5e79458ac266b8af386c2bfa1a51d51b9e6387"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-user-043/slack-user-043.json",
+      "sha256": "f90dc8c600305ac17cf25d0c862d2c1a67052cb6ce958313d68ac596cba943eb"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-user-043/traces/events.jsonl",
+      "sha256": "52a82ee3e3395f89ba2336bfff134559ab3905b7ef064c0ba1260ae52dc39cc0"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/slack-user-043/traces/model-calls.json",
+      "sha256": "06b97cd1aae41ae3dc4e8fd6533555735ddb4e08fa46ef1ca9426dc3b98a89fa"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/airtable-batch-042.json",
+      "sha256": "62545e3563e9e36607c0db2f6b057d4db9cf88f0fca22c2e15580ec883b41e7e"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/airtable-expiry-041.json",
+      "sha256": "1eb21d2f65a7f92fb813b10bd05aacf2f28e3c91ab653381bbc2c7060d0137c0"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/delivery-dedupe-051.json",
+      "sha256": "9ce80519e401dcdc2de36002b8c97498e65e27d0722c224b48f454dbc49204b5"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/github-org-035.json",
+      "sha256": "88f989f39f20f18424af3b8fd01241f0814052cec478e712dba0d1624d8c91c9"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/github-setup-037.json",
+      "sha256": "3b6af214795580ffef0ea57ae69205ec58b63768240b5cc42f787ae40b26fcb7"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/github-token-036.json",
+      "sha256": "43ca1065df9e3f1cb514053138d691680b6d97c8c03724b8c050e8db4b741fc4"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/gmail-file-048.json",
+      "sha256": "85af8d30abb789d8d8c0dc8f8462f9eb717c54c21997b9a3fc9f2354d4fb7c9b"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/gmail-shape-047.json",
+      "sha256": "ad37cfa013f425b982f2248c34ee3a6f881e88ec4264ed25365c9fb945ad3f90"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/log-gap-050.json",
+      "sha256": "32159e81a373c4b1d6e7c059ad9e21bda304e51f705ac880762db1dae1a1859e"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/notion-access-033.json",
+      "sha256": "18ae5595a0e835da9edec99baba70c25a11c4158523ba21081f95f926f7ab0bb"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/notion-event-034.json",
+      "sha256": "e9034e50c7d1d5b6d5cfe94c736b8e3301c72f10cc844d7e6ca10d8f620b6728"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/session-policy-049.json",
+      "sha256": "85638fe93c0e6b51be0f8a05d80dc2c6cfc9e696a723dc0994b0a3ec96736232"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/sheets-discovery-039.json",
+      "sha256": "22203083075e2529815983249ea10ca847a237a117a30e39574d662a6f880321"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/sheets-id-040.json",
+      "sha256": "c56b2dbeabc0c97c309bbecae8e375ee9709becfd7e4fa5ad25293680563ee6a"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/sheets-plane-038.json",
+      "sha256": "56163478e16b2a58da7989c211ae323ea49b05f376fefda0399950156dd45bf1"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/slack-ingress-045.json",
+      "sha256": "ca0ab09b01f40fa66f20ba7e70095cebc040be59d988c01f257ab84cb08a63fa"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/slack-plan-044.json",
+      "sha256": "0768741bf9163f80e6eeff86004f85d63b4ff597cb0f8ff06881c95ac327564e"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/slack-redirect-046.json",
+      "sha256": "667640b54760fc73d5058b9f9a95bd128ef6e97510e7844dc748452a8a43bdbb"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/slack-schedule-052.json",
+      "sha256": "3af04fb26d6ed147e1e450a345716deafe2f39d43f800232145c40417fd0ef13"
+    },
+    {
+      "path": "composio-v3/single_agent_plain_matched/submissions/slack-user-043.json",
+      "sha256": "f90dc8c600305ac17cf25d0c862d2c1a67052cb6ce958313d68ac596cba943eb"
+    },
+    {
+      "path": "composio-v3/ui-verification.json",
+      "sha256": "a76576077b0c967d6a7d53043662d699d5d0f0819354d421f736e41e58c1f4a6"
+    },
+    {
+      "path": "composio-v3/workflow-verification.json",
+      "sha256": "1c5c7f04fb3f5c5ae6b7e6a396c636716f1c98e4842f8d623f42c3aa5b838b05"
+    },
+    {
+      "path": "composio-v31/comparison-portal-text-preliminary.json",
+      "sha256": "cafbf7c9a7dff66936cbfe823bb5acbc0a6e38544e32589894823365b026ec2a"
+    },
+    {
+      "path": "composio-v31/comparison.csv",
+      "sha256": "0b7b553b6ea468e52b79fc28f9ccf79ad6ef74bddcd5c90c444430b4024a470c"
+    },
+    {
+      "path": "composio-v31/comparison.json",
+      "sha256": "baf095c14f6f15132daeb7291dd690f9c25967d0d4df8ad9ffecd9e13d130f98"
+    },
+    {
+      "path": "composio-v31/control-corrections.json",
+      "sha256": "89e0fd2e633ec3fd8d1f1ca724be105b2f397e38c0698912872d98427dbe0304"
+    },
+    {
+      "path": "composio-v31/manifest.json",
+      "sha256": "15fd171f42445238caf0347c8fa044e4263a178cd3b64d6d95ded6646fa47885"
+    },
+    {
+      "path": "composio-v31/multi_agent/airtable-expiry-041/matched-traces/events.jsonl",
+      "sha256": "6f0b5778401c4227862640a1346a3e44cfc36d161ecfdd8105c4093e8902308c"
+    },
+    {
+      "path": "composio-v31/multi_agent/airtable-expiry-041/matched-traces/model-calls.json",
+      "sha256": "b51601d4f1027a353c0437474e085cb93bd0de6b6889cedadb8cfef8a2c6292c"
+    },
+    {
+      "path": "composio-v31/multi_agent/airtable-expiry-041/matched-traces/workflow.json",
+      "sha256": "6dc6c857d9bcf00dc18daed58593ebe815dd263ffdc2cb3c6b07fd611550aab5"
+    },
+    {
+      "path": "composio-v31/multi_agent/airtable-expiry-041/ticket.json",
+      "sha256": "138de0eee0a587adf42ce961e88892e1140692a408c59af5e801a5cde18ae690"
+    },
+    {
+      "path": "composio-v31/multi_agent/gmail-shape-047/matched-traces/events.jsonl",
+      "sha256": "f87e77530d9dabdae05859cbe8dae8d31ea22325c3ea9ddb77f5728c153ad43a"
+    },
+    {
+      "path": "composio-v31/multi_agent/gmail-shape-047/matched-traces/model-calls.json",
+      "sha256": "55f885a7d5e094af2c3d884b0aea7929edd6d559c9d68ddb40667cfd910c7770"
+    },
+    {
+      "path": "composio-v31/multi_agent/gmail-shape-047/matched-traces/workflow.json",
+      "sha256": "db4bbdb8a014eec6919d34edaad7dcec801b04a139353f87a6395b2f368f6be3"
+    },
+    {
+      "path": "composio-v31/multi_agent/gmail-shape-047/ticket.json",
+      "sha256": "2498e3702c7abe5e12faee6da69fd2c0b617de0ef385bb63df8fdf734c5f3d52"
+    },
+    {
+      "path": "composio-v31/multi_agent/sheets-discovery-039/matched-traces/events.jsonl",
+      "sha256": "cdff430f5e8a2c9714b1b3f2c00ce83e9f793a588b8e102f4cfe933bf4710fb8"
+    },
+    {
+      "path": "composio-v31/multi_agent/sheets-discovery-039/matched-traces/model-calls.json",
+      "sha256": "9abe222919ccfe30bd7b34c21bafef292146f1891a132ccd9985d499a26daf64"
+    },
+    {
+      "path": "composio-v31/multi_agent/sheets-discovery-039/matched-traces/workflow.json",
+      "sha256": "1669c6237dc67fb64a2343828219fb84474df50ccd6a677ef2882c55e8e0220f"
+    },
+    {
+      "path": "composio-v31/multi_agent/sheets-discovery-039/ticket.json",
+      "sha256": "3db8cf4290b2883d484b048802bfb7af328b4947fbee8e4234010d207479779e"
+    },
+    {
+      "path": "composio-v31/multi_agent/slack-redirect-046/matched-traces/events.jsonl",
+      "sha256": "200d3d25e38014f5ff7178a0573e4f07f1eb255a6ac05db905914150133f50e9"
+    },
+    {
+      "path": "composio-v31/multi_agent/slack-redirect-046/matched-traces/model-calls.json",
+      "sha256": "1f3cc1b0e1ef85375f245238608006c0085ac3c8118590e2f77ab9922ddee6a8"
+    },
+    {
+      "path": "composio-v31/multi_agent/slack-redirect-046/matched-traces/workflow.json",
+      "sha256": "fa44f2e49c6aa4a14e009e931d22712b71fc364c82364556218c58e00b1fdaa9"
+    },
+    {
+      "path": "composio-v31/multi_agent/slack-redirect-046/ticket.json",
+      "sha256": "2461dc6d2152dbc4ff56fc5925dda1fa78b4ecdf42c0b7529315a18b0a44af21"
+    },
+    {
+      "path": "composio-v31/multi_agent/slack-user-043/matched-traces/events.jsonl",
+      "sha256": "a7d51dfc9626dae9b35f78bb2458e3e3f46ca6bf91ae8fad92ea48686c70aa17"
+    },
+    {
+      "path": "composio-v31/multi_agent/slack-user-043/matched-traces/model-calls.json",
+      "sha256": "432da90f4b0d6a40892c36b7252e8e5b75fa5c7e1522d228ba3740d03e58b52d"
+    },
+    {
+      "path": "composio-v31/multi_agent/slack-user-043/matched-traces/workflow.json",
+      "sha256": "a5a6bab6551876c9e3a8c4a64bbb5f6ee9f719a4e8fed376d830adb0e6089d01"
+    },
+    {
+      "path": "composio-v31/multi_agent/slack-user-043/ticket.json",
+      "sha256": "c21555f00d7bce79378a3dc7a2bfc497fffc13201cb7965d0f7ad481d7658320"
+    },
+    {
+      "path": "composio-v31/multi_agent/submissions/airtable-expiry-041.json",
+      "sha256": "b09d69f829153668e74d0c7dc9873be3a6788223914bd7045dbec63ab1aa28da"
+    },
+    {
+      "path": "composio-v31/multi_agent/submissions/gmail-shape-047.json",
+      "sha256": "26e941406028cd5ffd2a70b842667398dd550c255177521d719bb585d88d54f4"
+    },
+    {
+      "path": "composio-v31/multi_agent/submissions/sheets-discovery-039.json",
+      "sha256": "04fdd468efac6f988d2472d0dc382d095bb5a2b07e6d5eb069c3731b1a2c242c"
+    },
+    {
+      "path": "composio-v31/multi_agent/submissions/slack-redirect-046.json",
+      "sha256": "3c567200bd07165d7b85756a6dd7d3613846d3f6f5d8563f50773ce4b6984124"
+    },
+    {
+      "path": "composio-v31/multi_agent/submissions/slack-user-043.json",
+      "sha256": "5b522d4dea5e8ce742ca5a87ef4852153f9ab792db9ac337836ee1df68a343f1"
+    },
+    {
+      "path": "composio-v31/reviews.json",
+      "sha256": "3eac5f3161d9effdbabdc8d8cfc7690a9bc601e850b3388ea6918819c49d23bb"
+    },
+    {
+      "path": "composio-v31/single_agent/airtable-expiry-041/airtable-expiry-041.json",
+      "sha256": "a31c4eab4b436857c1e05cab6e5db7f9459fa3554342efd3c46eeb1ae078a23d"
+    },
+    {
+      "path": "composio-v31/single_agent/airtable-expiry-041/traces/events.jsonl",
+      "sha256": "0b6bcc2ca06b35fc6ddf479b0da3658d0820532af1a493b87c3dcc0e7b6fd0b1"
+    },
+    {
+      "path": "composio-v31/single_agent/airtable-expiry-041/traces/model-calls.json",
+      "sha256": "a7150a907af531a5857ff37f3d22f1cd9a07bdc183eaf439cd8411be6e0ebc7a"
+    },
+    {
+      "path": "composio-v31/single_agent/gmail-shape-047/gmail-shape-047.json",
+      "sha256": "c7b3a27384e685134760f5b327494f4d055f793673807f5bbbe286164fb87a97"
+    },
+    {
+      "path": "composio-v31/single_agent/gmail-shape-047/traces/events.jsonl",
+      "sha256": "c9a1bb04a1b2a51dcf2e6460147e9a4f30fa28b99118ae11f280576e2d68e69e"
+    },
+    {
+      "path": "composio-v31/single_agent/gmail-shape-047/traces/model-calls.json",
+      "sha256": "e45c6d2983aedd8f576a3a644fd004e9ee0a11a7c22323d63374325814d7b2f3"
+    },
+    {
+      "path": "composio-v31/single_agent/sheets-discovery-039/sheets-discovery-039.json",
+      "sha256": "d79c76fb8e0a34239f76e9feb8ebea4215bf478c6fa134c8357290b4e786ca15"
+    },
+    {
+      "path": "composio-v31/single_agent/sheets-discovery-039/traces/events.jsonl",
+      "sha256": "d4ff146c46b9440efc42e5df49335f74686c51512195d50c97adfb406c6ac4ed"
+    },
+    {
+      "path": "composio-v31/single_agent/sheets-discovery-039/traces/model-calls.json",
+      "sha256": "903747201d10aab36342b5ab149611b8acb3c3e5c2fb86229d4f8c97511afde7"
+    },
+    {
+      "path": "composio-v31/single_agent/slack-redirect-046/slack-redirect-046.json",
+      "sha256": "8bfbfdc4817332f0da2255fc9dc3ec64c5aa5c0ed152d0ba0080450029ad8ed9"
+    },
+    {
+      "path": "composio-v31/single_agent/slack-redirect-046/traces/events.jsonl",
+      "sha256": "48ffcb64268f7c404da70d3f20445b3cbbb34a34d5667e57db7c16e09816163f"
+    },
+    {
+      "path": "composio-v31/single_agent/slack-redirect-046/traces/model-calls.json",
+      "sha256": "9a85fa7759853e13d514f3d74ae1677f3363c14b4f074bb74621a22ea710a25d"
+    },
+    {
+      "path": "composio-v31/single_agent/slack-user-043/slack-user-043.json",
+      "sha256": "a72a695708216041390a209df896dfe1cf9ba6d3c1e9ecc701d7c6dcafc21c64"
+    },
+    {
+      "path": "composio-v31/single_agent/slack-user-043/traces/events.jsonl",
+      "sha256": "94b6dfc2e1f06e9f79ddc5f16f437102bb371cfe2ffdf0978bbff7e370258780"
+    },
+    {
+      "path": "composio-v31/single_agent/slack-user-043/traces/model-calls.json",
+      "sha256": "eb7e1d23f4479253e99043afc5e7b8ff90308240d005a02f73fa40a8b20c499c"
+    },
+    {
+      "path": "composio-v31/single_agent/submissions/airtable-expiry-041.json",
+      "sha256": "a31c4eab4b436857c1e05cab6e5db7f9459fa3554342efd3c46eeb1ae078a23d"
+    },
+    {
+      "path": "composio-v31/single_agent/submissions/gmail-shape-047.json",
+      "sha256": "c7b3a27384e685134760f5b327494f4d055f793673807f5bbbe286164fb87a97"
+    },
+    {
+      "path": "composio-v31/single_agent/submissions/sheets-discovery-039.json",
+      "sha256": "d79c76fb8e0a34239f76e9feb8ebea4215bf478c6fa134c8357290b4e786ca15"
+    },
+    {
+      "path": "composio-v31/single_agent/submissions/slack-redirect-046.json",
+      "sha256": "8bfbfdc4817332f0da2255fc9dc3ec64c5aa5c0ed152d0ba0080450029ad8ed9"
+    },
+    {
+      "path": "composio-v31/single_agent/submissions/slack-user-043.json",
+      "sha256": "a72a695708216041390a209df896dfe1cf9ba6d3c1e9ecc701d7c6dcafc21c64"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/airtable-expiry-041/airtable-expiry-041.json",
+      "sha256": "47e368954d18ba327c7374249d1b33b97c788ef5dc4a395a7e8dee379c034f1b"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/airtable-expiry-041/traces/events.jsonl",
+      "sha256": "856fb6d38d0506282feb3372c26e829248275925c6c57a11d4aa5528f4cdd84a"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/airtable-expiry-041/traces/model-calls.json",
+      "sha256": "6ae567d18d3dd089eceacdb45f7dfe98edb87fdce8e370d31a31b04e63fdb5ec"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/gmail-shape-047/gmail-shape-047.json",
+      "sha256": "157a759984ff0832ff551adb54bb5ad5fedb62f8ef37f2b06d4aa81d5ddb4907"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/gmail-shape-047/traces/events.jsonl",
+      "sha256": "45e5dc733aeea9563b99437c2d900e57821b940a15a1898232da93a9bd349cd1"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/gmail-shape-047/traces/model-calls.json",
+      "sha256": "fdc38dc14b574566398a4e3929cfd8be8e852b60f8e8300bfc77dc1ddaf06342"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/sheets-discovery-039/sheets-discovery-039.json",
+      "sha256": "712c627de2f01f54a9aea3a57a5da73e0a39900df2cf527196910cd554405b68"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/sheets-discovery-039/traces/events.jsonl",
+      "sha256": "77a0a3a4f00d8c60c64f0fe399ca5f00fb9b2ebeb0ada7cd3ad6114246397d93"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/sheets-discovery-039/traces/model-calls.json",
+      "sha256": "87e376881cee2ddb11409b0cad0458add1b9c7b071660acc7ee9bb0caff58c1b"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/slack-redirect-046/slack-redirect-046.json",
+      "sha256": "b22147fae7f1bfced7ccb6a0ed2e91985bd2225a1d991912c1b8593c7e5746f4"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/slack-redirect-046/traces/events.jsonl",
+      "sha256": "0182255ee5884fb95b47bec757f6afb580bdc937dd233741504acca8e9eb22a0"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/slack-redirect-046/traces/model-calls.json",
+      "sha256": "39fbcec4873630f0e6d18296dd92dcd203da164b30e2c644f03d7dfbb042e4dc"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/slack-user-043/slack-user-043.json",
+      "sha256": "88c1ee6161412fac9f87d92f8d5979080b4abe60d190633ec9c7ea5934693379"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/slack-user-043/traces/events.jsonl",
+      "sha256": "2ffd0092500f7e7dceede93d5b1517b240959e6cbc3884d8ed60ae664e977a6e"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/slack-user-043/traces/model-calls.json",
+      "sha256": "43d4ea84c8807acbd88e7a58557c83955c141dd51ec4f1721459a8ff3696b50c"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/submissions/airtable-expiry-041.json",
+      "sha256": "47e368954d18ba327c7374249d1b33b97c788ef5dc4a395a7e8dee379c034f1b"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/submissions/gmail-shape-047.json",
+      "sha256": "157a759984ff0832ff551adb54bb5ad5fedb62f8ef37f2b06d4aa81d5ddb4907"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/submissions/sheets-discovery-039.json",
+      "sha256": "712c627de2f01f54a9aea3a57a5da73e0a39900df2cf527196910cd554405b68"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/submissions/slack-redirect-046.json",
+      "sha256": "b22147fae7f1bfced7ccb6a0ed2e91985bd2225a1d991912c1b8593c7e5746f4"
+    },
+    {
+      "path": "composio-v31/single_agent_plain_matched/submissions/slack-user-043.json",
+      "sha256": "88c1ee6161412fac9f87d92f8d5979080b4abe60d190633ec9c7ea5934693379"
+    },
+    {
+      "path": "plain-input-matching/final-summary.json",
+      "sha256": "add6ec6b46d0e3a1cdc5ac8ac7bd036e55e430ab2119446ac906b2df215330c2"
+    },
+    {
+      "path": "plain-input-matching/final-verification.json",
+      "sha256": "2a960aa4c7057c10453374df6106191c7214dbe4a3706ccc9f5b609c23dcbce1"
+    },
+    {
+      "path": "plain-input-matching/progress.json",
+      "sha256": "318cadbd1e5dbb3329354796687db5a0c289cb846898545170297d3543f1384e"
+    },
+    {
+      "path": "plain-input-matching/results.json",
+      "sha256": "1e9fa4559db42526a5a64b30d99a9a94a4c36cfbdbc2213892db429c011bdccc"
+    },
+    {
+      "path": "context-recovery/agent-log.json",
+      "sha256": "5c7a4fcb70672291b41338bc7310f9c0d5e133fd18b2a5f126cd645ff0ea4263"
+    },
+    {
+      "path": "context-recovery/comparison.json",
+      "sha256": "de1bbb4420cff92d29efc3ccdc32765a212a2a6e906d750c2ef2f6f445ba2181"
+    },
+    {
+      "path": "context-recovery/manifest.json",
+      "sha256": "6870fbc941473e06190e11e65c5146fa1d2692617ad3c0b09a815760e84ed998"
+    },
+    {
+      "path": "context-recovery/reviews.json",
+      "sha256": "5956449e4647529e2899d3892a2e07a5a567d8668f78beb3633d11695ff675c4"
+    },
+    {
+      "path": "context-recovery/ticket.json",
+      "sha256": "00915d7a2a9cd1d9ddedad37810e759bf2732ac62e7fccb557599c8747806afd"
+    },
+    {
+      "path": "custom-intake/agent-log.json",
+      "sha256": "70c92a5f8115dc0532a75d436cf85c412592cf216e514b5663e4b11b3760232f"
+    },
+    {
+      "path": "custom-intake/ticket-id.json",
+      "sha256": "24d40081896bb316433b3b27767bb14e04c3a6505d53918d9b65e7809bd12262"
+    },
+    {
+      "path": "custom-intake/ticket.json",
+      "sha256": "7a9490d928af3958709465ae1618c8ad6848d9aaf1b7c026866fcdf6af248649"
+    },
+    {
+      "path": "submission-demo/gmail-001-agent-log.json",
+      "sha256": "18976153951411024a9e4c223dcd531bf026f629b68f07060da9c6ec2bc80c5b"
+    },
+    {
+      "path": "submission-demo/gmail-001-first-attempt.json",
+      "sha256": "99bf92d82cdbff2d188f444194baeaa034a3b94e383cc8f1f62b096c34f2013b"
+    },
+    {
+      "path": "submission-demo/gmail-001.json",
+      "sha256": "40b35e732bf13ac62c64e57a70b6483e237b3c41439c1d7b9a28d32379c2a53a"
+    },
+    {
+      "path": "submission-demo/tickets.json",
+      "sha256": "3f10a2ccf9402b3f52ce755266f4332617a8ca05f9463b717fd518e375284f93"
+    },
+    {
+      "path": "submission-demo/unknown-012-agent-log.json",
+      "sha256": "7c43fe62ea89b5883a1d4d7bed733b5bf28a0ac9bfe5ad08dae9cd500067dd84"
+    },
+    {
+      "path": "submission-demo/unknown-012.json",
+      "sha256": "8de4fa5d89ccb835ae0db3997c25d12edd105147aeea969bcac995cc20dd7523"
+    },
+    {
+      "path": "submission-demo/verification.json",
+      "sha256": "b053dde14cd5cdc26357b1266647c029f17a33373e77c9b0e9f87d27ce6d36e8"
+    }
+  ]
+}

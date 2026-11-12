@@ -1,0 +1,664 @@
+{
+  "incident_id": "session-policy-049",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "session-policy-049",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Probable cause for the observed cedar failure: the write attempt was denied by session tool policy before any provider call. The canonical execution log shows provider scope present but policy_allowed=false, and the controlled synthetic comparison flips the outcome by changing only session configuration.",
+        "supporting_evidence": [
+          "ev_9526b2a257cc",
+          "ev_984c7105b9af",
+          "ev_204c51af1486"
+        ],
+        "contradicting_evidence": [
+          "ev_99dd47f840b4"
+        ],
+        "confidence": "high",
+        "assumptions": [
+          "Scoped to the observed cedar write path and request req-49, not all write actions globally.",
+          "The synthetic controlled comparison is discriminating evidence for mechanism, not proof of the exact production configuration source.",
+          "The complaint's discovery omission is not independently verified by a canonical production discovery payload in the supplied evidence."
+        ]
+      },
+      {
+        "description": "Alternative explanation: a tenant- or session-specific unconfirmed configuration difference explains why cedar is impacted while maple is healthy. This fits the observed isolation, but the precise source of the configuration difference is not proven by supplied canonical config records.",
+        "supporting_evidence": [
+          "ev_204c51af1486",
+          "ev_32fa755190df",
+          "ev_a2a80b98b985"
+        ],
+        "contradicting_evidence": [
+          "ev_7b3724caad88",
+          "ev_964fa7bd66ac"
+        ],
+        "confidence": "medium",
+        "assumptions": [
+          "No observed tool-executor deployment reduces support for a broad fresh executor regression, but does not prove no relevant configuration changed elsewhere.",
+          "Healthy maple observations are a comparison point, not proof that every non-cedar session is unaffected."
+        ]
+      },
+      {
+        "description": "Weak alternative: missing or ineffective provider grant on the connection. This remains uncorroborated because connection queries returned no canonical grant snapshot, but it is not the observed blocking mechanism for req-49 because the provider was never called and the log reports provider_scope_present=true.",
+        "supporting_evidence": [
+          "ev_99dd47f840b4"
+        ],
+        "contradicting_evidence": [
+          "ev_9526b2a257cc",
+          "ev_984c7105b9af"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "Empty connection-query results are a telemetry limitation, not proof that the connection or grants were absent.",
+          "A grant issue could coexist with policy problems, but was not the demonstrated cause of the observed failed execution."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Use synthetic telemetry plus canonical production policy/config records to inspect the effective cedar session tool policy and verify whether a narrow write-tool exception was intended for this workflow; recommended actions have not been executed.",
+      "Collect the canonical production discovery response and effective session-policy payload for the affected cedar session to verify whether write tools were hidden by policy versus omitted by discovery logic.",
+      "Compare cedar's effective session configuration and policy inputs with a healthy baseline tenant/session such as maple to identify the tenant-specific difference.",
+      "If grant state still needs reassurance, collect a canonical connection grant/scope snapshot for the exact affected cedar connection near 2026-11-12T10:05:00Z before treating missing grant as causal.",
+      "Monitor cedar backlog and latency during investigation because observed blocked operations and queue depth indicate material tenant impact."
+    ],
+    "limitations": [
+      "No canonical production discovery payload was supplied, so the 'missing from discovery' portion of the complaint is unverified.",
+      "No canonical connection/grant snapshot was returned, so the complaint's claim about effective write authorization is not independently corroborated from connection records.",
+      "Metrics are synthetic telemetry and were initially delayed by a retryable timeout before succeeding; conclusions should stay scoped to the supplied observations.",
+      "No canonical policy audit trail or config-change record was supplied, so the exact source and timing of the effective session-policy state remains uncertain."
+    ]
+  },
+  "ranked_cause_codes": [
+    "session_tool_policy_block",
+    "unconfirmed_change",
+    "missing_grant"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The canonical cedar execution record shows a 403 with provider_scope_present=true, session_allowed_tags=[readOnlyHint], requested_tool_tags=[writeHint], policy_allowed=false, and provider_called=false, identifying a pre-provider session-policy denial on the observed write attempt.",
+      "citations": [
+        {
+          "evidence_id": "ev_9526b2a257cc",
+          "record_id": "session-policy-049:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the synthetic controlled comparison, the original session configuration reproduces the same 403 denial with policy_allowed=false and no provider call, while changing only session configuration yields 200 with policy_allowed=true and provider_called=true.",
+      "citations": [
+        {
+          "evidence_id": "ev_984c7105b9af",
+          "record_id": "session-policy-049:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_984c7105b9af",
+          "record_id": "session-policy-049:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact is severe but tenant-isolated in supplied telemetry: cedar had 772 requests with 430 failures and 430 business operations blocked, queue depth 138, and p95 latency 1840 ms, while maple had 626 requests with 0 failures, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_204c51af1486",
+          "record_id": "session-policy-049:metrics:0"
+        },
+        {
+          "evidence_id": "ev_204c51af1486",
+          "record_id": "session-policy-049:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_isolation",
+      "statement": "A comparison log shows maple successfully completing an unrelated read against the same provider context while cedar's write was denied, which is counter-evidence to a broad provider outage and supports tenant/session-specific impact.",
+      "citations": [
+        {
+          "evidence_id": "ev_32fa755190df",
+          "record_id": "session-policy-049:logs:1"
+        },
+        {
+          "evidence_id": "ev_9526b2a257cc",
+          "record_id": "session-policy-049:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "scope_present",
+      "statement": "The failed production execution explicitly reports provider_scope_present=true, which weighs against a simple missing-provider-scope explanation for the observed request.",
+      "citations": [
+        {
+          "evidence_id": "ev_9526b2a257cc",
+          "record_id": "session-policy-049:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "The observed write did not call the provider, so the demonstrated failure mechanism occurred before any provider-side grant enforcement or provider outage could affect req-49.",
+      "citations": [
+        {
+          "evidence_id": "ev_9526b2a257cc",
+          "record_id": "session-policy-049:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "The supplied evidence contains no canonical production discovery payload and no canonical connection/grant snapshot for the affected cedar connection, so discovery omission and exact effective grant state remain unverified gaps.",
+      "citations": [
+        {
+          "evidence_id": "ev_9526b2a257cc",
+          "record_id": "session-policy-049:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "No tool-executor deployment was observed during the incident window; the only deployment hit in supplied records was an unrelated support-dashboard release, so deployment timing is only weak counter-context and not the basis of diagnosis.",
+      "citations": [
+        {
+          "evidence_id": "ev_964fa7bd66ac",
+          "record_id": "session-policy-049:deployments:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "session_tool_policy_block_remediation",
+    "collect_missing_telemetry",
+    "verify_original_body_bytes"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_1334f929a211",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_964fa7bd66ac",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_984c7105b9af",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "session_configuration",
+          "check_passed": false,
+          "status": 403,
+          "provider_scope_present": true,
+          "session_allowed_tags": [
+            "readOnlyHint"
+          ],
+          "requested_tool_tags": [
+            "writeHint"
+          ],
+          "policy_allowed": false,
+          "provider_called": false
+        },
+        {
+          "record_id": "session-policy-049:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "session_configuration",
+          "check_passed": true,
+          "status": 200,
+          "provider_scope_present": true,
+          "session_allowed_tags": [
+            "readOnlyHint"
+          ],
+          "requested_tool_tags": [
+            "writeHint"
+          ],
+          "policy_allowed": true,
+          "provider_called": true,
+          "session_exact_tool_exception_authorized": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_32fa755190df",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-49",
+          "status": 403,
+          "provider_scope_present": true,
+          "session_allowed_tags": [
+            "readOnlyHint"
+          ],
+          "requested_tool_tags": [
+            "writeHint"
+          ],
+          "policy_allowed": false,
+          "provider_called": false
+        },
+        {
+          "record_id": "session-policy-049:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_99dd47f840b4",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_45d2ce309621",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_204c51af1486",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 772,
+          "failures": 430,
+          "business_operations_blocked": 430,
+          "queue_depth": 138,
+          "p95_latency_ms": 1840
+        },
+        {
+          "record_id": "session-policy-049:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 626,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_9526b2a257cc",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "req-49",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-49",
+          "status": 403,
+          "provider_scope_present": true,
+          "session_allowed_tags": [
+            "readOnlyHint"
+          ],
+          "requested_tool_tags": [
+            "writeHint"
+          ],
+          "policy_allowed": false,
+          "provider_called": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_74baff4a7fcc",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7b3724caad88",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7d76f94bcb60",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "policy",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_df70987a05e3",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_a2a80b98b985",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "session_configuration",
+          "check_passed": false,
+          "status": 403,
+          "provider_scope_present": true,
+          "session_allowed_tags": [
+            "readOnlyHint"
+          ],
+          "requested_tool_tags": [
+            "writeHint"
+          ],
+          "policy_allowed": false,
+          "provider_called": false
+        },
+        {
+          "record_id": "session-policy-049:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "session_configuration",
+          "check_passed": true,
+          "status": 200,
+          "provider_scope_present": true,
+          "session_allowed_tags": [
+            "readOnlyHint"
+          ],
+          "requested_tool_tags": [
+            "writeHint"
+          ],
+          "policy_allowed": true,
+          "provider_called": true,
+          "session_exact_tool_exception_authorized": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_384cd28b039f",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "session-policy-049:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-49",
+          "status": 403,
+          "provider_scope_present": true,
+          "session_allowed_tags": [
+            "readOnlyHint"
+          ],
+          "requested_tool_tags": [
+            "writeHint"
+          ],
+          "policy_allowed": false,
+          "provider_called": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 204.42483902501408,
+  "input_tokens": 94436,
+  "output_tokens": 13473
+}

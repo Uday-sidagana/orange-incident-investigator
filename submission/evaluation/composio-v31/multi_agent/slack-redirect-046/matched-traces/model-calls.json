@@ -1,0 +1,257 @@
+{
+  "models": {
+    "orchestrator": "gpt-5.4",
+    "observability": "gpt-5.4",
+    "dependency": "gpt-5.4",
+    "reasoning": "gpt-5.4",
+    "critic": "gpt-5.4",
+    "reporting": "gpt-5.4"
+  },
+  "limits": {
+    "max_provider_attempts": 2,
+    "max_requests": 24,
+    "max_output_tokens": 4000,
+    "max_context_chars": 100000,
+    "max_total_context_chars": 700000,
+    "max_collection_rounds": 3,
+    "max_queries_per_task": 7
+  },
+  "requests": 13,
+  "context_chars": 403484,
+  "calls": [
+    {
+      "role": "orchestrator",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0a7729bd424d5721016af5f7c72cc087d28bcfa4abedd41d84",
+      "usage": {
+        "input_tokens": 2846,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1792
+        },
+        "output_tokens": 647,
+        "output_tokens_details": {
+          "reasoning_tokens": 42
+        },
+        "total_tokens": 3493
+      }
+    },
+    {
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0bc4578845fdb8b2016af5f7da5f4c87d2996e8144cf7483ba",
+      "usage": {
+        "input_tokens": 3764,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 208,
+        "output_tokens_details": {
+          "reasoning_tokens": 55
+        },
+        "total_tokens": 3972
+      }
+    },
+    {
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_029ec8b53fb891d7016af5f7da375487d28c68d2ffb807b528",
+      "usage": {
+        "input_tokens": 3936,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 236,
+        "output_tokens_details": {
+          "reasoning_tokens": 86
+        },
+        "total_tokens": 4172
+      }
+    },
+    {
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_029ec8b53fb891d7016af5f7dfa5c087d2bdf29b2b8f180e72",
+      "usage": {
+        "input_tokens": 4839,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 164,
+        "output_tokens_details": {
+          "reasoning_tokens": 90
+        },
+        "total_tokens": 5003
+      }
+    },
+    {
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_029ec8b53fb891d7016af5f7e3811487d297c84acddfe70ae1",
+      "usage": {
+        "input_tokens": 5283,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 4608
+        },
+        "output_tokens": 87,
+        "output_tokens_details": {
+          "reasoning_tokens": 13
+        },
+        "total_tokens": 5370
+      }
+    },
+    {
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0bc4578845fdb8b2016af5f7de759887d2991b89b5d18e56d6",
+      "usage": {
+        "input_tokens": 4686,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 439,
+        "output_tokens_details": {
+          "reasoning_tokens": 210
+        },
+        "total_tokens": 5125
+      }
+    },
+    {
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0bc4578845fdb8b2016af5f7e7065087d29db978b59519f7cf",
+      "usage": {
+        "input_tokens": 5451,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 4608
+        },
+        "output_tokens": 381,
+        "output_tokens_details": {
+          "reasoning_tokens": 232
+        },
+        "total_tokens": 5832
+      }
+    },
+    {
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0b6b338f6293527c016af5f7e5c99c87d2a8f98ac7094e3a0d",
+      "usage": {
+        "input_tokens": 5402,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 644,
+        "output_tokens_details": {
+          "reasoning_tokens": 76
+        },
+        "total_tokens": 6046
+      }
+    },
+    {
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0281538ba9189b12016af5f7ee940487d294191010fb533bc6",
+      "usage": {
+        "input_tokens": 5970,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 600,
+        "output_tokens_details": {
+          "reasoning_tokens": 60
+        },
+        "total_tokens": 6570
+      }
+    },
+    {
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_07aec486aa17e143016af5f7ffd06c87d2938cd8451c38c044",
+      "usage": {
+        "input_tokens": 7136,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1142,
+        "output_tokens_details": {
+          "reasoning_tokens": 85
+        },
+        "total_tokens": 8278
+      }
+    },
+    {
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_01cd73655a9cea6f016af5f8136ce087d287be412a0d813214",
+      "usage": {
+        "input_tokens": 9191,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 2716,
+        "output_tokens_details": {
+          "reasoning_tokens": 210
+        },
+        "total_tokens": 11907
+      }
+    },
+    {
+      "role": "critic",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0462a401b8d7eaf1016af5f83c71cc87d2a4455b39bd961bd4",
+      "usage": {
+        "input_tokens": 9990,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 648,
+        "output_tokens_details": {
+          "reasoning_tokens": 249
+        },
+        "total_tokens": 10638
+      }
+    },
+    {
+      "role": "reporting",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_02d9cc76162886b7016af5f84914c487d2ac6155f4d920a8b8",
+      "usage": {
+        "input_tokens": 12088,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1557,
+        "output_tokens_details": {
+          "reasoning_tokens": 36
+        },
+        "total_tokens": 13645
+      }
+    }
+  ]
+}

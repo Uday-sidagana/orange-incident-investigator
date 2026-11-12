@@ -1,0 +1,363 @@
+{
+  "incident_id": "sheets-discovery-039",
+  "approach": "single_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "sheets-discovery-039",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "The missing Sheets action was not absent from the provider or current catalog; discovery returned only the first page (20 tools), and the required action was on a later page, so the agent treated truncation as unavailability.",
+        "supporting_evidence": [
+          "ev_9b152f02d7f9",
+          "ev_e2138419ef7e",
+          "ev_154da898e8ad",
+          "ev_2eae34a8d8ef"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The affected workflow depended on catalog discovery output rather than directly invoking a known action slug.",
+          "The sandbox controlled comparison is representative of the cedar request path except for the stated Sheets configuration difference."
+        ]
+      },
+      {
+        "description": "A provider outage caused the required Sheets action to disappear.",
+        "supporting_evidence": [
+          "ev_53d065c564c9"
+        ],
+        "contradicting_evidence": [
+          "ev_9b152f02d7f9",
+          "ev_154da898e8ad",
+          "ev_2eae34a8d8ef"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The historical outage is relevant to current behavior, despite being labeled analogy only."
+        ]
+      },
+      {
+        "description": "A recent deployment regressed discovery behavior.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_4103779983c7",
+          "ev_9b152f02d7f9"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "Any causal deployment would have been visible in the supplied deployment record."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Paginate discovery or raise the discovery limit for googlesheets, then use the returned action slug from the later page.",
+      "Verify the cedar configuration path matches the corrected reproduction that completes pagination.",
+      "Monitor cedar backlog/latency after correcting discovery behavior because business operations were blocked despite zero request failures.",
+      "If additional uncertainty remains, collect request-level telemetry showing the discovery pagination parameters used by the affected workflow."
+    ],
+    "limitations": [
+      "No raw request payload was provided to show exactly how cedar configured discovery pagination.",
+      "The reproduce evidence is sandbox-based and controlled, so it supports mechanism discrimination but is not a live production replay.",
+      "Evidence is centered on cedar and one comparison tenant; broader tenant prevalence is not established."
+    ]
+  },
+  "ranked_cause_codes": [
+    "tool_discovery_truncation",
+    "provider_failure",
+    "unconfirmed_change"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "In cedar, tool discovery succeeded with HTTP 200 but returned only 20 googlesheets tools with has_more=true, and the requested tool was on a later page even though the current version contained it.",
+      "citations": [
+        {
+          "evidence_id": "ev_9b152f02d7f9",
+          "record_id": "sheets-discovery-039:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "A controlled sandbox reproduction matched the original failure when using the original Sheets configuration, then passed when the configuration was corrected to complete pagination; both runs still showed list_limit=20 and the requested tool existing on a later page.",
+      "citations": [
+        {
+          "evidence_id": "ev_154da898e8ad",
+          "record_id": "sheets-discovery-039:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_154da898e8ad",
+          "record_id": "sheets-discovery-039:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Impact was tenant-specific in the supplied evidence: cedar had 380 business operations blocked, queue depth 108, and p95 latency 1440 ms with zero request failures, while maple had zero blocked operations, zero queue depth, and 160 ms p95 latency.",
+      "citations": [
+        {
+          "evidence_id": "ev_2eae34a8d8ef",
+          "record_id": "sheets-discovery-039:metrics:0"
+        },
+        {
+          "evidence_id": "ev_2eae34a8d8ef",
+          "record_id": "sheets-discovery-039:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "The outage explanation is weakened because another tenant saw the same provider available and unrelated reads succeeded at the same time.",
+      "citations": [
+        {
+          "evidence_id": "ev_9b152f02d7f9",
+          "record_id": "sheets-discovery-039:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "verification_control",
+      "statement": "Public product guidance matches the observed mechanism: tool discovery may return only the default first page unless pagination is followed or a larger limit is requested.",
+      "citations": [
+        {
+          "evidence_id": "ev_e2138419ef7e",
+          "record_id": "sheets-discovery-039:knowledge:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "tool_discovery_truncation_remediation",
+    "collect_missing_telemetry",
+    "monitor_provider"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_9b152f02d7f9",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-39",
+          "toolkit": "googlesheets",
+          "status": 200,
+          "list_limit": 20,
+          "returned_tools": 20,
+          "has_more": true,
+          "requested_tool_on_later_page": true,
+          "version_contains_tool": true
+        },
+        {
+          "record_id": "sheets-discovery-039:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2eae34a8d8ef",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 602,
+          "failures": 0,
+          "business_operations_blocked": 380,
+          "queue_depth": 108,
+          "p95_latency_ms": 1440
+        },
+        {
+          "record_id": "sheets-discovery-039:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 516,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_53d065c564c9",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_e2138419ef7e",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-googlesheets",
+          "kind": "public_reference",
+          "summary": "Tool discovery can return only its default first page; follow pagination or request a larger limit."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4103779983c7",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_154da898e8ad",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "sheets_configuration",
+          "check_passed": false,
+          "toolkit": "googlesheets",
+          "status": 200,
+          "list_limit": 20,
+          "returned_tools": 20,
+          "has_more": true,
+          "requested_tool_on_later_page": true,
+          "version_contains_tool": true
+        },
+        {
+          "record_id": "sheets-discovery-039:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "sheets_configuration",
+          "check_passed": true,
+          "toolkit": "googlesheets",
+          "status": 200,
+          "list_limit": 20,
+          "returned_tools": 20,
+          "has_more": true,
+          "requested_tool_on_later_page": true,
+          "version_contains_tool": true,
+          "pagination_completed": true,
+          "requested_tool_found": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 47.2081704250304,
+  "input_tokens": 16813,
+  "output_tokens": 2842
+}

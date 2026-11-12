@@ -1,0 +1,672 @@
+{
+  "incident_id": "notion-access-033",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "notion-access-033",
+    "outcome": "inconclusive",
+    "hypotheses": [
+      {
+        "description": "Leading explanation for the observed Cedar failure is a Notion access-boundary problem on the specific page: the page exists, Cedar's token is valid, but the current integration does not have access. This is consistent with the page not being shared to the existing integration or being moved into a different Notion sharing boundary, but the narrower root cause is not fully distinguished from wrong-account selection in the supplied canonical production evidence.",
+        "supporting_evidence": [
+          "ev_793ba50ce905",
+          "ev_d563d801376f",
+          "ev_c33975c43e94",
+          "ev_67cfb4828cc7",
+          "ev_7249ad8b7753",
+          "ev_41f6b24c1b8d"
+        ],
+        "contradicting_evidence": [
+          "ev_82604d12e0b9"
+        ],
+        "confidence": "medium",
+        "assumptions": [
+          "The observed Cedar request is representative of the reported new-page failures.",
+          "The sandbox controlled comparison supports the mechanism but does not prove the exact production sharing state.",
+          "No canonical production record here shows a successful Cedar existing-page read in the same window."
+        ]
+      },
+      {
+        "description": "Competing explanation: Cedar may have used the wrong Notion connected account or workspace, producing the same immediate symptom of resource existence with integration access missing.",
+        "supporting_evidence": [
+          "ev_793ba50ce905",
+          "ev_41f6b24c1b8d"
+        ],
+        "contradicting_evidence": [
+          "ev_d563d801376f",
+          "ev_7249ad8b7753"
+        ],
+        "confidence": "medium",
+        "assumptions": [
+          "The supplied canonical logs do not expose the selected Notion account/workspace identity for the failing request.",
+          "Wrong-account selection and missing page share can both yield integration_has_page_access=false."
+        ]
+      },
+      {
+        "description": "A nearby release regression remains weak and unconfirmed. The supplied telemetry does not show a tool-executor deployment in the checked window, and the observed mechanism is better explained by Notion access state than by a generic executor regression.",
+        "supporting_evidence": [
+          "ev_82604d12e0b9"
+        ],
+        "contradicting_evidence": [
+          "ev_b1329854c9c2",
+          "ev_d563d801376f",
+          "ev_7249ad8b7753",
+          "ev_41f6b24c1b8d"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The incident description's nearby-release concern is not independently confirmed for tool-executor in supplied records.",
+          "Absence of deployment records here is not absolute proof that no relevant release existed outside coverage."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry shows Cedar-only impact; collect canonical production evidence for one successful Cedar existing-page read and one failing new-page read in the same window under the same connection context. These actions have not been executed.",
+      "Verify the exact Notion connected account/workspace selected on Cedar's failing request before recommending any reconnect. These actions have not been executed.",
+      "Ask a Cedar workspace admin to verify whether the affected page was explicitly shared to the currently used Notion integration, or moved into a different database/teamspace/share boundary. These actions have not been executed.",
+      "Do not ask everyone to reconnect based on current evidence alone; first distinguish missing page share from wrong connected account. These actions have not been executed."
+    ],
+    "limitations": [
+      "critic_approved is false, so this report remains inconclusive despite a leading explanation.",
+      "Supplied canonical production evidence does not show the exact connected account identity used on the failing Cedar request.",
+      "Supplied canonical production evidence does not verify the customer-reported split of new-page failures versus existing-page successes within Cedar during the same window.",
+      "Synthetic reproduce telemetry is supportive mechanism evidence only, not direct production proof of the exact Notion configuration state.",
+      "Critic did not approve a probable cause; further evidence is required."
+    ]
+  },
+  "ranked_cause_codes": [
+    "notion_resource_not_shared",
+    "wrong_connected_account",
+    "unconfirmed_change"
+  ],
+  "findings": [
+    {
+      "code": "tenant_isolation",
+      "statement": "Observed failures are tenant-isolated in supplied production telemetry: Cedar has a failing Notion read while Maple succeeds at the same time.",
+      "citations": [
+        {
+          "evidence_id": "ev_793ba50ce905",
+          "record_id": "notion-access-033:logs:0"
+        },
+        {
+          "evidence_id": "ev_d563d801376f",
+          "record_id": "notion-access-033:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact is severe for Cedar and absent for Maple at 10:05Z: Cedar had 500 requests with 350 failures, 350 blocked business operations, queue depth 90, and p95 latency 1200 ms, while Maple had 450 requests with 0 failures, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_c33975c43e94",
+          "record_id": "notion-access-033:metrics:0"
+        },
+        {
+          "evidence_id": "ev_67cfb4828cc7",
+          "record_id": "notion-access-033:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "mechanism_observation",
+      "statement": "The observed Cedar failure is an explicit Notion-side access/not-found state, not an expired-token or transport failure: status 404 with resource_exists=true, integration_has_page_access=false, token_valid=true, and provider API reachable.",
+      "citations": [
+        {
+          "evidence_id": "ev_793ba50ce905",
+          "record_id": "notion-access-033:logs:0"
+        },
+        {
+          "evidence_id": "ev_7249ad8b7753",
+          "record_id": "notion-access-033:dependencies:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "Synthetic controlled comparison supports the access-boundary mechanism: with the original Notion configuration the same request produced 404 and integration_has_page_access=false, while with corrected Notion configuration it produced 200 and integration_has_page_access=true.",
+      "citations": [
+        {
+          "evidence_id": "ev_41f6b24c1b8d",
+          "record_id": "notion-access-033:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_41f6b24c1b8d",
+          "record_id": "notion-access-033:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "The supplied canonical evidence does not identify the exact Cedar connected account/workspace used on the failing request and does not show a successful Cedar existing-page read in the same window, so missing page share is not yet distinguished from wrong connected account.",
+      "citations": [
+        {
+          "evidence_id": "ev_793ba50ce905",
+          "record_id": "notion-access-033:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "The only observed deployment near the incident was an unrelated support-dashboard release; the supplied checked window did not show a tool-executor deployment record, so the nearby release hypothesis is unverified from current evidence.",
+      "citations": [
+        {
+          "evidence_id": "ev_82604d12e0b9",
+          "record_id": "notion-access-033:deployments:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "collect_missing_telemetry",
+    "select_intended_connected_account",
+    "request_workspace_admin_access",
+    "notion_resource_not_shared_remediation"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_d1e6504e5489",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-33",
+          "toolkit": "notion",
+          "status": 404,
+          "resource_exists": true,
+          "integration_has_page_access": false,
+          "token_valid": true
+        },
+        {
+          "record_id": "notion-access-033:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_364dc4a9ff53",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_0d316fd10710",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 500,
+          "failures": 350,
+          "business_operations_blocked": 350,
+          "queue_depth": 90,
+          "p95_latency_ms": 1200
+        },
+        {
+          "record_id": "notion-access-033:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 450,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_82604d12e0b9",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7249ad8b7753",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_41f6b24c1b8d",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "notion_configuration",
+          "check_passed": false,
+          "toolkit": "notion",
+          "status": 404,
+          "resource_exists": true,
+          "integration_has_page_access": false,
+          "token_valid": true
+        },
+        {
+          "record_id": "notion-access-033:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "notion_configuration",
+          "check_passed": true,
+          "toolkit": "notion",
+          "status": 200,
+          "resource_exists": true,
+          "integration_has_page_access": true,
+          "token_valid": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_b1329854c9c2",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:30:00Z",
+        "end": "2026-11-12T10:30:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_b6fd97c80dba",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:30:00Z",
+        "end": "2026-11-12T10:30:00Z",
+        "search": "Notion",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1c0747779c84",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": "Cedar",
+        "version": null,
+        "start": "2026-11-12T09:30:00Z",
+        "end": "2026-11-12T10:30:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_793ba50ce905",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-33",
+          "toolkit": "notion",
+          "status": 404,
+          "resource_exists": true,
+          "integration_has_page_access": false,
+          "token_valid": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_d563d801376f",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "maple",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_372c4bf24dc1",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c33975c43e94",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 500,
+          "failures": 350,
+          "business_operations_blocked": 350,
+          "queue_depth": 90,
+          "p95_latency_ms": 1200
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_9d5c453e74af",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": "maple",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_67cfb4828cc7",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": "maple",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 450,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_6fcebd2c8d3b",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "Cedar",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_ec9b9338f29b",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-access-033:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-33",
+          "toolkit": "notion",
+          "status": 404,
+          "resource_exists": true,
+          "integration_has_page_access": false,
+          "token_valid": true
+        },
+        {
+          "record_id": "notion-access-033:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 156.82642421399942,
+  "input_tokens": 82964,
+  "output_tokens": 9655
+}

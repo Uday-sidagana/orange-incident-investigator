@@ -1,0 +1,522 @@
+{
+  "incident_id": "github-token-036",
+  "approach": "multi_agent",
+  "run_status": "failed",
+  "report": {
+    "incident_id": "github-token-036",
+    "outcome": "inconclusive",
+    "hypotheses": [],
+    "recommended_actions": [
+      "Inspect execution errors and obtain missing evidence before retrying."
+    ],
+    "limitations": [
+      "reason-1: ProviderFailure: Model context budget exhausted",
+      "critic-1: dependency failed"
+    ]
+  },
+  "ranked_cause_codes": [],
+  "findings": [],
+  "action_codes": [],
+  "trace": [
+    {
+      "evidence_id": "ev_36037a947c61",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_302c6ee2e1e9",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c5af76d59927",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "github_configuration",
+          "check_passed": false,
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": true,
+          "tool_execution_status": 200
+        },
+        {
+          "record_id": "github-token-036:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "github_configuration",
+          "check_passed": true,
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": false,
+          "tool_execution_status": 200,
+          "execution_path": "authenticated_proxy",
+          "relay_completed": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1947c9b8c84d",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-36",
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": true,
+          "tool_execution_status": 200
+        },
+        {
+          "record_id": "github-token-036:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_09a96d0607b0",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 551,
+          "failures": 0,
+          "business_operations_blocked": 365,
+          "queue_depth": 99,
+          "p95_latency_ms": 1320
+        },
+        {
+          "record_id": "github-token-036:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 483,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1e7e0bea6d53",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9c5a6b552ca7",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-36",
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": true,
+          "tool_execution_status": 200
+        },
+        {
+          "record_id": "github-token-036:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9ce4282d5c24",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:30:00Z",
+        "end": "2026-11-12T10:20:00Z",
+        "search": "relay",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_5d9706b6edf8",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "github",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_16242bf35c1c",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "github_configuration",
+          "check_passed": false,
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": true,
+          "tool_execution_status": 200
+        },
+        {
+          "record_id": "github-token-036:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "github_configuration",
+          "check_passed": true,
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": false,
+          "tool_execution_status": 200,
+          "execution_path": "authenticated_proxy",
+          "relay_completed": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_02e3f904846f",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 551,
+          "failures": 0,
+          "business_operations_blocked": 365,
+          "queue_depth": 99,
+          "p95_latency_ms": 1320
+        },
+        {
+          "record_id": "github-token-036:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 483,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9d9f569e17a0",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:25:00Z",
+        "end": "2026-11-12T09:49:59Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_24d1a211a924",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_349e9e66af16",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+          "kind": "public_reference",
+          "summary": "Connected-account responses redact GitHub provider tokens; authenticated execution remains available."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_0d6a7b501fdf",
+      "query": {
+        "tool": "refresh_history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 171.19508499698713,
+  "input_tokens": 122316,
+  "output_tokens": 9602
+}

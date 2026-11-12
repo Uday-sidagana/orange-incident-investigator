@@ -1,0 +1,106 @@
+{
+  "models": {
+    "single_agent": "gpt-5.4"
+  },
+  "limits": {
+    "max_provider_attempts": 2,
+    "max_requests": 24,
+    "max_output_tokens": 4000,
+    "max_context_chars": 100000,
+    "max_total_context_chars": 700000,
+    "max_collection_rounds": 20,
+    "max_queries_per_task": 24
+  },
+  "calls": [
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_056af43428fb66f1016af5f40d411487d2815775ac45efd862",
+      "usage": {
+        "input_tokens": 4434,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1536
+        },
+        "output_tokens": 289,
+        "output_tokens_details": {
+          "reasoning_tokens": 53
+        },
+        "total_tokens": 4723
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_056af43428fb66f1016af5f411ca7c87d2beb3a862fac53ff6",
+      "usage": {
+        "input_tokens": 5761,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 183,
+        "output_tokens_details": {
+          "reasoning_tokens": 47
+        },
+        "total_tokens": 5944
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_056af43428fb66f1016af5f4159b7c87d2ad870347c487a136",
+      "usage": {
+        "input_tokens": 6337,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 5632
+        },
+        "output_tokens": 1387,
+        "output_tokens_details": {
+          "reasoning_tokens": 285
+        },
+        "total_tokens": 7724
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0549993d7be9d625016af5f42d7af487d2939fc6b81121c7d1",
+      "usage": {
+        "input_tokens": 6334,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1588,
+        "output_tokens_details": {
+          "reasoning_tokens": 516
+        },
+        "total_tokens": 7922
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0dd2a98a38e65b9e016af5f44b943887d29b3eaa3144350301",
+      "usage": {
+        "input_tokens": 7547,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 5888
+        },
+        "output_tokens": 1203,
+        "output_tokens_details": {
+          "reasoning_tokens": 173
+        },
+        "total_tokens": 8750
+      }
+    }
+  ]
+}

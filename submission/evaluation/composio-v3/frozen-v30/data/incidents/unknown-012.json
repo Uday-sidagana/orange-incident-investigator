@@ -1,0 +1,76 @@
+{
+  "incident": {
+    "id": "unknown-012",
+    "title": "Intermittent execution failures with missing telemetry",
+    "description": "A customer reports sporadic 502 responses; traces and metrics are unavailable.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "unknown-012:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "status": 502,
+        "request_id": "lost-1",
+        "upstream_trace_id": null
+      }
+    ],
+    "metrics": [],
+    "deployments": [
+      {
+        "record_id": "unknown-012:deployments:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Executor release",
+        "version": "new"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "unknown-012:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "unknown-012:history:0",
+        "service": "tool-executor",
+        "symptom": "502 error",
+        "cause": "Provider outage",
+        "verified": true
+      },
+      {
+        "record_id": "unknown-012:history:1",
+        "service": "tool-executor",
+        "symptom": "502 error",
+        "cause": "Executor regression",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 100
+    },
+    "logs": {
+      "incomplete": true
+    },
+    "reproduce": {
+      "incomplete": true
+    }
+  }
+}

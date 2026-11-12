@@ -1,0 +1,1641 @@
+{
+  "status": "complete",
+  "matched_pairs": 25,
+  "note": "Two baseline inputs were already exact and reused; other baselines rerun once with exact saved Plain descriptions using frozen original runtime. Preliminary portal-text baseline results retained.",
+  "cases": [
+    {
+      "version": "composio-v3",
+      "id": "notion-access-033",
+      "same_as_portal_text": true,
+      "rerun_required": false,
+      "exact_plain_input_hash": "b48e6c89191af804911614a294286da9dc2dd81328d085269b18a359b8f69e9c",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "notion_resource_not_shared",
+        "metrics": {
+          "incident_id": "notion-access-033",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 86.76311900501605,
+          "input_tokens": 34090,
+          "output_tokens": 4382,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "resource_role_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "notion-event-034",
+      "same_as_portal_text": true,
+      "rerun_required": false,
+      "exact_plain_input_hash": "7f8e49cc1348f0a82de23ab7fa32c68ba12905e5e725ab8376526415d7f01594",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "trigger_event_kind_mismatch",
+        "metrics": {
+          "incident_id": "notion-event-034",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 58.972661898995284,
+          "input_tokens": 32165,
+          "output_tokens": 2727,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "subscription_event_missing",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "github-token-036",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "99c6fdafd5b58fdd631bc9483b9b22d008dcccba8f02bbf4a5309123084a4f42",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "redacted_token_relay_design",
+        "metrics": {
+          "incident_id": "github-token-036",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.75,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 56.4641560689779,
+          "input_tokens": 17306,
+          "output_tokens": 3334,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "github-org-035",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "432ddd9cd605b78f87fa7c103f4465594c2635a9332fd52beb12eeb303c77955",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "github_organization_approval",
+        "metrics": {
+          "incident_id": "github-org-035",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 79.3815760940779,
+          "input_tokens": 30607,
+          "output_tokens": 4581,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "policy_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "backlog",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "github-setup-037",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "d4bc0a2ff1000b4090b741052a3914ce7c1781627cdb230406d36be22cb7eeb0",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "obsolete_trigger_setup_path",
+        "metrics": {
+          "incident_id": "github-setup-037",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 87.75773397705052,
+          "input_tokens": 32061,
+          "output_tokens": 5173,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_specific_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "sheets-discovery-039",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "ba556bd16617e031179d8eb2146fd64bb4004738fbb4057740d1ad4fa836e5f6",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "tool_discovery_truncation",
+        "metrics": {
+          "incident_id": "sheets-discovery-039",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 7,
+          "latency_seconds": 46.703431945992634,
+          "input_tokens": 23555,
+          "output_tokens": 2830,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "sheets-plane-038",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "9b184ac96055b833d153775c50b2552c2427ca6ab82b92e9665099c82f31bd5d",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "connection_surface_isolation",
+        "metrics": {
+          "incident_id": "sheets-plane-038",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 14,
+          "latency_seconds": 74.5956256990321,
+          "input_tokens": 43616,
+          "output_tokens": 4432,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "sheets-id-040",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "8441b010d39fed6c9a838b36f91aef7a002f862386a39ec49c9b6cf6dc394e08",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "spreadsheet_identifier_kind",
+        "metrics": {
+          "incident_id": "sheets-id-040",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 45.84038900991436,
+          "input_tokens": 17252,
+          "output_tokens": 2894,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "airtable-expiry-041",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "84bcede7b3b1c9d8725ccc5f0165959bc9a2ecac406278c2a0f2b589d5cccca9",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "authentication_initiation_expired",
+        "metrics": {
+          "incident_id": "airtable-expiry-041",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 1.0,
+          "acceptable_action_present": true,
+          "tool_calls": 7,
+          "latency_seconds": 52.08639592991676,
+          "input_tokens": 16823,
+          "output_tokens": 3082,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "new_connection_healthy",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "slack-user-043",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "0859d5f13dbc1fc527dab99371a5b77d2fdcfe57c3c416e7e48d98be04bcf6d6",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "slack_user_scope_configuration",
+        "metrics": {
+          "incident_id": "slack-user-043",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 59.86202816397417,
+          "input_tokens": 33834,
+          "output_tokens": 3802,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "scope_mismatch",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "airtable-batch-042",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "0580dcd898d5e43b14d948adc7a1ff9d96a23d207e4fc61cab483028c0840819",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "provider_batch_record_limit",
+        "metrics": {
+          "incident_id": "airtable-batch-042",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 63.61817137792241,
+          "input_tokens": 24121,
+          "output_tokens": 3766,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "slack-plan-044",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "f72a9b508a1273d5f789128dbac217d47b9eecb2938da76cc1d9f7dd39955f49",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "provider_feature_entitlement",
+        "metrics": {
+          "incident_id": "slack-plan-044",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 15,
+          "latency_seconds": 65.22323101502843,
+          "input_tokens": 41322,
+          "output_tokens": 4042,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "slack-redirect-046",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "c7547f53863600bc8c6b091de39e75e3163c738d9954343bf7e4eb3f57504240",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "oauth_redirect_uri_mismatch",
+        "metrics": {
+          "incident_id": "slack-redirect-046",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 56.763603610917926,
+          "input_tokens": 24402,
+          "output_tokens": 3370,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "slack-ingress-045",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "20c7fc1b8a332987ca44103a3af3359f7ef681f4e03266550a9f256a6b14476d",
+      "single_agent": {
+        "outcome": "inconclusive",
+        "run_status": "failed",
+        "top_cause": null,
+        "metrics": {
+          "incident_id": "slack-ingress-045",
+          "approach": "single_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.0,
+          "finding_recall": 0.0,
+          "citation_validity": 0.0,
+          "action_precision": 0.0,
+          "acceptable_action_present": false,
+          "tool_calls": 12,
+          "latency_seconds": 69.24904314195737,
+          "input_tokens": 33237,
+          "output_tokens": 4530,
+          "finding_details": [],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "gmail-shape-047",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "573eaa9da495fc373f75859976e15a987f838d4cf4515d880be2b943a69e3755",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "attachment_reference_shape",
+        "metrics": {
+          "incident_id": "gmail-shape-047",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": false,
+          "finding_precision": 0.25,
+          "finding_recall": 0.6666666666666666,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 56.619914424954914,
+          "input_tokens": 32113,
+          "output_tokens": 3528,
+          "finding_details": [
+            {
+              "code": "argument_shape_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "backlog",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "gmail-file-048",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "69bd55d22c615c672ee070b61015df03d0a465ab7fbc9760f9398973e7eaf6ea",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "temporary_file_reference_expired",
+        "metrics": {
+          "incident_id": "gmail-file-048",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.42857142857142855,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 57.82394772104453,
+          "input_tokens": 26369,
+          "output_tokens": 3677,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "backlog",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "session-policy-049",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "acc4c11776d28f63c3223defc5fb732c5093717bd112e64d03f416fac70de6d8",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "session_tool_policy_block",
+        "metrics": {
+          "incident_id": "session-policy-049",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": false,
+          "finding_precision": 0.25,
+          "finding_recall": 0.6666666666666666,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 7,
+          "latency_seconds": 51.690985125955194,
+          "input_tokens": 16785,
+          "output_tokens": 3502,
+          "finding_details": [
+            {
+              "code": "scope_present",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "policy_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "competing_history",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "log-gap-050",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "0995b30cba4488ee7e333a424cd2e46532b06e286dfb13cdff42cef9a7875de1",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "unconfirmed_change",
+        "metrics": {
+          "incident_id": "log-gap-050",
+          "approach": "single_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.16666666666666666,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.6666666666666666,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 69.94366964802612,
+          "input_tokens": 23891,
+          "output_tokens": 4005,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "slack-schedule-052",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "ef838f9a1dc2f38dc653bcf8bcbfb7469555a0363a2652b9856c50d691444738",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "scheduled_attachment_semantics",
+        "metrics": {
+          "incident_id": "slack-schedule-052",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 57.698729650932364,
+          "input_tokens": 24358,
+          "output_tokens": 3620,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v3",
+      "id": "delivery-dedupe-051",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "ed187e273ac2ab9f93c40111a791097f41571b88d12c8b9a54599474e11a2d4b",
+      "single_agent": {
+        "outcome": "inconclusive",
+        "run_status": "failed",
+        "top_cause": null,
+        "metrics": {
+          "incident_id": "delivery-dedupe-051",
+          "approach": "single_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.0,
+          "finding_recall": 0.0,
+          "citation_validity": 0.0,
+          "action_precision": 0.0,
+          "acceptable_action_present": false,
+          "tool_calls": 9,
+          "latency_seconds": 90.04579299001489,
+          "input_tokens": 33848,
+          "output_tokens": 5449,
+          "finding_details": [],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v31",
+      "id": "sheets-discovery-039",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "ba556bd16617e031179d8eb2146fd64bb4004738fbb4057740d1ad4fa836e5f6",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "tool_discovery_truncation",
+        "metrics": {
+          "incident_id": "sheets-discovery-039",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 6,
+          "latency_seconds": 50.169667319976725,
+          "input_tokens": 16815,
+          "output_tokens": 3129,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v31",
+      "id": "airtable-expiry-041",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "84bcede7b3b1c9d8725ccc5f0165959bc9a2ecac406278c2a0f2b589d5cccca9",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "authentication_initiation_expired",
+        "metrics": {
+          "incident_id": "airtable-expiry-041",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 50.92407788604032,
+          "input_tokens": 23461,
+          "output_tokens": 3176,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "new_connection_healthy",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v31",
+      "id": "slack-redirect-046",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "c7547f53863600bc8c6b091de39e75e3163c738d9954343bf7e4eb3f57504240",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "oauth_redirect_uri_mismatch",
+        "metrics": {
+          "incident_id": "slack-redirect-046",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 6,
+          "latency_seconds": 41.24440892506391,
+          "input_tokens": 16869,
+          "output_tokens": 2364,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v31",
+      "id": "slack-user-043",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "0859d5f13dbc1fc527dab99371a5b77d2fdcfe57c3c416e7e48d98be04bcf6d6",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "slack_user_scope_configuration",
+        "metrics": {
+          "incident_id": "slack-user-043",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.42857142857142855,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 62.135067991912365,
+          "input_tokens": 32252,
+          "output_tokens": 3964,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "scope_mismatch",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "auth_dependency",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    },
+    {
+      "version": "composio-v31",
+      "id": "gmail-shape-047",
+      "same_as_portal_text": false,
+      "rerun_required": true,
+      "exact_plain_input_hash": "573eaa9da495fc373f75859976e15a987f838d4cf4515d880be2b943a69e3755",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "attachment_reference_shape",
+        "metrics": {
+          "incident_id": "gmail-shape-047",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 53.773343518027104,
+          "input_tokens": 24142,
+          "output_tokens": 3233,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "argument_shape_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      }
+    }
+  ]
+}

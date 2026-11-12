@@ -1,0 +1,2891 @@
+{
+  "incident": {
+    "id": "notion-event-034",
+    "title": "[DEMO C034] Notion edits no longer reach our workflow",
+    "description": "Our Notion workflow receives newly created pages but misses edits to existing pages. Work is backing up for Cedar after a trigger configuration change.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "trigger-worker"
+    ]
+  },
+  "mode": "live_agents",
+  "tasks": [
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "Starting with null filters, what canonical trigger-worker records exist for 2026-11-12 09:50Z–10:15Z that show: (1) Notion trigger executions for Cedar, (2) event kind or subscription type for newly created pages vs edits to existing pages, (3) enqueue/backlog counts and latency during the window, and (4) whether any comparison tenant continued receiving Notion edit events in the same period?",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "What exact trigger configuration change for Cedar occurred immediately before 09:50Z, and do canonical config/audit records show a switch in trigger type, subscription scope, connection identity, or setup path that could distinguish create events from edit events? Also, were there any trigger-worker deployments or platform changes in the same window that affected multiple tenants, or is impact isolated to Cedar?",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Given the complaint that creates still arrive while edits do not, which hypothesis best matches the observed records: a trigger_event_kind_mismatch or webhook/subscription configuration issue affecting only edit events, versus a broader internal trigger-worker regression, provider failure, credentials/permissions problem, or backlog-induced delay? What discriminating control exists between Cedar and an unaffected tenant or between pre-change and post-change behavior?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_a80e448b3497",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-34",
+          "toolkit": "notion",
+          "status": 200,
+          "observed_event": "page_content_updated",
+          "configured_trigger_event": "page_created",
+          "matched": false,
+          "connection_active": true
+        },
+        {
+          "record_id": "notion-event-034:logs:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9e5e17164c4a",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:metrics:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 517,
+          "failures": 0,
+          "business_operations_blocked": 355,
+          "queue_depth": 93,
+          "p95_latency_ms": 1240
+        },
+        {
+          "record_id": "notion-event-034:metrics:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 461,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c9919ec00db6",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:dependencies:0",
+          "service": "trigger-worker",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_cb557e970210",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_8a3312eb9216",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:reproduce:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "notion_configuration",
+          "check_passed": false,
+          "toolkit": "notion",
+          "status": 200,
+          "observed_event": "page_content_updated",
+          "configured_trigger_event": "page_created",
+          "matched": false,
+          "connection_active": true
+        },
+        {
+          "record_id": "notion-event-034:reproduce:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "notion_configuration",
+          "check_passed": true,
+          "toolkit": "notion",
+          "status": 200,
+          "observed_event": "page_content_updated",
+          "configured_trigger_event": "page_content_updated",
+          "matched": true,
+          "connection_active": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_b03e407bd73d",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-34",
+          "toolkit": "notion",
+          "status": 200,
+          "observed_event": "page_content_updated",
+          "configured_trigger_event": "page_created",
+          "matched": false,
+          "connection_active": true
+        },
+        {
+          "record_id": "notion-event-034:logs:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2743809125fc",
+      "query": {
+        "tool": "metrics",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:metrics:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 517,
+          "failures": 0,
+          "business_operations_blocked": 355,
+          "queue_depth": 93,
+          "p95_latency_ms": 1240
+        },
+        {
+          "record_id": "notion-event-034:metrics:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 461,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_cc6e8c995cb9",
+      "query": {
+        "tool": "dependencies",
+        "service": "trigger-worker",
+        "tenant": "Cedar",
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_e30919981a23",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "Cedar",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2c457743c20d",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "page_created",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-34",
+          "toolkit": "notion",
+          "status": 200,
+          "observed_event": "page_content_updated",
+          "configured_trigger_event": "page_created",
+          "matched": false,
+          "connection_active": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9b5a97bf61ce",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "page_content_updated",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-34",
+          "toolkit": "notion",
+          "status": 200,
+          "observed_event": "page_content_updated",
+          "configured_trigger_event": "page_created",
+          "matched": false,
+          "connection_active": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_b874c681f814",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 5
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:history:0",
+          "service": "trigger-worker",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_95640c90828a",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 5
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "notion-event-034:knowledge:0",
+          "service": "trigger-worker",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-notion",
+          "kind": "public_reference",
+          "summary": "Different Notion event families have separate trigger catalog entries."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "hypotheses": [],
+  "objections": [],
+  "events": [
+    {
+      "event": "task_started",
+      "task": "plan",
+      "role": "orchestrator",
+      "at": 523691.547829493,
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "orchestrator",
+      "model": "gpt-5.4",
+      "request": 1,
+      "task": "plan"
+    },
+    {
+      "event": "model_finished",
+      "role": "orchestrator",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 2843,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 532,
+        "output_tokens_details": {
+          "reasoning_tokens": 29
+        },
+        "total_tokens": 3375
+      },
+      "task": "plan"
+    },
+    {
+      "event": "agent_result",
+      "task": "plan",
+      "role": "orchestrator",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [
+          {
+            "id": "observe",
+            "role": "observability",
+            "question": "Starting with null filters, what canonical trigger-worker records exist for 2026-11-12 09:50Z–10:15Z that show: (1) Notion trigger executions for Cedar, (2) event kind or subscription type for newly created pages vs edits to existing pages, (3) enqueue/backlog counts and latency during the window, and (4) whether any comparison tenant continued receiving Notion edit events in the same period?",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "dependencies",
+            "role": "dependency",
+            "question": "What exact trigger configuration change for Cedar occurred immediately before 09:50Z, and do canonical config/audit records show a switch in trigger type, subscription scope, connection identity, or setup path that could distinguish create events from edit events? Also, were there any trigger-worker deployments or platform changes in the same window that affected multiple tenants, or is impact isolated to Cedar?",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "reason",
+            "role": "reasoning",
+            "question": "Given the complaint that creates still arrive while edits do not, which hypothesis best matches the observed records: a trigger_event_kind_mismatch or webhook/subscription configuration issue affecting only edit events, versus a broader internal trigger-worker regression, provider failure, credentials/permissions problem, or backlog-induced delay? What discriminating control exists between Cedar and an unaffected tenant or between pre-change and post-change behavior?",
+            "dependencies": [
+              "observe",
+              "dependencies"
+            ],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "critic",
+            "role": "critic",
+            "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+            "dependencies": [
+              "reason"
+            ],
+            "status": "pending",
+            "error": null
+          }
+        ],
+        "report": null,
+        "notes": [
+          "Current evidence is insufficient to diagnose; the first step is to establish canonical records for requests/events, not derived refresh or convenience views.",
+          "Scope should compare Cedar impact with at least one unaffected tenant, including failure rate, latency, and backlog, because a Cedar-only pattern would weigh against a platform-wide provider or worker outage.",
+          "Because creates reportedly still succeed, credential loss or total provider ingress failure is less likely but not excluded; exact event-kind/subscription records are needed.",
+          "The phrase 'after a trigger configuration change' is only a hypothesis until confirmed by audit/config evidence with timestamps aligned to the incident window.",
+          "Use exact-match filters carefully; begin with null filters so missing service/timestamp fields do not hide useful records.",
+          "If canonical records show edit events never reaching trigger-worker while create events do, focus on subscription/event-kind/setup-path differences; if edit events reach trigger-worker but stall, focus on internal queue/backlog/processing regressions.",
+          "Need canonical evidence for tenant backlog growth and whether misses are permanent drops versus delayed processing.",
+          "Do not infer absence of provider ingress, deployments, or tenant impact from empty partial queries; missing telemetry remains a live possibility until explicitly checked."
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "plan",
+      "role": "orchestrator",
+      "status": "complete",
+      "at": 523705.671077403
+    },
+    {
+      "event": "task_started",
+      "task": "observe",
+      "role": "observability",
+      "at": 523705.683492397,
+      "question": "Starting with null filters, what canonical trigger-worker records exist for 2026-11-12 09:50Z–10:15Z that show: (1) Notion trigger executions for Cedar, (2) event kind or subscription type for newly created pages vs edits to existing pages, (3) enqueue/backlog counts and latency during the window, and (4) whether any comparison tenant continued receiving Notion edit events in the same period?",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 2,
+      "task": "observe"
+    },
+    {
+      "event": "task_started",
+      "task": "dependencies",
+      "role": "dependency",
+      "at": 523705.749651277,
+      "question": "What exact trigger configuration change for Cedar occurred immediately before 09:50Z, and do canonical config/audit records show a switch in trigger type, subscription scope, connection identity, or setup path that could distinguish create events from edit events? Also, were there any trigger-worker deployments or platform changes in the same window that affected multiple tenants, or is impact isolated to Cedar?",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 3,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3857,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 172,
+        "output_tokens_details": {
+          "reasoning_tokens": 66
+        },
+        "total_tokens": 4029
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_a80e448b3497",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_a80e448b3497",
+        "query": {
+          "tool": "logs",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:logs:0",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-34",
+            "toolkit": "notion",
+            "status": 200,
+            "observed_event": "page_content_updated",
+            "configured_trigger_event": "page_created",
+            "matched": false,
+            "connection_active": true
+          },
+          {
+            "record_id": "notion-event-034:logs:1",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "status": 200,
+            "same_provider_available": true,
+            "unrelated_read_succeeds": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "metrics",
+      "status": "ok",
+      "evidence_id": "ev_9e5e17164c4a",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_9e5e17164c4a",
+        "query": {
+          "tool": "metrics",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:metrics:0",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "requests": 517,
+            "failures": 0,
+            "business_operations_blocked": 355,
+            "queue_depth": 93,
+            "p95_latency_ms": 1240
+          },
+          {
+            "record_id": "notion-event-034:metrics:1",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "requests": 461,
+            "failures": 0,
+            "business_operations_blocked": 0,
+            "queue_depth": 0,
+            "p95_latency_ms": 160
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 4,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3664,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 212,
+        "output_tokens_details": {
+          "reasoning_tokens": 59
+        },
+        "total_tokens": 3876
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "dependencies",
+      "status": "ok",
+      "evidence_id": "ev_c9919ec00db6",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_c9919ec00db6",
+        "query": {
+          "tool": "dependencies",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:dependencies:0",
+            "service": "trigger-worker",
+            "depends_on": [
+              "auth-service",
+              "provider-api",
+              "session-policy"
+            ],
+            "provider_api_reachable": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "deployments",
+      "status": "ok",
+      "evidence_id": "ev_cb557e970210",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_cb557e970210",
+        "query": {
+          "tool": "deployments",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:deployments:0",
+            "service": "support-dashboard",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "change": "Unrelated inbox display release",
+            "version": "dashboard-v23"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "reproduce",
+      "status": "ok",
+      "evidence_id": "ev_8a3312eb9216",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_8a3312eb9216",
+        "query": {
+          "tool": "reproduce",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:reproduce:0",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "sandbox",
+            "provider_mock": true,
+            "controlled": true,
+            "condition": "original",
+            "same_request_except": "notion_configuration",
+            "check_passed": false,
+            "toolkit": "notion",
+            "status": 200,
+            "observed_event": "page_content_updated",
+            "configured_trigger_event": "page_created",
+            "matched": false,
+            "connection_active": true
+          },
+          {
+            "record_id": "notion-event-034:reproduce:1",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "sandbox",
+            "provider_mock": true,
+            "controlled": true,
+            "condition": "corrected",
+            "same_request_except": "notion_configuration",
+            "check_passed": true,
+            "toolkit": "notion",
+            "status": 200,
+            "observed_event": "page_content_updated",
+            "configured_trigger_event": "page_content_updated",
+            "matched": true,
+            "connection_active": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 5,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4543,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 244,
+        "output_tokens_details": {
+          "reasoning_tokens": 88
+        },
+        "total_tokens": 4787
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_b03e407bd73d",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_b03e407bd73d",
+        "query": {
+          "tool": "logs",
+          "service": "trigger-worker",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:logs:0",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-34",
+            "toolkit": "notion",
+            "status": 200,
+            "observed_event": "page_content_updated",
+            "configured_trigger_event": "page_created",
+            "matched": false,
+            "connection_active": true
+          },
+          {
+            "record_id": "notion-event-034:logs:1",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "status": 200,
+            "same_provider_available": true,
+            "unrelated_read_succeeds": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "metrics",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "metrics",
+      "status": "ok",
+      "evidence_id": "ev_2743809125fc",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_2743809125fc",
+        "query": {
+          "tool": "metrics",
+          "service": "trigger-worker",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:metrics:0",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "requests": 517,
+            "failures": 0,
+            "business_operations_blocked": 355,
+            "queue_depth": 93,
+            "p95_latency_ms": 1240
+          },
+          {
+            "record_id": "notion-event-034:metrics:1",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "requests": 461,
+            "failures": 0,
+            "business_operations_blocked": 0,
+            "queue_depth": 0,
+            "p95_latency_ms": 160
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 6,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4525,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 127,
+        "output_tokens_details": {
+          "reasoning_tokens": 77
+        },
+        "total_tokens": 4652
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "dependencies",
+        "service": "trigger-worker",
+        "tenant": "Cedar",
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "dependencies",
+      "status": "ok",
+      "evidence_id": "ev_cc6e8c995cb9",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_cc6e8c995cb9",
+        "query": {
+          "tool": "dependencies",
+          "service": "trigger-worker",
+          "tenant": "Cedar",
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 20
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 7,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4737,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3584
+        },
+        "output_tokens": 74,
+        "output_tokens_details": {
+          "reasoning_tokens": 25
+        },
+        "total_tokens": 4811
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "Cedar",
+        "limit": 20
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "dependencies",
+      "status": "ok",
+      "evidence_id": "ev_e30919981a23",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_e30919981a23",
+        "query": {
+          "tool": "dependencies",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": "Cedar",
+          "limit": 20
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 8,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5273,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3584
+        },
+        "output_tokens": 212,
+        "output_tokens_details": {
+          "reasoning_tokens": 53
+        },
+        "total_tokens": 5485
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "page_created",
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_2c457743c20d",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_2c457743c20d",
+        "query": {
+          "tool": "logs",
+          "service": "trigger-worker",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "page_created",
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:logs:0",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-34",
+            "toolkit": "notion",
+            "status": 200,
+            "observed_event": "page_content_updated",
+            "configured_trigger_event": "page_created",
+            "matched": false,
+            "connection_active": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "page_content_updated",
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_9b5a97bf61ce",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_9b5a97bf61ce",
+        "query": {
+          "tool": "logs",
+          "service": "trigger-worker",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "page_content_updated",
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:logs:0",
+            "service": "trigger-worker",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-34",
+            "toolkit": "notion",
+            "status": 200,
+            "observed_event": "page_content_updated",
+            "configured_trigger_event": "page_created",
+            "matched": false,
+            "connection_active": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 9,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5251,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 540,
+        "output_tokens_details": {
+          "reasoning_tokens": 72
+        },
+        "total_tokens": 5791
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "agent_result",
+      "task": "dependencies",
+      "role": "dependency",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "No canonical config or audit records are present that show the exact Cedar trigger change immediately before 09:50Z, so I cannot confirm any switch in trigger type, subscription scope, connection identity, or setup path from audit/config evidence. The available canonical trigger-worker log only shows that at 10:05Z Cedar received a Notion edit event (`page_content_updated`) while the configured trigger event was `page_created`, with the connection still active; that distinguishes create vs edit behavior but does not timestamp or explain the preceding config change (ev_b03e407bd73d / notion-event-034:logs:0).",
+          "Observed mechanism is Cedar-specific mismatch rather than worker/provider unavailability: Cedar’s edit event reached trigger-worker and was not matched because configured trigger event was `page_created` (ev_b03e407bd73d / notion-event-034:logs:0). A controlled sandbox comparison changed only the Notion configuration and flipped the outcome from unmatched to matched, consistent with event-kind configuration as a discriminating factor, but reproduce output is supporting context rather than canonical production audit of what changed (ev_8a3312eb9216 / notion-event-034:reproduce:0, notion-event-034:reproduce:1).",
+          "Impact appears isolated to Cedar in the observed window, not multi-tenant/platform-wide: Cedar shows 517 requests, 0 failures, 355 business operations blocked, queue depth 93, p95 latency 1240 ms, while Maple shows 461 requests, 0 failures, 0 blocked, queue depth 0, p95 latency 160 ms (ev_2743809125fc / notion-event-034:metrics:0, notion-event-034:metrics:1). This weighs against a broad trigger-worker outage or provider-wide Notion degradation.",
+          "No trigger-worker deployment or platform change is evidenced in the same window; the only deployment record shown is an unrelated support-dashboard release at 10:05Z (ev_cb557e970210 / notion-event-034:deployments:0). Important gap: missing canonical Cedar config history/audit trail leaves unverified whether the change was specifically an event-type switch, setup-path migration, scope change, or connection/account swap."
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "dependencies",
+      "role": "dependency",
+      "status": "complete",
+      "at": 523727.521445366
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5759,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 579,
+        "output_tokens_details": {
+          "reasoning_tokens": 37
+        },
+        "total_tokens": 6338
+      },
+      "task": "observe"
+    },
+    {
+      "event": "agent_result",
+      "task": "observe",
+      "role": "observability",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "Canonical trigger-worker log in-window for Cedar shows a Notion execution at 2026-11-12T10:05:00Z: observed_event=page_content_updated, configured_trigger_event=page_created, matched=false, connection_active=true, status=200 on request req-34. This is the only provided Cedar trigger-worker request record in the 09:50Z–10:15Z window and it reflects an edit event not matching the configured create-only trigger, rather than a worker/provider error. Citations: ev_b03e407bd73d / notion-event-034:logs:0; also returned by ev_a80e448b3497 / notion-event-034:logs:0.",
+          "No canonical trigger-worker record for Cedar newly created-page delivery is present in the supplied window; only the configured trigger type page_created appears, while the observed in-window event kind is page_content_updated. Empty or partial searches cannot prove absence, so the evidence establishes the edit-event mismatch but not an in-window create-event success record. Citations: ev_b03e407bd73d / notion-event-034:logs:0; ev_2c457743c20d / notion-event-034:logs:0; ev_9b5a97bf61ce / notion-event-034:logs:0.",
+          "Tenant impact/backlog differs sharply at 10:05Z: Cedar has 517 requests, 0 failures, 355 business_operations_blocked, queue_depth 93, and p95 latency 1240 ms, versus Maple with 461 requests, 0 failures, 0 blocked, queue_depth 0, and p95 latency 160 ms. This supports Cedar-local impact with backlog/latency despite no HTTP failures in the sampled metrics. Citations: ev_2743809125fc / notion-event-034:metrics:0 and notion-event-034:metrics:1.",
+          "For comparison-tenant continuity of Notion edit events, the supplied canonical records do not show Maple receiving a Notion edit event; Maple only has a generic trigger-worker log noting same_provider_available=true and unrelated_read_succeeds=true, plus healthy metrics. So the evidence weighs against a broad provider outage but does not directly prove another tenant continued receiving Notion edits in this window. Citations: ev_b03e407bd73d / notion-event-034:logs:1; ev_2743809125fc / notion-event-034:metrics:1; provider reachability context: ev_c9919ec00db6 / notion-event-034:dependencies:0."
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "observe",
+      "role": "observability",
+      "status": "complete",
+      "at": 523728.332590496
+    },
+    {
+      "event": "task_started",
+      "task": "reason",
+      "role": "reasoning",
+      "at": 523728.34294896,
+      "question": "Given the complaint that creates still arrive while edits do not, which hypothesis best matches the observed records: a trigger_event_kind_mismatch or webhook/subscription configuration issue affecting only edit events, versus a broader internal trigger-worker regression, provider failure, credentials/permissions problem, or backlog-induced delay? What discriminating control exists between Cedar and an unaffected tenant or between pre-change and post-change behavior?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_a80e448b3497",
+        "ev_9e5e17164c4a",
+        "ev_c9919ec00db6",
+        "ev_cb557e970210",
+        "ev_8a3312eb9216",
+        "ev_b03e407bd73d",
+        "ev_2743809125fc",
+        "ev_cc6e8c995cb9",
+        "ev_e30919981a23",
+        "ev_2c457743c20d",
+        "ev_9b5a97bf61ce"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "reasoning",
+      "model": "gpt-5.4",
+      "request": 10,
+      "task": "reason"
+    },
+    {
+      "event": "model_finished",
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 6850,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 262,
+        "output_tokens_details": {
+          "reasoning_tokens": 155
+        },
+        "total_tokens": 7112
+      },
+      "task": "reason"
+    },
+    {
+      "event": "tool_started",
+      "role": "reasoning",
+      "task": "reason",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 5
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "reasoning",
+      "task": "reason",
+      "tool": "history",
+      "status": "ok",
+      "evidence_id": "ev_b874c681f814",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_b874c681f814",
+        "query": {
+          "tool": "history",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 5
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:history:0",
+            "service": "trigger-worker",
+            "symptom": "A similar workflow stopped following a release",
+            "cause": "An earlier provider outage",
+            "relation": "historical analogy only, not current proof"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "reasoning",
+      "task": "reason",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 5
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "reasoning",
+      "task": "reason",
+      "tool": "knowledge",
+      "status": "ok",
+      "evidence_id": "ev_95640c90828a",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_95640c90828a",
+        "query": {
+          "tool": "knowledge",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 5
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "notion-event-034:knowledge:0",
+            "service": "trigger-worker",
+            "url": "https://docs.composio.dev/kb/guide/toolkits-notion",
+            "kind": "public_reference",
+            "summary": "Different Notion event families have separate trigger catalog entries."
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "reasoning",
+      "model": "gpt-5.4",
+      "request": 11,
+      "task": "reason"
+    },
+    {
+      "event": "model_finished",
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 7452,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1134,
+        "output_tokens_details": {
+          "reasoning_tokens": 31
+        },
+        "total_tokens": 8586
+      },
+      "task": "reason"
+    },
+    {
+      "event": "model_started",
+      "role": "reasoning",
+      "model": "gpt-5.4",
+      "request": 12,
+      "task": "reason"
+    },
+    {
+      "event": "model_finished",
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 9365,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 2333,
+        "output_tokens_details": {
+          "reasoning_tokens": 173
+        },
+        "total_tokens": 11698
+      },
+      "task": "reason"
+    },
+    {
+      "event": "agent_result",
+      "task": "reason",
+      "role": "reasoning",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "Best match: trigger_event_kind_mismatch.",
+          "Discriminating control: the controlled comparison shows the same edit event only succeeds when the configured trigger event is changed to page_content_updated.",
+          "Backlog appears consequential to Cedar's blocked operations, but the observed failed execution is a mismatch, not a delay-only explanation."
+        ],
+        "candidates": [
+          {
+            "code": "trigger_event_kind_mismatch",
+            "hypothesis": {
+              "description": "Cedar's edit events are reaching trigger-worker, but the trigger is configured for page_created, so page_content_updated events do not match and are not delivered. This fits the complaint that creates still arrive while edits do not, and it explains Cedar-local backlog without worker errors.",
+              "supporting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_2743809125fc",
+                "ev_8a3312eb9216",
+                "ev_95640c90828a",
+                "ev_c9919ec00db6"
+              ],
+              "contradicting_evidence": [],
+              "confidence": "high",
+              "assumptions": [
+                "The observed Cedar record is representative of the missed edit executions during the incident window.",
+                "The reported trigger configuration change refers to the currently observed configured_trigger_event, but no canonical config audit record is supplied to prove when that change occurred.",
+                "No in-window canonical create-success record is supplied; the complaint that creates still arrive is treated as unverified context, not proven telemetry."
+              ]
+            },
+            "findings": [
+              {
+                "code": "mechanism_observation",
+                "statement": "At 10:05Z Cedar's Notion edit event reached trigger-worker as observed_event=page_content_updated, but the configured trigger event was page_created, producing matched=false with connection_active=true and status=200. This directly matches an event-kind mismatch rather than a provider or credential failure.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b03e407bd73d",
+                    "record_id": "notion-event-034:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "In the controlled sandbox comparison, changing only the Notion configuration flipped the same page_content_updated event from unmatched under page_created to matched under page_content_updated, isolating configuration/event-kind as the discriminating variable.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_8a3312eb9216",
+                    "record_id": "notion-event-034:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_8a3312eb9216",
+                    "record_id": "notion-event-034:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Impact is Cedar-local in the observed window: Cedar shows 517 requests, 0 failures, 355 business operations blocked, queue depth 93, and p95 latency 1240 ms, while Maple shows 461 requests, 0 failures, 0 blocked, queue depth 0, and p95 latency 160 ms.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "A broad provider/platform outage is weakened by healthy comparison-tenant signals and provider reachability: Maple shows same_provider_available=true and unrelated_read_succeeds=true, and trigger-worker reports provider_api_reachable=true.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b03e407bd73d",
+                    "record_id": "notion-event-034:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_c9919ec00db6",
+                    "record_id": "notion-event-034:dependencies:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "trigger_event_kind_mismatch_remediation",
+              "collect_missing_telemetry"
+            ],
+            "actions": [
+              "Update the Cedar trigger to the intended Notion edit event kind instead of page_created, preserving the existing connection.",
+              "Collect canonical Cedar config/audit history to confirm when the trigger event was changed and whether any create-only behavior was introduced at that time."
+            ],
+            "missing_checks": [
+              "Canonical Cedar trigger config/audit history showing the exact pre-change and post-change event selection aligned to the 09:50Z-10:15Z incident window.",
+              "A canonical in-window record confirming create events still matched for Cedar after the change, to fully validate the creates-vs-edits split described in the complaint."
+            ],
+            "strength": 9
+          },
+          {
+            "code": "webhook_event_subscription",
+            "hypothesis": {
+              "description": "A Notion subscription or webhook configuration issue affecting only edit events is less likely than a trigger event mismatch because an edit event was already ingested by trigger-worker for Cedar.",
+              "supporting_evidence": [
+                "ev_95640c90828a"
+              ],
+              "contradicting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_8a3312eb9216"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "This candidate is limited to setup variants not ruled out by the single observed ingested edit event, such as multiple overlapping subscriptions or configuration layers not visible in the supplied records."
+              ]
+            },
+            "findings": [
+              {
+                "code": "ingress_received",
+                "statement": "Cedar's edit event was observed inside trigger-worker, so the failed execution did not depend on proving missing provider ingress for that request.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b03e407bd73d",
+                    "record_id": "notion-event-034:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "The controlled comparison showed that changing only Notion configuration corrected matching for the same ingested edit event, which points more specifically to trigger event selection than to a provider-side subscription outage.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_8a3312eb9216",
+                    "record_id": "notion-event-034:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_8a3312eb9216",
+                    "record_id": "notion-event-034:reproduce:1"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "subscribe_to_delivery_event"
+            ],
+            "actions": [
+              "Check canonical trigger/subscription setup records only if there are separate configuration layers beyond the trigger event selector.",
+              "If configuration review shows edits are meant to be delivered via a distinct subscription, verify that the intended edit-event subscription is present."
+            ],
+            "missing_checks": [
+              "Canonical subscription/setup records for Cedar showing whether edit events use a separate provider subscription path from create events."
+            ],
+            "strength": 3
+          },
+          {
+            "code": "provider_failure",
+            "hypothesis": {
+              "description": "A broader provider or trigger-worker regression is not the best fit for the observed failure because the failing Cedar request reached trigger-worker, returned 200, and comparison telemetry is healthy for Maple.",
+              "supporting_evidence": [],
+              "contradicting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_2743809125fc",
+                "ev_c9919ec00db6",
+                "ev_cb557e970210"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "The absence of a trigger-worker deployment record in the supplied evidence does not prove no internal change occurred elsewhere; it only weakens that explanation in this incident scope."
+              ]
+            },
+            "findings": [
+              {
+                "code": "tenant_isolation",
+                "statement": "Observed impact is isolated to Cedar rather than multi-tenant: Cedar has blocked operations and backlog while Maple does not.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "upstream_errors",
+                "statement": "There are no observed HTTP failures for Cedar or Maple in the provided metrics, and provider_api_reachable=true, which weighs against a broad provider outage causing the missed edit execution.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:1"
+                  },
+                  {
+                    "evidence_id": "ev_c9919ec00db6",
+                    "record_id": "notion-event-034:dependencies:0"
+                  }
+                ]
+              },
+              {
+                "code": "version_control",
+                "statement": "The only deployment record in evidence is an unrelated support-dashboard release, so the supplied records do not support attributing this to a contemporaneous trigger-worker deployment.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_cb557e970210",
+                    "record_id": "notion-event-034:deployments:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "monitor_provider"
+            ],
+            "actions": [
+              "Do not prioritize broad provider or platform rollback based on current evidence.",
+              "If concern remains about a hidden platform regression, gather canonical trigger-worker deployment/version records for the incident window rather than relying on the unrelated dashboard release record."
+            ],
+            "missing_checks": [
+              "Canonical trigger-worker deployment/version history for the incident window, because the supplied deployment evidence covers only an unrelated service."
+            ],
+            "strength": 2
+          }
+        ],
+        "findings": [
+          {
+            "code": "mechanism_observation",
+            "statement": "The strongest observed mechanism is a Cedar edit event reaching trigger-worker but failing match evaluation because observed_event=page_content_updated while configured_trigger_event=page_created.",
+            "citations": [
+              {
+                "evidence_id": "ev_b03e407bd73d",
+                "record_id": "notion-event-034:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "controlled_comparison",
+            "statement": "A controlled original-versus-corrected comparison changed only Notion configuration and turned the same edit event from unmatched to matched, providing the main discriminating control for event-kind mismatch.",
+            "citations": [
+              {
+                "evidence_id": "ev_8a3312eb9216",
+                "record_id": "notion-event-034:reproduce:0"
+              },
+              {
+                "evidence_id": "ev_8a3312eb9216",
+                "record_id": "notion-event-034:reproduce:1"
+              }
+            ]
+          },
+          {
+            "code": "tenant_impact",
+            "statement": "Observed production impact is substantial but Cedar-scoped: 355 blocked business operations, queue depth 93, and p95 latency 1240 ms for Cedar versus no blocked operations and zero queue depth for Maple.",
+            "citations": [
+              {
+                "evidence_id": "ev_2743809125fc",
+                "record_id": "notion-event-034:metrics:0"
+              },
+              {
+                "evidence_id": "ev_2743809125fc",
+                "record_id": "notion-event-034:metrics:1"
+              }
+            ]
+          },
+          {
+            "code": "telemetry_gap",
+            "statement": "No canonical Cedar config/audit record is supplied to prove exactly what trigger configuration changed before 09:50Z or to show pre-change versus post-change production behavior directly.",
+            "citations": [
+              {
+                "evidence_id": "ev_b03e407bd73d",
+                "record_id": "notion-event-034:logs:0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "reason",
+      "role": "reasoning",
+      "status": "complete",
+      "at": 523786.152596737
+    },
+    {
+      "event": "task_started",
+      "task": "critic",
+      "role": "critic",
+      "at": 523786.167692331,
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_a80e448b3497",
+        "ev_9e5e17164c4a",
+        "ev_c9919ec00db6",
+        "ev_cb557e970210",
+        "ev_8a3312eb9216",
+        "ev_b03e407bd73d",
+        "ev_2743809125fc",
+        "ev_cc6e8c995cb9",
+        "ev_e30919981a23",
+        "ev_2c457743c20d",
+        "ev_9b5a97bf61ce",
+        "ev_b874c681f814",
+        "ev_95640c90828a"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "critic",
+      "model": "gpt-5.4",
+      "request": 13,
+      "task": "critic"
+    },
+    {
+      "event": "model_finished",
+      "role": "critic",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 9671,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 539,
+        "output_tokens_details": {
+          "reasoning_tokens": 132
+        },
+        "total_tokens": 10210
+      },
+      "task": "critic"
+    },
+    {
+      "event": "critique_decision",
+      "role": "critic",
+      "task": "critic",
+      "approved": true,
+      "blocking_checks": [],
+      "notes": [
+        "The leading diagnosis is adequately grounded for the observed failed execution: Cedar's edit event reached trigger-worker and was rejected by match evaluation because observed_event=page_content_updated while configured_trigger_event=page_created (ev_b03e407bd73d / notion-event-034:logs:0).",
+        "The controlled comparison is discriminating enough to support a bounded probable cause: with the same request except for Notion configuration, the event flips from unmatched to matched (ev_8a3312eb9216 / notion-event-034:reproduce:0, notion-event-034:reproduce:1).",
+        "Tenant impact and isolation are appropriately scoped rather than overstated: Cedar shows blocked operations, backlog, and higher latency while Maple remains healthy (ev_2743809125fc / notion-event-034:metrics:0, notion-event-034:metrics:1).",
+        "Provider-wide failure is reasonably challenged by counter-evidence: the failing Cedar request reached trigger-worker with status 200, provider_api_reachable=true, and Maple has healthy same-provider comparison signals (ev_b03e407bd73d / notion-event-034:logs:0, notion-event-034:logs:1; ev_c9919ec00db6 / notion-event-034:dependencies:0).",
+        "The missing Cedar config/audit history is a real telemetry gap, but it is not blocking for diagnosing this observed failure mechanism; it matters mainly for confirming when and how the reported trigger change occurred.",
+        "The report correctly treats the complaint that creates still arrive as unverified context. Lack of an in-window create-success record should remain a caveat, not a blocker to the mismatch diagnosis.",
+        "One phrasing caveat: the unrelated support-dashboard deployment record weakens but does not prove absence of a contemporaneous trigger-worker change. That caveat belongs in notes, not as a blocking check."
+      ]
+    },
+    {
+      "event": "agent_result",
+      "task": "critic",
+      "role": "critic",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [
+          {
+            "id": "report",
+            "role": "reporting",
+            "question": "Write the evidence-backed internal report and proposed next steps.",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          }
+        ],
+        "report": null,
+        "notes": [
+          "The leading diagnosis is adequately grounded for the observed failed execution: Cedar's edit event reached trigger-worker and was rejected by match evaluation because observed_event=page_content_updated while configured_trigger_event=page_created (ev_b03e407bd73d / notion-event-034:logs:0).",
+          "The controlled comparison is discriminating enough to support a bounded probable cause: with the same request except for Notion configuration, the event flips from unmatched to matched (ev_8a3312eb9216 / notion-event-034:reproduce:0, notion-event-034:reproduce:1).",
+          "Tenant impact and isolation are appropriately scoped rather than overstated: Cedar shows blocked operations, backlog, and higher latency while Maple remains healthy (ev_2743809125fc / notion-event-034:metrics:0, notion-event-034:metrics:1).",
+          "Provider-wide failure is reasonably challenged by counter-evidence: the failing Cedar request reached trigger-worker with status 200, provider_api_reachable=true, and Maple has healthy same-provider comparison signals (ev_b03e407bd73d / notion-event-034:logs:0, notion-event-034:logs:1; ev_c9919ec00db6 / notion-event-034:dependencies:0).",
+          "The missing Cedar config/audit history is a real telemetry gap, but it is not blocking for diagnosing this observed failure mechanism; it matters mainly for confirming when and how the reported trigger change occurred.",
+          "The report correctly treats the complaint that creates still arrive as unverified context. Lack of an in-window create-success record should remain a caveat, not a blocker to the mismatch diagnosis.",
+          "One phrasing caveat: the unrelated support-dashboard deployment record weakens but does not prove absence of a contemporaneous trigger-worker change. That caveat belongs in notes, not as a blocking check."
+        ],
+        "candidates": [
+          {
+            "code": "trigger_event_kind_mismatch",
+            "hypothesis": {
+              "description": "Cedar's edit events are reaching trigger-worker, but the trigger is configured for page_created, so page_content_updated events do not match and are not delivered. This fits the complaint that creates still arrive while edits do not, and it explains Cedar-local backlog without worker errors.",
+              "supporting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_2743809125fc",
+                "ev_8a3312eb9216",
+                "ev_95640c90828a",
+                "ev_c9919ec00db6"
+              ],
+              "contradicting_evidence": [],
+              "confidence": "high",
+              "assumptions": [
+                "The observed Cedar record is representative of the missed edit executions during the incident window.",
+                "The reported trigger configuration change refers to the currently observed configured_trigger_event, but no canonical config audit record is supplied to prove when that change occurred.",
+                "No in-window canonical create-success record is supplied; the complaint that creates still arrive is treated as unverified context, not proven telemetry."
+              ]
+            },
+            "findings": [
+              {
+                "code": "mechanism_observation",
+                "statement": "At 10:05Z Cedar's Notion edit event reached trigger-worker as observed_event=page_content_updated, but the configured trigger event was page_created, producing matched=false with connection_active=true and status=200. This directly matches an event-kind mismatch rather than a provider or credential failure.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b03e407bd73d",
+                    "record_id": "notion-event-034:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "In the controlled sandbox comparison, changing only the Notion configuration flipped the same page_content_updated event from unmatched under page_created to matched under page_content_updated, isolating configuration/event-kind as the discriminating variable.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_8a3312eb9216",
+                    "record_id": "notion-event-034:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_8a3312eb9216",
+                    "record_id": "notion-event-034:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Impact is Cedar-local in the observed window: Cedar shows 517 requests, 0 failures, 355 business operations blocked, queue depth 93, and p95 latency 1240 ms, while Maple shows 461 requests, 0 failures, 0 blocked, queue depth 0, and p95 latency 160 ms.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "A broad provider/platform outage is weakened by healthy comparison-tenant signals and provider reachability: Maple shows same_provider_available=true and unrelated_read_succeeds=true, and trigger-worker reports provider_api_reachable=true.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b03e407bd73d",
+                    "record_id": "notion-event-034:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_c9919ec00db6",
+                    "record_id": "notion-event-034:dependencies:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "trigger_event_kind_mismatch_remediation",
+              "collect_missing_telemetry"
+            ],
+            "actions": [
+              "Update the Cedar trigger to the intended Notion edit event kind instead of page_created, preserving the existing connection.",
+              "Collect canonical Cedar config/audit history to confirm when the trigger event was changed and whether any create-only behavior was introduced at that time."
+            ],
+            "missing_checks": [],
+            "strength": 9
+          },
+          {
+            "code": "webhook_event_subscription",
+            "hypothesis": {
+              "description": "A Notion subscription or webhook configuration issue affecting only edit events is less likely than a trigger event mismatch because an edit event was already ingested by trigger-worker for Cedar.",
+              "supporting_evidence": [
+                "ev_95640c90828a"
+              ],
+              "contradicting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_8a3312eb9216"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "This candidate is limited to setup variants not ruled out by the single observed ingested edit event, such as multiple overlapping subscriptions or configuration layers not visible in the supplied records."
+              ]
+            },
+            "findings": [
+              {
+                "code": "ingress_received",
+                "statement": "Cedar's edit event was observed inside trigger-worker, so the failed execution did not depend on proving missing provider ingress for that request.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b03e407bd73d",
+                    "record_id": "notion-event-034:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "The controlled comparison showed that changing only Notion configuration corrected matching for the same ingested edit event, which points more specifically to trigger event selection than to a provider-side subscription outage.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_8a3312eb9216",
+                    "record_id": "notion-event-034:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_8a3312eb9216",
+                    "record_id": "notion-event-034:reproduce:1"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "subscribe_to_delivery_event"
+            ],
+            "actions": [
+              "Check canonical trigger/subscription setup records only if there are separate configuration layers beyond the trigger event selector.",
+              "If configuration review shows edits are meant to be delivered via a distinct subscription, verify that the intended edit-event subscription is present."
+            ],
+            "missing_checks": [
+              "Canonical subscription/setup records for Cedar showing whether edit events use a separate provider subscription path from create events."
+            ],
+            "strength": 3
+          },
+          {
+            "code": "provider_failure",
+            "hypothesis": {
+              "description": "A broader provider or trigger-worker regression is not the best fit for the observed failure because the failing Cedar request reached trigger-worker, returned 200, and comparison telemetry is healthy for Maple.",
+              "supporting_evidence": [],
+              "contradicting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_2743809125fc",
+                "ev_c9919ec00db6",
+                "ev_cb557e970210"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "The absence of a trigger-worker deployment record in the supplied evidence does not prove no internal change occurred elsewhere; it only weakens that explanation in this incident scope."
+              ]
+            },
+            "findings": [
+              {
+                "code": "tenant_isolation",
+                "statement": "Observed impact is isolated to Cedar rather than multi-tenant: Cedar has blocked operations and backlog while Maple does not.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "upstream_errors",
+                "statement": "There are no observed HTTP failures for Cedar or Maple in the provided metrics, and provider_api_reachable=true, which weighs against a broad provider outage causing the missed edit execution.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_2743809125fc",
+                    "record_id": "notion-event-034:metrics:1"
+                  },
+                  {
+                    "evidence_id": "ev_c9919ec00db6",
+                    "record_id": "notion-event-034:dependencies:0"
+                  }
+                ]
+              },
+              {
+                "code": "version_control",
+                "statement": "The only deployment record in evidence is an unrelated support-dashboard release, so the supplied records do not support attributing this to a contemporaneous trigger-worker deployment.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_cb557e970210",
+                    "record_id": "notion-event-034:deployments:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "monitor_provider"
+            ],
+            "actions": [
+              "Do not prioritize broad provider or platform rollback based on current evidence.",
+              "If concern remains about a hidden platform regression, gather canonical trigger-worker deployment/version records for the incident window rather than relying on the unrelated dashboard release record."
+            ],
+            "missing_checks": [
+              "Canonical trigger-worker deployment/version history for the incident window, because the supplied deployment evidence covers only an unrelated service."
+            ],
+            "strength": 2
+          }
+        ],
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "critic",
+      "role": "critic",
+      "status": "complete",
+      "at": 523797.06790524
+    },
+    {
+      "event": "task_started",
+      "task": "report",
+      "role": "reporting",
+      "at": 523797.089886124,
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_a80e448b3497",
+        "ev_9e5e17164c4a",
+        "ev_c9919ec00db6",
+        "ev_cb557e970210",
+        "ev_8a3312eb9216",
+        "ev_b03e407bd73d",
+        "ev_2743809125fc",
+        "ev_cc6e8c995cb9",
+        "ev_e30919981a23",
+        "ev_2c457743c20d",
+        "ev_9b5a97bf61ce",
+        "ev_b874c681f814",
+        "ev_95640c90828a"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "reporting",
+      "model": "gpt-5.4",
+      "request": 14,
+      "task": "report"
+    },
+    {
+      "event": "model_finished",
+      "role": "reporting",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 11907,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1295,
+        "output_tokens_details": {
+          "reasoning_tokens": 37
+        },
+        "total_tokens": 13202
+      },
+      "task": "report"
+    },
+    {
+      "event": "agent_result",
+      "task": "report",
+      "role": "reporting",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": {
+          "incident_id": "notion-event-034",
+          "outcome": "probable_cause",
+          "hypotheses": [
+            {
+              "description": "Most likely cause: Cedar's Notion edit events reached trigger-worker, but the trigger was configured for page_created, so page_content_updated events did not match and were not delivered. This explains Cedar-local blocked operations and backlog without HTTP failures or a provider outage.",
+              "supporting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_2743809125fc",
+                "ev_8a3312eb9216",
+                "ev_95640c90828a",
+                "ev_c9919ec00db6"
+              ],
+              "contradicting_evidence": [],
+              "confidence": "high",
+              "assumptions": [
+                "The sampled Cedar request is representative of the missed edit executions during the incident window.",
+                "The reported configuration change is not independently timestamped because no canonical config/audit record was supplied.",
+                "The complaint that creates still arrive is unverified context; no canonical create-success record is present in-window."
+              ]
+            },
+            {
+              "description": "Alternative but less likely: a distinct edit-event subscription/setup issue exists. This is weakened because the failed Cedar edit event was already ingested by trigger-worker, so the observed failed execution does not require missing provider ingress.",
+              "supporting_evidence": [
+                "ev_95640c90828a"
+              ],
+              "contradicting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_8a3312eb9216"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "This would require an additional configuration layer beyond the observed trigger event selector."
+              ]
+            },
+            {
+              "description": "Broader provider or platform failure is unlikely for the observed failure. The failing Cedar request reached trigger-worker with status 200, provider reachability is healthy, and Maple remained healthy in the same window.",
+              "supporting_evidence": [],
+              "contradicting_evidence": [
+                "ev_b03e407bd73d",
+                "ev_2743809125fc",
+                "ev_c9919ec00db6",
+                "ev_cb557e970210"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "The supplied deployment evidence does not prove absence of a hidden trigger-worker change; it only fails to support that explanation."
+              ]
+            }
+          ],
+          "recommended_actions": [
+            "Synthetic telemetry indicates the first priority is trigger_event_kind_mismatch_remediation: select the intended Notion update/edit trigger event for Cedar while preserving the existing connection, then verify with a newly generated edit.",
+            "Collect missing canonical Cedar config/audit history for the incident window to confirm exactly what trigger configuration changed and when.",
+            "If Cedar expects edits via a distinct subscription path, check the canonical setup/subscription records and subscribe_to_delivery_event only if that separate layer is actually required.",
+            "Monitor backlog and blocked operations for Cedar after configuration review, and consider replay_after_recovery only for missed work if product semantics allow it; this has not been executed."
+          ],
+          "limitations": [
+            "No canonical Cedar config/audit record was provided, so timing and exact nature of the reported trigger change remain unverified.",
+            "No canonical in-window Cedar create-success record was supplied; the report does not prove creates continued succeeding during the sampled window.",
+            "The reproduce tool is synthetic controlled telemetry, useful as a discriminating comparison but not proof of production change history.",
+            "Empty partial dependency queries for tenant 'Cedar' are not evidence of absence and were not used to rule causes out."
+          ]
+        },
+        "notes": [],
+        "candidates": null,
+        "findings": [
+          {
+            "code": "mechanism_observation",
+            "statement": "At 10:05Z, Cedar's Notion edit event reached trigger-worker as observed_event=page_content_updated, but the configured trigger event was page_created, so matched=false while connection_active=true and status=200. This directly supports an event-kind mismatch over provider or credential failure for the observed execution.",
+            "citations": [
+              {
+                "evidence_id": "ev_b03e407bd73d",
+                "record_id": "notion-event-034:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "controlled_comparison",
+            "statement": "In synthetic controlled telemetry, changing only the Notion configuration turned the same page_content_updated event from unmatched under page_created to matched under page_content_updated, isolating configuration/event-kind as the discriminating variable.",
+            "citations": [
+              {
+                "evidence_id": "ev_8a3312eb9216",
+                "record_id": "notion-event-034:reproduce:0"
+              },
+              {
+                "evidence_id": "ev_8a3312eb9216",
+                "record_id": "notion-event-034:reproduce:1"
+              }
+            ]
+          },
+          {
+            "code": "tenant_impact",
+            "statement": "Observed impact is Cedar-scoped in the sampled window: Cedar had 517 requests, 0 failures, 355 blocked business operations, queue depth 93, and p95 latency 1240 ms, while Maple had 461 requests, 0 failures, 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+            "citations": [
+              {
+                "evidence_id": "ev_2743809125fc",
+                "record_id": "notion-event-034:metrics:0"
+              },
+              {
+                "evidence_id": "ev_2743809125fc",
+                "record_id": "notion-event-034:metrics:1"
+              }
+            ]
+          },
+          {
+            "code": "provider_isolation",
+            "statement": "A broad provider/platform outage is weakened by comparison telemetry and dependency health: Maple shows same_provider_available=true and unrelated_read_succeeds=true, and trigger-worker reports provider_api_reachable=true.",
+            "citations": [
+              {
+                "evidence_id": "ev_b03e407bd73d",
+                "record_id": "notion-event-034:logs:1"
+              },
+              {
+                "evidence_id": "ev_c9919ec00db6",
+                "record_id": "notion-event-034:dependencies:0"
+              }
+            ]
+          },
+          {
+            "code": "telemetry_gap",
+            "statement": "The incident evidence does not include a canonical Cedar config/audit record showing exactly what trigger configuration changed before the incident window, so change timing and operator intent remain unverified.",
+            "citations": [
+              {
+                "evidence_id": "ev_b03e407bd73d",
+                "record_id": "notion-event-034:logs:0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "report",
+      "role": "reporting",
+      "status": "complete",
+      "at": 523813.847000076
+    }
+  ],
+  "limitations": [],
+  "report": {
+    "incident_id": "notion-event-034",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause: Cedar's Notion edit events reached trigger-worker, but the trigger was configured for page_created, so page_content_updated events did not match and were not delivered. This explains Cedar-local blocked operations and backlog without HTTP failures or a provider outage.",
+        "supporting_evidence": [
+          "ev_b03e407bd73d",
+          "ev_2743809125fc",
+          "ev_8a3312eb9216",
+          "ev_95640c90828a",
+          "ev_c9919ec00db6"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The sampled Cedar request is representative of the missed edit executions during the incident window.",
+          "The reported configuration change is not independently timestamped because no canonical config/audit record was supplied.",
+          "The complaint that creates still arrive is unverified context; no canonical create-success record is present in-window."
+        ]
+      },
+      {
+        "description": "Alternative but less likely: a distinct edit-event subscription/setup issue exists. This is weakened because the failed Cedar edit event was already ingested by trigger-worker, so the observed failed execution does not require missing provider ingress.",
+        "supporting_evidence": [
+          "ev_95640c90828a"
+        ],
+        "contradicting_evidence": [
+          "ev_b03e407bd73d",
+          "ev_8a3312eb9216"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "This would require an additional configuration layer beyond the observed trigger event selector."
+        ]
+      },
+      {
+        "description": "Broader provider or platform failure is unlikely for the observed failure. The failing Cedar request reached trigger-worker with status 200, provider reachability is healthy, and Maple remained healthy in the same window.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_b03e407bd73d",
+          "ev_2743809125fc",
+          "ev_c9919ec00db6",
+          "ev_cb557e970210"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The supplied deployment evidence does not prove absence of a hidden trigger-worker change; it only fails to support that explanation."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry indicates the first priority is trigger_event_kind_mismatch_remediation: select the intended Notion update/edit trigger event for Cedar while preserving the existing connection, then verify with a newly generated edit.",
+      "Collect missing canonical Cedar config/audit history for the incident window to confirm exactly what trigger configuration changed and when.",
+      "If Cedar expects edits via a distinct subscription path, check the canonical setup/subscription records and subscribe_to_delivery_event only if that separate layer is actually required.",
+      "Monitor backlog and blocked operations for Cedar after configuration review, and consider replay_after_recovery only for missed work if product semantics allow it; this has not been executed."
+    ],
+    "limitations": [
+      "No canonical Cedar config/audit record was provided, so timing and exact nature of the reported trigger change remain unverified.",
+      "No canonical in-window Cedar create-success record was supplied; the report does not prove creates continued succeeding during the sampled window.",
+      "The reproduce tool is synthetic controlled telemetry, useful as a discriminating comparison but not proof of production change history.",
+      "Empty partial dependency queries for tenant 'Cedar' are not evidence of absence and were not used to rule causes out."
+    ]
+  },
+  "tool_calls": 13,
+  "followup_rounds": 0,
+  "status": "complete",
+  "candidates": [
+    {
+      "code": "trigger_event_kind_mismatch",
+      "hypothesis": {
+        "description": "Cedar's edit events are reaching trigger-worker, but the trigger is configured for page_created, so page_content_updated events do not match and are not delivered. This fits the complaint that creates still arrive while edits do not, and it explains Cedar-local backlog without worker errors.",
+        "supporting_evidence": [
+          "ev_b03e407bd73d",
+          "ev_2743809125fc",
+          "ev_8a3312eb9216",
+          "ev_95640c90828a",
+          "ev_c9919ec00db6"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The observed Cedar record is representative of the missed edit executions during the incident window.",
+          "The reported trigger configuration change refers to the currently observed configured_trigger_event, but no canonical config audit record is supplied to prove when that change occurred.",
+          "No in-window canonical create-success record is supplied; the complaint that creates still arrive is treated as unverified context, not proven telemetry."
+        ]
+      },
+      "findings": [
+        {
+          "code": "mechanism_observation",
+          "statement": "At 10:05Z Cedar's Notion edit event reached trigger-worker as observed_event=page_content_updated, but the configured trigger event was page_created, producing matched=false with connection_active=true and status=200. This directly matches an event-kind mismatch rather than a provider or credential failure.",
+          "citations": [
+            {
+              "evidence_id": "ev_b03e407bd73d",
+              "record_id": "notion-event-034:logs:0"
+            }
+          ]
+        },
+        {
+          "code": "controlled_comparison",
+          "statement": "In the controlled sandbox comparison, changing only the Notion configuration flipped the same page_content_updated event from unmatched under page_created to matched under page_content_updated, isolating configuration/event-kind as the discriminating variable.",
+          "citations": [
+            {
+              "evidence_id": "ev_8a3312eb9216",
+              "record_id": "notion-event-034:reproduce:0"
+            },
+            {
+              "evidence_id": "ev_8a3312eb9216",
+              "record_id": "notion-event-034:reproduce:1"
+            }
+          ]
+        },
+        {
+          "code": "tenant_impact",
+          "statement": "Impact is Cedar-local in the observed window: Cedar shows 517 requests, 0 failures, 355 business operations blocked, queue depth 93, and p95 latency 1240 ms, while Maple shows 461 requests, 0 failures, 0 blocked, queue depth 0, and p95 latency 160 ms.",
+          "citations": [
+            {
+              "evidence_id": "ev_2743809125fc",
+              "record_id": "notion-event-034:metrics:0"
+            },
+            {
+              "evidence_id": "ev_2743809125fc",
+              "record_id": "notion-event-034:metrics:1"
+            }
+          ]
+        },
+        {
+          "code": "provider_isolation",
+          "statement": "A broad provider/platform outage is weakened by healthy comparison-tenant signals and provider reachability: Maple shows same_provider_available=true and unrelated_read_succeeds=true, and trigger-worker reports provider_api_reachable=true.",
+          "citations": [
+            {
+              "evidence_id": "ev_b03e407bd73d",
+              "record_id": "notion-event-034:logs:1"
+            },
+            {
+              "evidence_id": "ev_c9919ec00db6",
+              "record_id": "notion-event-034:dependencies:0"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "trigger_event_kind_mismatch_remediation",
+        "collect_missing_telemetry"
+      ],
+      "actions": [
+        "Update the Cedar trigger to the intended Notion edit event kind instead of page_created, preserving the existing connection.",
+        "Collect canonical Cedar config/audit history to confirm when the trigger event was changed and whether any create-only behavior was introduced at that time."
+      ],
+      "missing_checks": [],
+      "strength": 9
+    },
+    {
+      "code": "webhook_event_subscription",
+      "hypothesis": {
+        "description": "A Notion subscription or webhook configuration issue affecting only edit events is less likely than a trigger event mismatch because an edit event was already ingested by trigger-worker for Cedar.",
+        "supporting_evidence": [
+          "ev_95640c90828a"
+        ],
+        "contradicting_evidence": [
+          "ev_b03e407bd73d",
+          "ev_8a3312eb9216"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "This candidate is limited to setup variants not ruled out by the single observed ingested edit event, such as multiple overlapping subscriptions or configuration layers not visible in the supplied records."
+        ]
+      },
+      "findings": [
+        {
+          "code": "ingress_received",
+          "statement": "Cedar's edit event was observed inside trigger-worker, so the failed execution did not depend on proving missing provider ingress for that request.",
+          "citations": [
+            {
+              "evidence_id": "ev_b03e407bd73d",
+              "record_id": "notion-event-034:logs:0"
+            }
+          ]
+        },
+        {
+          "code": "controlled_comparison",
+          "statement": "The controlled comparison showed that changing only Notion configuration corrected matching for the same ingested edit event, which points more specifically to trigger event selection than to a provider-side subscription outage.",
+          "citations": [
+            {
+              "evidence_id": "ev_8a3312eb9216",
+              "record_id": "notion-event-034:reproduce:0"
+            },
+            {
+              "evidence_id": "ev_8a3312eb9216",
+              "record_id": "notion-event-034:reproduce:1"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "collect_missing_telemetry",
+        "subscribe_to_delivery_event"
+      ],
+      "actions": [
+        "Check canonical trigger/subscription setup records only if there are separate configuration layers beyond the trigger event selector.",
+        "If configuration review shows edits are meant to be delivered via a distinct subscription, verify that the intended edit-event subscription is present."
+      ],
+      "missing_checks": [
+        "Canonical subscription/setup records for Cedar showing whether edit events use a separate provider subscription path from create events."
+      ],
+      "strength": 3
+    },
+    {
+      "code": "provider_failure",
+      "hypothesis": {
+        "description": "A broader provider or trigger-worker regression is not the best fit for the observed failure because the failing Cedar request reached trigger-worker, returned 200, and comparison telemetry is healthy for Maple.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_b03e407bd73d",
+          "ev_2743809125fc",
+          "ev_c9919ec00db6",
+          "ev_cb557e970210"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The absence of a trigger-worker deployment record in the supplied evidence does not prove no internal change occurred elsewhere; it only weakens that explanation in this incident scope."
+        ]
+      },
+      "findings": [
+        {
+          "code": "tenant_isolation",
+          "statement": "Observed impact is isolated to Cedar rather than multi-tenant: Cedar has blocked operations and backlog while Maple does not.",
+          "citations": [
+            {
+              "evidence_id": "ev_2743809125fc",
+              "record_id": "notion-event-034:metrics:0"
+            },
+            {
+              "evidence_id": "ev_2743809125fc",
+              "record_id": "notion-event-034:metrics:1"
+            }
+          ]
+        },
+        {
+          "code": "upstream_errors",
+          "statement": "There are no observed HTTP failures for Cedar or Maple in the provided metrics, and provider_api_reachable=true, which weighs against a broad provider outage causing the missed edit execution.",
+          "citations": [
+            {
+              "evidence_id": "ev_2743809125fc",
+              "record_id": "notion-event-034:metrics:0"
+            },
+            {
+              "evidence_id": "ev_2743809125fc",
+              "record_id": "notion-event-034:metrics:1"
+            },
+            {
+              "evidence_id": "ev_c9919ec00db6",
+              "record_id": "notion-event-034:dependencies:0"
+            }
+          ]
+        },
+        {
+          "code": "version_control",
+          "statement": "The only deployment record in evidence is an unrelated support-dashboard release, so the supplied records do not support attributing this to a contemporaneous trigger-worker deployment.",
+          "citations": [
+            {
+              "evidence_id": "ev_cb557e970210",
+              "record_id": "notion-event-034:deployments:0"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "collect_missing_telemetry",
+        "monitor_provider"
+      ],
+      "actions": [
+        "Do not prioritize broad provider or platform rollback based on current evidence.",
+        "If concern remains about a hidden platform regression, gather canonical trigger-worker deployment/version records for the incident window rather than relying on the unrelated dashboard release record."
+      ],
+      "missing_checks": [
+        "Canonical trigger-worker deployment/version history for the incident window, because the supplied deployment evidence covers only an unrelated service."
+      ],
+      "strength": 2
+    }
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "At 10:05Z, Cedar's Notion edit event reached trigger-worker as observed_event=page_content_updated, but the configured trigger event was page_created, so matched=false while connection_active=true and status=200. This directly supports an event-kind mismatch over provider or credential failure for the observed execution.",
+      "citations": [
+        {
+          "evidence_id": "ev_b03e407bd73d",
+          "record_id": "notion-event-034:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In synthetic controlled telemetry, changing only the Notion configuration turned the same page_content_updated event from unmatched under page_created to matched under page_content_updated, isolating configuration/event-kind as the discriminating variable.",
+      "citations": [
+        {
+          "evidence_id": "ev_8a3312eb9216",
+          "record_id": "notion-event-034:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_8a3312eb9216",
+          "record_id": "notion-event-034:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact is Cedar-scoped in the sampled window: Cedar had 517 requests, 0 failures, 355 blocked business operations, queue depth 93, and p95 latency 1240 ms, while Maple had 461 requests, 0 failures, 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_2743809125fc",
+          "record_id": "notion-event-034:metrics:0"
+        },
+        {
+          "evidence_id": "ev_2743809125fc",
+          "record_id": "notion-event-034:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "A broad provider/platform outage is weakened by comparison telemetry and dependency health: Maple shows same_provider_available=true and unrelated_read_succeeds=true, and trigger-worker reports provider_api_reachable=true.",
+      "citations": [
+        {
+          "evidence_id": "ev_b03e407bd73d",
+          "record_id": "notion-event-034:logs:1"
+        },
+        {
+          "evidence_id": "ev_c9919ec00db6",
+          "record_id": "notion-event-034:dependencies:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "The incident evidence does not include a canonical Cedar config/audit record showing exactly what trigger configuration changed before the incident window, so change timing and operator intent remain unverified.",
+      "citations": [
+        {
+          "evidence_id": "ev_b03e407bd73d",
+          "record_id": "notion-event-034:logs:0"
+        }
+      ]
+    }
+  ]
+}

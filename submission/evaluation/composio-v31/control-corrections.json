@@ -1,0 +1,56 @@
+[
+  {
+    "id": "sheets-discovery-039",
+    "record_id": "sheets-discovery-039:reproduce:1",
+    "before": {
+      "has_more": true,
+      "returned_tools": 20,
+      "initial_page_count": null
+    },
+    "after": {
+      "has_more": false,
+      "returned_tools": 75,
+      "initial_page_count": 20
+    }
+  },
+  {
+    "id": "airtable-expiry-041",
+    "record_id": "airtable-expiry-041:reproduce:1",
+    "before": {
+      "token_exchange_attempted": false
+    },
+    "after": {
+      "token_exchange_attempted": true
+    }
+  },
+  {
+    "id": "slack-user-043",
+    "record_id": "slack-user-043:reproduce:1",
+    "before": {
+      "error": "missing_scope"
+    },
+    "after": {
+      "error": null
+    }
+  },
+  {
+    "id": "slack-redirect-046",
+    "record_id": "slack-redirect-046:reproduce:1",
+    "before": {
+      "oauth_error": "redirect_uri_mismatch"
+    },
+    "after": {
+      "oauth_error": null
+    }
+  },
+  {
+    "id": "gmail-shape-047",
+    "record_id": "gmail-shape-047:reproduce:1",
+    "before": {
+      "validation_error": "attachment_object_required"
+    },
+    "after": {
+      "validation_error": null
+    }
+  }
+]

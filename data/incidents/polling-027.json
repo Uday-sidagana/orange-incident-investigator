@@ -1,0 +1,103 @@
+{
+  "incident": {
+    "id": "polling-027",
+    "title": "A new Gmail trigger misses older inbox messages",
+    "description": "A newly created Gmail trigger does not emit messages that were already in the inbox. Polling succeeds, and a message sent after setup is delivered.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "trigger-worker"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "polling-027:logs:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "poll_success": true,
+        "message_predates_baseline": true,
+        "backfill_enabled": false,
+        "event_emitted": false,
+        "status": 200
+      },
+      {
+        "record_id": "polling-027:logs:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "poll_success": true,
+        "message_predates_baseline": false,
+        "backfill_enabled": false,
+        "event_emitted": true,
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "polling-027:metrics:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "polling-027:metrics:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "polling-027:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "polling-027:dependencies:0",
+        "service": "trigger-worker",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "polling-027:history:0",
+        "service": "trigger-worker",
+        "symptom": "A new Gmail trigger misses older inbox messages",
+        "cause": "A past no-event incident had a disabled trigger; the current poll is healthy.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "polling-027:knowledge:0",
+        "service": "trigger-worker",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "history": {
+      "incomplete": true
+    }
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "incident": {
+    "id": "github-org-035",
+    "title": "GitHub personal repositories work but organization jobs fail",
+    "description": "Cedar can read personal repositories but organization requests return 403. Reconnecting has not helped, and organization jobs are accumulating.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "github-org-035:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "request_id": "req-35",
+        "toolkit": "github",
+        "status": 403,
+        "personal_repository_access": true,
+        "organization_oauth_policy": "restricted",
+        "organization_app_approval": "pending",
+        "token_valid": true
+      },
+      {
+        "record_id": "github-org-035:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "status": 200,
+        "same_provider_available": true,
+        "unrelated_read_succeeds": true
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "github-org-035:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "requests": 534,
+        "failures": 360,
+        "business_operations_blocked": 360,
+        "queue_depth": 96,
+        "p95_latency_ms": 1280
+      },
+      {
+        "record_id": "github-org-035:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "requests": 472,
+        "failures": 0,
+        "business_operations_blocked": 0,
+        "queue_depth": 0,
+        "p95_latency_ms": 160
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "github-org-035:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated inbox display release",
+        "version": "dashboard-v23"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "github-org-035:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api",
+          "session-policy"
+        ],
+        "provider_api_reachable": true
+      }
+    ],
+    "history": [
+      {
+        "record_id": "github-org-035:history:0",
+        "service": "tool-executor",
+        "symptom": "A similar workflow stopped following a release",
+        "cause": "An earlier provider outage",
+        "relation": "historical analogy only, not current proof"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "github-org-035:knowledge:0",
+        "service": "tool-executor",
+        "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+        "kind": "public_reference",
+        "summary": "GitHub organizations may require owner approval of an OAuth app."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "github-org-035:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "original",
+        "same_request_except": "github_configuration",
+        "check_passed": false,
+        "toolkit": "github",
+        "status": 403,
+        "personal_repository_access": true,
+        "organization_oauth_policy": "restricted",
+        "organization_app_approval": "pending",
+        "token_valid": true
+      },
+      {
+        "record_id": "github-org-035:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "corrected",
+        "same_request_except": "github_configuration",
+        "check_passed": true,
+        "toolkit": "github",
+        "status": 200,
+        "personal_repository_access": true,
+        "organization_oauth_policy": "restricted",
+        "organization_app_approval": "approved",
+        "token_valid": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

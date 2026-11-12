@@ -1,0 +1,124 @@
+{
+  "incident": {
+    "id": "account-017",
+    "title": "Successful action returns another mailbox\u2019s data",
+    "description": "Gmail actions return 200 but the customer sees the wrong mailbox. They have multiple connected Gmail accounts under one application user.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-router"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "account-017:logs:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "expected_account_id": "mailbox-a",
+        "selected_account_id": "mailbox-b",
+        "provider_status": 200,
+        "status": 200,
+        "result_matches_expected_account": false
+      },
+      {
+        "record_id": "account-017:logs:1",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "expected_account_id": "mailbox-a",
+        "selected_account_id": "mailbox-a",
+        "provider_status": 200,
+        "status": 200,
+        "result_matches_expected_account": true
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "account-017:metrics:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 0,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "account-017:metrics:1",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "account-017:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "account-017:dependencies:0",
+        "service": "tool-router",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "account-017:history:0",
+        "service": "tool-router",
+        "symptom": "Successful action returns another mailbox\u2019s data",
+        "cause": "A similar missing-mail complaint previously involved insufficient read scopes.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "account-017:knowledge:0",
+        "service": "tool-router",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "account-017:reproduce:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "account_selection",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "account-017:reproduce:1",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "account_selection",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 1
+    }
+  }
+}

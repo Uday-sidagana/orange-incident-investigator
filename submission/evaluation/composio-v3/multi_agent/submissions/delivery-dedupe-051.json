@@ -1,0 +1,611 @@
+{
+  "incident_id": "delivery-dedupe-051",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "delivery-dedupe-051",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely for the observed cedar execution: one upstream ingress event led to two downstream delivery attempts carrying the same stable event identifier, and the downstream side created two records when receiver deduplication was absent. A controlled synthetic comparison kept one ingress and two attempts but reduced downstream records from 2 to 1 when receiver deduplication was enabled, which best fits a non-idempotent webhook receiver processing legitimate retries as new work.",
+        "supporting_evidence": [
+          "ev_b5f640347b49",
+          "ev_7549ab5beb31",
+          "ev_ec52aebd6eb4",
+          "ev_d949c602a22d"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The synthetic controlled comparison verifies the mechanism change tied to receiver deduplication, but is not independent proof of every production condition.",
+          "Current canonical production logs do not show per-attempt acknowledgement or timeout details, so this explains the duplicate downstream records for the observed request more directly than it explains why the second attempt occurred."
+        ]
+      },
+      {
+        "description": "A weaker competing explanation is unsafe send retry: trigger-worker may have resent after an uncertain or already-accepted first delivery, contributing to duplicate downstream processing of the same event id. Two attempts are observed, but available canonical records do not show whether the first attempt definitively failed, timed out, or was accepted before retry.",
+        "supporting_evidence": [
+          "ev_b5f640347b49",
+          "ev_ec52aebd6eb4"
+        ],
+        "contradicting_evidence": [
+          "ev_7549ab5beb31",
+          "ev_0067e63ba0b3"
+        ],
+        "confidence": "medium",
+        "assumptions": [
+          "Receiver non-idempotency can coexist with unsafe retry behavior.",
+          "Missing attempt-level send outcomes prevent assigning the duplicate primarily to send-side logic from current evidence alone."
+        ]
+      },
+      {
+        "description": "Duplicate upstream ingress of the same provider event into trigger-worker is not supported for the observed cedar request. Current canonical evidence shows one provider ingress event paired with two downstream attempts, and the synthetic controlled comparison reproduces duplicate downstream records without duplicate ingress.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_b5f640347b49",
+          "ev_7549ab5beb31"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "This conclusion is limited to the observed execution and available records, not all possible requests outside the provided evidence."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Proposed only, not executed: apply webhook_receiver_not_idempotent_remediation by deduplicating receiver processing on the stable event/log identifier so retries do not create multiple downstream records.",
+      "Proposed only, not executed: collect missing telemetry for each delivery attempt, including attempt id, send result, acknowledgement timing, timeout boundary, and retry decision keyed by stable_event_id.",
+      "Proposed only, not executed: subscribe_to_delivery_event or otherwise persist delivery-attempt receipts keyed by stable_event_id so future incidents can distinguish legitimate retries from unsafe resend-after-acceptance.",
+      "Proposed only, not executed: if send-side ownership matters, verify_send_before_retry and disable_blind_send_retries only after confirming whether attempt 2 followed a definitive failure versus an already-accepted first send."
+    ],
+    "limitations": [
+      "Evidence is sparse and centered on one observed cedar execution plus a maple comparison; absence of more examples is a telemetry gap, not proof of absence.",
+      "Synthetic reproduce evidence is useful mechanism verification but not independent production proof.",
+      "Current canonical records do not include per-attempt acknowledgement, timeout, or send-result fields, so send-side blame remains less certain than the duplicate-processing mechanism."
+    ]
+  },
+  "ranked_cause_codes": [
+    "webhook_receiver_not_idempotent",
+    "unsafe_send_retry",
+    "provider_event_ingress_misrouting"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "In the observed cedar execution, trigger-worker recorded one provider ingress event but two downstream delivery attempts for stable_event_id event-demo-051, and the downstream side produced two records with receiver_deduplication=false.",
+      "citations": [
+        {
+          "evidence_id": "ev_b5f640347b49",
+          "record_id": "delivery-dedupe-051:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the synthetic controlled comparison, keeping the request the same except for delivery configuration preserved one ingress event and two delivery attempts, but downstream records dropped from 2 to 1 when receiver deduplication was enabled.",
+      "citations": [
+        {
+          "evidence_id": "ev_7549ab5beb31",
+          "record_id": "delivery-dedupe-051:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_7549ab5beb31",
+          "record_id": "delivery-dedupe-051:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact is tenant-specific in current evidence: cedar had 440 business operations blocked, queue_depth 144, and p95 latency 1920 ms, while maple had 0 blocked, queue_depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_ec52aebd6eb4",
+          "record_id": "delivery-dedupe-051:metrics:0"
+        },
+        {
+          "evidence_id": "ev_d949c602a22d",
+          "record_id": "delivery-dedupe-051:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "A comparison tenant using the same provider showed unrelated reads succeeding, which weakens a broad provider outage explanation for the observed duplicate records.",
+      "citations": [
+        {
+          "evidence_id": "ev_0067e63ba0b3",
+          "record_id": "delivery-dedupe-051:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "The only observed deployment near the incident was an unrelated support-dashboard release, not a trigger-worker deployment record.",
+      "citations": [
+        {
+          "evidence_id": "ev_bcebcc5d08f8",
+          "record_id": "delivery-dedupe-051:deployments:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "The available canonical production record for the duplicated cedar execution does not include per-attempt acknowledgement, timeout, or send-result fields, so it cannot fully distinguish legitimate retry from unsafe resend-after-acceptance.",
+      "citations": [
+        {
+          "evidence_id": "ev_b5f640347b49",
+          "record_id": "delivery-dedupe-051:logs:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "webhook_receiver_not_idempotent_remediation",
+    "collect_missing_telemetry",
+    "subscribe_to_delivery_event",
+    "verify_send_before_retry",
+    "disable_blind_send_retries"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_bcebcc5d08f8",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_07f0bccd15d3",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:dependencies:0",
+          "service": "trigger-worker",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7549ab5beb31",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:reproduce:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "delivery_configuration",
+          "check_passed": false,
+          "status": 200,
+          "provider_ingress_events": 1,
+          "delivery_attempts": 2,
+          "stable_event_id": "event-demo-051",
+          "receipt_event_ids": [
+            "event-demo-051",
+            "event-demo-051"
+          ],
+          "receiver_deduplication": false,
+          "downstream_records": 2
+        },
+        {
+          "record_id": "delivery-dedupe-051:reproduce:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "delivery_configuration",
+          "check_passed": true,
+          "status": 200,
+          "provider_ingress_events": 1,
+          "delivery_attempts": 2,
+          "stable_event_id": "event-demo-051",
+          "receipt_event_ids": [
+            "event-demo-051",
+            "event-demo-051"
+          ],
+          "receiver_deduplication": true,
+          "downstream_records": 1
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_bf86d3ceafd0",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-51",
+          "status": 200,
+          "provider_ingress_events": 1,
+          "delivery_attempts": 2,
+          "stable_event_id": "event-demo-051",
+          "receipt_event_ids": [
+            "event-demo-051",
+            "event-demo-051"
+          ],
+          "receiver_deduplication": false,
+          "downstream_records": 2
+        },
+        {
+          "record_id": "delivery-dedupe-051:logs:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_abbe7600cc0a",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:metrics:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 806,
+          "failures": 0,
+          "business_operations_blocked": 440,
+          "queue_depth": 144,
+          "p95_latency_ms": 1920
+        },
+        {
+          "record_id": "delivery-dedupe-051:metrics:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 648,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_25e6ab5723c8",
+      "query": {
+        "tool": "deployments",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_14f36f7eefb5",
+      "query": {
+        "tool": "dependencies",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_876b0c72b77d",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "event-demo-051",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-51",
+          "status": 200,
+          "provider_ingress_events": 1,
+          "delivery_attempts": 2,
+          "stable_event_id": "event-demo-051",
+          "receipt_event_ids": [
+            "event-demo-051",
+            "event-demo-051"
+          ],
+          "receiver_deduplication": false,
+          "downstream_records": 2
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_ec52aebd6eb4",
+      "query": {
+        "tool": "metrics",
+        "service": "trigger-worker",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:metrics:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 806,
+          "failures": 0,
+          "business_operations_blocked": 440,
+          "queue_depth": 144,
+          "p95_latency_ms": 1920
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_d949c602a22d",
+      "query": {
+        "tool": "metrics",
+        "service": "trigger-worker",
+        "tenant": "maple",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:metrics:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 648,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_a69f40447071",
+      "query": {
+        "tool": "deployments",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_888beb6afc32",
+      "query": {
+        "tool": "dependencies",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:dependencies:0",
+          "service": "trigger-worker",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_b5f640347b49",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-51",
+          "status": 200,
+          "provider_ingress_events": 1,
+          "delivery_attempts": 2,
+          "stable_event_id": "event-demo-051",
+          "receipt_event_ids": [
+            "event-demo-051",
+            "event-demo-051"
+          ],
+          "receiver_deduplication": false,
+          "downstream_records": 2
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_0067e63ba0b3",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": "maple",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:logs:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 163.13629943097476,
+  "input_tokens": 81141,
+  "output_tokens": 10096
+}

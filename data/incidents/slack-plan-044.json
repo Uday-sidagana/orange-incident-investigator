@@ -1,0 +1,143 @@
+{
+  "incident": {
+    "id": "slack-plan-044",
+    "title": "Slack AI search fails while ordinary search remains healthy",
+    "description": "Cedar cannot use assistant context search, although other Slack tools work. Adding scopes and reconnecting did not restore the workflow.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "slack-plan-044:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "request_id": "req-44",
+        "toolkit": "slack",
+        "status": 403,
+        "action": "assistant.search.context",
+        "workspace_plan": "standard",
+        "agents_ai_apps_enabled": true,
+        "is_ai_search_enabled": false,
+        "required_plan": "business_plus"
+      },
+      {
+        "record_id": "slack-plan-044:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "status": 200,
+        "same_provider_available": true,
+        "unrelated_read_succeeds": true
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "slack-plan-044:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "requests": 687,
+        "failures": 405,
+        "business_operations_blocked": 405,
+        "queue_depth": 123,
+        "p95_latency_ms": 1640
+      },
+      {
+        "record_id": "slack-plan-044:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "requests": 571,
+        "failures": 0,
+        "business_operations_blocked": 0,
+        "queue_depth": 0,
+        "p95_latency_ms": 160
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "slack-plan-044:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated inbox display release",
+        "version": "dashboard-v23"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "slack-plan-044:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api",
+          "session-policy"
+        ],
+        "provider_api_reachable": true
+      }
+    ],
+    "history": [
+      {
+        "record_id": "slack-plan-044:history:0",
+        "service": "tool-executor",
+        "symptom": "A similar workflow stopped following a release",
+        "cause": "An earlier provider outage",
+        "relation": "historical analogy only, not current proof"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "slack-plan-044:knowledge:0",
+        "service": "tool-executor",
+        "url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+        "kind": "public_reference",
+        "summary": "Slack assistant context search depends on both feature enablement and workspace plan eligibility."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "slack-plan-044:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "original",
+        "same_request_except": "slack_configuration",
+        "check_passed": false,
+        "toolkit": "slack",
+        "status": 403,
+        "action": "assistant.search.context",
+        "workspace_plan": "standard",
+        "agents_ai_apps_enabled": true,
+        "is_ai_search_enabled": false,
+        "required_plan": "business_plus"
+      },
+      {
+        "record_id": "slack-plan-044:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "corrected",
+        "same_request_except": "slack_configuration",
+        "check_passed": true,
+        "toolkit": "slack",
+        "status": 200,
+        "action": "assistant.search.context",
+        "workspace_plan": "business_plus",
+        "agents_ai_apps_enabled": true,
+        "is_ai_search_enabled": true,
+        "required_plan": "business_plus"
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

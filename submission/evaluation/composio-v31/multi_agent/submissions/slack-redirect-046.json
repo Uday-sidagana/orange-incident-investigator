@@ -1,0 +1,545 @@
+{
+  "incident_id": "slack-redirect-046",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "slack-redirect-046",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause for the observed failed execution is a Slack custom OAuth redirect URI mismatch on new authorization attempts. Canonical production logging shows Slack returning `redirect_uri_mismatch` because the authorization flow used `https://backend.composio.dev/api/v1/auth-apps/add` while the app was registered with `https://backend.composio.dev/api/v3/s/demo`, and a controlled comparison changes only Slack configuration and flips the result from failure to success.",
+        "supporting_evidence": [
+          "ev_b4edf41cb3ae",
+          "ev_d36163f78ef9",
+          "ev_0cfbd7f54d4a",
+          "ev_8d28d999665c"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The observed cedar auth failure is representative of at least some failed new Slack connection attempts during the incident window.",
+          "The controlled sandbox comparison is supportive of mechanism, not independent proof of every production failure in the window."
+        ]
+      },
+      {
+        "description": "A Slack workspace/app policy block is a weaker alternative for unobserved failures, since such policy can affect new authorizations while existing activity continues, but the observed canonical failure is specifically `redirect_uri_mismatch`, which is more discriminating than a policy denial.",
+        "supporting_evidence": [
+          "ev_0cfbd7f54d4a"
+        ],
+        "contradicting_evidence": [
+          "ev_b4edf41cb3ae",
+          "ev_d36163f78ef9",
+          "ev_8d28d999665c"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "This would only explain other failed attempts that did not emit the same canonical redirect-mismatch error."
+        ]
+      },
+      {
+        "description": "An expired or invalid auth initiation link is another weak alternative for unobserved failures, but the observed production request shows a provider-returned redirect validation error instead of an initiation-expiry error, and the controlled comparison clears the failure by changing only Slack redirect configuration.",
+        "supporting_evidence": [
+          "ev_0cfbd7f54d4a"
+        ],
+        "contradicting_evidence": [
+          "ev_b4edf41cb3ae",
+          "ev_d36163f78ef9"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "This remains relevant only if additional failed requests are found without canonical provider error details."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry indicates the first step should be to compare the custom Slack OAuth app's registered redirect URI against the authorization callback URI used by the platform, and keep any short per-connection link separate from the OAuth redirect setting.",
+      "Verify the intended custom OAuth app and project selection in the authoritative Slack app configuration, including the exact redirect URI value used for new Slack connections; this verification has not been executed here.",
+      "Collect canonical auth initiation, callback, and configuration-audit records for 2026-11-12T09:50:00Z to 2026-11-12T10:15:00Z to confirm when the redirect setting diverged and whether other tenants' failed onboarding attempts share the same mechanism.",
+      "Align tenant/request-level telemetry for new connection attempts versus existing Slack operations so incident scope can be quantified beyond the observed cedar failure and maple comparison.",
+      "If additional failed auth attempts appear without redirect-mismatch details, then inspect Slack workspace approval/policy state and initiation-link freshness for those requests specifically."
+    ],
+    "limitations": [
+      "Canonical production evidence includes one explicit failed Slack auth record and one successful unrelated Slack read, so conclusions should be scoped to the observed requests and sampled tenant metrics.",
+      "No canonical change-audit or callback-stage record is provided to prove who changed the redirect URI or exactly when the configuration changed.",
+      "Empty partial searches and the empty refresh-history view do not prove absence of other activity or causes; they are not sufficient to rule out other issues for unobserved failures.",
+      "Recommended actions are proposals based on supplied synthetic telemetry and have not been executed."
+    ]
+  },
+  "ranked_cause_codes": [
+    "oauth_redirect_uri_mismatch",
+    "workspace_app_policy",
+    "authentication_initiation_expired"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "Canonical production logs show a Slack OAuth failure with `oauth_error=redirect_uri_mismatch`; the request used `authorization_redirect_uri=https://backend.composio.dev/api/v1/auth-apps/add` while the app was registered with `https://backend.composio.dev/api/v3/s/demo`, and the record flags `short_connect_url_used_as_redirect=true`.",
+      "citations": [
+        {
+          "evidence_id": "ev_b4edf41cb3ae",
+          "record_id": "slack-redirect-046:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "A controlled sandbox comparison changed only Slack configuration: the original setup fails 400 with `redirect_uri_mismatch` when the short link is registered as the redirect, while the corrected setup succeeds 200 when the registered and authorization redirect URIs match.",
+      "citations": [
+        {
+          "evidence_id": "ev_d36163f78ef9",
+          "record_id": "slack-redirect-046:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_d36163f78ef9",
+          "record_id": "slack-redirect-046:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact is severe for cedar and absent for the comparison tenant maple at the sampled time: cedar had 721 requests with 415 failures, 415 blocked business operations, queue depth 129, and p95 latency 1720 ms, while maple had 593 requests with 0 failures, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_0cfbd7f54d4a",
+          "record_id": "slack-redirect-046:metrics:0"
+        },
+        {
+          "evidence_id": "ev_0cfbd7f54d4a",
+          "record_id": "slack-redirect-046:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "The supplied evidence argues against provider-wide Slack failure or a broad executor outage: provider API reachability is true, and another tenant shows a successful unrelated Slack read during the same window.",
+      "citations": [
+        {
+          "evidence_id": "ev_8d28d999665c",
+          "record_id": "slack-redirect-046:dependencies:0"
+        },
+        {
+          "evidence_id": "ev_b4edf41cb3ae",
+          "record_id": "slack-redirect-046:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "There is no recorded tool-executor deployment in the incident window, and the only deployment shown is an unrelated support-dashboard release, which weakens a timing-only internal regression hypothesis.",
+      "citations": [
+        {
+          "evidence_id": "ev_4fdcd7693563",
+          "record_id": "slack-redirect-046:deployments:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "Material causal telemetry is missing: no canonical change-audit or callback-stage record is supplied to prove who changed the Slack app redirect URI or to enumerate all failed new-auth attempts across tenants.",
+      "citations": [
+        {
+          "evidence_id": "ev_b4edf41cb3ae",
+          "record_id": "slack-redirect-046:logs:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "oauth_redirect_uri_mismatch_remediation",
+    "verify_custom_oauth_app",
+    "collect_missing_telemetry",
+    "align_telemetry_windows",
+    "request_workspace_admin_access",
+    "authentication_initiation_expired_remediation"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_8d28d999665c",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-redirect-046:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4fdcd7693563",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-redirect-046:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_d36163f78ef9",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-redirect-046:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "slack_configuration",
+          "check_passed": false,
+          "toolkit": "slack",
+          "status": 400,
+          "oauth_error": "redirect_uri_mismatch",
+          "registered_redirect_uri": "https://backend.composio.dev/api/v3/s/demo",
+          "authorization_redirect_uri": "https://backend.composio.dev/api/v1/auth-apps/add",
+          "short_connect_url_used_as_redirect": true
+        },
+        {
+          "record_id": "slack-redirect-046:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "slack_configuration",
+          "check_passed": true,
+          "toolkit": "slack",
+          "status": 200,
+          "oauth_error": null,
+          "registered_redirect_uri": "https://backend.composio.dev/api/v1/auth-apps/add",
+          "authorization_redirect_uri": "https://backend.composio.dev/api/v1/auth-apps/add",
+          "short_connect_url_used_as_redirect": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_28017485c07b",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-redirect-046:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-46",
+          "toolkit": "slack",
+          "status": 400,
+          "oauth_error": "redirect_uri_mismatch",
+          "registered_redirect_uri": "https://backend.composio.dev/api/v3/s/demo",
+          "authorization_redirect_uri": "https://backend.composio.dev/api/v1/auth-apps/add",
+          "short_connect_url_used_as_redirect": true
+        },
+        {
+          "record_id": "slack-redirect-046:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_db879cd0982c",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-redirect-046:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 721,
+          "failures": 415,
+          "business_operations_blocked": 415,
+          "queue_depth": 129,
+          "p95_latency_ms": 1720
+        },
+        {
+          "record_id": "slack-redirect-046:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 593,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1398f30980d4",
+      "query": {
+        "tool": "refresh_history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_b4edf41cb3ae",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-redirect-046:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-46",
+          "toolkit": "slack",
+          "status": 400,
+          "oauth_error": "redirect_uri_mismatch",
+          "registered_redirect_uri": "https://backend.composio.dev/api/v3/s/demo",
+          "authorization_redirect_uri": "https://backend.composio.dev/api/v1/auth-apps/add",
+          "short_connect_url_used_as_redirect": true
+        },
+        {
+          "record_id": "slack-redirect-046:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_0cfbd7f54d4a",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-redirect-046:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 721,
+          "failures": 415,
+          "business_operations_blocked": 415,
+          "queue_depth": 129,
+          "p95_latency_ms": 1720
+        },
+        {
+          "record_id": "slack-redirect-046:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 593,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2040de52421a",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:00:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "redirect",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1f2d2400c94b",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:00:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "oauth",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_8702459a9eca",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:00:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_6e059ad05e88",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "slack",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-redirect-046:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 154.28048644203227,
+  "input_tokens": 80582,
+  "output_tokens": 9469
+}

@@ -1,0 +1,88 @@
+{
+  "models": {
+    "single_agent": "gpt-5.4"
+  },
+  "limits": {
+    "max_provider_attempts": 2,
+    "max_requests": 24,
+    "max_output_tokens": 4000,
+    "max_context_chars": 100000,
+    "max_total_context_chars": 700000,
+    "max_collection_rounds": 20,
+    "max_queries_per_task": 24
+  },
+  "calls": [
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0021e14dc14da391016af5fe15f73c87d287f549c6e59635e7",
+      "usage": {
+        "input_tokens": 4434,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1536
+        },
+        "output_tokens": 320,
+        "output_tokens_details": {
+          "reasoning_tokens": 40
+        },
+        "total_tokens": 4754
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0021e14dc14da391016af5fe1ae38c87d2b34be9c31dc5ae28",
+      "usage": {
+        "input_tokens": 6203,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1536
+        },
+        "output_tokens": 253,
+        "output_tokens_details": {
+          "reasoning_tokens": 50
+        },
+        "total_tokens": 6456
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0021e14dc14da391016af5fe20441487d2b3a4a75adae513ca",
+      "usage": {
+        "input_tokens": 6905,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1536
+        },
+        "output_tokens": 1595,
+        "output_tokens_details": {
+          "reasoning_tokens": 175
+        },
+        "total_tokens": 8500
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0c9dbe64e00d5a44016af5fe396a9c87d2b28d1d231c5ab47d",
+      "usage": {
+        "input_tokens": 6860,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1202,
+        "output_tokens_details": {
+          "reasoning_tokens": 47
+        },
+        "total_tokens": 8062
+      }
+    }
+  ]
+}

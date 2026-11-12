@@ -1,0 +1,141 @@
+{
+  "incident": {
+    "id": "refresh-007",
+    "title": "Authentication failures across multiple toolkits",
+    "description": "Previously active connections fail intermittently. Dashboard connection status is still active.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "auth-service"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "refresh-007:logs:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "connection_status": "ACTIVE",
+        "refresh_status": 503,
+        "credential_cache": "expired",
+        "provider_called": false
+      },
+      {
+        "record_id": "refresh-007:logs:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "connection_status": "ACTIVE",
+        "refresh_status": 503,
+        "credential_cache": "expired",
+        "provider_called": false,
+        "tenant": "birch"
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "refresh-007:metrics:0",
+        "service": "credential-store",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "p95_ms": 15000,
+        "error_rate": 0.8
+      },
+      {
+        "record_id": "refresh-007:metrics:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "refresh_failures": 800
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "refresh-007:deployments:0",
+        "service": "dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Connection badge display update"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "refresh-007:dependencies:0",
+        "service": "auth-service",
+        "depends_on": [
+          "credential-store"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "refresh-007:history:0",
+        "service": "auth-service",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [
+      {
+        "record_id": "connection-view-adcbbaa65805",
+        "connection_id": "auth-service:shared",
+        "service": "auth-service",
+        "tenant": null,
+        "connection_status": "ACTIVE",
+        "granted_scopes": null,
+        "token_state": "expired",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "refresh-007:logs:0"
+        ]
+      },
+      {
+        "record_id": "connection-view-4f7704de591c",
+        "connection_id": "auth-service:birch",
+        "service": "auth-service",
+        "tenant": "birch",
+        "connection_status": "ACTIVE",
+        "granted_scopes": null,
+        "token_state": "expired",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "refresh-007:logs:1"
+        ]
+      }
+    ],
+    "refresh_history": [
+      {
+        "record_id": "refresh-view-refresh-007:logs:0",
+        "connection_id": "auth-service:shared",
+        "service": "auth-service",
+        "tenant": null,
+        "timestamp": "2026-11-12T10:05:00Z",
+        "refresh_status": 503,
+        "connection_status": "ACTIVE",
+        "credential_cache": "expired",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "refresh-007:logs:0"
+        ]
+      },
+      {
+        "record_id": "refresh-view-refresh-007:logs:1",
+        "connection_id": "auth-service:birch",
+        "service": "auth-service",
+        "tenant": "birch",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "refresh_status": 503,
+        "connection_status": "ACTIVE",
+        "credential_cache": "expired",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "refresh-007:logs:1"
+        ]
+      }
+    ]
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 1
+    }
+  }
+}

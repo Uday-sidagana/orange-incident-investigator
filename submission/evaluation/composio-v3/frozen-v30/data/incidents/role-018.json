@@ -1,0 +1,156 @@
+{
+  "incident": {
+    "id": "role-018",
+    "title": "Authorized connection cannot perform an admin action",
+    "description": "A provider connection is active and has the declared OAuth scope, but one administrative tool returns 403. Ordinary actions succeed.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "role-018:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "required_scope": "resource.write",
+        "granted_scopes": [
+          "resource.write"
+        ],
+        "required_resource_role": "admin",
+        "granted_resource_role": "member",
+        "provider_error": "role_required",
+        "status": 403
+      },
+      {
+        "record_id": "role-018:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "required_scope": "resource.write",
+        "granted_scopes": [
+          "resource.write"
+        ],
+        "required_resource_role": "admin",
+        "granted_resource_role": "admin",
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "role-018:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "role-018:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "role-018:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "role-018:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "role-018:history:0",
+        "service": "tool-executor",
+        "symptom": "Authorized connection cannot perform an admin action",
+        "cause": "A previous 403 was fixed by reconnecting with a missing scope.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "role-018:knowledge:0",
+        "service": "tool-executor",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "role-018:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "resource_role",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "role-018:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "resource_role",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [
+      {
+        "record_id": "connection-view-090ee4ff76d2",
+        "connection_id": "tool-executor:atlas",
+        "service": "tool-executor",
+        "tenant": "atlas",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "resource.write"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "role-018:logs:0"
+        ]
+      },
+      {
+        "record_id": "connection-view-ef336142f361",
+        "connection_id": "tool-executor:birch",
+        "service": "tool-executor",
+        "tenant": "birch",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "resource.write"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "role-018:logs:1"
+        ]
+      }
+    ],
+    "refresh_history": []
+  },
+  "failures": {}
+}

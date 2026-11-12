@@ -1,0 +1,1207 @@
+{
+  "account-017": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "wrong_connected_account",
+    "findings": {
+      "account_selection_mismatch": [
+        "account-017:logs:0"
+      ],
+      "account_selection_control": [
+        "account-017:reproduce:0",
+        "account-017:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "select_intended_connected_account"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "airtable-batch-042": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_batch_record_limit",
+    "findings": {
+      "mechanism_observation": [
+        "airtable-batch-042:logs:0"
+      ],
+      "tenant_impact": [
+        "airtable-batch-042:metrics:0",
+        "airtable-batch-042:metrics:1"
+      ],
+      "controlled_comparison": [
+        "airtable-batch-042:reproduce:0",
+        "airtable-batch-042:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "provider_batch_record_limit_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "airtable-expiry-041": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "authentication_initiation_expired",
+    "findings": {
+      "mechanism_observation": [
+        "airtable-expiry-041:logs:0"
+      ],
+      "tenant_impact": [
+        "airtable-expiry-041:metrics:0",
+        "airtable-expiry-041:metrics:1"
+      ],
+      "controlled_comparison": [
+        "airtable-expiry-041:reproduce:0",
+        "airtable-expiry-041:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "authentication_initiation_expired_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "allowlist-024": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_ip_allowlist",
+    "findings": {
+      "egress_not_allowlisted": [
+        "allowlist-024:logs:0"
+      ],
+      "egress_control": [
+        "allowlist-024:reproduce:0",
+        "allowlist-024:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "approve_expected_egress"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "auth-002": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "missing_grant",
+    "findings": {
+      "scope_mismatch": [
+        "auth-002:logs:0"
+      ],
+      "tenant_isolation": [
+        "auth-002:metrics:0",
+        "auth-002:metrics:1"
+      ],
+      "grant_control": [
+        "auth-002:reproduce:0",
+        "auth-002:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "reconnect_required_scope"
+    ],
+    "tags": [
+      "auth",
+      "tenant_impact",
+      "misleading_change"
+    ]
+  },
+  "body-029": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "webhook_body_transformation",
+    "findings": {
+      "signature_body_changed": [
+        "body-029:logs:0"
+      ],
+      "raw_body_control": [
+        "body-029:reproduce:0",
+        "body-029:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "verify_original_body_bytes"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "clock-025": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "webhook_clock_skew",
+    "findings": {
+      "webhook_clock_outside_window": [
+        "clock-025:logs:0"
+      ],
+      "clock_control": [
+        "clock-025:reproduce:0",
+        "clock-025:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "synchronize_webhook_clock"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "conflict-032": {
+    "expected_outcome": "inconclusive",
+    "cause_code": null,
+    "findings": {
+      "telemetry_conflict": [
+        "conflict-032:logs:0",
+        "conflict-032:metrics:0"
+      ]
+    },
+    "acceptable_action_codes": [
+      "align_telemetry_windows",
+      "collect_missing_telemetry"
+    ],
+    "tags": [
+      "expanded",
+      "inconclusive",
+      "conflicting_observations"
+    ]
+  },
+  "cursor-010": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "trigger_old_connection",
+    "findings": {
+      "new_connection_healthy": [
+        "cursor-010:logs:0"
+      ],
+      "trigger_old_disabled_connection": [
+        "cursor-010:logs:1"
+      ],
+      "reconnect_identity_change": [
+        "cursor-010:deployments:0"
+      ]
+    },
+    "acceptable_action_codes": [
+      "create_trigger_for_new_connection"
+    ],
+    "tags": [
+      "trigger",
+      "conflicting_send_success"
+    ]
+  },
+  "delivery-dedupe-051": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "webhook_receiver_not_idempotent",
+    "findings": {
+      "mechanism_observation": [
+        "delivery-dedupe-051:logs:0"
+      ],
+      "tenant_impact": [
+        "delivery-dedupe-051:metrics:0",
+        "delivery-dedupe-051:metrics:1"
+      ],
+      "controlled_comparison": [
+        "delivery-dedupe-051:reproduce:0",
+        "delivery-dedupe-051:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "webhook_receiver_not_idempotent_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "dns-030": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "internal_dns_failure",
+    "findings": {
+      "credential_dns_failure": [
+        "dns-030:logs:0"
+      ],
+      "dns_control": [
+        "dns-030:reproduce:0",
+        "dns-030:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "restore_internal_dns"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "duplicate-011": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "unsafe_send_retry",
+    "findings": {
+      "accepted_before_timeout": [
+        "duplicate-011:logs:0"
+      ],
+      "duplicate_retry": [
+        "duplicate-011:logs:0",
+        "duplicate-011:logs:1"
+      ],
+      "timeout_below_latency": [
+        "duplicate-011:metrics:0"
+      ]
+    },
+    "acceptable_action_codes": [
+      "verify_send_before_retry",
+      "disable_blind_send_retries"
+    ],
+    "tags": [
+      "non_idempotent",
+      "latency",
+      "conflicting_timeout"
+    ]
+  },
+  "github-org-035": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "github_organization_approval",
+    "findings": {
+      "mechanism_observation": [
+        "github-org-035:logs:0"
+      ],
+      "tenant_impact": [
+        "github-org-035:metrics:0",
+        "github-org-035:metrics:1"
+      ],
+      "controlled_comparison": [
+        "github-org-035:reproduce:0",
+        "github-org-035:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "github_organization_approval_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "github-setup-037": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "obsolete_trigger_setup_path",
+    "findings": {
+      "mechanism_observation": [
+        "github-setup-037:logs:0"
+      ],
+      "tenant_impact": [
+        "github-setup-037:metrics:0",
+        "github-setup-037:metrics:1"
+      ],
+      "controlled_comparison": [
+        "github-setup-037:reproduce:0",
+        "github-setup-037:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "obsolete_trigger_setup_path_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "github-token-036": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "redacted_token_relay_design",
+    "findings": {
+      "mechanism_observation": [
+        "github-token-036:logs:0"
+      ],
+      "tenant_impact": [
+        "github-token-036:metrics:0",
+        "github-token-036:metrics:1"
+      ],
+      "controlled_comparison": [
+        "github-token-036:reproduce:0",
+        "github-token-036:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "redacted_token_relay_design_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "gmail-001": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "recipient_mapping_regression",
+    "findings": {
+      "version_specific_failure": [
+        "gmail-001:logs:1",
+        "gmail-001:logs:6"
+      ],
+      "pre_provider_failure": [
+        "gmail-001:logs:1"
+      ],
+      "scope_present": [
+        "gmail-001:logs:1"
+      ],
+      "version_control": [
+        "gmail-001:reproduce:0",
+        "gmail-001:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "rollback_executor",
+      "repair_recipient_mapping"
+    ],
+    "tags": [
+      "regression",
+      "misleading_history",
+      "tool_timeout"
+    ]
+  },
+  "gmail-file-048": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "temporary_file_reference_expired",
+    "findings": {
+      "mechanism_observation": [
+        "gmail-file-048:logs:0"
+      ],
+      "tenant_impact": [
+        "gmail-file-048:metrics:0",
+        "gmail-file-048:metrics:1"
+      ],
+      "controlled_comparison": [
+        "gmail-file-048:reproduce:0",
+        "gmail-file-048:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "temporary_file_reference_expired_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "gmail-shape-047": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "attachment_reference_shape",
+    "findings": {
+      "mechanism_observation": [
+        "gmail-shape-047:logs:0"
+      ],
+      "tenant_impact": [
+        "gmail-shape-047:metrics:0",
+        "gmail-shape-047:metrics:1"
+      ],
+      "controlled_comparison": [
+        "gmail-shape-047:reproduce:0",
+        "gmail-shape-047:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "attachment_reference_shape_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "history-028": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "expired_history_cursor",
+    "findings": {
+      "invalid_history_cursor": [
+        "history-028:logs:0"
+      ],
+      "cursor_resync_control": [
+        "history-028:reproduce:0",
+        "history-028:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "resynchronize_history_cursor"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "log-gap-050": {
+    "expected_outcome": "inconclusive",
+    "cause_code": null,
+    "findings": {
+      "telemetry_gap": [
+        "log-gap-050:logs:0"
+      ]
+    },
+    "acceptable_action_codes": [
+      "collect_missing_telemetry",
+      "request_reproduction"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "member-019": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "slack_channel_membership",
+    "findings": {
+      "channel_membership_missing": [
+        "member-019:logs:0"
+      ],
+      "membership_control": [
+        "member-019:reproduce:0",
+        "member-019:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "invite_bot_to_channel"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "notion-access-033": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "notion_resource_not_shared",
+    "findings": {
+      "mechanism_observation": [
+        "notion-access-033:logs:0"
+      ],
+      "tenant_impact": [
+        "notion-access-033:metrics:0",
+        "notion-access-033:metrics:1"
+      ],
+      "controlled_comparison": [
+        "notion-access-033:reproduce:0",
+        "notion-access-033:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "notion_resource_not_shared_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "notion-event-034": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "trigger_event_kind_mismatch",
+    "findings": {
+      "mechanism_observation": [
+        "notion-event-034:logs:0"
+      ],
+      "tenant_impact": [
+        "notion-event-034:metrics:0",
+        "notion-event-034:metrics:1"
+      ],
+      "controlled_comparison": [
+        "notion-event-034:reproduce:0",
+        "notion-event-034:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "trigger_event_kind_mismatch_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "oauth-013": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "oauth_app_unverified",
+    "findings": {
+      "unverified_consent": [
+        "oauth-013:logs:0"
+      ],
+      "verification_control": [
+        "oauth-013:reproduce:0",
+        "oauth-013:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "verify_custom_oauth_app"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "payload-031": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_payload_limit",
+    "findings": {
+      "payload_exceeds_limit": [
+        "payload-031:logs:0"
+      ],
+      "payload_size_control": [
+        "payload-031:reproduce:0",
+        "payload-031:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "reduce_provider_payload"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "policy-014": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "workspace_app_policy",
+    "findings": {
+      "workspace_policy_block": [
+        "policy-014:logs:0"
+      ],
+      "policy_control": [
+        "policy-014:reproduce:0",
+        "policy-014:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "request_workspace_admin_access"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "polling-027": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "polling_baseline_expectation",
+    "findings": {
+      "polling_baseline_exclusion": [
+        "polling-027:logs:0"
+      ],
+      "post_baseline_delivery": [
+        "polling-027:logs:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "fetch_historical_messages_separately"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "expected_behavior"
+    ]
+  },
+  "pool-008": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "connection_pool_exhaustion",
+    "findings": {
+      "pool_wait_dominates": [
+        "pool-008:logs:0",
+        "pool-008:logs:1"
+      ],
+      "pool_saturated": [
+        "pool-008:metrics:0"
+      ],
+      "pool_config_change": [
+        "pool-008:deployments:0"
+      ]
+    },
+    "acceptable_action_codes": [
+      "restore_pool_capacity",
+      "verify_db_capacity"
+    ],
+    "tags": [
+      "latency",
+      "config",
+      "misleading_history"
+    ]
+  },
+  "provider-003": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_failure",
+    "findings": {
+      "upstream_errors": [
+        "provider-003:logs:0",
+        "provider-003:logs:1"
+      ],
+      "provider_isolation": [
+        "provider-003:metrics:0",
+        "provider-003:metrics:1"
+      ],
+      "cross_version_failure": [
+        "provider-003:reproduce:0",
+        "provider-003:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "backoff_provider",
+      "monitor_provider"
+    ],
+    "tags": [
+      "upstream",
+      "tool_timeout",
+      "conflicting_deployment"
+    ]
+  },
+  "quota-004": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_rate_limit",
+    "findings": {
+      "rate_limit_response": [
+        "quota-004:logs:0"
+      ],
+      "load_exceeds_quota": [
+        "quota-004:metrics:0"
+      ],
+      "tenant_isolation": [
+        "quota-004:metrics:0",
+        "quota-004:metrics:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "respect_retry_after",
+      "reduce_concurrency"
+    ],
+    "tags": [
+      "rate_limit",
+      "latency",
+      "tenant_impact"
+    ]
+  },
+  "race-016": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "refresh_rotation_race",
+    "findings": {
+      "refresh_generation_race": [
+        "race-016:logs:0"
+      ],
+      "refresh_serialization_control": [
+        "race-016:reproduce:0",
+        "race-016:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "serialize_connection_refresh"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "refresh-007": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "credential_store_unavailable",
+    "findings": {
+      "refresh_failure": [
+        "refresh-007:logs:0"
+      ],
+      "credential_store_degraded": [
+        "refresh-007:metrics:0"
+      ],
+      "auth_dependency": [
+        "refresh-007:dependencies:0"
+      ]
+    },
+    "acceptable_action_codes": [
+      "restore_credential_store",
+      "retry_refresh_after_recovery"
+    ],
+    "tags": [
+      "dependency",
+      "auth",
+      "tool_timeout"
+    ]
+  },
+  "region-023": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_region_mismatch",
+    "findings": {
+      "region_mismatch": [
+        "region-023:logs:0"
+      ],
+      "region_control": [
+        "region-023:reproduce:0",
+        "region-023:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "route_to_connection_region"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "revoked-015": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "oauth_consent_revoked",
+    "findings": {
+      "revoked_consent": [
+        "revoked-015:logs:0"
+      ],
+      "reconnection_control": [
+        "revoked-015:reproduce:0",
+        "revoked-015:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "reconnect_revoked_consent"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "role-018": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_resource_role",
+    "findings": {
+      "resource_role_mismatch": [
+        "role-018:logs:0"
+      ],
+      "resource_role_control": [
+        "role-018:reproduce:0",
+        "role-018:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "use_authorized_resource_role"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "schema-020": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "sdk_argument_nesting",
+    "findings": {
+      "argument_path_mismatch": [
+        "schema-020:logs:0"
+      ],
+      "argument_shape_control": [
+        "schema-020:reproduce:0",
+        "schema-020:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "correct_nested_arguments"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "secret-022": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "expired_provider_api_key",
+    "findings": {
+      "expired_api_key": [
+        "secret-022:logs:0"
+      ],
+      "credential_version_control": [
+        "secret-022:reproduce:0",
+        "secret-022:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "replace_expired_provider_key"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "session-policy-049": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "session_tool_policy_block",
+    "findings": {
+      "mechanism_observation": [
+        "session-policy-049:logs:0"
+      ],
+      "tenant_impact": [
+        "session-policy-049:metrics:0",
+        "session-policy-049:metrics:1"
+      ],
+      "controlled_comparison": [
+        "session-policy-049:reproduce:0",
+        "session-policy-049:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "session_tool_policy_block_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "sheets-discovery-039": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "tool_discovery_truncation",
+    "findings": {
+      "mechanism_observation": [
+        "sheets-discovery-039:logs:0"
+      ],
+      "tenant_impact": [
+        "sheets-discovery-039:metrics:0",
+        "sheets-discovery-039:metrics:1"
+      ],
+      "controlled_comparison": [
+        "sheets-discovery-039:reproduce:0",
+        "sheets-discovery-039:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "tool_discovery_truncation_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "sheets-id-040": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "spreadsheet_identifier_kind",
+    "findings": {
+      "mechanism_observation": [
+        "sheets-id-040:logs:0"
+      ],
+      "tenant_impact": [
+        "sheets-id-040:metrics:0",
+        "sheets-id-040:metrics:1"
+      ],
+      "controlled_comparison": [
+        "sheets-id-040:reproduce:0",
+        "sheets-id-040:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "spreadsheet_identifier_kind_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "sheets-plane-038": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "connection_surface_isolation",
+    "findings": {
+      "mechanism_observation": [
+        "sheets-plane-038:logs:0"
+      ],
+      "tenant_impact": [
+        "sheets-plane-038:metrics:0",
+        "sheets-plane-038:metrics:1"
+      ],
+      "controlled_comparison": [
+        "sheets-plane-038:reproduce:0",
+        "sheets-plane-038:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "connection_surface_isolation_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "signature-006": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "webhook_secret_mismatch",
+    "findings": {
+      "signature_mismatch": [
+        "signature-006:logs:1"
+      ],
+      "rotation_mismatch": [
+        "signature-006:deployments:0"
+      ],
+      "secret_control": [
+        "signature-006:reproduce:0",
+        "signature-006:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "synchronize_signing_secret",
+      "replay_after_recovery"
+    ],
+    "tags": [
+      "config",
+      "conflicting_active_status"
+    ]
+  },
+  "slack-ingress-045": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_event_ingress_misrouting",
+    "findings": {
+      "mechanism_observation": [
+        "slack-ingress-045:logs:0"
+      ],
+      "tenant_impact": [
+        "slack-ingress-045:metrics:0",
+        "slack-ingress-045:metrics:1"
+      ],
+      "controlled_comparison": [
+        "slack-ingress-045:reproduce:0",
+        "slack-ingress-045:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "provider_event_ingress_misrouting_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "slack-plan-044": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "provider_feature_entitlement",
+    "findings": {
+      "mechanism_observation": [
+        "slack-plan-044:logs:0"
+      ],
+      "tenant_impact": [
+        "slack-plan-044:metrics:0",
+        "slack-plan-044:metrics:1"
+      ],
+      "controlled_comparison": [
+        "slack-plan-044:reproduce:0",
+        "slack-plan-044:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "provider_feature_entitlement_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "slack-redirect-046": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "oauth_redirect_uri_mismatch",
+    "findings": {
+      "mechanism_observation": [
+        "slack-redirect-046:logs:0"
+      ],
+      "tenant_impact": [
+        "slack-redirect-046:metrics:0",
+        "slack-redirect-046:metrics:1"
+      ],
+      "controlled_comparison": [
+        "slack-redirect-046:reproduce:0",
+        "slack-redirect-046:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "oauth_redirect_uri_mismatch_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "slack-schedule-052": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "scheduled_attachment_semantics",
+    "findings": {
+      "mechanism_observation": [
+        "slack-schedule-052:logs:0"
+      ],
+      "tenant_impact": [
+        "slack-schedule-052:metrics:0",
+        "slack-schedule-052:metrics:1"
+      ],
+      "controlled_comparison": [
+        "slack-schedule-052:reproduce:0",
+        "slack-schedule-052:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "scheduled_attachment_semantics_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "slack-user-043": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "slack_user_scope_configuration",
+    "findings": {
+      "mechanism_observation": [
+        "slack-user-043:logs:0"
+      ],
+      "tenant_impact": [
+        "slack-user-043:metrics:0",
+        "slack-user-043:metrics:1"
+      ],
+      "controlled_comparison": [
+        "slack-user-043:reproduce:0",
+        "slack-user-043:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "slack_user_scope_configuration_remediation"
+    ],
+    "tags": [
+      "prospective_comparison_v3",
+      "public_documentation_inspired",
+      "llm_only_case"
+    ]
+  },
+  "subscription-026": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "webhook_event_subscription",
+    "findings": {
+      "subscription_event_missing": [
+        "subscription-026:logs:0"
+      ],
+      "subscription_control": [
+        "subscription-026:reproduce:0",
+        "subscription-026:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "subscribe_to_delivery_event"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "tenant-009": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "project_boundary_mismatch",
+    "findings": {
+      "project_mismatch": [
+        "tenant-009:logs:0"
+      ],
+      "tenant_isolation": [
+        "tenant-009:metrics:0",
+        "tenant-009:metrics:1"
+      ],
+      "project_migration": [
+        "tenant-009:deployments:0"
+      ]
+    },
+    "acceptable_action_codes": [
+      "use_correct_project_connection"
+    ],
+    "tags": [
+      "tenant_impact",
+      "identity"
+    ]
+  },
+  "unknown-012": {
+    "expected_outcome": "inconclusive",
+    "cause_code": null,
+    "findings": {
+      "observed_gateway_failure": [
+        "unknown-012:logs:0"
+      ],
+      "competing_history": [
+        "unknown-012:history:0",
+        "unknown-012:history:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "collect_missing_telemetry",
+      "request_reproduction"
+    ],
+    "tags": [
+      "inconclusive",
+      "permanent_tool_failure",
+      "incomplete_evidence"
+    ]
+  },
+  "version-021": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "toolkit_version_pin",
+    "findings": {
+      "unavailable_pinned_tool": [
+        "version-021:logs:0"
+      ],
+      "toolkit_pin_control": [
+        "version-021:reproduce:0",
+        "version-021:reproduce:1"
+      ]
+    },
+    "acceptable_action_codes": [
+      "update_and_test_toolkit_pin"
+    ],
+    "tags": [
+      "expanded",
+      "misleading_history",
+      "controlled_reproduction"
+    ]
+  },
+  "webhook-005": {
+    "expected_outcome": "probable_cause",
+    "cause_code": "customer_endpoint_failure",
+    "findings": {
+      "ingress_received": [
+        "webhook-005:logs:0"
+      ],
+      "destination_failure": [
+        "webhook-005:logs:1"
+      ],
+      "backlog": [
+        "webhook-005:metrics:0"
+      ]
+    },
+    "acceptable_action_codes": [
+      "restore_customer_endpoint",
+      "replay_after_recovery"
+    ],
+    "tags": [
+      "webhook",
+      "backlog",
+      "dependency"
+    ]
+  }
+}

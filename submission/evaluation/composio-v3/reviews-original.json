@@ -1,0 +1,120 @@
+{
+  "notion-access-033": {
+    "verdict": "needs_work",
+    "notes": "Assistant validation: current facts and safe next steps are sound, but the report abstains despite explicit page existence, valid token, missing integration page access and a discriminating 404-to-200 access control. This is excessive abstention against the authored probable-cause case; wrong-account selection is a caveat, not an observed alternative cause. No fix or customer reply was executed.",
+    "ticket_id": "ef15b241-0b95-4dc9-9184-01b53afb6eaa",
+    "published": true
+  },
+  "notion-event-034": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct event-kind diagnosis. Current logs show update events checked against a create trigger; the changed-event control succeeds. Tenant backlog is correctly distinguished from HTTP failures. Proposed configuration verification is appropriate and no deployed fix is claimed. Optional subscription/replay steps could be trimmed for clarity.",
+    "ticket_id": "940b8a7f-5b24-4d98-aced-5a26afc3170e",
+    "published": true
+  },
+  "github-org-035": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: the GitHub organization-approval diagnosis is supported by restricted-policy/pending-approval state and a matched approval control. The report correctly limits personal-access and upstream-origin claims, proposes organization-owner approval rather than a blanket reconnect, and does not claim deployment or customer sending. Verify replay eligibility for queued jobs before rerunning them.",
+    "ticket_id": "f2dc5bed-8e6d-4649-a4bb-3cbc081667ac",
+    "published": true
+  },
+  "github-token-036": {
+    "verdict": "needs_work",
+    "notes": "Assistant validation: the first attempt failed at the model context bound during reassessment and produced no usable diagnosis. This is an execution failure, not a correct abstention or a verified credential problem. Preserve the original benchmark result and recover the same issue separately with bounded context handling."
+  },
+  "github-setup-037": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct obsolete GitHub V2 setup-path diagnosis, supported by the failing endpoint and a matched successful trigger-instance upsert control. It correctly separates unrelated deployment timing and healthy provider access. The proposed action should state the supported-path change more directly; additional upstream traces are useful scope checks rather than a reason to retry the obsolete endpoint.",
+    "ticket_id": "3ba73351-3641-4383-ad7f-a6791df85b3a",
+    "published": true
+  },
+  "sheets-plane-038": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct connection-surface isolation diagnosis. Current MCP requests have zero MCP connections despite an active Platform connection, and the changed-surface control succeeds. Authentication through the actual client surface is appropriate; no cross-project credential sharing or automatic remediation is claimed. Account-selection alternatives are explicitly scoped caveats.",
+    "ticket_id": "847ad6e6-8ee1-4495-ae3d-77aadc5e6a51",
+    "published": true
+  },
+  "sheets-discovery-039": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct truncated-discovery diagnosis and pagination/larger-limit remedy; provider outage and missing catalog action are appropriately distinguished. Metrics correctly separate blocked business operations from HTTP failures. Dataset caveat: the corrected control retains first-page counters alongside pagination_completed=true, so those counters must not be read as the final combined tool count.",
+    "ticket_id": "c96ec4bc-9252-4516-a2e7-e18415306702",
+    "published": true
+  },
+  "sheets-id-040": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct display-name versus spreadsheet-ID diagnosis and supported changed-identifier control. The proposed direct-ID operation is appropriate. Precision caveat: without a provider_called or boundary trace, the report should avoid asserting exactly which layer emitted the 400; this does not change the supported identifier remedy.",
+    "ticket_id": "0517ca66-993e-4b35-a27d-2c00803b086f",
+    "published": true
+  },
+  "airtable-expiry-041": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct expired authentication-initiation diagnosis, distinct from revoked consent or token refresh. The observed age exceeds the stated window before exchange; using a fresh link is the supported next step. Dataset caveat: the fresh ACTIVE control retains token_exchange_attempted=false, so it corroborates link-age handling but does not prove a completed production token exchange. The report appropriately states control limitations.",
+    "ticket_id": "6e21eac4-0bd7-4cdd-859a-b68c3f5c45a2",
+    "published": true
+  },
+  "airtable-batch-042": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct record-count limit, with the failing 25-record request exceeding the observed maximum of ten and a successful ten-record control. Splitting batches, respecting rate limits and checking partial completion are appropriate. Payload-byte limits and release attribution remain alternatives, not established causes. The exact emitting boundary of the 422 is not observed and should stay qualified.",
+    "ticket_id": "30901b50-bf24-4e80-83a6-536077c1d58c",
+    "published": true
+  },
+  "slack-user-043": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct bot-scope versus user-scope diagnosis and targeted reconnect remedy. The report correctly limits absent account-selection evidence and flags a real dataset flaw: the corrected control succeeds but retains the original missing_scope error string. Preserve this first result, correct the control after the frozen run, and rerun the affected pair.",
+    "ticket_id": "daf6136c-a2dc-4aec-88a4-97234f715d3a",
+    "published": true
+  },
+  "slack-plan-044": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct Slack AI-search feature/plan entitlement diagnosis, supported by the configured plan, disabled capability flag and changed-plan control. It proposes an eligible feature path or supported alternative rather than scope escalation. Exact upstream-versus-local 403 origin is appropriately left unverified.",
+    "ticket_id": "f6c27e16-440f-4e20-91a2-7a8864830c7c",
+    "published": true
+  },
+  "slack-ingress-045": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct provider-event ingress misrouting diagnosis. The observed subscription target differs from the intended ingress, event creation succeeds but ingress is absent, and the corrected target control receives the event. Restoring the expected target and testing a new event is appropriate; secret rotation is only conditional on future evidence of verification failures.",
+    "ticket_id": "b04e00a2-d438-4adc-b742-81a86e9db604",
+    "published": true
+  },
+  "slack-redirect-046": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct static OAuth callback versus short connect-link mismatch. Matching the app redirect setting to the auth flow callback is the appropriate remedy; the example URI must not be treated as a global constant. Dataset caveat: the corrected control retains the old oauth_error label despite success; this is a generator defect to correct and reevaluate separately.",
+    "ticket_id": "10755f3b-2110-4253-8e49-ce51f9747826",
+    "published": true
+  },
+  "gmail-shape-047": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct uploaded-file-object versus signed-URL argument diagnosis, with explicit pre-provider validation failure and a changed-shape control. It scopes the sampled failure instead of asserting all tenant failures share it. Dataset caveat: the successful control retains a stale validation_error label; correct this field and rerun the affected pair after preserving the first result.",
+    "ticket_id": "2c4ec441-3ca1-4af6-b448-4bd74d7a1416",
+    "published": true
+  },
+  "gmail-file-048": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct expired temporary file-reference diagnosis; credentials are valid and the failed lookup occurs before the provider call. The fresh-reference remedy and verifying send status before retry are appropriate. The queue may contribute to expiry, but the report correctly says the missing per-request timing prevents proving that deeper cause. Extra scheduled-message/DB-capacity actions are weakly supported and should be trimmed.",
+    "ticket_id": "06b2bf4e-cef7-4a6a-a9fa-c87852982534",
+    "published": true
+  },
+  "session-policy-049": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct session-policy denial despite provider scope availability. The provider is not called and the authorized narrow-tool exception control succeeds. It preserves least privilege and distinguishes discovery, policy state and provider grants; the exact policy change origin remains unverified. No global widening or permission bypass is recommended.",
+    "ticket_id": "c0da2093-d508-4d9a-831d-bfac9b62635c",
+    "published": true
+  },
+  "log-gap-050": {
+    "verdict": "needs_work",
+    "notes": "Assistant validation: the payload-storage explanation is supported, but the report answers that visibility question rather than establishing the intended execution-500 cause. It explicitly leaves the 500 mechanism unknown, so a probable-cause outcome for the execution incident is not justified against the authored reference. This is a scope mismatch, not a fabricated claim that storage settings caused the 500. Dataset caveat: the complaint/title leaves some ambiguity between these two symptoms; clarify the objective in a future version. The single-agent first attempt also failed structured hypothesis/code alignment, so it is not credited as a valid abstention.",
+    "ticket_id": "13ba47f6-f0f9-4a8c-b540-607e46eb61b0",
+    "published": true
+  },
+  "delivery-dedupe-051": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct non-idempotent receiver diagnosis. One ingress event, two receipts with the same stable ID, and the deduplication control support processing retries once. Do not blame duplicate provider ingress. Quality caveat: subscription changes and disabling send retries are not established remedies here; retain legitimate at-least-once retries and focus on receiver deduplication.",
+    "ticket_id": "2777613e-af76-4748-84b2-1a7fdb170eb9",
+    "published": true
+  },
+  "slack-schedule-052": {
+    "verdict": "accepted",
+    "notes": "Assistant validation: correct distinction between Slack legacy message formatting attachments and file upload. Scheduling text succeeds without a file; separate upload plus a body link succeeds in the control. Use an actual supported file link in the scheduled message, not an arbitrary file-object descriptor. No successful production fix is claimed.",
+    "ticket_id": "c5801ab9-6b74-45b6-be3a-0b7614d88b35",
+    "published": true
+  }
+}

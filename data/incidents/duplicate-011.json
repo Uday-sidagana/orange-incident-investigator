@@ -1,0 +1,79 @@
+{
+  "incident": {
+    "id": "duplicate-011",
+    "title": "Duplicate Gmail sends after attachment timeouts",
+    "description": "Customers receive duplicate attachment emails despite client timeout errors.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "duplicate-011:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "operation_id": "op-1",
+        "request_id": "req-1",
+        "client_status": "timeout",
+        "provider_message_id": "msg-a",
+        "provider_status": 200
+      },
+      {
+        "record_id": "duplicate-011:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "operation_id": "op-1",
+        "request_id": "req-2",
+        "client_status": 200,
+        "provider_message_id": "msg-b",
+        "provider_status": 200,
+        "retry_of": "req-1"
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "duplicate-011:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "client_timeout_ms": 1000,
+        "attachment_send_p95_ms": 3500,
+        "duplicate_operations": 30
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "duplicate-011:deployments:0",
+        "service": "customer-client",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unconditional retries enabled on execution timeout"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "duplicate-011:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "duplicate-011:history:0",
+        "service": "tool-executor",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

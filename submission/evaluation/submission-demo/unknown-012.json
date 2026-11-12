@@ -1,0 +1,2793 @@
+{
+  "id": "14a7ab29-14ed-42c8-9a29-14c3cd9f344c",
+  "complaint": {
+    "name": "Demo Reviewer",
+    "email": "submission-demo@example.com",
+    "company": "Atlas Demo",
+    "title": "[VIDEO REHEARSAL] Intermittent execution failures with missing telemetry",
+    "description": "A customer reports sporadic 502 responses; traces and metrics are unavailable.",
+    "scenario_id": "unknown-012"
+  },
+  "status": "needs_review",
+  "plain": {
+    "mode": "live",
+    "thread_id": "th_01M78P01VWCS1NAVVB0XY0BPBE",
+    "summary": "The customer reports intermittent 502 responses during video rehearsal, with missing traces and metrics.",
+    "input_source": "immutable_portal_request"
+  },
+  "original_complaint": {
+    "name": "Demo Reviewer",
+    "email": "submission-demo@example.com",
+    "company": "Atlas Demo",
+    "title": "[VIDEO REHEARSAL] Intermittent execution failures with missing telemetry",
+    "description": "A customer reports sporadic 502 responses; traces and metrics are unavailable.",
+    "scenario_id": "unknown-012"
+  },
+  "created_at": "2026-11-12T20:08:13.405272+00:00",
+  "updated_at": "2026-11-12T20:13:13.593848+00:00",
+  "result": {
+    "incident_id": "unknown-012",
+    "approach": "multi_agent",
+    "run_status": "completed",
+    "report": {
+      "incident_id": "unknown-012",
+      "outcome": "inconclusive",
+      "hypotheses": [
+        {
+          "description": "An internal tool-executor regression is the leading hypothesis. A new executor release occurred simultaneously with the observed 502 failure, and historical incidents show that the same error symptom has previously resulted from executor regressions. However, the evidence is incomplete: only one partial 502 log record exists with no upstream trace, and there is no comparative failure rate data before or after the deployment to verify causality.",
+          "supporting_evidence": [
+            "ev_71cf28865868",
+            "ev_fa27c5ed7005",
+            "ev_ad8a03f96807"
+          ],
+          "contradicting_evidence": [
+            "ev_ad8a03f96807",
+            "ev_e989518b0f5b"
+          ],
+          "confidence": "medium",
+          "assumptions": [
+            "The single observed 502 log is representative of reported intermittent failures.",
+            "Temporal coincidence of deployment and failure may indicate causality.",
+            "Missing upstream trace might signal failure occurred internally before provider dispatch, but this is not confirmed."
+          ]
+        },
+        {
+          "description": "Upstream provider failure is a plausible alternative cause, since tool-executor depends on provider-api and past history shows similar 502 errors have been caused by provider outages. However, no canonical logs or telemetry from provider-api during the incident window are present to confirm any upstream failure, nor is there evidence of broader tenant impact",
+          "supporting_evidence": [
+            "ev_e989518b0f5b",
+            "ev_ad8a03f96807",
+            "ev_fa27c5ed7005"
+          ],
+          "contradicting_evidence": [
+            "ev_71cf28865868",
+            "ev_fa27c5ed7005"
+          ],
+          "confidence": "low",
+          "assumptions": [
+            "Provider-api is on the request path for this execution.",
+            "Upstream failure could still produce missing traces if tracer attachment timing varies.",
+            "No provider deployment changes were observed, but that does not prove provider health."
+          ]
+        },
+        {
+          "description": "A permission or credential failure is the weakest hypothesis at present. tool-executor depends on auth-service, so credential errors or missing grants could cause failures. However, no error logs, 401/403 responses, token refresh failures, or revoked consent evidence exist for this incident window.",
+          "supporting_evidence": [
+            "ev_e989518b0f5b",
+            "ev_fa27c5ed7005"
+          ],
+          "contradicting_evidence": [
+            "ev_71cf28865868",
+            "ev_ad8a03f96807"
+          ],
+          "confidence": "low",
+          "assumptions": [
+            "Some auth errors might manifest as 502 responses if error mapping is incomplete.",
+            "Null upstream_trace_id might also reflect pre-provider dispatch failure, including auth failure.",
+            "No auth service deployment changes were recorded, but authentication state could conceivably change independently."
+          ]
+        }
+      ],
+      "recommended_actions": [
+        "Collect and analyze canonical request path logs for the failing request_id to determine whether the fault occurred before or after dispatch to auth-service and provider-api.",
+        "Compare failure rates of tool-executor requests immediately before and after the new release deployment to identify release-associated regressions.",
+        "Collect canonical logs or health status indicators from provider-api and auth-service for the incident window to verify upstream issues or authentication errors.",
+        "Investigate affected tenants and requests for clustering to clarify scope and potential credential-related failures.",
+        "Monitor provider-api and tool-executor health metrics continuously, once telemetry systems are restored.",
+        "Avoid assuming causality based solely on deployment timing; gather controlled comparative telemetry to isolate cause."
+      ],
+      "limitations": [
+        "Only a single partial 502 log record with null upstream trace is observed; this is insufficient to locate failure stage (internal executor, auth-service, or provider-api).",
+        "Metrics and traces are unavailable due to timeouts, limiting diagnostic confidence.",
+        "No canonical upstream provider-api or auth-service logs or telemetry are available for this incident window.",
+        "The temporal proximity of the executor release to the 502 error is suggestive but not proof of causality (no before/after failure rate data).",
+        "Reported failures are sporadic and affect multiple tenants, but observed evidence covers only one tenant and one failing request.",
+        "No direct evidence distinguishes whether failure occurs before or after provider dispatch or during authentication steps.",
+        "Critic did not approve a probable cause; further evidence is required."
+      ]
+    },
+    "ranked_cause_codes": [
+      "unconfirmed_change",
+      "provider_failure",
+      "missing_grant"
+    ],
+    "findings": [
+      {
+        "code": "observed_gateway_failure",
+        "statement": "One canonical log record shows tool-executor returned 502 for tenant atlas at 2026-11-12T10:05:00Z; the record includes no upstream_trace_id.",
+        "citations": [
+          {
+            "evidence_id": "ev_fa27c5ed7005",
+            "record_id": "unknown-012:logs:0"
+          }
+        ]
+      },
+      {
+        "code": "version_control",
+        "statement": "A new tool-executor release was deployed at the same timestamp as the observed 502.",
+        "citations": [
+          {
+            "evidence_id": "ev_71cf28865868",
+            "record_id": "unknown-012:deployments:0"
+          },
+          {
+            "evidence_id": "ev_fa27c5ed7005",
+            "record_id": "unknown-012:logs:0"
+          }
+        ]
+      },
+      {
+        "code": "auth_dependency",
+        "statement": "tool-executor depends on both auth-service and provider-api, so either upstream provider issues or auth-path failures are possible in principle.",
+        "citations": [
+          {
+            "evidence_id": "ev_e989518b0f5b",
+            "record_id": "unknown-012:dependencies:0"
+          }
+        ]
+      },
+      {
+        "code": "competing_history",
+        "statement": "Verified incident history shows the same 502 symptom has occurred previously under both provider outage and executor regression causes.",
+        "citations": [
+          {
+            "evidence_id": "ev_ad8a03f96807",
+            "record_id": "unknown-012:history:0"
+          },
+          {
+            "evidence_id": "ev_ad8a03f96807",
+            "record_id": "unknown-012:history:1"
+          }
+        ]
+      }
+    ],
+    "action_codes": [
+      "collect_missing_telemetry",
+      "rollback_executor",
+      "monitor_provider"
+    ],
+    "trace": [
+      {
+        "evidence_id": "ev_fa27c5ed7005",
+        "query": {
+          "tool": "logs",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "partial",
+        "records": [
+          {
+            "record_id": "unknown-012:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "atlas",
+            "status": 502,
+            "request_id": "lost-1",
+            "upstream_trace_id": null
+          }
+        ],
+        "complete": false,
+        "error": null,
+        "warning": "Results are incomplete; absence is not proof",
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_60da973cb36c",
+        "query": {
+          "tool": "metrics",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "error",
+        "records": [],
+        "complete": false,
+        "error": {
+          "code": "timeout",
+          "message": "Simulated telemetry timeout",
+          "retryable": true
+        },
+        "warning": null,
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_c26eaff0371a",
+        "query": {
+          "tool": "metrics",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "error",
+        "records": [],
+        "complete": false,
+        "error": {
+          "code": "timeout",
+          "message": "Simulated telemetry timeout",
+          "retryable": true
+        },
+        "warning": null,
+        "attempt": 2
+      },
+      {
+        "evidence_id": "ev_71cf28865868",
+        "query": {
+          "tool": "deployments",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "unknown-012:deployments:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "change": "Executor release",
+            "version": "new"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_e989518b0f5b",
+        "query": {
+          "tool": "dependencies",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "unknown-012:dependencies:0",
+            "service": "tool-executor",
+            "depends_on": [
+              "auth-service",
+              "provider-api"
+            ]
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_98c984228b7a",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "502",
+          "limit": 10
+        },
+        "status": "partial",
+        "records": [
+          {
+            "record_id": "unknown-012:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "atlas",
+            "status": 502,
+            "request_id": "lost-1",
+            "upstream_trace_id": null
+          }
+        ],
+        "complete": false,
+        "error": null,
+        "warning": "Results are incomplete; absence is not proof",
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_28b8891d4cd9",
+        "query": {
+          "tool": "deployments",
+          "service": "auth-service",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:40:00Z",
+          "end": "2026-11-12T10:20:00Z",
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_154b466afa65",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": null,
+          "limit": 10
+        },
+        "status": "partial",
+        "records": [
+          {
+            "record_id": "unknown-012:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "atlas",
+            "status": 502,
+            "request_id": "lost-1",
+            "upstream_trace_id": null
+          }
+        ],
+        "complete": false,
+        "error": null,
+        "warning": "Results are incomplete; absence is not proof",
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_a6118eaa1742",
+        "query": {
+          "tool": "deployments",
+          "service": "provider-api",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:40:00Z",
+          "end": "2026-11-12T10:20:00Z",
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_ad8a03f96807",
+        "query": {
+          "tool": "history",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 5
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "unknown-012:history:0",
+            "service": "tool-executor",
+            "symptom": "502 error",
+            "cause": "Provider outage",
+            "verified": true
+          },
+          {
+            "record_id": "unknown-012:history:1",
+            "service": "tool-executor",
+            "symptom": "502 error",
+            "cause": "Executor regression",
+            "verified": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      },
+      {
+        "evidence_id": "ev_8fbe90ba7873",
+        "query": {
+          "tool": "history",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": "telemetry",
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    ],
+    "latency_seconds": 111.067806769046,
+    "input_tokens": 65534,
+    "output_tokens": 7312,
+    "workflow": {
+      "mode": "live_agents",
+      "tasks": [
+        {
+          "id": "plan",
+          "role": "orchestrator",
+          "question": "Scope and coordinate the evidence-led incident investigation.",
+          "dependencies": [],
+          "status": "complete",
+          "error": null
+        },
+        {
+          "id": "observe",
+          "role": "observability",
+          "question": "Are there any available logs, traces, or error metrics specifically from the 'tool-executor' service during the incident window 2026-11-12T09:50:00Z to 2026-11-12T10:15:00Z that capture failure details, error codes, timeouts, or latency spikes associated with the reported 502 responses?",
+          "dependencies": [],
+          "status": "complete",
+          "error": null
+        },
+        {
+          "id": "dependencies",
+          "role": "dependency",
+          "question": "Were there any deployment events, configuration changes, credential rotations, or dependency failures affecting the 'tool-executor' or its downstream providers immediately before or during the incident period? Were any related services or network components exhibiting failures or saturation?",
+          "dependencies": [],
+          "status": "complete",
+          "error": null
+        },
+        {
+          "id": "reason",
+          "role": "reasoning",
+          "question": "Given the intermittent 502 errors with missing telemetry, is the failure more likely due to an upstream provider failure, a permission or credential issue causing silent failures, or an internal tool-executor regression causing dropped telemetry and error responses? What data from logs or dependency status would discriminate these hypotheses?",
+          "dependencies": [
+            "observe",
+            "dependencies"
+          ],
+          "status": "complete",
+          "error": null
+        },
+        {
+          "id": "critic",
+          "role": "critic",
+          "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+          "dependencies": [
+            "reason"
+          ],
+          "status": "complete",
+          "error": null
+        },
+        {
+          "id": "report",
+          "role": "reporting",
+          "question": "Write the evidence-backed internal report and proposed next steps.",
+          "dependencies": [],
+          "status": "complete",
+          "error": null
+        }
+      ],
+      "objections": [
+        "The current evidence does not verify the leading 'executor regression' diagnosis. The only runtime record is a single partial tool-executor 502 for tenant atlas with null upstream_trace_id in ev_fa27c5ed7005 / unknown-012:logs:0; that does not by itself establish whether the failure occurred before auth, before provider dispatch, or after an upstream error.",
+        "Deployment coincidence is not causal proof. ev_71cf28865868 / unknown-012:deployments:0 shows an executor release at the same timestamp as the observed 502, but there is no before/after failure-rate or version-segmented comparison in canonical records.",
+        "History is correctly treated as non-dispositive, but it also means the report cannot elevate regression over provider failure based on prior incidents alone. ev_ad8a03f96807 / unknown-012:history:0 and unknown-012:history:1 explicitly support competing verified causes for the same symptom.",
+        "There is no canonical provider-api or auth-service incident-window log evidence in the bundle. The dependency record ev_e989518b0f5b / unknown-012:dependencies:0 only shows possible paths, not which path failed here.",
+        "Scope and impact are unverified. The customer reported sporadic failures, but the observed evidence contains only one tenant ('atlas') and one failed request record, so any broader impact framing would be unsupported.",
+        "Metrics/traces are unavailable, but that gap should be stated as a limitation rather than used to imply absence of upstream issues. The metrics queries timed out twice in the query log; no trace corpus was returned.",
+        "Further collection cannot fit the remaining execution budget; report uncertainty and required checks."
+      ],
+      "followup_rounds": 0,
+      "status": "inconclusive"
+    }
+  },
+  "error": null,
+  "events": [
+    {
+      "sequence": 3084,
+      "type": "complaint_received",
+      "payload": {
+        "title": "[VIDEO REHEARSAL] Intermittent execution failures with missing telemetry"
+      },
+      "created_at": "2026-11-12T20:08:13.406637+00:00"
+    },
+    {
+      "sequence": 3085,
+      "type": "plain_thread_created",
+      "payload": {
+        "mode": "live",
+        "thread_id": "th_01M78P01VWCS1NAVVB0XY0BPBE"
+      },
+      "created_at": "2026-11-12T20:08:13.974813+00:00"
+    },
+    {
+      "sequence": 3155,
+      "type": "plain_thread_read",
+      "payload": {
+        "thread_id": "th_01M78P01VWCS1NAVVB0XY0BPBE",
+        "mode": "live",
+        "description_source": "immutable_portal_request",
+        "original_plain_message_verified": true,
+        "summary_differs_from_original": true
+      },
+      "created_at": "2026-11-12T20:11:22.488737+00:00"
+    },
+    {
+      "sequence": 3156,
+      "type": "investigation_queued",
+      "payload": {
+        "source": "plain_api_read"
+      },
+      "created_at": "2026-11-12T20:11:22.489146+00:00"
+    },
+    {
+      "sequence": 3157,
+      "type": "investigation_started",
+      "payload": {},
+      "created_at": "2026-11-12T20:11:22.494112+00:00"
+    },
+    {
+      "sequence": 3158,
+      "type": "delivery_queued",
+      "payload": {
+        "provider": "linear",
+        "stage": "intake"
+      },
+      "created_at": "2026-11-12T20:11:22.507685+00:00"
+    },
+    {
+      "sequence": 3159,
+      "type": "delivery_queued",
+      "payload": {
+        "provider": "slack",
+        "stage": "intake"
+      },
+      "created_at": "2026-11-12T20:11:22.512020+00:00"
+    },
+    {
+      "sequence": 3160,
+      "type": "task_started",
+      "payload": {
+        "task": "plan",
+        "role": "orchestrator",
+        "at": 535399.781577222,
+        "question": "Scope and coordinate the evidence-led incident investigation.",
+        "dependencies": [],
+        "available_evidence_ids": []
+      },
+      "created_at": "2026-11-12T20:11:22.565004+00:00"
+    },
+    {
+      "sequence": 3161,
+      "type": "model_started",
+      "payload": {
+        "role": "orchestrator",
+        "model": "gpt-4.1-mini",
+        "request": 1,
+        "task": "plan"
+      },
+      "created_at": "2026-11-12T20:11:22.573487+00:00"
+    },
+    {
+      "sequence": 3165,
+      "type": "delivery_completed",
+      "payload": {
+        "provider": "linear",
+        "stage": "intake"
+      },
+      "created_at": "2026-11-12T20:11:23.982928+00:00"
+    },
+    {
+      "sequence": 3166,
+      "type": "delivery_completed",
+      "payload": {
+        "provider": "slack",
+        "stage": "intake"
+      },
+      "created_at": "2026-11-12T20:11:24.279909+00:00"
+    },
+    {
+      "sequence": 3168,
+      "type": "model_finished",
+      "payload": {
+        "role": "orchestrator",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 3092,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 391,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 3483
+        },
+        "task": "plan"
+      },
+      "created_at": "2026-11-12T20:11:25.975325+00:00"
+    },
+    {
+      "sequence": 3169,
+      "type": "agent_result",
+      "payload": {
+        "task": "plan",
+        "role": "orchestrator",
+        "result": {
+          "hypotheses": [],
+          "objections": [],
+          "followups": [
+            {
+              "id": "observe",
+              "role": "observability",
+              "question": "Are there any available logs, traces, or error metrics specifically from the 'tool-executor' service during the incident window 2026-11-12T09:50:00Z to 2026-11-12T10:15:00Z that capture failure details, error codes, timeouts, or latency spikes associated with the reported 502 responses?",
+              "dependencies": [],
+              "status": "pending",
+              "error": null
+            },
+            {
+              "id": "dependencies",
+              "role": "dependency",
+              "question": "Were there any deployment events, configuration changes, credential rotations, or dependency failures affecting the 'tool-executor' or its downstream providers immediately before or during the incident period? Were any related services or network components exhibiting failures or saturation?",
+              "dependencies": [],
+              "status": "pending",
+              "error": null
+            },
+            {
+              "id": "reason",
+              "role": "reasoning",
+              "question": "Given the intermittent 502 errors with missing telemetry, is the failure more likely due to an upstream provider failure, a permission or credential issue causing silent failures, or an internal tool-executor regression causing dropped telemetry and error responses? What data from logs or dependency status would discriminate these hypotheses?",
+              "dependencies": [
+                "observe",
+                "dependencies"
+              ],
+              "status": "pending",
+              "error": null
+            },
+            {
+              "id": "critic",
+              "role": "critic",
+              "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+              "dependencies": [
+                "reason"
+              ],
+              "status": "pending",
+              "error": null
+            }
+          ],
+          "report": null,
+          "notes": [
+            "No telemetry or traces currently available seriously limits direct diagnosis.",
+            "The service implicated is the 'tool-executor' which is responsible for executing requests that subsequently failed with 502 errors.",
+            "502 typically indicates a gateway or upstream service responding with an error, suggesting possible provider failure or proxy issues.",
+            "We should confirm from logs whether requests reached the provider and what response codes or error messages were returned.",
+            "Investigate whether internal telemetry gaps correlate exactly with 502 response timing, suggesting dropped telemetry due to error path failures.",
+            "Check for recent deployments or configuration changes that might cause telemetry instrumentation breaks or intermittent failures.",
+            "Tenant scope and impact are unknown without logs or metrics; check for tenant-specific failure rates if possible.",
+            "Consider querying for any proxy logs or gateway logs that might record 502 responses and their root causes.",
+            "Absent concrete data, do not preemptively assign cause; instead focus on locating logs, traces or control plane records from tool-executor and related components that can clarify the failure mechanism."
+          ],
+          "candidates": null,
+          "findings": null
+        }
+      },
+      "created_at": "2026-11-12T20:11:25.979548+00:00"
+    },
+    {
+      "sequence": 3170,
+      "type": "task_finished",
+      "payload": {
+        "task": "plan",
+        "role": "orchestrator",
+        "status": "complete",
+        "at": 535403.201002922
+      },
+      "created_at": "2026-11-12T20:11:25.982532+00:00"
+    },
+    {
+      "sequence": 3171,
+      "type": "task_started",
+      "payload": {
+        "task": "observe",
+        "role": "observability",
+        "at": 535403.205837234,
+        "question": "Are there any available logs, traces, or error metrics specifically from the 'tool-executor' service during the incident window 2026-11-12T09:50:00Z to 2026-11-12T10:15:00Z that capture failure details, error codes, timeouts, or latency spikes associated with the reported 502 responses?",
+        "dependencies": [],
+        "available_evidence_ids": []
+      },
+      "created_at": "2026-11-12T20:11:25.987424+00:00"
+    },
+    {
+      "sequence": 3172,
+      "type": "model_started",
+      "payload": {
+        "role": "observability",
+        "model": "gpt-4.1-mini",
+        "request": 2,
+        "task": "observe"
+      },
+      "created_at": "2026-11-12T20:11:26.001307+00:00"
+    },
+    {
+      "sequence": 3173,
+      "type": "task_started",
+      "payload": {
+        "task": "dependencies",
+        "role": "dependency",
+        "at": 535403.234432652,
+        "question": "Were there any deployment events, configuration changes, credential rotations, or dependency failures affecting the 'tool-executor' or its downstream providers immediately before or during the incident period? Were any related services or network components exhibiting failures or saturation?",
+        "dependencies": [],
+        "available_evidence_ids": []
+      },
+      "created_at": "2026-11-12T20:11:26.016536+00:00"
+    },
+    {
+      "sequence": 3174,
+      "type": "model_started",
+      "payload": {
+        "role": "dependency",
+        "model": "gpt-4.1-mini",
+        "request": 3,
+        "task": "dependencies"
+      },
+      "created_at": "2026-11-12T20:11:26.031460+00:00"
+    },
+    {
+      "sequence": 3175,
+      "type": "model_finished",
+      "payload": {
+        "role": "observability",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 3880,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 101,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 3981
+        },
+        "task": "observe"
+      },
+      "created_at": "2026-11-12T20:11:27.459979+00:00"
+    },
+    {
+      "sequence": 3176,
+      "type": "tool_started",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "query": {
+          "tool": "logs",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.463645+00:00"
+    },
+    {
+      "sequence": 3177,
+      "type": "tool_finished",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "tool": "logs",
+        "status": "partial",
+        "evidence_id": "ev_fa27c5ed7005",
+        "records": 1,
+        "result": {
+          "evidence_id": "ev_fa27c5ed7005",
+          "query": {
+            "tool": "logs",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "records": [
+            {
+              "record_id": "unknown-012:logs:0",
+              "service": "tool-executor",
+              "timestamp": "2026-11-12T10:05:00Z",
+              "tenant": "atlas",
+              "status": 502,
+              "request_id": "lost-1",
+              "upstream_trace_id": null
+            }
+          ],
+          "complete": false,
+          "error": null,
+          "warning": "Results are incomplete; absence is not proof",
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.467141+00:00"
+    },
+    {
+      "sequence": 3178,
+      "type": "tool_started",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "query": {
+          "tool": "metrics",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.472950+00:00"
+    },
+    {
+      "sequence": 3179,
+      "type": "tool_finished",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "tool": "metrics",
+        "status": "error",
+        "evidence_id": "ev_60da973cb36c",
+        "records": 0,
+        "result": {
+          "evidence_id": "ev_60da973cb36c",
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "error",
+          "records": [],
+          "complete": false,
+          "error": {
+            "code": "timeout",
+            "message": "Simulated telemetry timeout",
+            "retryable": true
+          },
+          "warning": null,
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.476837+00:00"
+    },
+    {
+      "sequence": 3180,
+      "type": "tool_started",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "query": {
+          "tool": "metrics",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.481278+00:00"
+    },
+    {
+      "sequence": 3181,
+      "type": "tool_finished",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "tool": "metrics",
+        "status": "error",
+        "evidence_id": "ev_c26eaff0371a",
+        "records": 0,
+        "result": {
+          "evidence_id": "ev_c26eaff0371a",
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "error",
+          "records": [],
+          "complete": false,
+          "error": {
+            "code": "timeout",
+            "message": "Simulated telemetry timeout",
+            "retryable": true
+          },
+          "warning": null,
+          "attempt": 2
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.485500+00:00"
+    },
+    {
+      "sequence": 3182,
+      "type": "model_started",
+      "payload": {
+        "role": "observability",
+        "model": "gpt-4.1-mini",
+        "request": 4,
+        "task": "observe"
+      },
+      "created_at": "2026-11-12T20:11:27.505111+00:00"
+    },
+    {
+      "sequence": 3183,
+      "type": "model_finished",
+      "payload": {
+        "role": "dependency",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 3676,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 104,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 3780
+        },
+        "task": "dependencies"
+      },
+      "created_at": "2026-11-12T20:11:27.630680+00:00"
+    },
+    {
+      "sequence": 3184,
+      "type": "tool_started",
+      "payload": {
+        "role": "dependency",
+        "task": "dependencies",
+        "query": {
+          "tool": "deployments",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.634755+00:00"
+    },
+    {
+      "sequence": 3185,
+      "type": "tool_finished",
+      "payload": {
+        "role": "dependency",
+        "task": "dependencies",
+        "tool": "deployments",
+        "status": "ok",
+        "evidence_id": "ev_71cf28865868",
+        "records": 1,
+        "result": {
+          "evidence_id": "ev_71cf28865868",
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "records": [
+            {
+              "record_id": "unknown-012:deployments:0",
+              "service": "tool-executor",
+              "timestamp": "2026-11-12T10:05:00Z",
+              "change": "Executor release",
+              "version": "new"
+            }
+          ],
+          "complete": true,
+          "error": null,
+          "warning": null,
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.640295+00:00"
+    },
+    {
+      "sequence": 3186,
+      "type": "tool_started",
+      "payload": {
+        "role": "dependency",
+        "task": "dependencies",
+        "query": {
+          "tool": "dependencies",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.645400+00:00"
+    },
+    {
+      "sequence": 3187,
+      "type": "tool_finished",
+      "payload": {
+        "role": "dependency",
+        "task": "dependencies",
+        "tool": "dependencies",
+        "status": "ok",
+        "evidence_id": "ev_e989518b0f5b",
+        "records": 1,
+        "result": {
+          "evidence_id": "ev_e989518b0f5b",
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "records": [
+            {
+              "record_id": "unknown-012:dependencies:0",
+              "service": "tool-executor",
+              "depends_on": [
+                "auth-service",
+                "provider-api"
+              ]
+            }
+          ],
+          "complete": true,
+          "error": null,
+          "warning": null,
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:27.651559+00:00"
+    },
+    {
+      "sequence": 3188,
+      "type": "model_started",
+      "payload": {
+        "role": "dependency",
+        "model": "gpt-4.1-mini",
+        "request": 5,
+        "task": "dependencies"
+      },
+      "created_at": "2026-11-12T20:11:27.664116+00:00"
+    },
+    {
+      "sequence": 3189,
+      "type": "model_finished",
+      "payload": {
+        "role": "observability",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 4270,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 69,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 4339
+        },
+        "task": "observe"
+      },
+      "created_at": "2026-11-12T20:11:28.985132+00:00"
+    },
+    {
+      "sequence": 3190,
+      "type": "tool_started",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "502",
+          "limit": 10
+        }
+      },
+      "created_at": "2026-11-12T20:11:28.989300+00:00"
+    },
+    {
+      "sequence": 3191,
+      "type": "tool_finished",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "tool": "logs",
+        "status": "partial",
+        "evidence_id": "ev_98c984228b7a",
+        "records": 1,
+        "result": {
+          "evidence_id": "ev_98c984228b7a",
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": "502",
+            "limit": 10
+          },
+          "status": "partial",
+          "records": [
+            {
+              "record_id": "unknown-012:logs:0",
+              "service": "tool-executor",
+              "timestamp": "2026-11-12T10:05:00Z",
+              "tenant": "atlas",
+              "status": 502,
+              "request_id": "lost-1",
+              "upstream_trace_id": null
+            }
+          ],
+          "complete": false,
+          "error": null,
+          "warning": "Results are incomplete; absence is not proof",
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:28.996030+00:00"
+    },
+    {
+      "sequence": 3192,
+      "type": "model_started",
+      "payload": {
+        "role": "observability",
+        "model": "gpt-4.1-mini",
+        "request": 6,
+        "task": "observe"
+      },
+      "created_at": "2026-11-12T20:11:29.017878+00:00"
+    },
+    {
+      "sequence": 3193,
+      "type": "model_finished",
+      "payload": {
+        "role": "dependency",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 4066,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 71,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 4137
+        },
+        "task": "dependencies"
+      },
+      "created_at": "2026-11-12T20:11:29.100995+00:00"
+    },
+    {
+      "sequence": 3194,
+      "type": "tool_started",
+      "payload": {
+        "role": "dependency",
+        "task": "dependencies",
+        "query": {
+          "tool": "deployments",
+          "service": "auth-service",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:40:00Z",
+          "end": "2026-11-12T10:20:00Z",
+          "search": null,
+          "limit": 10
+        }
+      },
+      "created_at": "2026-11-12T20:11:29.107617+00:00"
+    },
+    {
+      "sequence": 3195,
+      "type": "tool_finished",
+      "payload": {
+        "role": "dependency",
+        "task": "dependencies",
+        "tool": "deployments",
+        "status": "ok",
+        "evidence_id": "ev_28b8891d4cd9",
+        "records": 0,
+        "result": {
+          "evidence_id": "ev_28b8891d4cd9",
+          "query": {
+            "tool": "deployments",
+            "service": "auth-service",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:40:00Z",
+            "end": "2026-11-12T10:20:00Z",
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "records": [],
+          "complete": true,
+          "error": null,
+          "warning": null,
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:29.117685+00:00"
+    },
+    {
+      "sequence": 3196,
+      "type": "model_started",
+      "payload": {
+        "role": "dependency",
+        "model": "gpt-4.1-mini",
+        "request": 7,
+        "task": "dependencies"
+      },
+      "created_at": "2026-11-12T20:11:29.173395+00:00"
+    },
+    {
+      "sequence": 3197,
+      "type": "model_finished",
+      "payload": {
+        "role": "observability",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 4505,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 4224
+          },
+          "output_tokens": 69,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 4574
+        },
+        "task": "observe"
+      },
+      "created_at": "2026-11-12T20:11:30.453772+00:00"
+    },
+    {
+      "sequence": 3198,
+      "type": "tool_started",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": null,
+          "limit": 10
+        }
+      },
+      "created_at": "2026-11-12T20:11:30.458344+00:00"
+    },
+    {
+      "sequence": 3199,
+      "type": "tool_finished",
+      "payload": {
+        "role": "observability",
+        "task": "observe",
+        "tool": "logs",
+        "status": "partial",
+        "evidence_id": "ev_154b466afa65",
+        "records": 1,
+        "result": {
+          "evidence_id": "ev_154b466afa65",
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "records": [
+            {
+              "record_id": "unknown-012:logs:0",
+              "service": "tool-executor",
+              "timestamp": "2026-11-12T10:05:00Z",
+              "tenant": "atlas",
+              "status": 502,
+              "request_id": "lost-1",
+              "upstream_trace_id": null
+            }
+          ],
+          "complete": false,
+          "error": null,
+          "warning": "Results are incomplete; absence is not proof",
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:30.463703+00:00"
+    },
+    {
+      "sequence": 3200,
+      "type": "agent_result",
+      "payload": {
+        "task": "observe",
+        "role": "observability",
+        "result": {
+          "hypotheses": [],
+          "objections": [],
+          "followups": [],
+          "report": null,
+          "notes": [
+            "Collection ended within its round budget; inspect the exact tool results and unresolved gaps."
+          ],
+          "candidates": null,
+          "findings": null
+        }
+      },
+      "created_at": "2026-11-12T20:11:30.468464+00:00"
+    },
+    {
+      "sequence": 3201,
+      "type": "task_finished",
+      "payload": {
+        "task": "observe",
+        "role": "observability",
+        "status": "complete",
+        "at": 535407.690940159
+      },
+      "created_at": "2026-11-12T20:11:30.472371+00:00"
+    },
+    {
+      "sequence": 3202,
+      "type": "model_finished",
+      "payload": {
+        "role": "dependency",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 4243,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 3968
+          },
+          "output_tokens": 71,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 4314
+        },
+        "task": "dependencies"
+      },
+      "created_at": "2026-11-12T20:11:30.550579+00:00"
+    },
+    {
+      "sequence": 3203,
+      "type": "tool_started",
+      "payload": {
+        "role": "dependency",
+        "task": "dependencies",
+        "query": {
+          "tool": "deployments",
+          "service": "provider-api",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:40:00Z",
+          "end": "2026-11-12T10:20:00Z",
+          "search": null,
+          "limit": 10
+        }
+      },
+      "created_at": "2026-11-12T20:11:30.553994+00:00"
+    },
+    {
+      "sequence": 3204,
+      "type": "tool_finished",
+      "payload": {
+        "role": "dependency",
+        "task": "dependencies",
+        "tool": "deployments",
+        "status": "ok",
+        "evidence_id": "ev_a6118eaa1742",
+        "records": 0,
+        "result": {
+          "evidence_id": "ev_a6118eaa1742",
+          "query": {
+            "tool": "deployments",
+            "service": "provider-api",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:40:00Z",
+            "end": "2026-11-12T10:20:00Z",
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "records": [],
+          "complete": true,
+          "error": null,
+          "warning": null,
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:30.557222+00:00"
+    },
+    {
+      "sequence": 3205,
+      "type": "agent_result",
+      "payload": {
+        "task": "dependencies",
+        "role": "dependency",
+        "result": {
+          "hypotheses": [],
+          "objections": [],
+          "followups": [],
+          "report": null,
+          "notes": [
+            "Collection ended within its round budget; inspect the exact tool results and unresolved gaps."
+          ],
+          "candidates": null,
+          "findings": null
+        }
+      },
+      "created_at": "2026-11-12T20:11:30.561691+00:00"
+    },
+    {
+      "sequence": 3206,
+      "type": "task_finished",
+      "payload": {
+        "task": "dependencies",
+        "role": "dependency",
+        "status": "complete",
+        "at": 535407.783899931
+      },
+      "created_at": "2026-11-12T20:11:30.565461+00:00"
+    },
+    {
+      "sequence": 3207,
+      "type": "task_started",
+      "payload": {
+        "task": "reason",
+        "role": "reasoning",
+        "at": 535407.792138415,
+        "question": "Given the intermittent 502 errors with missing telemetry, is the failure more likely due to an upstream provider failure, a permission or credential issue causing silent failures, or an internal tool-executor regression causing dropped telemetry and error responses? What data from logs or dependency status would discriminate these hypotheses?",
+        "dependencies": [
+          "observe",
+          "dependencies"
+        ],
+        "available_evidence_ids": [
+          "ev_fa27c5ed7005",
+          "ev_60da973cb36c",
+          "ev_c26eaff0371a",
+          "ev_71cf28865868",
+          "ev_e989518b0f5b",
+          "ev_98c984228b7a",
+          "ev_28b8891d4cd9",
+          "ev_154b466afa65",
+          "ev_a6118eaa1742"
+        ]
+      },
+      "created_at": "2026-11-12T20:11:30.574107+00:00"
+    },
+    {
+      "sequence": 3208,
+      "type": "model_started",
+      "payload": {
+        "role": "reasoning",
+        "model": "gpt-5.4",
+        "request": 8,
+        "task": "reason"
+      },
+      "created_at": "2026-11-12T20:11:30.591031+00:00"
+    },
+    {
+      "sequence": 3209,
+      "type": "model_finished",
+      "payload": {
+        "role": "reasoning",
+        "model": "gpt-5.4-2026-03-05",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 4547,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 180,
+          "output_tokens_details": {
+            "reasoning_tokens": 132
+          },
+          "total_tokens": 4727
+        },
+        "task": "reason"
+      },
+      "created_at": "2026-11-12T20:11:34.984262+00:00"
+    },
+    {
+      "sequence": 3210,
+      "type": "tool_started",
+      "payload": {
+        "role": "reasoning",
+        "task": "reason",
+        "query": {
+          "tool": "history",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 5
+        }
+      },
+      "created_at": "2026-11-12T20:11:34.992652+00:00"
+    },
+    {
+      "sequence": 3211,
+      "type": "tool_finished",
+      "payload": {
+        "role": "reasoning",
+        "task": "reason",
+        "tool": "history",
+        "status": "ok",
+        "evidence_id": "ev_ad8a03f96807",
+        "records": 2,
+        "result": {
+          "evidence_id": "ev_ad8a03f96807",
+          "query": {
+            "tool": "history",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 5
+          },
+          "status": "ok",
+          "records": [
+            {
+              "record_id": "unknown-012:history:0",
+              "service": "tool-executor",
+              "symptom": "502 error",
+              "cause": "Provider outage",
+              "verified": true
+            },
+            {
+              "record_id": "unknown-012:history:1",
+              "service": "tool-executor",
+              "symptom": "502 error",
+              "cause": "Executor regression",
+              "verified": true
+            }
+          ],
+          "complete": true,
+          "error": null,
+          "warning": null,
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:35.008366+00:00"
+    },
+    {
+      "sequence": 3212,
+      "type": "model_started",
+      "payload": {
+        "role": "reasoning",
+        "model": "gpt-5.4",
+        "request": 9,
+        "task": "reason"
+      },
+      "created_at": "2026-11-12T20:11:35.029646+00:00"
+    },
+    {
+      "sequence": 3213,
+      "type": "model_finished",
+      "payload": {
+        "role": "reasoning",
+        "model": "gpt-5.4-2026-03-05",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 5087,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 97,
+          "output_tokens_details": {
+            "reasoning_tokens": 46
+          },
+          "total_tokens": 5184
+        },
+        "task": "reason"
+      },
+      "created_at": "2026-11-12T20:11:37.736264+00:00"
+    },
+    {
+      "sequence": 3214,
+      "type": "tool_started",
+      "payload": {
+        "role": "reasoning",
+        "task": "reason",
+        "query": {
+          "tool": "history",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": "telemetry",
+          "limit": 10
+        }
+      },
+      "created_at": "2026-11-12T20:11:37.739982+00:00"
+    },
+    {
+      "sequence": 3215,
+      "type": "tool_finished",
+      "payload": {
+        "role": "reasoning",
+        "task": "reason",
+        "tool": "history",
+        "status": "ok",
+        "evidence_id": "ev_8fbe90ba7873",
+        "records": 0,
+        "result": {
+          "evidence_id": "ev_8fbe90ba7873",
+          "query": {
+            "tool": "history",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": "telemetry",
+            "limit": 10
+          },
+          "status": "ok",
+          "records": [],
+          "complete": true,
+          "error": null,
+          "warning": null,
+          "attempt": 1
+        }
+      },
+      "created_at": "2026-11-12T20:11:37.743840+00:00"
+    },
+    {
+      "sequence": 3216,
+      "type": "model_started",
+      "payload": {
+        "role": "reasoning",
+        "model": "gpt-5.4",
+        "request": 10,
+        "task": "reason"
+      },
+      "created_at": "2026-11-12T20:11:37.754907+00:00"
+    },
+    {
+      "sequence": 3217,
+      "type": "model_finished",
+      "payload": {
+        "role": "reasoning",
+        "model": "gpt-5.4-2026-03-05",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 5270,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 4608
+          },
+          "output_tokens": 1333,
+          "output_tokens_details": {
+            "reasoning_tokens": 378
+          },
+          "total_tokens": 6603
+        },
+        "task": "reason"
+      },
+      "created_at": "2026-11-12T20:12:01.406982+00:00"
+    },
+    {
+      "sequence": 3218,
+      "type": "model_started",
+      "payload": {
+        "role": "reasoning",
+        "model": "gpt-5.4",
+        "request": 11,
+        "task": "reason"
+      },
+      "created_at": "2026-11-12T20:12:01.419182+00:00"
+    },
+    {
+      "sequence": 3219,
+      "type": "model_finished",
+      "payload": {
+        "role": "reasoning",
+        "model": "gpt-5.4-2026-03-05",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 6452,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 2703,
+          "output_tokens_details": {
+            "reasoning_tokens": 516
+          },
+          "total_tokens": 9155
+        },
+        "task": "reason"
+      },
+      "created_at": "2026-11-12T20:12:43.656615+00:00"
+    },
+    {
+      "sequence": 3220,
+      "type": "agent_result",
+      "payload": {
+        "task": "reason",
+        "role": "reasoning",
+        "result": {
+          "hypotheses": [],
+          "objections": [],
+          "followups": [],
+          "report": null,
+          "notes": [
+            "Most likely among the three proposed explanations: internal tool-executor regression > upstream provider failure > permission/credential issue.",
+            "This remains inconclusive because runtime evidence is sparse: log results are partial, metrics queries timed out in both attempts, and there are no canonical provider-api or auth-service logs in the evidence bundle.",
+            "Observed impact is limited to a single canonical failing request for tenant atlas; no record-backed failure rate, latency, backlog, or cross-tenant scope comparison is available.",
+            "The most discriminating missing data would be: (1) canonical executor logs showing whether provider/auth handoff occurred for failing requests, (2) provider-api logs at matching timestamps showing receipt or absence of those requests, and (3) auth-service logs for token/grant failures on the same path.",
+            "No provider-api or auth-service deployment records were returned for the queried window, but empty deployment results are not proof those dependencies were healthy."
+          ],
+          "candidates": [
+            {
+              "code": "unconfirmed_change",
+              "hypothesis": {
+                "description": "An internal tool-executor regression is the strongest current explanation: a new executor release occurred at the same timestamp as the observed 502, and prior verified history shows the same symptom has previously been caused by an executor regression. This is suggestive but not proof because the log sample is incomplete and there is no version-segmented failure comparison.",
+                "supporting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_fa27c5ed7005",
+                  "ev_ad8a03f96807"
+                ],
+                "contradicting_evidence": [
+                  "ev_ad8a03f96807",
+                  "ev_e989518b0f5b"
+                ],
+                "confidence": "medium",
+                "assumptions": [
+                  "The single observed 502 is representative of the reported intermittent failures.",
+                  "Temporal proximity between release time and failure time may be causal, but no before/after failure-rate comparison is available.",
+                  "The missing upstream trace ID may indicate failure before provider handoff, but current evidence does not prove whether trace creation happens before or after provider dispatch in this service."
+                ]
+              },
+              "findings": [
+                {
+                  "code": "observed_gateway_failure",
+                  "statement": "A tool-executor request for tenant atlas returned 502 during the incident window.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_fa27c5ed7005",
+                      "record_id": "unknown-012:logs:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "version_control",
+                  "statement": "A new tool-executor release was deployed at 2026-11-12T10:05:00Z, matching the timestamp of the observed 502.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_71cf28865868",
+                      "record_id": "unknown-012:deployments:0"
+                    },
+                    {
+                      "evidence_id": "ev_fa27c5ed7005",
+                      "record_id": "unknown-012:logs:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "competing_history",
+                  "statement": "Historical incidents show the same 502 symptom has previously been verified under both provider outage and executor regression causes, so history alone does not resolve causality here.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_ad8a03f96807",
+                      "record_id": "unknown-012:history:0"
+                    },
+                    {
+                      "evidence_id": "ev_ad8a03f96807",
+                      "record_id": "unknown-012:history:1"
+                    }
+                  ]
+                }
+              ],
+              "action_codes": [
+                "collect_missing_telemetry",
+                "rollback_executor",
+                "monitor_provider"
+              ],
+              "actions": [
+                "Compare tool-executor 502 frequency immediately before versus after version 'new' to test whether failures are version-specific.",
+                "Inspect request-path logs around request_id lost-1 to determine whether the executor emitted any provider/auth handoff attempt before returning 502.",
+                "If additional evidence shows failures are isolated to the new release, consider rollback of tool-executor."
+              ],
+              "missing_checks": [
+                "A before/after or old/new version comparison of 502 rates or logs for tool-executor during the incident window.",
+                "Canonical executor logs showing whether requests reached auth-service or provider-api before failing.",
+                "Any deployment or config change detail beyond the generic 'Executor release' label that could identify the changed code path."
+              ],
+              "strength": 7
+            },
+            {
+              "code": "provider_failure",
+              "hypothesis": {
+                "description": "An upstream provider failure remains plausible because tool-executor depends on provider-api and prior verified history shows the same symptom has occurred during provider outages. However, current evidence does not show a provider request, upstream error, or broader provider impact.",
+                "supporting_evidence": [
+                  "ev_e989518b0f5b",
+                  "ev_ad8a03f96807",
+                  "ev_fa27c5ed7005"
+                ],
+                "contradicting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_fa27c5ed7005"
+                ],
+                "confidence": "low",
+                "assumptions": [
+                  "provider-api is on the failing path for this request type.",
+                  "A missing upstream trace ID could still occur even if the provider failed, depending on when tracing is attached.",
+                  "No provider-api deployment was observed in the queried window, but absence of deployment does not prove provider health."
+                ]
+              },
+              "findings": [
+                {
+                  "code": "observed_gateway_failure",
+                  "statement": "A 502 was emitted by tool-executor during the incident window.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_fa27c5ed7005",
+                      "record_id": "unknown-012:logs:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "provider_isolation",
+                  "statement": "tool-executor has a declared dependency on provider-api, so an upstream provider-side issue is on the possible execution path.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_e989518b0f5b",
+                      "record_id": "unknown-012:dependencies:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "competing_history",
+                  "statement": "A prior verified incident recorded the same 502 symptom with cause 'Provider outage'.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_ad8a03f96807",
+                      "record_id": "unknown-012:history:0"
+                    }
+                  ]
+                }
+              ],
+              "action_codes": [
+                "collect_missing_telemetry",
+                "monitor_provider",
+                "backoff_provider"
+              ],
+              "actions": [
+                "Check canonical logs or status for provider-api at the same timestamps to see whether requests from tool-executor were received and failed upstream.",
+                "Look for clustered errors across multiple tenants or request types to distinguish a shared upstream outage from a local executor issue.",
+                "If upstream failures are confirmed, apply provider-aware retry/backoff rather than treating all 502s as internal regressions."
+              ],
+              "missing_checks": [
+                "Provider-api canonical logs or health evidence for the incident window showing request receipt, error rates, or timeouts.",
+                "A correlation of affected tenants/requests demonstrating whether impact is broad enough to fit a provider outage.",
+                "Any upstream response metadata for request_id lost-1 or adjacent requests."
+              ],
+              "strength": 4
+            },
+            {
+              "code": "missing_grant",
+              "hypothesis": {
+                "description": "A permission or credential issue is currently the weakest of the three explanations. tool-executor depends on auth-service, so auth-related silent failures are possible, but there is no observed 401/403, refresh error, revoked consent, missing grant, or expired key evidence in the available records.",
+                "supporting_evidence": [
+                  "ev_e989518b0f5b",
+                  "ev_fa27c5ed7005"
+                ],
+                "contradicting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_ad8a03f96807"
+                ],
+                "confidence": "low",
+                "assumptions": [
+                  "Some auth failures in this platform could surface as 502s if error mapping is poor.",
+                  "The observed null upstream_trace_id may reflect failure before provider dispatch, including auth-path failure, but this is not established by current records.",
+                  "No auth-service deployment was observed in the queried window, but configuration or token state could still change independently of deployment."
+                ]
+              },
+              "findings": [
+                {
+                  "code": "auth_dependency",
+                  "statement": "tool-executor depends on auth-service, so credential or grant failures are structurally possible on the request path.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_e989518b0f5b",
+                      "record_id": "unknown-012:dependencies:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "observed_gateway_failure",
+                  "statement": "The only current canonical runtime record is a tool-executor 502 for tenant atlas.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_fa27c5ed7005",
+                      "record_id": "unknown-012:logs:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "version_control",
+                  "statement": "A contemporaneous executor release provides a more direct observed change than any observed auth-service change.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_71cf28865868",
+                      "record_id": "unknown-012:deployments:0"
+                    }
+                  ]
+                }
+              ],
+              "action_codes": [
+                "collect_missing_telemetry",
+                "reconnect_required_scope",
+                "replace_expired_provider_key"
+              ],
+              "actions": [
+                "Inspect auth-service canonical logs for the same timestamps for token refresh failures, revoked grants, or scope errors tied to the failing request path.",
+                "Check whether affected executions cluster by connection, account, or tenant, which would better fit credential or permission failure than a release regression.",
+                "If auth evidence appears, verify whether the failure mode is missing grant, revoked consent, or expired provider key before reconnecting or rotating credentials."
+              ],
+              "missing_checks": [
+                "Auth-service canonical logs for refresh, scope, grant, or credential errors during the incident window.",
+                "Connection-level error distribution showing whether failures are isolated to specific credentials/accounts.",
+                "Any executor-to-auth error mapping evidence showing whether auth failures can surface as 502 with missing traces."
+              ],
+              "strength": 2
+            }
+          ],
+          "findings": [
+            {
+              "code": "observed_gateway_failure",
+              "statement": "One canonical log record shows tool-executor returned 502 for tenant atlas at 2026-11-12T10:05:00Z; the record includes no upstream_trace_id.",
+              "citations": [
+                {
+                  "evidence_id": "ev_fa27c5ed7005",
+                  "record_id": "unknown-012:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "A new tool-executor release was deployed at the same timestamp as the observed 502.",
+              "citations": [
+                {
+                  "evidence_id": "ev_71cf28865868",
+                  "record_id": "unknown-012:deployments:0"
+                },
+                {
+                  "evidence_id": "ev_fa27c5ed7005",
+                  "record_id": "unknown-012:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "auth_dependency",
+              "statement": "tool-executor depends on both auth-service and provider-api, so either upstream provider issues or auth-path failures are possible in principle.",
+              "citations": [
+                {
+                  "evidence_id": "ev_e989518b0f5b",
+                  "record_id": "unknown-012:dependencies:0"
+                }
+              ]
+            },
+            {
+              "code": "competing_history",
+              "statement": "Verified incident history shows the same 502 symptom has occurred previously under both provider outage and executor regression causes.",
+              "citations": [
+                {
+                  "evidence_id": "ev_ad8a03f96807",
+                  "record_id": "unknown-012:history:0"
+                },
+                {
+                  "evidence_id": "ev_ad8a03f96807",
+                  "record_id": "unknown-012:history:1"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "created_at": "2026-11-12T20:12:43.667308+00:00"
+    },
+    {
+      "sequence": 3221,
+      "type": "task_finished",
+      "payload": {
+        "task": "reason",
+        "role": "reasoning",
+        "status": "complete",
+        "at": 535480.890050193
+      },
+      "created_at": "2026-11-12T20:12:43.673872+00:00"
+    },
+    {
+      "sequence": 3222,
+      "type": "task_started",
+      "payload": {
+        "task": "critic",
+        "role": "critic",
+        "at": 535480.904981051,
+        "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+        "dependencies": [
+          "reason"
+        ],
+        "available_evidence_ids": [
+          "ev_fa27c5ed7005",
+          "ev_60da973cb36c",
+          "ev_c26eaff0371a",
+          "ev_71cf28865868",
+          "ev_e989518b0f5b",
+          "ev_98c984228b7a",
+          "ev_28b8891d4cd9",
+          "ev_154b466afa65",
+          "ev_a6118eaa1742",
+          "ev_ad8a03f96807",
+          "ev_8fbe90ba7873"
+        ]
+      },
+      "created_at": "2026-11-12T20:12:43.689044+00:00"
+    },
+    {
+      "sequence": 3223,
+      "type": "model_started",
+      "payload": {
+        "role": "critic",
+        "model": "gpt-5.4",
+        "request": 12,
+        "task": "critic"
+      },
+      "created_at": "2026-11-12T20:12:43.702381+00:00"
+    },
+    {
+      "sequence": 3224,
+      "type": "model_finished",
+      "payload": {
+        "role": "critic",
+        "model": "gpt-5.4-2026-03-05",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 7274,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 945,
+          "output_tokens_details": {
+            "reasoning_tokens": 199
+          },
+          "total_tokens": 8219
+        },
+        "task": "critic"
+      },
+      "created_at": "2026-11-12T20:13:03.725887+00:00"
+    },
+    {
+      "sequence": 3225,
+      "type": "critique_decision",
+      "payload": {
+        "role": "critic",
+        "task": "critic",
+        "approved": false,
+        "blocking_checks": [
+          "Canonical request-path evidence showing whether the observed failed execution reached auth-service or provider-api before tool-executor returned 502; without this, provider/auth vs internal pre-handoff failure remains unresolved.",
+          "A discriminating comparison around the 2026-11-12T10:05:00Z executor release (for example, pre/post 502 occurrence in canonical executor logs). The current case has only one observed 502 record, so temporal proximity to the release is suggestive but not verified as version-specific failure."
+        ],
+        "notes": [
+          "The factual findings that are well grounded are limited to: one observed 502 in tool-executor (ev_fa27c5ed7005 / unknown-012:logs:0), one contemporaneous executor release (ev_71cf28865868 / unknown-012:deployments:0), declared dependencies on auth-service and provider-api (ev_e989518b0f5b / unknown-012:dependencies:0), and ambiguous historical precedent (ev_ad8a03f96807 / unknown-012:history:0,1).",
+          "An explicitly inconclusive report would be acceptable here. What is not yet justified is approving a ranked probable cause as adequately verified.",
+          "No repeated empty-source requery is needed; the existing gaps are already clear from the partial logs and failed metrics collection.",
+          "Null upstream_trace_id is suggestive but not discriminating unless the service's trace attachment point is known from current evidence; that knowledge is absent here."
+        ]
+      },
+      "created_at": "2026-11-12T20:13:03.730086+00:00"
+    },
+    {
+      "sequence": 3226,
+      "type": "agent_result",
+      "payload": {
+        "task": "critic",
+        "role": "critic",
+        "result": {
+          "hypotheses": [],
+          "objections": [
+            "The current evidence does not verify the leading 'executor regression' diagnosis. The only runtime record is a single partial tool-executor 502 for tenant atlas with null upstream_trace_id in ev_fa27c5ed7005 / unknown-012:logs:0; that does not by itself establish whether the failure occurred before auth, before provider dispatch, or after an upstream error.",
+            "Deployment coincidence is not causal proof. ev_71cf28865868 / unknown-012:deployments:0 shows an executor release at the same timestamp as the observed 502, but there is no before/after failure-rate or version-segmented comparison in canonical records.",
+            "History is correctly treated as non-dispositive, but it also means the report cannot elevate regression over provider failure based on prior incidents alone. ev_ad8a03f96807 / unknown-012:history:0 and unknown-012:history:1 explicitly support competing verified causes for the same symptom.",
+            "There is no canonical provider-api or auth-service incident-window log evidence in the bundle. The dependency record ev_e989518b0f5b / unknown-012:dependencies:0 only shows possible paths, not which path failed here.",
+            "Scope and impact are unverified. The customer reported sporadic failures, but the observed evidence contains only one tenant ('atlas') and one failed request record, so any broader impact framing would be unsupported.",
+            "Metrics/traces are unavailable, but that gap should be stated as a limitation rather than used to imply absence of upstream issues. The metrics queries timed out twice in the query log; no trace corpus was returned.",
+            "Further collection cannot fit the remaining execution budget; report uncertainty and required checks."
+          ],
+          "followups": [
+            {
+              "id": "report",
+              "role": "reporting",
+              "question": "Write the evidence-backed internal report and proposed next steps.",
+              "dependencies": [],
+              "status": "pending",
+              "error": null
+            }
+          ],
+          "report": null,
+          "notes": [
+            "The factual findings that are well grounded are limited to: one observed 502 in tool-executor (ev_fa27c5ed7005 / unknown-012:logs:0), one contemporaneous executor release (ev_71cf28865868 / unknown-012:deployments:0), declared dependencies on auth-service and provider-api (ev_e989518b0f5b / unknown-012:dependencies:0), and ambiguous historical precedent (ev_ad8a03f96807 / unknown-012:history:0,1).",
+            "An explicitly inconclusive report would be acceptable here. What is not yet justified is approving a ranked probable cause as adequately verified.",
+            "No repeated empty-source requery is needed; the existing gaps are already clear from the partial logs and failed metrics collection.",
+            "Null upstream_trace_id is suggestive but not discriminating unless the service's trace attachment point is known from current evidence; that knowledge is absent here."
+          ],
+          "candidates": [
+            {
+              "code": "unconfirmed_change",
+              "hypothesis": {
+                "description": "An internal tool-executor regression is the strongest current explanation: a new executor release occurred at the same timestamp as the observed 502, and prior verified history shows the same symptom has previously been caused by an executor regression. This is suggestive but not proof because the log sample is incomplete and there is no version-segmented failure comparison.",
+                "supporting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_fa27c5ed7005",
+                  "ev_ad8a03f96807"
+                ],
+                "contradicting_evidence": [
+                  "ev_ad8a03f96807",
+                  "ev_e989518b0f5b"
+                ],
+                "confidence": "medium",
+                "assumptions": [
+                  "The single observed 502 is representative of the reported intermittent failures.",
+                  "Temporal proximity between release time and failure time may be causal, but no before/after failure-rate comparison is available.",
+                  "The missing upstream trace ID may indicate failure before provider handoff, but current evidence does not prove whether trace creation happens before or after provider dispatch in this service."
+                ]
+              },
+              "findings": [
+                {
+                  "code": "observed_gateway_failure",
+                  "statement": "A tool-executor request for tenant atlas returned 502 during the incident window.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_fa27c5ed7005",
+                      "record_id": "unknown-012:logs:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "version_control",
+                  "statement": "A new tool-executor release was deployed at 2026-11-12T10:05:00Z, matching the timestamp of the observed 502.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_71cf28865868",
+                      "record_id": "unknown-012:deployments:0"
+                    },
+                    {
+                      "evidence_id": "ev_fa27c5ed7005",
+                      "record_id": "unknown-012:logs:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "competing_history",
+                  "statement": "Historical incidents show the same 502 symptom has previously been verified under both provider outage and executor regression causes, so history alone does not resolve causality here.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_ad8a03f96807",
+                      "record_id": "unknown-012:history:0"
+                    },
+                    {
+                      "evidence_id": "ev_ad8a03f96807",
+                      "record_id": "unknown-012:history:1"
+                    }
+                  ]
+                }
+              ],
+              "action_codes": [
+                "collect_missing_telemetry",
+                "rollback_executor",
+                "monitor_provider"
+              ],
+              "actions": [
+                "Compare tool-executor 502 frequency immediately before versus after version 'new' to test whether failures are version-specific.",
+                "Inspect request-path logs around request_id lost-1 to determine whether the executor emitted any provider/auth handoff attempt before returning 502.",
+                "If additional evidence shows failures are isolated to the new release, consider rollback of tool-executor."
+              ],
+              "missing_checks": [
+                "Canonical request-path evidence showing whether the observed failed execution reached auth-service or provider-api before tool-executor returned 502; without this, provider/auth vs internal pre-handoff failure remains unresolved.",
+                "A discriminating comparison around the 2026-11-12T10:05:00Z executor release (for example, pre/post 502 occurrence in canonical executor logs). The current case has only one observed 502 record, so temporal proximity to the release is suggestive but not verified as version-specific failure."
+              ],
+              "strength": 7
+            },
+            {
+              "code": "provider_failure",
+              "hypothesis": {
+                "description": "An upstream provider failure remains plausible because tool-executor depends on provider-api and prior verified history shows the same symptom has occurred during provider outages. However, current evidence does not show a provider request, upstream error, or broader provider impact.",
+                "supporting_evidence": [
+                  "ev_e989518b0f5b",
+                  "ev_ad8a03f96807",
+                  "ev_fa27c5ed7005"
+                ],
+                "contradicting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_fa27c5ed7005"
+                ],
+                "confidence": "low",
+                "assumptions": [
+                  "provider-api is on the failing path for this request type.",
+                  "A missing upstream trace ID could still occur even if the provider failed, depending on when tracing is attached.",
+                  "No provider-api deployment was observed in the queried window, but absence of deployment does not prove provider health."
+                ]
+              },
+              "findings": [
+                {
+                  "code": "observed_gateway_failure",
+                  "statement": "A 502 was emitted by tool-executor during the incident window.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_fa27c5ed7005",
+                      "record_id": "unknown-012:logs:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "provider_isolation",
+                  "statement": "tool-executor has a declared dependency on provider-api, so an upstream provider-side issue is on the possible execution path.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_e989518b0f5b",
+                      "record_id": "unknown-012:dependencies:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "competing_history",
+                  "statement": "A prior verified incident recorded the same 502 symptom with cause 'Provider outage'.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_ad8a03f96807",
+                      "record_id": "unknown-012:history:0"
+                    }
+                  ]
+                }
+              ],
+              "action_codes": [
+                "collect_missing_telemetry",
+                "monitor_provider",
+                "backoff_provider"
+              ],
+              "actions": [
+                "Check canonical logs or status for provider-api at the same timestamps to see whether requests from tool-executor were received and failed upstream.",
+                "Look for clustered errors across multiple tenants or request types to distinguish a shared upstream outage from a local executor issue.",
+                "If upstream failures are confirmed, apply provider-aware retry/backoff rather than treating all 502s as internal regressions."
+              ],
+              "missing_checks": [
+                "Provider-api canonical logs or health evidence for the incident window showing request receipt, error rates, or timeouts.",
+                "A correlation of affected tenants/requests demonstrating whether impact is broad enough to fit a provider outage.",
+                "Any upstream response metadata for request_id lost-1 or adjacent requests."
+              ],
+              "strength": 4
+            },
+            {
+              "code": "missing_grant",
+              "hypothesis": {
+                "description": "A permission or credential issue is currently the weakest of the three explanations. tool-executor depends on auth-service, so auth-related silent failures are possible, but there is no observed 401/403, refresh error, revoked consent, missing grant, or expired key evidence in the available records.",
+                "supporting_evidence": [
+                  "ev_e989518b0f5b",
+                  "ev_fa27c5ed7005"
+                ],
+                "contradicting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_ad8a03f96807"
+                ],
+                "confidence": "low",
+                "assumptions": [
+                  "Some auth failures in this platform could surface as 502s if error mapping is poor.",
+                  "The observed null upstream_trace_id may reflect failure before provider dispatch, including auth-path failure, but this is not established by current records.",
+                  "No auth-service deployment was observed in the queried window, but configuration or token state could still change independently of deployment."
+                ]
+              },
+              "findings": [
+                {
+                  "code": "auth_dependency",
+                  "statement": "tool-executor depends on auth-service, so credential or grant failures are structurally possible on the request path.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_e989518b0f5b",
+                      "record_id": "unknown-012:dependencies:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "observed_gateway_failure",
+                  "statement": "The only current canonical runtime record is a tool-executor 502 for tenant atlas.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_fa27c5ed7005",
+                      "record_id": "unknown-012:logs:0"
+                    }
+                  ]
+                },
+                {
+                  "code": "version_control",
+                  "statement": "A contemporaneous executor release provides a more direct observed change than any observed auth-service change.",
+                  "citations": [
+                    {
+                      "evidence_id": "ev_71cf28865868",
+                      "record_id": "unknown-012:deployments:0"
+                    }
+                  ]
+                }
+              ],
+              "action_codes": [
+                "collect_missing_telemetry",
+                "reconnect_required_scope",
+                "replace_expired_provider_key"
+              ],
+              "actions": [
+                "Inspect auth-service canonical logs for the same timestamps for token refresh failures, revoked grants, or scope errors tied to the failing request path.",
+                "Check whether affected executions cluster by connection, account, or tenant, which would better fit credential or permission failure than a release regression.",
+                "If auth evidence appears, verify whether the failure mode is missing grant, revoked consent, or expired provider key before reconnecting or rotating credentials."
+              ],
+              "missing_checks": [
+                "Auth-service canonical logs for refresh, scope, grant, or credential errors during the incident window.",
+                "Connection-level error distribution showing whether failures are isolated to specific credentials/accounts.",
+                "Any executor-to-auth error mapping evidence showing whether auth failures can surface as 502 with missing traces."
+              ],
+              "strength": 2
+            }
+          ],
+          "findings": null
+        }
+      },
+      "created_at": "2026-11-12T20:13:03.750619+00:00"
+    },
+    {
+      "sequence": 3227,
+      "type": "task_finished",
+      "payload": {
+        "task": "critic",
+        "role": "critic",
+        "status": "complete",
+        "at": 535500.972539381
+      },
+      "created_at": "2026-11-12T20:13:03.757764+00:00"
+    },
+    {
+      "sequence": 3228,
+      "type": "task_started",
+      "payload": {
+        "task": "report",
+        "role": "reporting",
+        "at": 535500.990544846,
+        "question": "Write the evidence-backed internal report and proposed next steps.",
+        "dependencies": [],
+        "available_evidence_ids": [
+          "ev_fa27c5ed7005",
+          "ev_60da973cb36c",
+          "ev_c26eaff0371a",
+          "ev_71cf28865868",
+          "ev_e989518b0f5b",
+          "ev_98c984228b7a",
+          "ev_28b8891d4cd9",
+          "ev_154b466afa65",
+          "ev_a6118eaa1742",
+          "ev_ad8a03f96807",
+          "ev_8fbe90ba7873"
+        ]
+      },
+      "created_at": "2026-11-12T20:13:03.775137+00:00"
+    },
+    {
+      "sequence": 3229,
+      "type": "model_started",
+      "payload": {
+        "role": "reporting",
+        "model": "gpt-4.1-mini",
+        "request": 13,
+        "task": "report"
+      },
+      "created_at": "2026-11-12T20:13:03.794073+00:00"
+    },
+    {
+      "sequence": 3230,
+      "type": "model_finished",
+      "payload": {
+        "role": "reporting",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "status": "completed",
+        "usage": {
+          "input_tokens": 9172,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1178,
+          "output_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "total_tokens": 10350
+        },
+        "task": "report"
+      },
+      "created_at": "2026-11-12T20:13:13.558212+00:00"
+    },
+    {
+      "sequence": 3231,
+      "type": "agent_result",
+      "payload": {
+        "task": "report",
+        "role": "reporting",
+        "result": {
+          "hypotheses": [],
+          "objections": [],
+          "followups": [],
+          "report": {
+            "incident_id": "unknown-012",
+            "outcome": "inconclusive",
+            "hypotheses": [
+              {
+                "description": "An internal tool-executor regression is the leading hypothesis. A new executor release occurred simultaneously with the observed 502 failure, and historical incidents show that the same error symptom has previously resulted from executor regressions. However, the evidence is incomplete: only one partial 502 log record exists with no upstream trace, and there is no comparative failure rate data before or after the deployment to verify causality.",
+                "supporting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_fa27c5ed7005",
+                  "ev_ad8a03f96807"
+                ],
+                "contradicting_evidence": [
+                  "ev_ad8a03f96807",
+                  "ev_e989518b0f5b"
+                ],
+                "confidence": "medium",
+                "assumptions": [
+                  "The single observed 502 log is representative of reported intermittent failures.",
+                  "Temporal coincidence of deployment and failure may indicate causality.",
+                  "Missing upstream trace might signal failure occurred internally before provider dispatch, but this is not confirmed."
+                ]
+              },
+              {
+                "description": "Upstream provider failure is a plausible alternative cause, since tool-executor depends on provider-api and past history shows similar 502 errors have been caused by provider outages. However, no canonical logs or telemetry from provider-api during the incident window are present to confirm any upstream failure, nor is there evidence of broader tenant impact",
+                "supporting_evidence": [
+                  "ev_e989518b0f5b",
+                  "ev_ad8a03f96807",
+                  "ev_fa27c5ed7005"
+                ],
+                "contradicting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_fa27c5ed7005"
+                ],
+                "confidence": "low",
+                "assumptions": [
+                  "Provider-api is on the request path for this execution.",
+                  "Upstream failure could still produce missing traces if tracer attachment timing varies.",
+                  "No provider deployment changes were observed, but that does not prove provider health."
+                ]
+              },
+              {
+                "description": "A permission or credential failure is the weakest hypothesis at present. tool-executor depends on auth-service, so credential errors or missing grants could cause failures. However, no error logs, 401/403 responses, token refresh failures, or revoked consent evidence exist for this incident window.",
+                "supporting_evidence": [
+                  "ev_e989518b0f5b",
+                  "ev_fa27c5ed7005"
+                ],
+                "contradicting_evidence": [
+                  "ev_71cf28865868",
+                  "ev_ad8a03f96807"
+                ],
+                "confidence": "low",
+                "assumptions": [
+                  "Some auth errors might manifest as 502 responses if error mapping is incomplete.",
+                  "Null upstream_trace_id might also reflect pre-provider dispatch failure, including auth failure.",
+                  "No auth service deployment changes were recorded, but authentication state could conceivably change independently."
+                ]
+              }
+            ],
+            "recommended_actions": [
+              "Collect and analyze canonical request path logs for the failing request_id to determine whether the fault occurred before or after dispatch to auth-service and provider-api.",
+              "Compare failure rates of tool-executor requests immediately before and after the new release deployment to identify release-associated regressions.",
+              "Collect canonical logs or health status indicators from provider-api and auth-service for the incident window to verify upstream issues or authentication errors.",
+              "Investigate affected tenants and requests for clustering to clarify scope and potential credential-related failures.",
+              "Monitor provider-api and tool-executor health metrics continuously, once telemetry systems are restored.",
+              "Avoid assuming causality based solely on deployment timing; gather controlled comparative telemetry to isolate cause."
+            ],
+            "limitations": [
+              "Only a single partial 502 log record with null upstream trace is observed; this is insufficient to locate failure stage (internal executor, auth-service, or provider-api).",
+              "Metrics and traces are unavailable due to timeouts, limiting diagnostic confidence.",
+              "No canonical upstream provider-api or auth-service logs or telemetry are available for this incident window.",
+              "The temporal proximity of the executor release to the 502 error is suggestive but not proof of causality (no before/after failure rate data).",
+              "Reported failures are sporadic and affect multiple tenants, but observed evidence covers only one tenant and one failing request.",
+              "No direct evidence distinguishes whether failure occurs before or after provider dispatch or during authentication steps.",
+              "Critic did not approve a probable cause; further evidence is required."
+            ]
+          },
+          "notes": [],
+          "candidates": null,
+          "findings": [
+            {
+              "code": "observed_gateway_failure",
+              "statement": "One canonical log record shows tool-executor returned 502 for tenant atlas at 2026-11-12T10:05:00Z; the record includes no upstream_trace_id.",
+              "citations": [
+                {
+                  "evidence_id": "ev_fa27c5ed7005",
+                  "record_id": "unknown-012:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "A new tool-executor release was deployed at the same timestamp as the observed 502.",
+              "citations": [
+                {
+                  "evidence_id": "ev_71cf28865868",
+                  "record_id": "unknown-012:deployments:0"
+                },
+                {
+                  "evidence_id": "ev_fa27c5ed7005",
+                  "record_id": "unknown-012:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "auth_dependency",
+              "statement": "tool-executor depends on both auth-service and provider-api, so either upstream provider issues or auth-path failures are possible in principle.",
+              "citations": [
+                {
+                  "evidence_id": "ev_e989518b0f5b",
+                  "record_id": "unknown-012:dependencies:0"
+                }
+              ]
+            },
+            {
+              "code": "competing_history",
+              "statement": "Verified incident history shows the same 502 symptom has occurred previously under both provider outage and executor regression causes.",
+              "citations": [
+                {
+                  "evidence_id": "ev_ad8a03f96807",
+                  "record_id": "unknown-012:history:0"
+                },
+                {
+                  "evidence_id": "ev_ad8a03f96807",
+                  "record_id": "unknown-012:history:1"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "created_at": "2026-11-12T20:13:13.566431+00:00"
+    },
+    {
+      "sequence": 3232,
+      "type": "task_finished",
+      "payload": {
+        "task": "report",
+        "role": "reporting",
+        "status": "complete",
+        "at": 535510.790099975
+      },
+      "created_at": "2026-11-12T20:13:13.575329+00:00"
+    },
+    {
+      "sequence": 3233,
+      "type": "report_ready",
+      "payload": {
+        "outcome": "inconclusive"
+      },
+      "created_at": "2026-11-12T20:13:13.595694+00:00"
+    },
+    {
+      "sequence": 3234,
+      "type": "response_drafted",
+      "payload": {
+        "sent": false
+      },
+      "created_at": "2026-11-12T20:13:13.596111+00:00"
+    },
+    {
+      "sequence": 3235,
+      "type": "delivery_queued",
+      "payload": {
+        "provider": "linear",
+        "stage": "report"
+      },
+      "created_at": "2026-11-12T20:13:13.616490+00:00"
+    },
+    {
+      "sequence": 3236,
+      "type": "delivery_queued",
+      "payload": {
+        "provider": "slack",
+        "stage": "report"
+      },
+      "created_at": "2026-11-12T20:13:13.622193+00:00"
+    },
+    {
+      "sequence": 3237,
+      "type": "delivery_completed",
+      "payload": {
+        "provider": "linear",
+        "stage": "report"
+      },
+      "created_at": "2026-11-12T20:13:14.546456+00:00"
+    },
+    {
+      "sequence": 3238,
+      "type": "delivery_completed",
+      "payload": {
+        "provider": "slack",
+        "stage": "report"
+      },
+      "created_at": "2026-11-12T20:13:15.076112+00:00"
+    },
+    {
+      "sequence": 3239,
+      "type": "delivery_queued",
+      "payload": {
+        "provider": "slack",
+        "stage": "summary-report"
+      },
+      "created_at": "2026-11-12T20:13:15.079817+00:00"
+    },
+    {
+      "sequence": 3240,
+      "type": "delivery_completed",
+      "payload": {
+        "provider": "slack",
+        "stage": "summary-report"
+      },
+      "created_at": "2026-11-12T20:13:15.420521+00:00"
+    }
+  ],
+  "integrations": {
+    "linear": {
+      "id": "78bc3bab-ef6b-4098-98af-aef468ba492a",
+      "identifier": "SID-32",
+      "url": "https://linear.app/sidagana/issue/SID-32/video-rehearsal-intermittent-execution-failures-with-missing-telemetry"
+    },
+    "slack": {
+      "channel": "C0CHXUF8NRW",
+      "ts": "1794514284.311189"
+    }
+  },
+  "deliveries": [
+    {
+      "id": 245,
+      "provider": "linear",
+      "stage": "intake",
+      "status": "complete",
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "id": 246,
+      "provider": "slack",
+      "stage": "intake",
+      "status": "complete",
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "id": 248,
+      "provider": "linear",
+      "stage": "report",
+      "status": "complete",
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "id": 249,
+      "provider": "slack",
+      "stage": "report",
+      "status": "complete",
+      "attempts": 1,
+      "error": null
+    },
+    {
+      "id": 250,
+      "provider": "slack",
+      "stage": "summary-report",
+      "status": "complete",
+      "attempts": 1,
+      "error": null
+    }
+  ]
+}

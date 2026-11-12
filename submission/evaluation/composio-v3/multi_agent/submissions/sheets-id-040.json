@@ -1,0 +1,507 @@
+{
+  "incident_id": "sheets-id-040",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "sheets-id-040",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause: the observed cedar failure used a display-name identifier on a Google Sheets operation that only accepts spreadsheet_id, so the executor rejected the request on that unsupported path before any provider-side name lookup was needed to explain the 400.",
+        "supporting_evidence": [
+          "ev_bd6f15b1fe79",
+          "ev_dbac33104552",
+          "ev_1a50782796aa",
+          "ev_8eaf50f5f88e",
+          "ev_11a5e4bd2134",
+          "ev_5d077567b098"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "Scoped to the observed failed cedar execution req-40 and related tenant metrics, not all customer-reported attempts.",
+          "The reproduce evidence is synthetic controlled telemetry, useful for discrimination but not an independent production execution record.",
+          "Dependency health shows general provider reachability, not request-level provider participation for req-40."
+        ]
+      },
+      {
+        "description": "Lower-confidence alternative: the customer may have expected a spreadsheet visible through a different connected account or project boundary, but the supplied canonical telemetry does not show account selection or project identity for req-40.",
+        "supporting_evidence": [
+          "ev_8eaf50f5f88e"
+        ],
+        "contradicting_evidence": [
+          "ev_bd6f15b1fe79",
+          "ev_dbac33104552",
+          "ev_1a50782796aa"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "Tenant-localized impact can be compatible with account-selection issues, but is not specific to them.",
+          "Even if present, this would be secondary to the observed unsupported identifier-kind failure on req-40."
+        ]
+      },
+      {
+        "description": "Weakest explanation: provider-side Sheets failure or rate limiting. Current evidence does not show a request-level provider search attempt for req-40, and same-provider health is observed elsewhere at the same time.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_bd6f15b1fe79",
+          "ev_11a5e4bd2134",
+          "ev_5d077567b098",
+          "ev_8eaf50f5f88e"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "A narrow provider issue cannot be absolutely excluded from partial telemetry.",
+          "General provider reachability is background context, not proof that req-40 reached the provider."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry suggests using the spreadsheet ID for this Sheets operation rather than a display-name lookup path.",
+      "Collect the canonical production cedar record for the customer-reported successful direct document-ID request to confirm the exact contrast on the same tenant/connection.",
+      "If additional reassurance is needed, retrieve request-level provider-call presence/response telemetry for req-40 rather than inferring provider involvement from dependency health alone.",
+      "Verify that the cedar workflow used the intended connected account and project-scoped connection before elevating the account-mismatch alternative.",
+      "These are proposed next steps only; they have not been executed in this investigation."
+    ],
+    "limitations": [
+      "No canonical production cedar log is supplied for the customer's claimed successful access by document ID; only the failing cedar request is canonical in the incident window.",
+      "No canonical records expose connected account identity, project boundary, OAuth scope set, or resource-sharing state for req-40.",
+      "The sandbox reproduce records are synthetic controlled observations and do not by themselves prove production behavior.",
+      "The provided deployment evidence shows only an unrelated support-dashboard change; it does not independently prove absence of every possible executor-side change."
+    ]
+  },
+  "ranked_cause_codes": [
+    "spreadsheet_identifier_kind",
+    "wrong_connected_account",
+    "provider_failure"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The canonical cedar request req-40 failed with status 400 while using spreadsheet_identifier \"Quarterly Revenue\" as identifier_kind=display_name, and the same record states the operation requires spreadsheet_id and name_lookup_supported=false.",
+      "citations": [
+        {
+          "evidence_id": "ev_bd6f15b1fe79",
+          "record_id": "sheets-id-040:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "For the observed failed execution, the discriminator is the executor log itself: it records an unsupported identifier path, which explains the 400 without needing a provider-side search failure.",
+      "citations": [
+        {
+          "evidence_id": "ev_bd6f15b1fe79",
+          "record_id": "sheets-id-040:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "Synthetic controlled comparison supports the same mechanism: the original condition using display_name failed with the same spreadsheet_id requirement, while the corrected condition using spreadsheet_id succeeded.",
+      "citations": [
+        {
+          "evidence_id": "ev_dbac33104552",
+          "record_id": "sheets-id-040:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_dbac33104552",
+          "record_id": "sheets-id-040:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact was significant but tenant-localized at 10:05: cedar had 385 failures out of 619 requests, all 385 business operations blocked, queue depth 111, and p95 latency 1480 ms, while maple had 0 failures out of 527 requests, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_8eaf50f5f88e",
+          "record_id": "sheets-id-040:metrics:0"
+        },
+        {
+          "evidence_id": "ev_8eaf50f5f88e",
+          "record_id": "sheets-id-040:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "Counter-evidence against a broad provider outage: dependency telemetry shows provider_api_reachable=true, and another tenant had a same-provider unrelated read succeed at the same timestamp.",
+      "citations": [
+        {
+          "evidence_id": "ev_11a5e4bd2134",
+          "record_id": "sheets-id-040:dependencies:0"
+        },
+        {
+          "evidence_id": "ev_5d077567b098",
+          "record_id": "sheets-id-040:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "There is no canonical production cedar log here for the customer's claimed successful direct-ID access, and no supplied canonical record shows account/project selection for req-40.",
+      "citations": [
+        {
+          "evidence_id": "ev_bd6f15b1fe79",
+          "record_id": "sheets-id-040:logs:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "spreadsheet_identifier_kind_remediation",
+    "collect_missing_telemetry",
+    "monitor_provider",
+    "select_intended_connected_account",
+    "use_correct_project_connection"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_5942eb19d174",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-40",
+          "toolkit": "googlesheets",
+          "status": 400,
+          "spreadsheet_identifier": "Quarterly Revenue",
+          "identifier_kind": "display_name",
+          "operation_requires": "spreadsheet_id",
+          "name_lookup_supported": false
+        },
+        {
+          "record_id": "sheets-id-040:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_8eaf50f5f88e",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 619,
+          "failures": 385,
+          "business_operations_blocked": 385,
+          "queue_depth": 111,
+          "p95_latency_ms": 1480
+        },
+        {
+          "record_id": "sheets-id-040:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 527,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_11a5e4bd2134",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_feec25cab866",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_dbac33104552",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "sheets_configuration",
+          "check_passed": false,
+          "toolkit": "googlesheets",
+          "status": 400,
+          "spreadsheet_identifier": "Quarterly Revenue",
+          "identifier_kind": "display_name",
+          "operation_requires": "spreadsheet_id",
+          "name_lookup_supported": false
+        },
+        {
+          "record_id": "sheets-id-040:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "sheets_configuration",
+          "check_passed": true,
+          "toolkit": "googlesheets",
+          "status": 200,
+          "spreadsheet_identifier": "sheet-demo-040",
+          "identifier_kind": "spreadsheet_id",
+          "operation_requires": "spreadsheet_id",
+          "name_lookup_supported": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_bd6f15b1fe79",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-40",
+          "toolkit": "googlesheets",
+          "status": 400,
+          "spreadsheet_identifier": "Quarterly Revenue",
+          "identifier_kind": "display_name",
+          "operation_requires": "spreadsheet_id",
+          "name_lookup_supported": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2c49cb3da42f",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_5d077567b098",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-40",
+          "toolkit": "googlesheets",
+          "status": 400,
+          "spreadsheet_identifier": "Quarterly Revenue",
+          "identifier_kind": "display_name",
+          "operation_requires": "spreadsheet_id",
+          "name_lookup_supported": false
+        },
+        {
+          "record_id": "sheets-id-040:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_91a2809fd1e4",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1a50782796aa",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-id-040:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-googlesheets",
+          "kind": "public_reference",
+          "summary": "The Sheets MCP operation expects a spreadsheet identifier rather than a name-search request."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 177.09380987705663,
+  "input_tokens": 83271,
+  "output_tokens": 9642
+}

@@ -1,0 +1,2756 @@
+{
+  "ticket_id": "312dd75b-5c86-4813-8994-f974a495ebc6",
+  "tasks": [
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 2852,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 712,
+            "output_tokens_details": {
+              "reasoning_tokens": 29
+            },
+            "total_tokens": 3564
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Do not assume the complaint is accurate; verify with canonical execution and auth/connection records.",
+        "Begin queries with null filters so missing timestamp/service fields do not hide relevant records; refine only after seeing the raw population.",
+        "Need a scoped timeline: first failed relay job, last failed relay job, and examples of successful tool executions using the same tenant/account during the same window.",
+        "Compare affected tenant(s) against any unaffected tenant or unaffected execution surface to establish tenant impact and isolate scope.",
+        "Collect canonical records for: job start/end, connection lookup, connected-account response, token/access-material presence or redaction flags, downstream request attempt, and provider response if any.",
+        "A key discriminator is whether the failed relay execution ever emits a provider request record; if not, provider-side failure is weak.",
+        "If tool executions succeed while relay jobs fail on the same connection, treat that as a hypothesis for surface-specific auth handling, not proof, until the shared connection identity is confirmed.",
+        "Check for exact connected-account IDs / account identities to rule out wrong_connected_account or account-selection mismatch.",
+        "Assess whether failure is uniform for new and old connections, or version-specific to the new relay path, using controlled comparisons where available.",
+        "Look for latency/backlog symptoms; if failures are immediate with low latency and no queue growth, that would weigh against saturation or provider timeout hypotheses.",
+        "Derived connection/refresh views are convenience copies only; cite canonical source records rather than derived summaries.",
+        "If access-token omission/redaction is observed in the relay path while another authenticated path works for the same connection, a probable cause may fit redacted_token_relay_design or connection_surface_isolation, but only after ruling out credential/permission mismatches with direct evidence.",
+        "If records show GitHub responds with auth errors after a provider request is sent, compare those records against revoked consent, missing grant/scope, or provider failure alternatives.",
+        "Remain inconclusive if the necessary causal telemetry\u2014especially canonical connection lookup or provider request records\u2014is missing and could materially change the leading explanation."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T16:57:50.977774+00:00",
+      "finished_at": "2026-11-12T16:58:09.167518+00:00",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "Using null-filter queries first, what canonical records show the affected execution path between 2026-11-12T09:50:00Z and 2026-11-12T10:15:00Z for service tool-executor: failed relay jobs, successful tool executions on the same GitHub connections, error messages, status codes, latency, retry counts, and any connected-account response payload fields indicating whether access tokens were omitted or redacted? Also, what are the failure rate, backlog, and tenant scope during the window versus an adjacent baseline?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "logs",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_1947c9b8c84d",
+            "query": {
+              "tool": "logs",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:logs:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "request_id": "req-36",
+                "toolkit": "github",
+                "status": 200,
+                "connected_account_active": true,
+                "provider_token_field": "REDACTED",
+                "relay_requires_raw_token": true,
+                "tool_execution_status": 200
+              },
+              {
+                "record_id": "github-token-036:logs:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "status": 200,
+                "same_provider_available": true,
+                "unrelated_read_succeeds": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_1947c9b8c84d"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_09a96d0607b0",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:metrics:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "requests": 551,
+                "failures": 0,
+                "business_operations_blocked": 365,
+                "queue_depth": 99,
+                "p95_latency_ms": 1320
+              },
+              {
+                "record_id": "github-token-036:metrics:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "requests": 483,
+                "failures": 0,
+                "business_operations_blocked": 0,
+                "queue_depth": 0,
+                "p95_latency_ms": 160
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_09a96d0607b0"
+        },
+        {
+          "query": {
+            "tool": "connections",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_1e7e0bea6d53",
+            "query": {
+              "tool": "connections",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_1e7e0bea6d53"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_9c5a6b552ca7",
+            "query": {
+              "tool": "logs",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:logs:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "request_id": "req-36",
+                "toolkit": "github",
+                "status": 200,
+                "connected_account_active": true,
+                "provider_token_field": "REDACTED",
+                "relay_requires_raw_token": true,
+                "tool_execution_status": 200
+              },
+              {
+                "record_id": "github-token-036:logs:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "status": 200,
+                "same_provider_available": true,
+                "unrelated_read_succeeds": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_9c5a6b552ca7"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_02e3f904846f",
+            "query": {
+              "tool": "metrics",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:metrics:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "requests": 551,
+                "failures": 0,
+                "business_operations_blocked": 365,
+                "queue_depth": 99,
+                "p95_latency_ms": 1320
+              },
+              {
+                "record_id": "github-token-036:metrics:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "requests": 483,
+                "failures": 0,
+                "business_operations_blocked": 0,
+                "queue_depth": 0,
+                "p95_latency_ms": 160
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_02e3f904846f"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:25:00Z",
+            "end": "2026-11-12T09:49:59Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_9d9f569e17a0",
+            "query": {
+              "tool": "metrics",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:25:00Z",
+              "end": "2026-11-12T09:49:59Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_9d9f569e17a0"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4063,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 263,
+            "output_tokens_details": {
+              "reasoning_tokens": 115
+            },
+            "total_tokens": 4326
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4965,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 121,
+            "output_tokens_details": {
+              "reasoning_tokens": 47
+            },
+            "total_tokens": 5086
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5339,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4608
+            },
+            "output_tokens": 238,
+            "output_tokens_details": {
+              "reasoning_tokens": 80
+            },
+            "total_tokens": 5577
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 6263,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 604,
+            "output_tokens_details": {
+              "reasoning_tokens": 41
+            },
+            "total_tokens": 6867
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Canonical tool-executor records in the incident window show the affected GitHub path on tenant cedar at 2026-11-12T10:05:00Z: request req-36 had status 200, connected_account_active=true, provider_token_field=\"REDACTED\", relay_requires_raw_token=true, and tool_execution_status=200, while a comparison log on maple at the same time shows status 200 with same_provider_available=true and unrelated_read_succeeds=true (ev_9c5a6b552ca7 / github-token-036:logs:0, github-token-036:logs:1). This supports \u201ctool execution works while the relay-auth path is different,\u201d but the canonical logs provided do not include a failed relay job record, explicit error text, downstream provider request, retry count, or per-request latency.",
+        "Controlled sandbox observations mirror that path difference: under the original condition, tool-executor recorded status 200, connected_account_active=true, provider_token_field=\"REDACTED\", relay_requires_raw_token=true, tool_execution_status=200, and check_passed=false; with only GitHub configuration changed, check_passed=true, execution_path=\"authenticated_proxy\", and relay_completed=true while provider_token_field remained \"REDACTED\" (ev_16242bf35c1c / github-token-036:reproduce:0, github-token-036:reproduce:1). Treat this as hypothesis-supporting comparison, not canonical production proof.",
+        "Observed tenant impact/backlog during the window is asymmetric: cedar shows 551 requests, 0 platform failures, 365 business_operations_blocked, queue_depth 99, and p95 latency 1320 ms, whereas maple shows 483 requests, 0 failures, 0 business_operations_blocked, queue_depth 0, and p95 latency 160 ms (ev_02e3f904846f / github-token-036:metrics:0, github-token-036:metrics:1). So the observed scope is at least cedar affected vs maple unaffected, with elevated backlog/latency on the affected tenant even though platform failure count remains zero.",
+        "Important gaps: the adjacent baseline query for 2026-11-12T09:25:00Z\u201309:49:59Z returned no metric records, so failure-rate/backlog change versus baseline cannot be established from canonical evidence here (ev_9d9f569e17a0). The null-filter connections query also returned no canonical connected-account records, so there is no direct production connected-account payload showing whether access tokens were omitted versus merely redacted, and no canonical job/error/retry records were supplied to quantify failed relay-job counts or statuses."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T16:58:09.173352+00:00",
+      "finished_at": "2026-11-12T16:58:35.813295+00:00",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "What changed around the start of the incident in the GitHub relay / connected-account retrieval path used by tool-executor\u2014deployments, config/schema changes, response-shaping/redaction changes, auth proxy changes, or connection-surface changes\u2014and is there a controlled comparison showing older relay behavior or another execution surface still receiving usable auth material for the same connection?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_36037a947c61",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:deployments:0",
+                "service": "support-dashboard",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "change": "Unrelated inbox display release",
+                "version": "dashboard-v23"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_36037a947c61"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_302c6ee2e1e9",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:dependencies:0",
+                "service": "tool-executor",
+                "depends_on": [
+                  "auth-service",
+                  "provider-api",
+                  "session-policy"
+                ],
+                "provider_api_reachable": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_302c6ee2e1e9"
+        },
+        {
+          "query": {
+            "tool": "reproduce",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_c5af76d59927",
+            "query": {
+              "tool": "reproduce",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:reproduce:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "sandbox",
+                "provider_mock": true,
+                "controlled": true,
+                "condition": "original",
+                "same_request_except": "github_configuration",
+                "check_passed": false,
+                "toolkit": "github",
+                "status": 200,
+                "connected_account_active": true,
+                "provider_token_field": "REDACTED",
+                "relay_requires_raw_token": true,
+                "tool_execution_status": 200
+              },
+              {
+                "record_id": "github-token-036:reproduce:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "sandbox",
+                "provider_mock": true,
+                "controlled": true,
+                "condition": "corrected",
+                "same_request_except": "github_configuration",
+                "check_passed": true,
+                "toolkit": "github",
+                "status": 200,
+                "connected_account_active": true,
+                "provider_token_field": "REDACTED",
+                "relay_requires_raw_token": false,
+                "tool_execution_status": 200,
+                "execution_path": "authenticated_proxy",
+                "relay_completed": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_c5af76d59927"
+        },
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:30:00Z",
+            "end": "2026-11-12T10:20:00Z",
+            "search": "relay",
+            "limit": 20
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_9ce4282d5c24",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:30:00Z",
+              "end": "2026-11-12T10:20:00Z",
+              "search": "relay",
+              "limit": 20
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_9ce4282d5c24"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": "github",
+            "limit": 20
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_5d9706b6edf8",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": "github",
+              "limit": 20
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:dependencies:0",
+                "service": "tool-executor",
+                "depends_on": [
+                  "auth-service",
+                  "provider-api",
+                  "session-policy"
+                ],
+                "provider_api_reachable": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_5d9706b6edf8"
+        },
+        {
+          "query": {
+            "tool": "reproduce",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 20
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_16242bf35c1c",
+            "query": {
+              "tool": "reproduce",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 20
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:reproduce:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "sandbox",
+                "provider_mock": true,
+                "controlled": true,
+                "condition": "original",
+                "same_request_except": "github_configuration",
+                "check_passed": false,
+                "toolkit": "github",
+                "status": 200,
+                "connected_account_active": true,
+                "provider_token_field": "REDACTED",
+                "relay_requires_raw_token": true,
+                "tool_execution_status": 200
+              },
+              {
+                "record_id": "github-token-036:reproduce:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "sandbox",
+                "provider_mock": true,
+                "controlled": true,
+                "condition": "corrected",
+                "same_request_except": "github_configuration",
+                "check_passed": true,
+                "toolkit": "github",
+                "status": 200,
+                "connected_account_active": true,
+                "provider_token_field": "REDACTED",
+                "relay_requires_raw_token": false,
+                "tool_execution_status": 200,
+                "execution_path": "authenticated_proxy",
+                "relay_completed": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_16242bf35c1c"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3851,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 189,
+            "output_tokens_details": {
+              "reasoning_tokens": 36
+            },
+            "total_tokens": 4040
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4706,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 273,
+            "output_tokens_details": {
+              "reasoning_tokens": 140
+            },
+            "total_tokens": 4979
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5211,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4608
+            },
+            "output_tokens": 112,
+            "output_tokens_details": {
+              "reasoning_tokens": 36
+            },
+            "total_tokens": 5323
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5766,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 595,
+            "output_tokens_details": {
+              "reasoning_tokens": 62
+            },
+            "total_tokens": 6361
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "No observed GitHub relay / connected-account-path deployment around the window: the only deployment returned was an unrelated support-dashboard release at 10:05Z (ev_36037a947c61/github-token-036:deployments:0), and a relay-targeted deployment search from 09:30Z\u201310:20Z returned no records (ev_9ce4282d5c24). That leaves config/schema/response-shaping/auth-proxy change as an unverified hypothesis rather than a demonstrated deployment event.",
+        "Canonical tool-executor logs show the affected execution surface can see an active connected account and returns 200, but the relay path still requires a raw token while the provider token field is redacted/missing from what this surface receives (ev_1947c9b8c84d/github-token-036:logs:0). The dependency view also shows provider API reachability, so this does not look like provider unreachability in the observed request (ev_302c6ee2e1e9/github-token-036:dependencies:0).",
+        "There is a controlled comparison on the same sandbox request shape: in the original condition, relay check fails with connected_account_active=true, provider_token_field=REDACTED, relay_requires_raw_token=true, while tool execution still succeeds; in the corrected condition, changing only GitHub configuration makes relay_requires_raw_token=false and the relay completes via authenticated_proxy (ev_c5af76d59927/github-token-036:reproduce:0, ev_c5af76d59927/github-token-036:reproduce:1). This is strong evidence of surface-specific auth-material handling, not a blanket GitHub credential outage.",
+        "Observed tenant impact is isolated in the supplied records: cedar shows 551 requests, 0 platform failures, but 365 business operations blocked, queue depth 99, and p95 latency 1320 ms, while maple shows 483 requests, 0 blocked ops, queue depth 0, and p95 160 ms; maple also has an unrelated read succeeding against the same provider (ev_09a96d0607b0/github-token-036:metrics:0, ev_09a96d0607b0/github-token-036:metrics:1, ev_1947c9b8c84d/github-token-036:logs:1). Important gap: no canonical connected-account response payload, account identity, or provider-request emission record was supplied, so exact response-shaping/redaction layer and shared-connection identity remain unverified."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T16:58:09.202771+00:00",
+      "finished_at": "2026-11-12T16:58:34.004029+00:00",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Does the evidence support a pre-provider internal auth-material handling problem\u2014such as token redaction/omission in the relay path or connection-surface isolation\u2014more strongly than alternatives like expired/revoked credentials, missing grants, wrong connected account, or GitHub provider failure? What discriminating records show whether requests fail before any provider call versus reaching GitHub and being rejected?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_36037a947c61",
+        "ev_302c6ee2e1e9",
+        "ev_c5af76d59927",
+        "ev_1947c9b8c84d",
+        "ev_09a96d0607b0",
+        "ev_1e7e0bea6d53",
+        "ev_9c5a6b552ca7",
+        "ev_9ce4282d5c24",
+        "ev_5d9706b6edf8",
+        "ev_16242bf35c1c",
+        "ev_02e3f904846f",
+        "ev_9d9f569e17a0"
+      ],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "history",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_24d1a211a924",
+            "query": {
+              "tool": "history",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:history:0",
+                "service": "tool-executor",
+                "symptom": "A similar workflow stopped following a release",
+                "cause": "An earlier provider outage",
+                "relation": "historical analogy only, not current proof"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_24d1a211a924"
+        },
+        {
+          "query": {
+            "tool": "knowledge",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_349e9e66af16",
+            "query": {
+              "tool": "knowledge",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:knowledge:0",
+                "service": "tool-executor",
+                "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+                "kind": "public_reference",
+                "summary": "Connected-account responses redact GitHub provider tokens; authenticated execution remains available."
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_349e9e66af16"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 7397,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 224,
+            "output_tokens_details": {
+              "reasoning_tokens": 117
+            },
+            "total_tokens": 7621
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 7967,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1098,
+            "output_tokens_details": {
+              "reasoning_tokens": 59
+            },
+            "total_tokens": 9065
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 10018,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 2719,
+            "output_tokens_details": {
+              "reasoning_tokens": 516
+            },
+            "total_tokens": 12737
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "The evidence supports a pre-provider internal auth-material handling problem more strongly than expired/revoked credentials, missing grant, wrong connected account, or GitHub provider failure.",
+        "However, the supplied canonical records do not include an outbound GitHub request record, GitHub auth rejection, or canonical connected-account payload for the affected production request, so the exact internal layer remains unverified between redacted-token relay design and surface isolation variants.",
+        "No relay-targeted deployment was observed in the supplied deployment evidence; any recent config or schema change remains an unconfirmed change rather than demonstrated cause."
+      ],
+      "candidates": [
+        {
+          "code": "redacted_token_relay_design",
+          "hypothesis": {
+            "description": "The observed failures are more consistent with an internal relay design that expects a raw GitHub provider token from connected-account data even though that token is redacted/omitted on this surface; authenticated tool execution still works because it does not require exposing the raw token.",
+            "supporting_evidence": [
+              "ev_1947c9b8c84d",
+              "ev_c5af76d59927",
+              "ev_349e9e66af16",
+              "ev_302c6ee2e1e9",
+              "ev_09a96d0607b0"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "The cedar production relay path is materially similar to the controlled sandbox comparison.",
+              "The absence of a provider response in the supplied canonical records reflects a pre-provider stop, but the exact provider-request emission record was not supplied."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "In production on cedar, tool-executor shows an active connected account and successful tool execution while the relay path still requires a raw token and the provider token field is redacted, matching a pre-provider auth-material handling problem rather than a bad GitHub credential on the working tool path.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1947c9b8c84d",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "In the controlled comparison, the original condition fails with connected_account_active=true, provider_token_field=REDACTED, and relay_requires_raw_token=true, while changing only GitHub configuration makes relay_requires_raw_token=false and the relay completes via authenticated_proxy. This discriminates relay auth-material handling from a blanket provider credential outage.",
+              "citations": [
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:1"
+                }
+              ]
+            },
+            {
+              "code": "provider_isolation",
+              "statement": "The supplied dependency record shows provider API reachability, and a comparison tenant has a same-provider read succeeding during the window, which weakens GitHub-wide provider failure as the primary explanation for the observed cedar issue.",
+              "citations": [
+                {
+                  "evidence_id": "ev_302c6ee2e1e9",
+                  "record_id": "github-token-036:dependencies:0"
+                },
+                {
+                  "evidence_id": "ev_1947c9b8c84d",
+                  "record_id": "github-token-036:logs:1"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Impact is asymmetric: cedar shows 365 business operations blocked, queue depth 99, and p95 latency 1320 ms with zero platform failures counted, while maple shows zero blocked operations, zero queue depth, and 160 ms p95. This scopes the observed production impact to at least cedar rather than a uniform provider outage.",
+              "citations": [
+                {
+                  "evidence_id": "ev_09a96d0607b0",
+                  "record_id": "github-token-036:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_09a96d0607b0",
+                  "record_id": "github-token-036:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "redacted_token_relay_design_remediation",
+            "collect_missing_telemetry",
+            "replay_after_recovery"
+          ],
+          "actions": [
+            "Route GitHub relay operations through the authenticated proxy/tool execution path instead of requiring extraction of a raw provider token from connected-account responses.",
+            "Collect canonical per-request telemetry for connected-account payload shape and downstream provider-request emission so the pre-provider stop can be directly verified in production.",
+            "After the auth-material handling path is corrected, consider replaying cedar\u2019s blocked relay work."
+          ],
+          "missing_checks": [
+            "Canonical production record showing whether the failed relay request emitted any outbound GitHub API call or provider auth rejection.",
+            "Canonical connected-account payload or lookup record for the affected production request showing whether the token was omitted/redacted on the relay-consumed surface."
+          ],
+          "strength": 9
+        },
+        {
+          "code": "connection_surface_isolation",
+          "hypothesis": {
+            "description": "A weaker alternative is that the relay path and tool-execution path use different authenticated surfaces or connection handling, so the relay cannot use the same active connection material that tool execution can.",
+            "supporting_evidence": [
+              "ev_1947c9b8c84d",
+              "ev_c5af76d59927"
+            ],
+            "contradicting_evidence": [
+              "ev_1947c9b8c84d"
+            ],
+            "confidence": "medium",
+            "assumptions": [
+              "The differing relay and authenticated_proxy behaviors could reflect distinct connection surfaces rather than only token-redaction design.",
+              "No canonical account-identity record was supplied to prove both surfaces used the exact same connected account object."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "Production shows tool execution succeeding while the relay path still requires raw token access on an active connected account, which is compatible with surface-specific auth handling.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1947c9b8c84d",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "The corrected condition succeeds specifically when the relay uses authenticated_proxy instead of requiring a raw token, supporting a surface/path distinction as a plausible mechanism.",
+              "citations": [
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "connection_surface_isolation_remediation",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Verify whether relay jobs are using the same authenticated connection surface as successful tool executions for the affected GitHub account.",
+            "Capture canonical connection/account identifiers across relay and tool-execution paths to confirm or rule out surface isolation."
+          ],
+          "missing_checks": [
+            "Canonical shared account/connection identity for the successful tool execution and failed relay path.",
+            "Canonical production path record proving whether relay and tool execution resolved auth through different internal surfaces."
+          ],
+          "strength": 6
+        },
+        {
+          "code": "wrong_connected_account",
+          "hypothesis": {
+            "description": "Wrong connected account remains a possible but currently weak alternative because no canonical account identity was supplied for the relay path versus the successful tool execution path.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "ev_1947c9b8c84d",
+              "ev_c5af76d59927",
+              "ev_09a96d0607b0"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "An account-selection mismatch could exist despite connected_account_active=true, but no identity mismatch is currently observed."
+            ]
+          },
+          "findings": [
+            {
+              "code": "account_selection_control",
+              "statement": "The current evidence does not show a mismatched account identity; instead it shows an active connected account and a path-level raw-token requirement, which points away from wrong-account selection as the leading explanation.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1947c9b8c84d",
+                  "record_id": "github-token-036:logs:0"
+                },
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "The issue is not uniform across observed tenants, which is more suggestive of path/config-specific behavior than a broad wrong-account condition affecting all GitHub usage.",
+              "citations": [
+                {
+                  "evidence_id": "ev_09a96d0607b0",
+                  "record_id": "github-token-036:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_09a96d0607b0",
+                  "record_id": "github-token-036:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "select_intended_connected_account",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Verify the exact connected-account identifier used by the relay path against the identifier used by successful tool execution before dismissing account selection entirely.",
+            "Add account-identity logging on relay job start and provider dispatch."
+          ],
+          "missing_checks": [
+            "Canonical account identifiers for the affected relay job and the successful comparison execution."
+          ],
+          "strength": 2
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T16:58:35.826176+00:00",
+      "finished_at": "2026-11-12T16:59:41.797871+00:00",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_36037a947c61",
+        "ev_302c6ee2e1e9",
+        "ev_c5af76d59927",
+        "ev_1947c9b8c84d",
+        "ev_09a96d0607b0",
+        "ev_1e7e0bea6d53",
+        "ev_9c5a6b552ca7",
+        "ev_9ce4282d5c24",
+        "ev_5d9706b6edf8",
+        "ev_16242bf35c1c",
+        "ev_02e3f904846f",
+        "ev_9d9f569e17a0",
+        "ev_24d1a211a924",
+        "ev_349e9e66af16"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 10292,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 847,
+            "output_tokens_details": {
+              "reasoning_tokens": 205
+            },
+            "total_tokens": 11139
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "The diagnosis is directionally strong that this is an internal pre-provider auth-path problem rather than GitHub-wide outage, expired credential, or permission loss.",
+        "Tenant impact is well scoped: cedar shows blocked business operations, queue growth, and higher latency while maple remains healthy, so the report appropriately avoids claiming a uniform provider incident (ev_02e3f904846f/github-token-036:metrics:0, ev_02e3f904846f/github-token-036:metrics:1).",
+        "I would clear the optional demand for a provider-request emission record as a blocking requirement for the broader conclusion of 'internal pre-provider auth-path issue'; it is useful reassurance but not necessary if shared-connection/surface identity can be established.",
+        "No contradictory deployment evidence was found; the absence of a relay deployment should remain a note, not a causal claim (ev_36037a947c61/github-token-036:deployments:0, ev_9ce4282d5c24)."
+      ],
+      "candidates": [
+        {
+          "code": "redacted_token_relay_design",
+          "hypothesis": {
+            "description": "The observed failures are more consistent with an internal relay design that expects a raw GitHub provider token from connected-account data even though that token is redacted/omitted on this surface; authenticated tool execution still works because it does not require exposing the raw token.",
+            "supporting_evidence": [
+              "ev_1947c9b8c84d",
+              "ev_c5af76d59927",
+              "ev_349e9e66af16",
+              "ev_302c6ee2e1e9",
+              "ev_09a96d0607b0"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "The cedar production relay path is materially similar to the controlled sandbox comparison.",
+              "The absence of a provider response in the supplied canonical records reflects a pre-provider stop, but the exact provider-request emission record was not supplied."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "In production on cedar, tool-executor shows an active connected account and successful tool execution while the relay path still requires a raw token and the provider token field is redacted, matching a pre-provider auth-material handling problem rather than a bad GitHub credential on the working tool path.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1947c9b8c84d",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "In the controlled comparison, the original condition fails with connected_account_active=true, provider_token_field=REDACTED, and relay_requires_raw_token=true, while changing only GitHub configuration makes relay_requires_raw_token=false and the relay completes via authenticated_proxy. This discriminates relay auth-material handling from a blanket provider credential outage.",
+              "citations": [
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:1"
+                }
+              ]
+            },
+            {
+              "code": "provider_isolation",
+              "statement": "The supplied dependency record shows provider API reachability, and a comparison tenant has a same-provider read succeeding during the window, which weakens GitHub-wide provider failure as the primary explanation for the observed cedar issue.",
+              "citations": [
+                {
+                  "evidence_id": "ev_302c6ee2e1e9",
+                  "record_id": "github-token-036:dependencies:0"
+                },
+                {
+                  "evidence_id": "ev_1947c9b8c84d",
+                  "record_id": "github-token-036:logs:1"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Impact is asymmetric: cedar shows 365 business operations blocked, queue depth 99, and p95 latency 1320 ms with zero platform failures counted, while maple shows zero blocked operations, zero queue depth, and 160 ms p95. This scopes the observed production impact to at least cedar rather than a uniform provider outage.",
+              "citations": [
+                {
+                  "evidence_id": "ev_09a96d0607b0",
+                  "record_id": "github-token-036:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_09a96d0607b0",
+                  "record_id": "github-token-036:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "redacted_token_relay_design_remediation",
+            "collect_missing_telemetry",
+            "replay_after_recovery"
+          ],
+          "actions": [
+            "Route GitHub relay operations through the authenticated proxy/tool execution path instead of requiring extraction of a raw provider token from connected-account responses.",
+            "Collect canonical per-request telemetry for connected-account payload shape and downstream provider-request emission so the pre-provider stop can be directly verified in production.",
+            "After the auth-material handling path is corrected, consider replaying cedar\u2019s blocked relay work."
+          ],
+          "missing_checks": [
+            "Canonical production record tying the failed relay job to the same connected account/auth surface as the successful tool execution, or otherwise proving the relay resolved auth through a different surface. Without that, redacted_token_relay_design vs connection_surface_isolation remains materially unresolved."
+          ],
+          "strength": 9
+        },
+        {
+          "code": "connection_surface_isolation",
+          "hypothesis": {
+            "description": "A weaker alternative is that the relay path and tool-execution path use different authenticated surfaces or connection handling, so the relay cannot use the same active connection material that tool execution can.",
+            "supporting_evidence": [
+              "ev_1947c9b8c84d",
+              "ev_c5af76d59927"
+            ],
+            "contradicting_evidence": [
+              "ev_1947c9b8c84d"
+            ],
+            "confidence": "medium",
+            "assumptions": [
+              "The differing relay and authenticated_proxy behaviors could reflect distinct connection surfaces rather than only token-redaction design.",
+              "No canonical account-identity record was supplied to prove both surfaces used the exact same connected account object."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "Production shows tool execution succeeding while the relay path still requires raw token access on an active connected account, which is compatible with surface-specific auth handling.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1947c9b8c84d",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "The corrected condition succeeds specifically when the relay uses authenticated_proxy instead of requiring a raw token, supporting a surface/path distinction as a plausible mechanism.",
+              "citations": [
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "connection_surface_isolation_remediation",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Verify whether relay jobs are using the same authenticated connection surface as successful tool executions for the affected GitHub account.",
+            "Capture canonical connection/account identifiers across relay and tool-execution paths to confirm or rule out surface isolation."
+          ],
+          "missing_checks": [
+            "Canonical shared account/connection identity for the successful tool execution and failed relay path.",
+            "Canonical production path record proving whether relay and tool execution resolved auth through different internal surfaces."
+          ],
+          "strength": 6
+        },
+        {
+          "code": "wrong_connected_account",
+          "hypothesis": {
+            "description": "Wrong connected account remains a possible but currently weak alternative because no canonical account identity was supplied for the relay path versus the successful tool execution path.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "ev_1947c9b8c84d",
+              "ev_c5af76d59927",
+              "ev_09a96d0607b0"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "An account-selection mismatch could exist despite connected_account_active=true, but no identity mismatch is currently observed."
+            ]
+          },
+          "findings": [
+            {
+              "code": "account_selection_control",
+              "statement": "The current evidence does not show a mismatched account identity; instead it shows an active connected account and a path-level raw-token requirement, which points away from wrong-account selection as the leading explanation.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1947c9b8c84d",
+                  "record_id": "github-token-036:logs:0"
+                },
+                {
+                  "evidence_id": "ev_c5af76d59927",
+                  "record_id": "github-token-036:reproduce:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "The issue is not uniform across observed tenants, which is more suggestive of path/config-specific behavior than a broad wrong-account condition affecting all GitHub usage.",
+              "citations": [
+                {
+                  "evidence_id": "ev_09a96d0607b0",
+                  "record_id": "github-token-036:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_09a96d0607b0",
+                  "record_id": "github-token-036:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "select_intended_connected_account",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Verify the exact connected-account identifier used by the relay path against the identifier used by successful tool execution before dismissing account selection entirely.",
+            "Add account-identity logging on relay job start and provider dispatch."
+          ],
+          "missing_checks": [
+            "Canonical account identifiers for the affected relay job and the successful comparison execution."
+          ],
+          "strength": 2
+        }
+      ],
+      "objections": [
+        "The current production evidence does not show an actual failed relay-job record or explicit relay error; the main canonical log only shows status=200 with connected_account_active=true, provider_token_field=REDACTED, relay_requires_raw_token=true, and tool_execution_status=200 in one request, which is suggestive but not by itself a complete failure trace (ev_1947c9b8c84d/github-token-036:logs:0).",
+        "The controlled sandbox comparison is strong for an internal auth-path issue, but it does not uniquely prove the narrower diagnosis that the relay wrongly expects a raw token from the connected-account surface. It also fits the weaker alternative that relay and tool execution use different authenticated surfaces (ev_c5af76d59927/github-token-036:reproduce:0, ev_c5af76d59927/github-token-036:reproduce:1).",
+        "Provider failure is reasonably weakened, not fully replaced by a specific internal mechanism. Reachability plus an unrelated same-provider success on maple narrows scope to cedar/path-specific behavior, but does not distinguish token-redaction design from wrong-surface/account-resolution inside cedar (ev_302c6ee2e1e9/github-token-036:dependencies:0, ev_1947c9b8c84d/github-token-036:logs:1, ev_09a96d0607b0/github-token-036:metrics:0, ev_09a96d0607b0/github-token-036:metrics:1)."
+      ],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T16:59:41.816880+00:00",
+      "critique": {
+        "approved": false,
+        "blocking_checks": [
+          "Canonical production record tying the failed relay job to the same connected account/auth surface as the successful tool execution, or otherwise proving the relay resolved auth through a different surface. Without that, redacted_token_relay_design vs connection_surface_isolation remains materially unresolved."
+        ],
+        "notes": [
+          "The diagnosis is directionally strong that this is an internal pre-provider auth-path problem rather than GitHub-wide outage, expired credential, or permission loss.",
+          "Tenant impact is well scoped: cedar shows blocked business operations, queue growth, and higher latency while maple remains healthy, so the report appropriately avoids claiming a uniform provider incident (ev_02e3f904846f/github-token-036:metrics:0, ev_02e3f904846f/github-token-036:metrics:1).",
+          "I would clear the optional demand for a provider-request emission record as a blocking requirement for the broader conclusion of 'internal pre-provider auth-path issue'; it is useful reassurance but not necessary if shared-connection/surface identity can be established.",
+          "No contradictory deployment evidence was found; the absence of a relay deployment should remain a note, not a causal claim (ev_36037a947c61/github-token-036:deployments:0, ev_9ce4282d5c24)."
+        ]
+      },
+      "finished_at": "2026-11-12T16:59:59.283628+00:00",
+      "error": null
+    },
+    {
+      "id": "check-1-0",
+      "role": "observability",
+      "question": "Do canonical production records exist for the affected cedar relay job that show the connected-account identifier or auth-surface identifier, so it can be matched against the successful tool-execution path for the same window?",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_36037a947c61",
+        "ev_302c6ee2e1e9",
+        "ev_c5af76d59927",
+        "ev_1947c9b8c84d",
+        "ev_09a96d0607b0",
+        "ev_1e7e0bea6d53",
+        "ev_9c5a6b552ca7",
+        "ev_9ce4282d5c24",
+        "ev_5d9706b6edf8",
+        "ev_16242bf35c1c",
+        "ev_02e3f904846f",
+        "ev_9d9f569e17a0",
+        "ev_24d1a211a924",
+        "ev_349e9e66af16"
+      ],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "refresh_history",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 20
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_0d6a7b501fdf",
+            "query": {
+              "tool": "refresh_history",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 20
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_0d6a7b501fdf"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 11040,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 236,
+            "output_tokens_details": {
+              "reasoning_tokens": 186
+            },
+            "total_tokens": 11276
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 11400,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 637,
+            "output_tokens_details": {
+              "reasoning_tokens": 340
+            },
+            "total_tokens": 12037
+          }
+        },
+        {
+          "model": "gpt-5.4",
+          "status": "error",
+          "usage": null
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 10650,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 9984
+            },
+            "output_tokens": 477,
+            "output_tokens_details": {
+              "reasoning_tokens": 89
+            },
+            "total_tokens": 11127
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [
+        {
+          "attempt": 2,
+          "delay_seconds": 2
+        }
+      ],
+      "notes": [
+        "No. The supplied canonical production records for cedar do not include a connected-account identifier or auth-surface identifier for the affected request; the main production log only shows request_id=req-36 with connected_account_active=true, provider_token_field=REDACTED, relay_requires_raw_token=true, and tool_execution_status=200, which is not enough to match identities across paths (ev_9c5a6b552ca7 / github-token-036:logs:0).",
+        "There is also no canonical production record for a successful cedar tool-execution path carrying the same account/surface identity in this window. The only comparison production record is maple, which helps scope provider impact but not shared identity for cedar (ev_9c5a6b552ca7 / github-token-036:logs:1; ev_02e3f904846f / github-token-036:metrics:0, github-token-036:metrics:1).",
+        "The null-filter connections view returned no records, so no canonical connected-account payload/ID was supplied for direct matching; per instructions, this derived view is not independent corroboration anyway (ev_1e7e0bea6d53).",
+        "What does exist is indirect evidence that cedar\u2019s tool execution succeeded while relay auth handling differed, plus tenant-local impact: cedar had 365 blocked business operations, queue depth 99, and p95 1320 ms versus maple with 0 blocked, queue depth 0, and p95 160 ms; however, the identity-linking telemetry needed to prove same-account/same-surface matching is missing (ev_9c5a6b552ca7 / github-token-036:logs:0; ev_02e3f904846f / github-token-036:metrics:0, github-token-036:metrics:1)."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T16:59:59.306078+00:00",
+      "finished_at": "2026-11-12T17:00:36.084161+00:00",
+      "error": null
+    },
+    {
+      "id": "reason-1",
+      "role": "reasoning",
+      "question": "Reassess all explanations after the requested verification checks.",
+      "dependencies": [
+        "check-1-0"
+      ],
+      "available_evidence_ids": [
+        "ev_36037a947c61",
+        "ev_302c6ee2e1e9",
+        "ev_c5af76d59927",
+        "ev_1947c9b8c84d",
+        "ev_09a96d0607b0",
+        "ev_1e7e0bea6d53",
+        "ev_9c5a6b552ca7",
+        "ev_9ce4282d5c24",
+        "ev_5d9706b6edf8",
+        "ev_16242bf35c1c",
+        "ev_02e3f904846f",
+        "ev_9d9f569e17a0",
+        "ev_24d1a211a924",
+        "ev_349e9e66af16",
+        "ev_0d6a7b501fdf"
+      ],
+      "status": "failed",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 10536,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 257,
+            "output_tokens_details": {
+              "reasoning_tokens": 150
+            },
+            "total_tokens": 10793
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T17:00:36.098213+00:00",
+      "finished_at": "2026-11-12T17:00:42.051609+00:00",
+      "error": null
+    },
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 2917,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 290,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3207
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "The incident specifies that healthy connections are treated as unauthenticated because access tokens are missing from connected-account responses.",
+        "The relay jobs fail due to missing tokens, but tool executions still function normally, indicating a potential difference in token handling or verification logic.",
+        "No telemetry or evidence data is currently available; initial focus should be on token presence verification in connected-account responses and recent changes to relay authentication logic or token propagation.",
+        "Investigation should scope where healthy connections become unauthenticated and confirm whether token data is actually missing or mishandled downstream.",
+        "Differential impact on relay jobs vs tool executions suggests a pathway or configuration divergence that must be confirmed by querying logs and deployment change history."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T17:40:00.762828+00:00",
+      "finished_at": "2026-11-12T17:40:06.645650+00:00",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "What is the comparison of failure rates and token presence in connected-account responses between the failing GitHub relay jobs and successful tool executions during the incident time window?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "logs",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_bf5e8cebc2d0",
+            "query": {
+              "tool": "logs",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:logs:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "request_id": "req-36",
+                "toolkit": "github",
+                "status": 200,
+                "connected_account_active": true,
+                "provider_token_field": "REDACTED",
+                "relay_requires_raw_token": true,
+                "tool_execution_status": 200
+              },
+              {
+                "record_id": "github-token-036:logs:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "status": 200,
+                "same_provider_available": true,
+                "unrelated_read_succeeds": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_bf5e8cebc2d0"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_f87852f386ed",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:metrics:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "requests": 551,
+                "failures": 0,
+                "business_operations_blocked": 365,
+                "queue_depth": 99,
+                "p95_latency_ms": 1320
+              },
+              {
+                "record_id": "github-token-036:metrics:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "requests": 483,
+                "failures": 0,
+                "business_operations_blocked": 0,
+                "queue_depth": 0,
+                "p95_latency_ms": 160
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_f87852f386ed"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": "cedar",
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": "unauthenticated",
+            "limit": 20
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_d4bef86883c6",
+            "query": {
+              "tool": "logs",
+              "service": "tool-executor",
+              "tenant": "cedar",
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": "unauthenticated",
+              "limit": 20
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_d4bef86883c6"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": "cedar",
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": "token",
+            "limit": 20
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_5fb0076b5a2d",
+            "query": {
+              "tool": "logs",
+              "service": "tool-executor",
+              "tenant": "cedar",
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": "token",
+              "limit": 20
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:logs:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "request_id": "req-36",
+                "toolkit": "github",
+                "status": 200,
+                "connected_account_active": true,
+                "provider_token_field": "REDACTED",
+                "relay_requires_raw_token": true,
+                "tool_execution_status": 200
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_5fb0076b5a2d"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3675,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 101,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3776
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4267,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 72,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4339
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4444,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4224
+            },
+            "output_tokens": 70,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4514
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Collection ended within its round budget; inspect the exact tool results and unresolved gaps."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T17:40:06.653645+00:00",
+      "finished_at": "2026-11-12T17:40:13.094692+00:00",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "Have there been recent configuration changes to the GitHub relay or connected-account access tokens, and can the token granting and relay authentication code paths be compared to identify any regressions or discrepancies that could cause missing access tokens?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_302c6ee2e1e9",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:dependencies:0",
+                "service": "tool-executor",
+                "depends_on": [
+                  "auth-service",
+                  "provider-api",
+                  "session-policy"
+                ],
+                "provider_api_reachable": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_302c6ee2e1e9"
+        },
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_36037a947c61",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:deployments:0",
+                "service": "support-dashboard",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "change": "Unrelated inbox display release",
+                "version": "dashboard-v23"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_36037a947c61"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3512,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 104,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3616
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3921,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 130,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4051
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "No recent configuration changes or deployments were found affecting the GitHub relay or connected-account access tokens in the relevant timeframe. The tool-executor service, which includes the GitHub relay, depends on auth-service, provider-api, and session-policy, all reachable. There is no evidence of new deployments or updated code paths specific to relay authentication or token granting during the incident period.\n\nComparison or regressions in token granting and relay authentication code paths cannot be confirmed from deployment or dependency data alone since no recent changes are recorded. Further investigation into configuration or runtime state differences in these code paths may be needed, but no direct evidence of such changes currently exists."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T17:40:06.700349+00:00",
+      "finished_at": "2026-11-12T17:40:11.041439+00:00",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Given that tool executions still work while GitHub relay jobs fail due to missing access tokens, is it plausible that the relay\u2019s handling or transmission of connected-account tokens has changed or is malfunctioning, and how can we verify that healthy connections are properly authenticated via token presence instead of being misclassified as unauthenticated?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_bf5e8cebc2d0",
+        "ev_f87852f386ed",
+        "ev_302c6ee2e1e9",
+        "ev_36037a947c61",
+        "ev_d4bef86883c6",
+        "ev_5fb0076b5a2d"
+      ],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "history",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_24d1a211a924",
+            "query": {
+              "tool": "history",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:history:0",
+                "service": "tool-executor",
+                "symptom": "A similar workflow stopped following a release",
+                "cause": "An earlier provider outage",
+                "relation": "historical analogy only, not current proof"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_24d1a211a924"
+        },
+        {
+          "query": {
+            "tool": "knowledge",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_349e9e66af16",
+            "query": {
+              "tool": "knowledge",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "github-token-036:knowledge:0",
+                "service": "tool-executor",
+                "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+                "kind": "public_reference",
+                "summary": "Connected-account responses redact GitHub provider tokens; authenticated execution remains available."
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_349e9e66af16"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4746,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 213,
+            "output_tokens_details": {
+              "reasoning_tokens": 106
+            },
+            "total_tokens": 4959
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5305,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1038,
+            "output_tokens_details": {
+              "reasoning_tokens": 91
+            },
+            "total_tokens": 6343
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 6779,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 2364,
+            "output_tokens_details": {
+              "reasoning_tokens": 588
+            },
+            "total_tokens": 9143
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Most plausible answer to the user's question: yes, it is plausible the relay's token handling/check is malfunctioning or mismatched to a redacted connected-account surface.",
+        "What can be verified from supplied evidence: healthy authentication should be inferred from active connection plus successful authenticated tool execution, not from raw token presence in connected-account responses.",
+        "What remains unverified: the exact relay-job classification record and whether any recent relay-specific change introduced the behavior."
+      ],
+      "candidates": [
+        {
+          "code": "redacted_token_relay_design",
+          "hypothesis": {
+            "description": "Most likely, the relay is incorrectly using connected-account token presence as its authentication check, even though GitHub connected-account responses redact provider tokens while authenticated tool execution still works. That would misclassify healthy connections as unauthenticated specifically in the relay path.",
+            "supporting_evidence": [
+              "ev_bf5e8cebc2d0",
+              "ev_f87852f386ed",
+              "ev_302c6ee2e1e9",
+              "ev_349e9e66af16"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "Observed cedar impact is representative of the reported relay failures, but coverage is limited to the supplied records.",
+              "The relay job's unauthenticated outcome depends on the same token-field handling shown in the cited tool-executor log."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "At 10:05Z for tenant cedar, the connection was active and normal tool execution succeeded, while the provider token field was redacted and the relay path explicitly required a raw token. This directly matches a design/handling mismatch where relay authentication depends on a token that the connected-account surface does not expose.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bf5e8cebc2d0",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "verification_control",
+              "statement": "Product knowledge states that connected-account responses redact GitHub provider tokens while authenticated execution remains available, which is consistent with the observed cedar log and supports token-redaction as expected behavior rather than proof of an auth loss.",
+              "citations": [
+                {
+                  "evidence_id": "ev_349e9e66af16",
+                  "record_id": "github-token-036:knowledge:0"
+                },
+                {
+                  "evidence_id": "ev_bf5e8cebc2d0",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Impact is materially concentrated in cedar: 365 business operations blocked with queue depth 99 and p95 latency 1320 ms, versus maple showing 0 blocked operations, queue depth 0, and p95 latency 160 ms at the same timestamp.",
+              "citations": [
+                {
+                  "evidence_id": "ev_f87852f386ed",
+                  "record_id": "github-token-036:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_f87852f386ed",
+                  "record_id": "github-token-036:metrics:1"
+                }
+              ]
+            },
+            {
+              "code": "provider_isolation",
+              "statement": "The evidence does not point to a general GitHub/provider outage: provider API reachability is true, and a comparison tenant shows same-provider availability with an unrelated read succeeding.",
+              "citations": [
+                {
+                  "evidence_id": "ev_302c6ee2e1e9",
+                  "record_id": "github-token-036:dependencies:0"
+                },
+                {
+                  "evidence_id": "ev_bf5e8cebc2d0",
+                  "record_id": "github-token-036:logs:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "redacted_token_relay_design_remediation",
+            "collect_missing_telemetry",
+            "request_reproduction"
+          ],
+          "actions": [
+            "Verify healthy authentication in the relay by checking the authenticated execution path or proxy capability rather than requiring raw provider-token presence from connected-account responses.",
+            "Capture the exact relay-job decision record showing which field caused the connection to be marked unauthenticated.",
+            "If available, reproduce against a known healthy GitHub connection and compare relay classification using the same connected-account payload shape."
+          ],
+          "missing_checks": [
+            "Need a canonical relay-job log or trace for a failed execution showing the exact unauthenticated classification condition and whether it keyed on the redacted token field.",
+            "Need a direct captured connected-account payload consumed by the relay during failure to confirm the field shape seen by the relay matches the documented redacted surface."
+          ],
+          "strength": 9
+        },
+        {
+          "code": "unconfirmed_change",
+          "hypothesis": {
+            "description": "A narrower alternative is that a recent runtime/config/code-path change in the relay began requiring raw connected-account tokens or changed token transmission, creating this misclassification. The symptom is compatible with a regression, but the supplied evidence does not establish a specific change event.",
+            "supporting_evidence": [
+              "ev_bf5e8cebc2d0",
+              "ev_f87852f386ed"
+            ],
+            "contradicting_evidence": [
+              "ev_36037a947c61"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "No supplied deployment record covers tool-executor itself, so absence of an observed relevant deployment is not proof that no change occurred.",
+              "The complaint's wording about a 'new GitHub relay' may reflect a real rollout, but that is not independently confirmed by canonical records."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "The observed failure pattern is path-specific: relay requires a raw token while ordinary authenticated tool execution still succeeds on an active connection. That is compatible with a relay-specific handling change, though not proof of one.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bf5e8cebc2d0",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "The issue has real production impact in cedar despite no request failures being recorded: 365 business operations blocked and queue depth 99, while maple remains unaffected.",
+              "citations": [
+                {
+                  "evidence_id": "ev_f87852f386ed",
+                  "record_id": "github-token-036:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_f87852f386ed",
+                  "record_id": "github-token-036:metrics:1"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "The only observed deployment in the timeframe is an unrelated support-dashboard release, which neither explains nor proves absence of a tool-executor or relay change.",
+              "citations": [
+                {
+                  "evidence_id": "ev_36037a947c61",
+                  "record_id": "github-token-036:deployments:0"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "request_reproduction"
+          ],
+          "actions": [
+            "Review relay-specific release, config, and feature-flag history for the incident window rather than relying on unrelated deployment records.",
+            "Compare relay authentication behavior before and during the incident using the same healthy GitHub connection if historical traces exist."
+          ],
+          "missing_checks": [
+            "Need tool-executor/relay deployment or config history covering the incident window to confirm or rule out a relay-specific behavioral change.",
+            "Need before/after relay-path traces for the same connection to verify whether token-handling expectations changed."
+          ],
+          "strength": 4
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T17:40:13.101139+00:00",
+      "finished_at": "2026-11-12T17:41:16.789727+00:00",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_bf5e8cebc2d0",
+        "ev_f87852f386ed",
+        "ev_302c6ee2e1e9",
+        "ev_36037a947c61",
+        "ev_d4bef86883c6",
+        "ev_5fb0076b5a2d",
+        "ev_24d1a211a924",
+        "ev_349e9e66af16"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 7069,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 498,
+            "output_tokens_details": {
+              "reasoning_tokens": 122
+            },
+            "total_tokens": 7567
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "The strongest causal record is ev_bf5e8cebc2d0 / github-token-036:logs:0: for cedar, the connection is active, ordinary tool execution succeeded, the provider token field is redacted, and the relay path requires a raw token. That directly supports a relay/auth-surface mismatch for the observed execution.",
+        "The diagnosis should stay bounded: current evidence supports this mechanism for the observed cedar failures, not all tenants or all GitHub relay failures everywhere.",
+        "Provider-wide failure is reasonably challenged by ev_302c6ee2e1e9 / github-token-036:dependencies:0 showing provider reachability and ev_bf5e8cebc2d0 / github-token-036:logs:1 showing same-provider availability and a successful unrelated read for maple.",
+        "Impact is materially demonstrated, despite zero request failures in the metric row: ev_f87852f386ed / github-token-036:metrics:0 shows 365 blocked business operations, queue depth 99, and elevated latency versus maple in github-token-036:metrics:1.",
+        "I would clear the candidate's requested missing checks as non-blocking. A direct failed relay-job decision trace and the exact connected-account payload would add reassurance, but the observed mechanism record plus product knowledge already adequately verify a probable cause for the failed path.",
+        "The deployment/history material should not be overstated. The unrelated support-dashboard deployment neither supports nor weakens the mechanism materially, and the historical outage analogy is not current evidence.",
+        "One wording caution: 'new GitHub relay' remains unverified from canonical change records. The approved diagnosis is the token-redaction/relay-check mismatch, not proof of a specific recent rollout or regression event."
+      ],
+      "candidates": [
+        {
+          "code": "redacted_token_relay_design",
+          "hypothesis": {
+            "description": "Most likely, the relay is incorrectly using connected-account token presence as its authentication check, even though GitHub connected-account responses redact provider tokens while authenticated tool execution still works. That would misclassify healthy connections as unauthenticated specifically in the relay path.",
+            "supporting_evidence": [
+              "ev_bf5e8cebc2d0",
+              "ev_f87852f386ed",
+              "ev_302c6ee2e1e9",
+              "ev_349e9e66af16"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "Observed cedar impact is representative of the reported relay failures, but coverage is limited to the supplied records.",
+              "The relay job's unauthenticated outcome depends on the same token-field handling shown in the cited tool-executor log."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "At 10:05Z for tenant cedar, the connection was active and normal tool execution succeeded, while the provider token field was redacted and the relay path explicitly required a raw token. This directly matches a design/handling mismatch where relay authentication depends on a token that the connected-account surface does not expose.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bf5e8cebc2d0",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "verification_control",
+              "statement": "Product knowledge states that connected-account responses redact GitHub provider tokens while authenticated execution remains available, which is consistent with the observed cedar log and supports token-redaction as expected behavior rather than proof of an auth loss.",
+              "citations": [
+                {
+                  "evidence_id": "ev_349e9e66af16",
+                  "record_id": "github-token-036:knowledge:0"
+                },
+                {
+                  "evidence_id": "ev_bf5e8cebc2d0",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Impact is materially concentrated in cedar: 365 business operations blocked with queue depth 99 and p95 latency 1320 ms, versus maple showing 0 blocked operations, queue depth 0, and p95 latency 160 ms at the same timestamp.",
+              "citations": [
+                {
+                  "evidence_id": "ev_f87852f386ed",
+                  "record_id": "github-token-036:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_f87852f386ed",
+                  "record_id": "github-token-036:metrics:1"
+                }
+              ]
+            },
+            {
+              "code": "provider_isolation",
+              "statement": "The evidence does not point to a general GitHub/provider outage: provider API reachability is true, and a comparison tenant shows same-provider availability with an unrelated read succeeding.",
+              "citations": [
+                {
+                  "evidence_id": "ev_302c6ee2e1e9",
+                  "record_id": "github-token-036:dependencies:0"
+                },
+                {
+                  "evidence_id": "ev_bf5e8cebc2d0",
+                  "record_id": "github-token-036:logs:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "redacted_token_relay_design_remediation",
+            "collect_missing_telemetry",
+            "request_reproduction"
+          ],
+          "actions": [
+            "Verify healthy authentication in the relay by checking the authenticated execution path or proxy capability rather than requiring raw provider-token presence from connected-account responses.",
+            "Capture the exact relay-job decision record showing which field caused the connection to be marked unauthenticated.",
+            "If available, reproduce against a known healthy GitHub connection and compare relay classification using the same connected-account payload shape."
+          ],
+          "missing_checks": [],
+          "strength": 9
+        },
+        {
+          "code": "unconfirmed_change",
+          "hypothesis": {
+            "description": "A narrower alternative is that a recent runtime/config/code-path change in the relay began requiring raw connected-account tokens or changed token transmission, creating this misclassification. The symptom is compatible with a regression, but the supplied evidence does not establish a specific change event.",
+            "supporting_evidence": [
+              "ev_bf5e8cebc2d0",
+              "ev_f87852f386ed"
+            ],
+            "contradicting_evidence": [
+              "ev_36037a947c61"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "No supplied deployment record covers tool-executor itself, so absence of an observed relevant deployment is not proof that no change occurred.",
+              "The complaint's wording about a 'new GitHub relay' may reflect a real rollout, but that is not independently confirmed by canonical records."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "The observed failure pattern is path-specific: relay requires a raw token while ordinary authenticated tool execution still succeeds on an active connection. That is compatible with a relay-specific handling change, though not proof of one.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bf5e8cebc2d0",
+                  "record_id": "github-token-036:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "The issue has real production impact in cedar despite no request failures being recorded: 365 business operations blocked and queue depth 99, while maple remains unaffected.",
+              "citations": [
+                {
+                  "evidence_id": "ev_f87852f386ed",
+                  "record_id": "github-token-036:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_f87852f386ed",
+                  "record_id": "github-token-036:metrics:1"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "The only observed deployment in the timeframe is an unrelated support-dashboard release, which neither explains nor proves absence of a tool-executor or relay change.",
+              "citations": [
+                {
+                  "evidence_id": "ev_36037a947c61",
+                  "record_id": "github-token-036:deployments:0"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "request_reproduction"
+          ],
+          "actions": [
+            "Review relay-specific release, config, and feature-flag history for the incident window rather than relying on unrelated deployment records.",
+            "Compare relay authentication behavior before and during the incident using the same healthy GitHub connection if historical traces exist."
+          ],
+          "missing_checks": [
+            "Need tool-executor/relay deployment or config history covering the incident window to confirm or rule out a relay-specific behavioral change.",
+            "Need before/after relay-path traces for the same connection to verify whether token-handling expectations changed."
+          ],
+          "strength": 4
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T17:41:16.800017+00:00",
+      "critique": {
+        "approved": true,
+        "blocking_checks": [],
+        "notes": [
+          "The strongest causal record is ev_bf5e8cebc2d0 / github-token-036:logs:0: for cedar, the connection is active, ordinary tool execution succeeded, the provider token field is redacted, and the relay path requires a raw token. That directly supports a relay/auth-surface mismatch for the observed execution.",
+          "The diagnosis should stay bounded: current evidence supports this mechanism for the observed cedar failures, not all tenants or all GitHub relay failures everywhere.",
+          "Provider-wide failure is reasonably challenged by ev_302c6ee2e1e9 / github-token-036:dependencies:0 showing provider reachability and ev_bf5e8cebc2d0 / github-token-036:logs:1 showing same-provider availability and a successful unrelated read for maple.",
+          "Impact is materially demonstrated, despite zero request failures in the metric row: ev_f87852f386ed / github-token-036:metrics:0 shows 365 blocked business operations, queue depth 99, and elevated latency versus maple in github-token-036:metrics:1.",
+          "I would clear the candidate's requested missing checks as non-blocking. A direct failed relay-job decision trace and the exact connected-account payload would add reassurance, but the observed mechanism record plus product knowledge already adequately verify a probable cause for the failed path.",
+          "The deployment/history material should not be overstated. The unrelated support-dashboard deployment neither supports nor weakens the mechanism materially, and the historical outage analogy is not current evidence.",
+          "One wording caution: 'new GitHub relay' remains unverified from canonical change records. The approved diagnosis is the token-redaction/relay-check mismatch, not proof of a specific recent rollout or regression event."
+        ]
+      },
+      "finished_at": "2026-11-12T17:41:27.838691+00:00",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_bf5e8cebc2d0",
+        "ev_f87852f386ed",
+        "ev_302c6ee2e1e9",
+        "ev_36037a947c61",
+        "ev_d4bef86883c6",
+        "ev_5fb0076b5a2d",
+        "ev_24d1a211a924",
+        "ev_349e9e66af16"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 8639,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1086,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 9725
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [],
+      "candidates": [],
+      "objections": [],
+      "report": {
+        "incident_id": "github-token-036",
+        "outcome": "probable_cause",
+        "hypotheses": [
+          {
+            "description": "The relay incorrectly uses presence of a raw provider token in connected-account responses as a proxy for authentication, whereas GitHub connected-account responses redact provider tokens by design. This mismatch causes the relay to treat healthy, authenticated connections as unauthenticated, leading to relay job failures even though tool executions succeed.",
+            "supporting_evidence": [
+              "ev_bf5e8cebc2d0",
+              "ev_f87852f386ed",
+              "ev_302c6ee2e1e9",
+              "ev_349e9e66af16"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "Observed tenant cedar's telemetry and logs represent the reported relay failures and are applicable for this diagnosis.",
+              "The relay's decision to mark connections unauthenticated relies on the same token-field handling as seen in the tool-executor logs."
+            ]
+          },
+          {
+            "description": "A relay-specific runtime, configuration, or code path change during deployment might have introduced a new requirement for raw connected-account tokens or altered token handling, resulting in the relay marking healthy connections as unauthenticated. However, no deployment or config changes affecting tool-executor or relay have been observed during the incident window, making this hypothesis plausible but unconfirmed.",
+            "supporting_evidence": [
+              "ev_bf5e8cebc2d0",
+              "ev_f87852f386ed"
+            ],
+            "contradicting_evidence": [
+              "ev_36037a947c61"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "No recorded deployments do not prove the absence of relay code or config changes; such changes could exist but remain undocumented here.",
+              "The mention of a \"new GitHub relay\" in the complaint may imply a rollout or change not visible in current deployment records."
+            ]
+          }
+        ],
+        "recommended_actions": [
+          "Update the relay authentication logic to infer healthy authentication from the active connection status and successful authenticated tool execution, rather than requiring presence of raw provider tokens which GitHub redacts in connected-account responses.",
+          "Collect detailed telemetry and logging inside the relay path to capture which token field or decision caused marking connections as unauthenticated.",
+          "Attempt reproductions using known healthy GitHub connections and compare relay authentication classification using identical connected-account payloads to confirm the misclassification mechanism.",
+          "Review relay-specific code, configuration, and feature flag changes for undocumented or unnoticed modifications affecting token handling during the incident period."
+        ],
+        "limitations": [
+          "Lack of deployment, configuration, or relay-path runtime traces limits the ability to detect relay-specific changes causing the behavior.",
+          "Telemetry coverage focuses on tenant cedar and comparison tenant maple; other tenants' experiences are unknown.",
+          "Relay internal logs or deeper authentication decision traces are not available to fully confirm token handling logic."
+        ]
+      },
+      "attempt": 2,
+      "started_at": "2026-11-12T17:41:27.850661+00:00",
+      "finished_at": "2026-11-12T17:41:35.352911+00:00",
+      "error": null
+    }
+  ],
+  "notice": "Observable decisions and evidence, not private chain-of-thought. Earlier tickets may lack per-task model/tool attribution."
+}

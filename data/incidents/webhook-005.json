@@ -1,0 +1,84 @@
+{
+  "incident": {
+    "id": "webhook-005",
+    "title": "Trigger delivery backlog",
+    "description": "Events appear in trigger logs but Atlas receives no callbacks.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "webhook-delivery"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "webhook-005:logs:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "event_id": "evt-1",
+        "stage": "provider_ingress",
+        "status": 200
+      },
+      {
+        "record_id": "webhook-005:logs:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "event_id": "evt-1",
+        "stage": "outbound_delivery",
+        "destination": "atlas.example/webhook",
+        "status": 503,
+        "attempt": 4
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "webhook-005:metrics:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "queue_depth": 450,
+        "oldest_event_seconds": 600
+      },
+      {
+        "record_id": "webhook-005:metrics:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "queue_depth": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "webhook-005:deployments:0",
+        "service": "customer-endpoint",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "change": "Customer endpoint maintenance began"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "webhook-005:dependencies:0",
+        "service": "webhook-delivery",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "webhook-005:history:0",
+        "service": "webhook-delivery",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

@@ -1,0 +1,556 @@
+{
+  "incident_id": "airtable-expiry-041",
+  "approach": "single_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "airtable-expiry-041",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Observed Cedar failures are caused by users completing an Airtable authentication initiation after its 10-minute validity window, so the executor rejects the link before any token exchange.",
+        "supporting_evidence": [
+          "ev_7b13e68f1976",
+          "ev_1c7dfb78223e",
+          "ev_a964fad6c294",
+          "ev_65a1711cc8ff"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The sampled Cedar 410 reflects the dominant failure mode behind the Cedar spike during the incident window.",
+          "The public Airtable auth-window behavior in knowledge applies to this executor flow."
+        ]
+      },
+      {
+        "description": "A provider-side Airtable outage caused the failures.",
+        "supporting_evidence": [
+          "ev_e6be6f9b156c"
+        ],
+        "contradicting_evidence": [
+          "ev_7b13e68f1976",
+          "ev_a964fad6c294",
+          "ev_65a1711cc8ff"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "Historical similarity would need current corroboration, which is not present here."
+        ]
+      },
+      {
+        "description": "A recent internal tool-executor deployment/regression caused late-arrival authentication failures.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_a68c25a2f035",
+          "ev_480d8997b003",
+          "ev_a964fad6c294"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "Absence of a tool-executor deployment in the queried window reduces, but does not mathematically eliminate, older latent regressions."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Start a fresh Airtable authentication initiation for affected users and have them complete it within the valid window; do not retry expired links.",
+      "Update user-facing onboarding/copy to warn that old Airtable auth links expire after 10 minutes and require regeneration.",
+      "Add monitoring/alerting for elevated EXPIRED initiation states and age-over-window auth completions in Cedar-like onboarding funnels.",
+      "Collect product telemetry on auth-link generation vs completion timing to quantify how much of Cedar's onboarding drop is explained by late arrivals."
+    ],
+    "limitations": [
+      "Metrics queries initially timed out before succeeding, so telemetry coverage is limited to the returned sample points.",
+      "Connections and refresh-history queries returned no records, which does not prove broader absence of other auth issues.",
+      "No direct onboarding funnel telemetry or user-level samples were provided beyond the observed executor records."
+    ]
+  },
+  "ranked_cause_codes": [
+    "authentication_initiation_expired",
+    "provider_failure",
+    "unconfirmed_change"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The failed Cedar request was rejected in EXPIRED connection state with initiation_age_seconds 950 exceeding completion_window_seconds 600, and no token exchange was attempted.",
+      "citations": [
+        {
+          "evidence_id": "ev_7b13e68f1976",
+          "record_id": "airtable-expiry-041:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "Because token_exchange_attempted=false on the failed Cedar auth completion, the observed failure happened before any provider token exchange rather than during a provider-side API call.",
+      "citations": [
+        {
+          "evidence_id": "ev_7b13e68f1976",
+          "record_id": "airtable-expiry-041:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the controlled sandbox comparison, the original Airtable configuration failed with the same EXPIRED state at age 950/600, while the corrected condition succeeded at age 120/600 and became ACTIVE.",
+      "citations": [
+        {
+          "evidence_id": "ev_a964fad6c294",
+          "record_id": "airtable-expiry-041:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_a964fad6c294",
+          "record_id": "airtable-expiry-041:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Impact was concentrated in Cedar: 390 failures out of 636 requests with 390 business operations blocked, queue_depth 114, and p95 latency 1520 ms, while Maple had 0 failures out of 538 requests, 0 blocked operations, queue_depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_65a1711cc8ff",
+          "record_id": "airtable-expiry-041:metrics:0"
+        },
+        {
+          "evidence_id": "ev_65a1711cc8ff",
+          "record_id": "airtable-expiry-041:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "Same-provider activity was observed as healthy elsewhere during the incident: Maple had a 200 response with same_provider_available=true and unrelated_read_succeeds=true, arguing against a broad Airtable outage.",
+      "citations": [
+        {
+          "evidence_id": "ev_7b13e68f1976",
+          "record_id": "airtable-expiry-041:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "verification_control",
+      "statement": "Public reference material matches the observed mechanism: unfinished Airtable connection initiation expires after its allowed ten-minute window.",
+      "citations": [
+        {
+          "evidence_id": "ev_1c7dfb78223e",
+          "record_id": "airtable-expiry-041:knowledge:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "authentication_initiation_expired_remediation",
+    "monitor_provider",
+    "collect_missing_telemetry"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_7b13e68f1976",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-41",
+          "toolkit": "airtable",
+          "status": 410,
+          "connection_state": "EXPIRED",
+          "initiation_age_seconds": 950,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        },
+        {
+          "record_id": "airtable-expiry-041:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_d979adae2e75",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_65a1711cc8ff",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 636,
+          "failures": 390,
+          "business_operations_blocked": 390,
+          "queue_depth": 114,
+          "p95_latency_ms": 1520
+        },
+        {
+          "record_id": "airtable-expiry-041:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 538,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_480d8997b003",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_e6be6f9b156c",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1c7dfb78223e",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-airtable",
+          "kind": "public_reference",
+          "summary": "An unfinished connection initiation expires after its allowed ten-minute window."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2bf614e12822",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_a964fad6c294",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "airtable_configuration",
+          "check_passed": false,
+          "toolkit": "airtable",
+          "status": 410,
+          "connection_state": "EXPIRED",
+          "initiation_age_seconds": 950,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        },
+        {
+          "record_id": "airtable-expiry-041:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "airtable_configuration",
+          "check_passed": true,
+          "toolkit": "airtable",
+          "status": 200,
+          "connection_state": "ACTIVE",
+          "initiation_age_seconds": 120,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_38cb9caa2182",
+      "query": {
+        "tool": "refresh_history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_5ae9aa20881c",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-41",
+          "toolkit": "airtable",
+          "status": 410,
+          "connection_state": "EXPIRED",
+          "initiation_age_seconds": 950,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        },
+        {
+          "record_id": "airtable-expiry-041:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_ae452940edf8",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_eb0885376637",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 636,
+          "failures": 390,
+          "business_operations_blocked": 390,
+          "queue_depth": 114,
+          "p95_latency_ms": 1520
+        },
+        {
+          "record_id": "airtable-expiry-041:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 538,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_a68c25a2f035",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 69.05671100498876,
+  "input_tokens": 25907,
+  "output_tokens": 3933
+}

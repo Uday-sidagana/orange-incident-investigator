@@ -1,0 +1,117 @@
+{
+  "incident": {
+    "id": "policy-014",
+    "title": "OAuth connections blocked for an education tenant",
+    "description": "A school tenant receives access_not_configured while connecting Google. Other tenants connect successfully. Reconnecting with additional scopes has not helped.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "auth-service"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "policy-014:logs:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "oauth_error": "access_not_configured",
+        "workspace_edition": "education",
+        "admin_app_access": "blocked",
+        "status": 400
+      },
+      {
+        "record_id": "policy-014:logs:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "workspace_edition": "education",
+        "admin_app_access": "allowed",
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "policy-014:metrics:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "policy-014:metrics:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "policy-014:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "policy-014:dependencies:0",
+        "service": "auth-service",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "policy-014:history:0",
+        "service": "auth-service",
+        "symptom": "OAuth connections blocked for an education tenant",
+        "cause": "An earlier Google consent failure involved an unverified app, not an administrator policy.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "policy-014:knowledge:0",
+        "service": "auth-service",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "policy-014:reproduce:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "admin_app_access",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "policy-014:reproduce:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "admin_app_access",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

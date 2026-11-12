@@ -1,0 +1,145 @@
+{
+  "incident": {
+    "id": "github-setup-037",
+    "title": "GitHub V2 trigger setup stalls before creating a trigger",
+    "description": "A migrated GitHub setup job fails on a webhook-endpoint creation call. No trigger instance is created, although our GitHub account is connected.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "trigger-worker"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "github-setup-037:logs:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "request_id": "req-37",
+        "toolkit": "github",
+        "status": 404,
+        "trigger_generation": "v2",
+        "attempted_setup_path": "/webhook_endpoints",
+        "trigger_created": false,
+        "auth_valid": true
+      },
+      {
+        "record_id": "github-setup-037:logs:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "status": 200,
+        "same_provider_available": true,
+        "unrelated_read_succeeds": true
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "github-setup-037:metrics:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "requests": 568,
+        "failures": 370,
+        "business_operations_blocked": 370,
+        "queue_depth": 102,
+        "p95_latency_ms": 1360
+      },
+      {
+        "record_id": "github-setup-037:metrics:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "requests": 494,
+        "failures": 0,
+        "business_operations_blocked": 0,
+        "queue_depth": 0,
+        "p95_latency_ms": 160
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "github-setup-037:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated inbox display release",
+        "version": "dashboard-v23"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "github-setup-037:dependencies:0",
+        "service": "trigger-worker",
+        "depends_on": [
+          "auth-service",
+          "provider-api",
+          "session-policy"
+        ],
+        "provider_api_reachable": true
+      }
+    ],
+    "history": [
+      {
+        "record_id": "github-setup-037:history:0",
+        "service": "trigger-worker",
+        "symptom": "A similar workflow stopped following a release",
+        "cause": "An earlier provider outage",
+        "relation": "historical analogy only, not current proof"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "github-setup-037:knowledge:0",
+        "service": "trigger-worker",
+        "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+        "kind": "public_reference",
+        "summary": "GitHub V2 trigger creation provisions its ingress without a separate endpoint-creation step."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "github-setup-037:reproduce:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "original",
+        "same_request_except": "github_configuration",
+        "check_passed": false,
+        "toolkit": "github",
+        "status": 404,
+        "trigger_generation": "v2",
+        "attempted_setup_path": "/webhook_endpoints",
+        "trigger_created": false,
+        "auth_valid": true
+      },
+      {
+        "record_id": "github-setup-037:reproduce:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "corrected",
+        "same_request_except": "github_configuration",
+        "check_passed": true,
+        "toolkit": "github",
+        "status": 200,
+        "trigger_generation": "v2",
+        "attempted_setup_path": "/trigger_instances/{slug}/upsert",
+        "trigger_created": true,
+        "auth_valid": true,
+        "ingress_provisioned": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 1
+    }
+  }
+}

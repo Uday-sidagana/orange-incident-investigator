@@ -1,0 +1,153 @@
+{
+  "incident": {
+    "id": "slack-user-043",
+    "title": "Slack user actions fail despite configured bot permissions",
+    "description": "A Cedar user-token Slack workflow returns missing_scope. The auth config lists the expected permission, and bot posting still works.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "slack-user-043:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "request_id": "req-43",
+        "toolkit": "slack",
+        "status": 403,
+        "required_token_kind": "user",
+        "auth_config_bot_scopes": [
+          "search:read"
+        ],
+        "auth_config_user_scopes": [],
+        "error": "missing_scope"
+      },
+      {
+        "record_id": "slack-user-043:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "status": 200,
+        "same_provider_available": true,
+        "unrelated_read_succeeds": true
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "slack-user-043:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "requests": 670,
+        "failures": 400,
+        "business_operations_blocked": 400,
+        "queue_depth": 120,
+        "p95_latency_ms": 1600
+      },
+      {
+        "record_id": "slack-user-043:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "requests": 560,
+        "failures": 0,
+        "business_operations_blocked": 0,
+        "queue_depth": 0,
+        "p95_latency_ms": 160
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "slack-user-043:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated inbox display release",
+        "version": "dashboard-v23"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "slack-user-043:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api",
+          "session-policy"
+        ],
+        "provider_api_reachable": true
+      }
+    ],
+    "history": [
+      {
+        "record_id": "slack-user-043:history:0",
+        "service": "tool-executor",
+        "symptom": "A similar workflow stopped following a release",
+        "cause": "An earlier provider outage",
+        "relation": "historical analogy only, not current proof"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "slack-user-043:knowledge:0",
+        "service": "tool-executor",
+        "url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+        "kind": "public_reference",
+        "summary": "Slack separates user-token permissions from bot permissions in its auth configuration."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "slack-user-043:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "original",
+        "same_request_except": "slack_configuration",
+        "check_passed": false,
+        "toolkit": "slack",
+        "status": 403,
+        "required_token_kind": "user",
+        "auth_config_bot_scopes": [
+          "search:read"
+        ],
+        "auth_config_user_scopes": [],
+        "error": "missing_scope"
+      },
+      {
+        "record_id": "slack-user-043:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "corrected",
+        "same_request_except": "slack_configuration",
+        "check_passed": true,
+        "toolkit": "slack",
+        "status": 200,
+        "required_token_kind": "user",
+        "auth_config_bot_scopes": [
+          "search:read"
+        ],
+        "auth_config_user_scopes": [
+          "search:read"
+        ],
+        "error": null,
+        "granted_token_kind": "user"
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "history": {
+      "incomplete": true
+    }
+  }
+}

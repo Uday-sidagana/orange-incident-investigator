@@ -1,0 +1,122 @@
+{
+  "incident": {
+    "id": "race-016",
+    "title": "Intermittent refresh failures under concurrent load",
+    "description": "One connection fails intermittently during parallel executions. Consent is still active and sequential requests usually succeed.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "auth-service"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "race-016:logs:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "refresh_error": "invalid_grant",
+        "consent_state": "active",
+        "refresh_token_rotated": true,
+        "concurrent_refresh_count": 4,
+        "submitted_generation": 7,
+        "current_generation": 8,
+        "status": 401
+      },
+      {
+        "record_id": "race-016:logs:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "refresh_error": null,
+        "concurrent_refresh_count": 1,
+        "submitted_generation": 8,
+        "current_generation": 8,
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "race-016:metrics:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "race-016:metrics:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "race-016:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "race-016:dependencies:0",
+        "service": "auth-service",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "race-016:history:0",
+        "service": "auth-service",
+        "symptom": "Intermittent refresh failures under concurrent load",
+        "cause": "An older invalid_grant incident required consent renewal; current consent has not been revoked.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "race-016:knowledge:0",
+        "service": "auth-service",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "race-016:reproduce:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "refresh_serialization",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "race-016:reproduce:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "refresh_serialization",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

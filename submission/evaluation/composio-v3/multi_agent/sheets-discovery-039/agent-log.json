@@ -1,0 +1,1463 @@
+{
+  "ticket_id": "c96ec4bc-9252-4516-a2e7-e18415306702",
+  "tasks": [
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 2845,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 536,
+            "output_tokens_details": {
+              "reasoning_tokens": 24
+            },
+            "total_tokens": 3381
+          }
+        }
+      ],
+      "notes": [
+        "Current incident context contains no canonical evidence records; no diagnosis is justified yet.",
+        "Start with broad/null-filter log and metric queries because exact-match filters can silently miss records with absent timestamps/service fields.",
+        "Use canonical source records for discovery responses, executor logs, queue/backlog metrics, and auth/connection events; do not rely on derived connection/refresh convenience views as independent proof.",
+        "Scope the tenant impact explicitly: identify affected tenant/request IDs, compare failure rate and latency to at least one unaffected tenant if available, and note whether impact is isolated or widespread.",
+        "If the action appears in the current catalog but not in the returned discovery payload during the incident, treat that as a hypothesis for truncation or version/pin mismatch, not proof until the exact returned payload is observed.",
+        "Provider outage remains only a hypothesis unless requests demonstrably reached the provider and failed there; if the action is missing before execution, prioritize pre-provider mechanisms.",
+        "Look for counter-evidence: successful Sheets discovery/execution in the same window, healthy non-Sheets discovery, or a comparison tenant receiving the supposedly missing action.",
+        "Material missing verification: canonical discovery payloads for the affected request, tenant-scoped impact metrics, and any overlapping catalog/version/auth changes. Optional reassurance later: code-level inspection or broader historical similarity review."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:02:59.966277+00:00",
+      "finished_at": "2026-11-12T17:03:16.120095+00:00",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "What canonical discovery and executor records exist for incident window 2026-11-12T09:50:00Z\u201310:15:00Z with null/empty filters first, then narrowed by service=tool-executor and any Sheets-related literal substrings, to show: the discovery request, returned tool/action count, whether the missing Sheets action slug was present or truncated, request latency/error rate, backlog, and the affected tenant(s) versus comparison tenants?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "logs",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_1b8d7225c1b0",
+            "query": {
+              "tool": "logs",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:logs:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "request_id": "req-39",
+                "toolkit": "googlesheets",
+                "status": 200,
+                "list_limit": 20,
+                "returned_tools": 20,
+                "has_more": true,
+                "requested_tool_on_later_page": true,
+                "version_contains_tool": true
+              },
+              {
+                "record_id": "sheets-discovery-039:logs:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "status": 200,
+                "same_provider_available": true,
+                "unrelated_read_succeeds": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_1b8d7225c1b0"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_fa5228b7ff1d",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:metrics:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "requests": 602,
+                "failures": 0,
+                "business_operations_blocked": 380,
+                "queue_depth": 108,
+                "p95_latency_ms": 1440
+              },
+              {
+                "record_id": "sheets-discovery-039:metrics:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "requests": 516,
+                "failures": 0,
+                "business_operations_blocked": 0,
+                "queue_depth": 0,
+                "p95_latency_ms": 160
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_fa5228b7ff1d"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": "sheets",
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_382ef84125f4",
+            "query": {
+              "tool": "logs",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": "sheets",
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:logs:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "request_id": "req-39",
+                "toolkit": "googlesheets",
+                "status": 200,
+                "list_limit": 20,
+                "returned_tools": 20,
+                "has_more": true,
+                "requested_tool_on_later_page": true,
+                "version_contains_tool": true
+              },
+              {
+                "record_id": "sheets-discovery-039:logs:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "status": 200,
+                "same_provider_available": true,
+                "unrelated_read_succeeds": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_382ef84125f4"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": "sheets",
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_9b46018c5c9d",
+            "query": {
+              "tool": "metrics",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": "sheets",
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:metrics:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "requests": 602,
+                "failures": 0,
+                "business_operations_blocked": 380,
+                "queue_depth": 108,
+                "p95_latency_ms": 1440
+              },
+              {
+                "record_id": "sheets-discovery-039:metrics:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "requests": 516,
+                "failures": 0,
+                "business_operations_blocked": 0,
+                "queue_depth": 0,
+                "p95_latency_ms": 160
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_9b46018c5c9d"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3885,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 163,
+            "output_tokens_details": {
+              "reasoning_tokens": 57
+            },
+            "total_tokens": 4048
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4580,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 244,
+            "output_tokens_details": {
+              "reasoning_tokens": 84
+            },
+            "total_tokens": 4824
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5333,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 3584
+            },
+            "output_tokens": 1236,
+            "output_tokens_details": {
+              "reasoning_tokens": 185
+            },
+            "total_tokens": 6569
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5858,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 493,
+            "output_tokens_details": {
+              "reasoning_tokens": 43
+            },
+            "total_tokens": 6351
+          }
+        }
+      ],
+      "notes": [
+        "Null-filter canonical records already include the key discovery/executor observation at 2026-11-12T10:05:00Z for tenant cedar: tool-executor request req-39 returned HTTP 200 for toolkit googlesheets with list_limit=20, returned_tools=20, has_more=true, and the requested Sheets tool was on a later page while the version still contained it, consistent with omission from the first page rather than disappearance from the catalog (ev_1b8d7225c1b0 / sheets-discovery-039:logs:0).",
+        "The narrowed service=tool-executor, time-window, literal \"sheets\" query reproduced the same two canonical log records: affected cedar discovery above, plus comparison tenant maple with HTTP 200 and same_provider_available=true / unrelated_read_succeeds=true, which is counter-evidence to a broad provider outage in this window (ev_382ef84125f4 / sheets-discovery-039:logs:0, sheets-discovery-039:logs:1).",
+        "Canonical metrics at the same timestamp show tenant-scoped impact concentrated in cedar despite zero request failures: cedar had 602 requests, 0 failures, 380 business_operations_blocked, queue_depth 108, p95 latency 1440 ms, versus maple with 516 requests, 0 failures, 0 blocked ops, queue_depth 0, p95 160 ms (ev_fa5228b7ff1d / sheets-discovery-039:metrics:0, sheets-discovery-039:metrics:1; also returned by narrowed query ev_9b46018c5c9d).",
+        "Gaps/limits: no canonical record here gives the exact missing action slug string, only that the requested tool was on a later page and present in the version; no tool-executor deployments were recorded in-window, and dependency metadata only shows provider_api_reachable=true, which does not by itself prove or disprove the specific discovery failure path (ev_abed50f2fc18; ev_63cc0806cce6 / sheets-discovery-039:dependencies:0)."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:03:16.124368+00:00",
+      "finished_at": "2026-11-12T17:03:54.730312+00:00",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "Were there any timed changes or dependencies overlapping the window\u2014catalog/discovery service changes, toolkit/version pin changes, auth/connection changes for Sheets, feature-flag/config updates, or upstream Google/provider status signals\u2014and is there canonical evidence tying any change to the affected tenant/request rather than only temporal proximity?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_63cc0806cce6",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:dependencies:0",
+                "service": "tool-executor",
+                "depends_on": [
+                  "auth-service",
+                  "provider-api",
+                  "session-policy"
+                ],
+                "provider_api_reachable": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_63cc0806cce6"
+        },
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_4103779983c7",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:deployments:0",
+                "service": "support-dashboard",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "change": "Unrelated inbox display release",
+                "version": "dashboard-v23"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_4103779983c7"
+        },
+        {
+          "query": {
+            "tool": "reproduce",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_154da898e8ad",
+            "query": {
+              "tool": "reproduce",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:reproduce:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "sandbox",
+                "provider_mock": true,
+                "controlled": true,
+                "condition": "original",
+                "same_request_except": "sheets_configuration",
+                "check_passed": false,
+                "toolkit": "googlesheets",
+                "status": 200,
+                "list_limit": 20,
+                "returned_tools": 20,
+                "has_more": true,
+                "requested_tool_on_later_page": true,
+                "version_contains_tool": true
+              },
+              {
+                "record_id": "sheets-discovery-039:reproduce:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "sandbox",
+                "provider_mock": true,
+                "controlled": true,
+                "condition": "corrected",
+                "same_request_except": "sheets_configuration",
+                "check_passed": true,
+                "toolkit": "googlesheets",
+                "status": 200,
+                "list_limit": 20,
+                "returned_tools": 20,
+                "has_more": true,
+                "requested_tool_on_later_page": true,
+                "version_contains_tool": true,
+                "pagination_completed": true,
+                "requested_tool_found": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_154da898e8ad"
+        },
+        {
+          "query": {
+            "tool": "deployments",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_abed50f2fc18",
+            "query": {
+              "tool": "deployments",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_abed50f2fc18"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": "auth",
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_8b4ad3866dec",
+            "query": {
+              "tool": "dependencies",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": "auth",
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:dependencies:0",
+                "service": "tool-executor",
+                "depends_on": [
+                  "auth-service",
+                  "provider-api",
+                  "session-policy"
+                ],
+                "provider_api_reachable": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_8b4ad3866dec"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": "provider",
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_8a799ecc641b",
+            "query": {
+              "tool": "dependencies",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": "provider",
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:dependencies:0",
+                "service": "tool-executor",
+                "depends_on": [
+                  "auth-service",
+                  "provider-api",
+                  "session-policy"
+                ],
+                "provider_api_reachable": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_8a799ecc641b"
+        },
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": "discovery",
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_7427074c4df1",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": "discovery",
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "sheets-discovery-039:deployments:0",
+                "service": "support-dashboard",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "change": "Unrelated inbox display release",
+                "version": "dashboard-v23"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_7427074c4df1"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3680,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 183,
+            "output_tokens_details": {
+              "reasoning_tokens": 30
+            },
+            "total_tokens": 3863
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4545,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 300,
+            "output_tokens_details": {
+              "reasoning_tokens": 119
+            },
+            "total_tokens": 4845
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5203,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 3584
+            },
+            "output_tokens": 120,
+            "output_tokens_details": {
+              "reasoning_tokens": 44
+            },
+            "total_tokens": 5323
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5827,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 571,
+            "output_tokens_details": {
+              "reasoning_tokens": 97
+            },
+            "total_tokens": 6398
+          }
+        }
+      ],
+      "notes": [
+        "No canonical timed change is shown for the affected service in the incident window: the tool-executor deployment query for 09:50\u201310:15 returns no records (ev_abed50f2fc18), while the only observed deployment is an unrelated support-dashboard release at 10:05Z with no tenant/request tie to cedar req-39 (ev_4103779983c7, sheets-discovery-039:deployments:0).",
+        "Observed request behavior points away from a Google/provider outage as the primary overlap: cedar req-39 received a 200 discovery response where the requested Sheets tool existed in the version but was on a later page beyond list_limit=20; maple simultaneously shows the same provider available and an unrelated read succeeding; dependency telemetry also says provider_api_reachable=true (ev_1b8d7225c1b0, sheets-discovery-039:logs:0; ev_1b8d7225c1b0, sheets-discovery-039:logs:1; ev_63cc0806cce6, sheets-discovery-039:dependencies:0).",
+        "Tenant impact is isolated to cedar in the supplied metrics rather than platform-wide: cedar shows 602 requests, 0 failures, 380 business operations blocked, queue_depth 108, p95 latency 1440 ms, while maple shows 516 requests, 0 blocked, queue_depth 0, p95 160 ms (ev_fa5228b7ff1d, sheets-discovery-039:metrics:0; ev_fa5228b7ff1d, sheets-discovery-039:metrics:1). This is impact evidence, not evidence of a timed dependency change.",
+        "Important gaps: there is no canonical evidence here of catalog/discovery service changes, toolkit/version pin changes, Sheets auth/connection changes, or feature-flag/config updates tied to cedar req-39. The sandbox controlled comparison suggests configuration can discriminate outcome, but it is precomputed reproduction evidence and not a canonical production change record for the affected tenant/request (ev_154da898e8ad, sheets-discovery-039:reproduce:0; ev_154da898e8ad, sheets-discovery-039:reproduce:1)."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:03:16.153749+00:00",
+      "finished_at": "2026-11-12T17:03:39.875961+00:00",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Among the leading hypotheses\u2014tool discovery truncation, connection surface/isolation or auth mismatch, provider failure, and internal regression\u2014which best matches the observed failed discovery/execution path for the affected tenant, and what discriminating control or comparison (same tenant different action, different tenant same action, pre/post window, or current catalog vs returned discovery payload) can confirm or contradict each mechanism?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_1b8d7225c1b0",
+        "ev_fa5228b7ff1d",
+        "ev_63cc0806cce6",
+        "ev_4103779983c7",
+        "ev_154da898e8ad",
+        "ev_382ef84125f4",
+        "ev_9b46018c5c9d",
+        "ev_abed50f2fc18",
+        "ev_8b4ad3866dec",
+        "ev_8a799ecc641b",
+        "ev_7427074c4df1"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 6827,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1997,
+            "output_tokens_details": {
+              "reasoning_tokens": 79
+            },
+            "total_tokens": 8824
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 8993,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 2375,
+            "output_tokens_details": {
+              "reasoning_tokens": 26
+            },
+            "total_tokens": 11368
+          }
+        }
+      ],
+      "notes": [
+        "No tool-executor deployment was observed in the incident window; the only deployment evidence is an unrelated support-dashboard release, so internal regression from a timed executor deploy is unsubstantiated here.",
+        "The requested question's discriminating controls are partly satisfied: current catalog vs returned discovery payload strongly supports truncation; different tenant same provider/action family contradicts broad provider failure; a controlled same-request configuration comparison suggests configuration can matter but does not by itself prove a production auth mismatch.",
+        "Because there is no canonical cedar auth/session-policy event record, any stronger causal claim about connection surface/auth mismatch should remain secondary."
+      ],
+      "candidates": [
+        {
+          "code": "tool_discovery_truncation",
+          "hypothesis": {
+            "description": "For cedar req-39, the missing Sheets action is best explained by discovery pagination/truncation: the action still exists in the versioned catalog, but the returned discovery page stopped at 20 tools and indicated more pages, with the requested tool on a later page. This is a pre-provider mechanism and matches the blocked-business impact without HTTP request failures.",
+            "supporting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_fa5228b7ff1d",
+              "ev_154da898e8ad"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "The affected user path depended on the first-page discovery payload rather than completing pagination.",
+              "The sandbox controlled comparison is used only as a discriminating verification of the discovery/pagination variable, not as proof of a production change."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "The affected cedar discovery request returned HTTP 200 with list_limit=20, returned_tools=20, has_more=true, and explicitly indicated the requested Sheets tool was on a later page even though the current version still contained it.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "The failure occurs before provider execution: the requested action was absent from the returned discovery page despite being present in the versioned catalog.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "In controlled sandbox observations, the original request shape failed while the corrected configuration passed and found the requested tool after pagination was completed; both runs still had has_more=true and 20 returned tools, making completion of discovery pagination the discriminating control.",
+              "citations": [
+                {
+                  "evidence_id": "ev_154da898e8ad",
+                  "record_id": "sheets-discovery-039:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_154da898e8ad",
+                  "record_id": "sheets-discovery-039:reproduce:1"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Observed impact is concentrated in cedar: 602 requests, 0 transport failures, 380 business operations blocked, queue depth 108, and p95 latency 1440 ms, while comparison tenant maple had 516 requests, 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+              "citations": [
+                {
+                  "evidence_id": "ev_fa5228b7ff1d",
+                  "record_id": "sheets-discovery-039:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_fa5228b7ff1d",
+                  "record_id": "sheets-discovery-039:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "tool_discovery_truncation_remediation",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Paginate discovery or raise the discovery limit for the googlesheets toolkit, then execute the exact action slug returned on the intended version.",
+            "Capture and retain the full returned discovery payload for affected requests so first-page omission versus catalog absence is directly visible in production traces."
+          ],
+          "missing_checks": [
+            "Canonical production evidence of the exact returned discovery payload pages or action slug sequence for cedar req-39 beyond the first page, to confirm whether the client actually stopped after page 1 rather than another layer filtering later results."
+          ],
+          "strength": 9
+        },
+        {
+          "code": "provider_failure",
+          "hypothesis": {
+            "description": "A Google/provider outage is not the best match for the observed path. The available evidence instead shows healthy provider reachability and same-window success signals, so provider failure remains a weaker competing hypothesis.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_63cc0806cce6",
+              "ev_fa5228b7ff1d"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "A broad provider outage would be expected to affect comparison traffic or produce provider-facing failures, neither of which is observed here.",
+              "The available telemetry covers enough of the affected path to distinguish pre-provider omission from provider execution failure for this request."
+            ]
+          },
+          "findings": [
+            {
+              "code": "provider_isolation",
+              "statement": "A comparison tenant in the same window shows the same provider available and an unrelated read succeeding, which contradicts a broad Sheets provider outage hypothesis.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:1"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "The affected request already shows the requested action missing from the returned discovery page before any provider-side tool execution is evidenced.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "verification_control",
+              "statement": "Dependency telemetry reports provider_api_reachable=true, which further weakens a provider outage explanation for the observed discovery failure path.",
+              "citations": [
+                {
+                  "evidence_id": "ev_63cc0806cce6",
+                  "record_id": "sheets-discovery-039:dependencies:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Impact is tenant-isolated rather than platform-wide in the supplied metrics: cedar is blocked and backlogged while maple is healthy.",
+              "citations": [
+                {
+                  "evidence_id": "ev_fa5228b7ff1d",
+                  "record_id": "sheets-discovery-039:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_fa5228b7ff1d",
+                  "record_id": "sheets-discovery-039:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "monitor_provider",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Do not prioritize provider outage mitigation for this incident path unless new evidence shows provider-facing failures after discovery completes.",
+            "If reassurance is needed, collect provider-facing request/response traces tied to successful pagination versus missing-action cases."
+          ],
+          "missing_checks": [
+            "Canonical provider-call records for the affected tenant/request after discovery, if any existed, to fully exclude a secondary provider error on later attempts."
+          ],
+          "strength": 3
+        },
+        {
+          "code": "connection_surface_isolation",
+          "hypothesis": {
+            "description": "A tenant-specific connection/auth surface mismatch is possible in principle, but the current evidence does not show missing grants, wrong connected account selection, or auth failures. The observed omission is better explained by discovery pagination than by auth mismatch.",
+            "supporting_evidence": [
+              "ev_154da898e8ad"
+            ],
+            "contradicting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_63cc0806cce6"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "The reproduce record's changed variable named sheets_configuration may include client-side configuration that is not purely auth related.",
+              "Auth-related misconfiguration could coexist, but it is not needed to explain the observed missing-action-on-first-page mechanism."
+            ]
+          },
+          "findings": [
+            {
+              "code": "auth_dependency",
+              "statement": "Tool-executor depends on auth-service, so connection/auth surface issues are relevant hypotheses to check, but dependency presence alone is not evidence of an auth failure here.",
+              "citations": [
+                {
+                  "evidence_id": "ev_63cc0806cce6",
+                  "record_id": "sheets-discovery-039:dependencies:0"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "The sandbox controlled comparison changed only sheets_configuration and flipped the outcome from failing to passing, so tenant-specific configuration remains a plausible secondary explanation to test against the stronger pagination mechanism.",
+              "citations": [
+                {
+                  "evidence_id": "ev_154da898e8ad",
+                  "record_id": "sheets-discovery-039:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_154da898e8ad",
+                  "record_id": "sheets-discovery-039:reproduce:1"
+                }
+              ]
+            },
+            {
+              "code": "telemetry_gap",
+              "statement": "No canonical incident record shows cedar-specific grant loss, wrong connected account selection, revoked consent, scope mismatch, or session policy block for req-39.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:0"
+                },
+                {
+                  "evidence_id": "ev_63cc0806cce6",
+                  "record_id": "sheets-discovery-039:dependencies:0"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "connection_surface_isolation_remediation",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Verify that the affected client used the intended Sheets connection surface and account, especially if the integration expects MCP-authenticated connections distinct from other platform connections.",
+            "Collect cedar-specific auth/session-policy records for req-39 to determine whether configuration differences altered discovery behavior beyond pagination."
+          ],
+          "missing_checks": [
+            "Canonical cedar auth/session-policy/connection records tied to req-39 showing whether the client used the intended connected account and connection surface; this could materially change whether configuration, rather than truncation alone, explains why pagination was not completed or the tool was not selectable."
+          ],
+          "strength": 2
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:03:54.739993+00:00",
+      "finished_at": "2026-11-12T17:05:11.606225+00:00",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_1b8d7225c1b0",
+        "ev_fa5228b7ff1d",
+        "ev_63cc0806cce6",
+        "ev_4103779983c7",
+        "ev_154da898e8ad",
+        "ev_382ef84125f4",
+        "ev_9b46018c5c9d",
+        "ev_abed50f2fc18",
+        "ev_8b4ad3866dec",
+        "ev_8a799ecc641b",
+        "ev_7427074c4df1"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 9528,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 697,
+            "output_tokens_details": {
+              "reasoning_tokens": 228
+            },
+            "total_tokens": 10225
+          }
+        }
+      ],
+      "notes": [
+        "The core diagnosis is sufficiently bounded: for cedar req-39, the observed failure mechanism is that discovery returned only the first 20 tools with has_more=true while the requested Sheets tool was present only on a later page, despite still existing in the versioned catalog (ev_1b8d7225c1b0 / sheets-discovery-039:logs:0).",
+        "Provider outage is reasonably deprioritized for this incident path, not because all provider issues are excluded, but because the failed request is already explained before provider execution and comparison signals show provider availability/success in the same window (ev_1b8d7225c1b0 / sheets-discovery-039:logs:1; ev_63cc0806cce6 / sheets-discovery-039:dependencies:0).",
+        "Tenant impact is properly scoped rather than generalized: cedar shows blocked business operations, backlog, and much higher latency, while maple does not (ev_fa5228b7ff1d / sheets-discovery-039:metrics:0, sheets-discovery-039:metrics:1).",
+        "The proposed missing check about proving the client literally stopped after page 1 is optional rather than blocking. Even without that proof, the observed failed execution already had an unsatisfied prerequisite: the needed action was absent from the returned page actually observed in production.",
+        "The sandbox reproduce evidence is appropriately discriminating but should remain framed as supportive, not as proof of a production auth/config change. The 'same_request_except: sheets_configuration' wording leaves the exact changed variable broader than pure pagination, so stronger claims about connection/auth mismatch should stay secondary.",
+        "Remediation suggestions should be read as proposals, not verified fixes. 'Paginate discovery' is supported by the evidence; 'raise the discovery limit' is plausible but not directly verified by the supplied records.",
+        "No timed tool-executor deployment evidence supports an internal regression in-window; the only observed deployment is unrelated support-dashboard activity, so it should not be used to strengthen or weaken the main diagnosis (ev_abed50f2fc18; ev_4103779983c7 / sheets-discovery-039:deployments:0)."
+      ],
+      "candidates": [
+        {
+          "code": "tool_discovery_truncation",
+          "hypothesis": {
+            "description": "For cedar req-39, the missing Sheets action is best explained by discovery pagination/truncation: the action still exists in the versioned catalog, but the returned discovery page stopped at 20 tools and indicated more pages, with the requested tool on a later page. This is a pre-provider mechanism and matches the blocked-business impact without HTTP request failures.",
+            "supporting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_fa5228b7ff1d",
+              "ev_154da898e8ad"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "The affected user path depended on the first-page discovery payload rather than completing pagination.",
+              "The sandbox controlled comparison is used only as a discriminating verification of the discovery/pagination variable, not as proof of a production change."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "The affected cedar discovery request returned HTTP 200 with list_limit=20, returned_tools=20, has_more=true, and explicitly indicated the requested Sheets tool was on a later page even though the current version still contained it.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "The failure occurs before provider execution: the requested action was absent from the returned discovery page despite being present in the versioned catalog.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "In controlled sandbox observations, the original request shape failed while the corrected configuration passed and found the requested tool after pagination was completed; both runs still had has_more=true and 20 returned tools, making completion of discovery pagination the discriminating control.",
+              "citations": [
+                {
+                  "evidence_id": "ev_154da898e8ad",
+                  "record_id": "sheets-discovery-039:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_154da898e8ad",
+                  "record_id": "sheets-discovery-039:reproduce:1"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Observed impact is concentrated in cedar: 602 requests, 0 transport failures, 380 business operations blocked, queue depth 108, and p95 latency 1440 ms, while comparison tenant maple had 516 requests, 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+              "citations": [
+                {
+                  "evidence_id": "ev_fa5228b7ff1d",
+                  "record_id": "sheets-discovery-039:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_fa5228b7ff1d",
+                  "record_id": "sheets-discovery-039:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "tool_discovery_truncation_remediation",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Paginate discovery or raise the discovery limit for the googlesheets toolkit, then execute the exact action slug returned on the intended version.",
+            "Capture and retain the full returned discovery payload for affected requests so first-page omission versus catalog absence is directly visible in production traces."
+          ],
+          "missing_checks": [],
+          "strength": 9
+        },
+        {
+          "code": "provider_failure",
+          "hypothesis": {
+            "description": "A Google/provider outage is not the best match for the observed path. The available evidence instead shows healthy provider reachability and same-window success signals, so provider failure remains a weaker competing hypothesis.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_63cc0806cce6",
+              "ev_fa5228b7ff1d"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "A broad provider outage would be expected to affect comparison traffic or produce provider-facing failures, neither of which is observed here.",
+              "The available telemetry covers enough of the affected path to distinguish pre-provider omission from provider execution failure for this request."
+            ]
+          },
+          "findings": [
+            {
+              "code": "provider_isolation",
+              "statement": "A comparison tenant in the same window shows the same provider available and an unrelated read succeeding, which contradicts a broad Sheets provider outage hypothesis.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:1"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "The affected request already shows the requested action missing from the returned discovery page before any provider-side tool execution is evidenced.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "verification_control",
+              "statement": "Dependency telemetry reports provider_api_reachable=true, which further weakens a provider outage explanation for the observed discovery failure path.",
+              "citations": [
+                {
+                  "evidence_id": "ev_63cc0806cce6",
+                  "record_id": "sheets-discovery-039:dependencies:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Impact is tenant-isolated rather than platform-wide in the supplied metrics: cedar is blocked and backlogged while maple is healthy.",
+              "citations": [
+                {
+                  "evidence_id": "ev_fa5228b7ff1d",
+                  "record_id": "sheets-discovery-039:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_fa5228b7ff1d",
+                  "record_id": "sheets-discovery-039:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "monitor_provider",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Do not prioritize provider outage mitigation for this incident path unless new evidence shows provider-facing failures after discovery completes.",
+            "If reassurance is needed, collect provider-facing request/response traces tied to successful pagination versus missing-action cases."
+          ],
+          "missing_checks": [
+            "Canonical provider-call records for the affected tenant/request after discovery, if any existed, to fully exclude a secondary provider error on later attempts."
+          ],
+          "strength": 3
+        },
+        {
+          "code": "connection_surface_isolation",
+          "hypothesis": {
+            "description": "A tenant-specific connection/auth surface mismatch is possible in principle, but the current evidence does not show missing grants, wrong connected account selection, or auth failures. The observed omission is better explained by discovery pagination than by auth mismatch.",
+            "supporting_evidence": [
+              "ev_154da898e8ad"
+            ],
+            "contradicting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_63cc0806cce6"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "The reproduce record's changed variable named sheets_configuration may include client-side configuration that is not purely auth related.",
+              "Auth-related misconfiguration could coexist, but it is not needed to explain the observed missing-action-on-first-page mechanism."
+            ]
+          },
+          "findings": [
+            {
+              "code": "auth_dependency",
+              "statement": "Tool-executor depends on auth-service, so connection/auth surface issues are relevant hypotheses to check, but dependency presence alone is not evidence of an auth failure here.",
+              "citations": [
+                {
+                  "evidence_id": "ev_63cc0806cce6",
+                  "record_id": "sheets-discovery-039:dependencies:0"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "The sandbox controlled comparison changed only sheets_configuration and flipped the outcome from failing to passing, so tenant-specific configuration remains a plausible secondary explanation to test against the stronger pagination mechanism.",
+              "citations": [
+                {
+                  "evidence_id": "ev_154da898e8ad",
+                  "record_id": "sheets-discovery-039:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_154da898e8ad",
+                  "record_id": "sheets-discovery-039:reproduce:1"
+                }
+              ]
+            },
+            {
+              "code": "telemetry_gap",
+              "statement": "No canonical incident record shows cedar-specific grant loss, wrong connected account selection, revoked consent, scope mismatch, or session policy block for req-39.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1b8d7225c1b0",
+                  "record_id": "sheets-discovery-039:logs:0"
+                },
+                {
+                  "evidence_id": "ev_63cc0806cce6",
+                  "record_id": "sheets-discovery-039:dependencies:0"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "connection_surface_isolation_remediation",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Verify that the affected client used the intended Sheets connection surface and account, especially if the integration expects MCP-authenticated connections distinct from other platform connections.",
+            "Collect cedar-specific auth/session-policy records for req-39 to determine whether configuration differences altered discovery behavior beyond pagination."
+          ],
+          "missing_checks": [
+            "Canonical cedar auth/session-policy/connection records tied to req-39 showing whether the client used the intended connected account and connection surface; this could materially change whether configuration, rather than truncation alone, explains why pagination was not completed or the tool was not selectable."
+          ],
+          "strength": 2
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:05:11.619960+00:00",
+      "critique": {
+        "approved": true,
+        "blocking_checks": [],
+        "notes": [
+          "The core diagnosis is sufficiently bounded: for cedar req-39, the observed failure mechanism is that discovery returned only the first 20 tools with has_more=true while the requested Sheets tool was present only on a later page, despite still existing in the versioned catalog (ev_1b8d7225c1b0 / sheets-discovery-039:logs:0).",
+          "Provider outage is reasonably deprioritized for this incident path, not because all provider issues are excluded, but because the failed request is already explained before provider execution and comparison signals show provider availability/success in the same window (ev_1b8d7225c1b0 / sheets-discovery-039:logs:1; ev_63cc0806cce6 / sheets-discovery-039:dependencies:0).",
+          "Tenant impact is properly scoped rather than generalized: cedar shows blocked business operations, backlog, and much higher latency, while maple does not (ev_fa5228b7ff1d / sheets-discovery-039:metrics:0, sheets-discovery-039:metrics:1).",
+          "The proposed missing check about proving the client literally stopped after page 1 is optional rather than blocking. Even without that proof, the observed failed execution already had an unsatisfied prerequisite: the needed action was absent from the returned page actually observed in production.",
+          "The sandbox reproduce evidence is appropriately discriminating but should remain framed as supportive, not as proof of a production auth/config change. The 'same_request_except: sheets_configuration' wording leaves the exact changed variable broader than pure pagination, so stronger claims about connection/auth mismatch should stay secondary.",
+          "Remediation suggestions should be read as proposals, not verified fixes. 'Paginate discovery' is supported by the evidence; 'raise the discovery limit' is plausible but not directly verified by the supplied records.",
+          "No timed tool-executor deployment evidence supports an internal regression in-window; the only observed deployment is unrelated support-dashboard activity, so it should not be used to strengthen or weaken the main diagnosis (ev_abed50f2fc18; ev_4103779983c7 / sheets-discovery-039:deployments:0)."
+        ]
+      },
+      "finished_at": "2026-11-12T17:05:27.210577+00:00",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_1b8d7225c1b0",
+        "ev_fa5228b7ff1d",
+        "ev_63cc0806cce6",
+        "ev_4103779983c7",
+        "ev_154da898e8ad",
+        "ev_382ef84125f4",
+        "ev_9b46018c5c9d",
+        "ev_abed50f2fc18",
+        "ev_8b4ad3866dec",
+        "ev_8a799ecc641b",
+        "ev_7427074c4df1"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 11808,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1631,
+            "output_tokens_details": {
+              "reasoning_tokens": 79
+            },
+            "total_tokens": 13439
+          }
+        }
+      ],
+      "notes": [],
+      "candidates": [],
+      "objections": [],
+      "report": {
+        "incident_id": "sheets-discovery-039",
+        "outcome": "probable_cause",
+        "hypotheses": [
+          {
+            "description": "Most likely cause: tool discovery truncation on cedar req-39. The returned googlesheets discovery page contained only 20 tools, indicated more pages, and explicitly shows the requested Sheets action was on a later page even though it still existed in the versioned catalog. This explains a missing action after discovery without requiring a provider-side failure.",
+            "supporting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_fa5228b7ff1d",
+              "ev_154da898e8ad"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "The affected execution path depended on the observed first discovery page rather than completing pagination.",
+              "The sandbox controlled comparison is supportive synthetic verification, not proof of a production change."
+            ]
+          },
+          {
+            "description": "Less likely alternative: a broad provider failure/outage. This is weakened because the failed path is already explained before provider execution, provider reachability is reported healthy, and a comparison tenant shows same-window provider availability and a successful unrelated read.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_63cc0806cce6",
+              "ev_fa5228b7ff1d"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "If a broad provider outage were primary, comparable provider-facing failures or wider tenant impact would be expected in the supplied telemetry."
+            ]
+          },
+          {
+            "description": "Secondary possibility: tenant-specific connection/configuration surface differences affected how discovery was performed or consumed. The controlled sandbox comparison says changing only 'sheets_configuration' flips the outcome, but there is no canonical production evidence here of grant loss, wrong account selection, revoked consent, or session-policy block for cedar req-39. This remains weaker than truncation.",
+            "supporting_evidence": [
+              "ev_154da898e8ad"
+            ],
+            "contradicting_evidence": [
+              "ev_1b8d7225c1b0",
+              "ev_63cc0806cce6"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "The reproduce record's 'sheets_configuration' variable may include client/config behavior beyond pure auth.",
+              "A configuration difference could coexist, but it is not required to explain the observed missing-action-on-first-page mechanism."
+            ]
+          }
+        ],
+        "recommended_actions": [
+          "Synthetic telemetry indicates a pre-provider discovery problem; proposed actions below have not been executed.",
+          "Paginate googlesheets discovery for the affected path, or otherwise ensure later pages are retrieved before concluding the action is unavailable.",
+          "If pagination cannot be completed in that path, evaluate increasing the discovery limit for the googlesheets toolkit and then use the exact returned action slug from the intended version.",
+          "Capture and retain the full discovery payload, pagination state, and selected action slug for affected requests so production traces directly distinguish first-page omission from true catalog absence.",
+          "Keep provider monitoring secondary for this incident path unless new canonical evidence shows requests reaching the provider and failing after discovery.",
+          "Collect cedar-specific auth/session-policy/connection records for req-39 only if needed to rule in or out a tenant-specific configuration contributor."
+        ],
+        "limitations": [
+          "Evidence is synthetic incident telemetry plus precomputed sandbox reproduction observations; reproduction records are supportive controls, not canonical production change records.",
+          "No canonical record here includes the exact missing action slug string, only that the requested tool was on a later page and present in the version.",
+          "No canonical cedar auth/session-policy event record is supplied for req-39, so stronger causal claims about wrong account, missing grant, or policy block would be speculative.",
+          "No in-window tool-executor deployment was observed; this limits attribution to a timed internal code change."
+        ]
+      },
+      "started_at": "2026-11-12T17:05:27.226573+00:00",
+      "finished_at": "2026-11-12T17:05:55.251307+00:00",
+      "error": null
+    }
+  ],
+  "notice": "Observable decisions and evidence, not private chain-of-thought. Earlier tickets may lack per-task model/tool attribution."
+}

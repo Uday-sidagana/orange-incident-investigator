@@ -1,0 +1,612 @@
+{
+  "incident_id": "slack-user-043",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "slack-user-043",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause for the observed cedar failures: Slack user-token actions were executed without the required user scope configured. The failing executor log shows a user-token request with empty user scopes returning 403 missing_scope, and a controlled comparison succeeds when only user_scopes is corrected to include search:read.",
+        "supporting_evidence": [
+          "ev_81d94d9c517b",
+          "ev_315dcd1e5920",
+          "ev_ef8b2f66c4c8",
+          "ev_021b3a6173e6",
+          "ev_5101fee03862"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "This explains the observed failed cedar execution and likely many of cedar's failures, but the provided metrics do not attribute all 400 failures to a single Slack action.",
+          "The evidence supports a tenant-isolated auth/scope configuration issue more strongly than a broad provider or executor outage.",
+          "The supplied canonical evidence does not directly verify the complaint's claim that cedar bot posting succeeded in the same window."
+        ]
+      },
+      {
+        "description": "Secondary possibility: the workflow selected the wrong Slack connected account or project connection, and that selected user grant lacked the required scope. This would also fit the empty observed user scopes and missing_scope error, but no canonical account-selection telemetry is provided.",
+        "supporting_evidence": [
+          "ev_81d94d9c517b"
+        ],
+        "contradicting_evidence": [
+          "ev_315dcd1e5920"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "This is an alternative explanation for why user_scopes were empty, not a different immediate failure mechanism.",
+          "The controlled comparison shows scope presence is sufficient for success but does not identify why production used empty user scopes."
+        ]
+      },
+      {
+        "description": "Less likely alternative: workspace policy or related grant governance reduced or blocked the effective user grant. The supplied canonical records do not show a policy-block or consent-revoked signal, and the execution-time evidence more directly matches missing configured user scope.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_81d94d9c517b",
+          "ev_315dcd1e5920",
+          "ev_021b3a6173e6",
+          "ev_5101fee03862"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "A policy or consent problem could still be an upstream reason the grant ended up without scope, but that is not demonstrated in the supplied evidence.",
+          "This does not compete with the immediate observed failure mechanism of missing user scope at execution time."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry indicates configuring the needed Slack user_scopes for the affected user-token action is the first remediation path; bot scopes alone do not authorize user-token calls.",
+      "Reconnect the intended Slack user after the required user scope is present so the grant can include that scope.",
+      "Collect canonical connection/workspace/account-selection telemetry for the failing cedar path to distinguish direct misconfiguration from wrong connected account selection.",
+      "If scope correction alone does not explain why the grant lacked scope, have a workspace admin verify Slack app/workspace policy and grant state.",
+      "After scope/grant issues are addressed, replay or retest the cedar operations blocked by missing_scope.",
+      "These recommended actions are proposals only; none have been executed in this investigation."
+    ],
+    "limitations": [
+      "No canonical record in the supplied evidence directly shows a same-window successful cedar bot-posting action, so that part of the complaint is not independently verified here.",
+      "No canonical record includes connection_id, workspace_id, or selected-account identity, so wrong-account selection cannot be fully excluded.",
+      "The provided metrics show tenant impact and severity but do not break all 400 cedar failures down by Slack action or exact retry behavior.",
+      "Empty time-bounded deployment/dependency result sets do not prove absence of all auth-side changes; they only show no matching records were returned."
+    ]
+  },
+  "ranked_cause_codes": [
+    "slack_user_scope_configuration",
+    "wrong_connected_account",
+    "workspace_app_policy"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The failed cedar execution required a Slack user token, had bot scopes present but no user scopes configured, and returned 403 missing_scope.",
+      "citations": [
+        {
+          "evidence_id": "ev_81d94d9c517b",
+          "record_id": "slack-user-043:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In controlled sandbox telemetry, the original configuration with empty user_scopes failed with missing_scope, while the otherwise same request succeeded after adding search:read to user_scopes; bot scopes were unchanged.",
+      "citations": [
+        {
+          "evidence_id": "ev_315dcd1e5920",
+          "record_id": "slack-user-043:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_315dcd1e5920",
+          "record_id": "slack-user-043:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact was significant and tenant-scoped: cedar had 670 requests with 400 failures, 400 blocked business operations, queue depth 120, and p95 latency 1600 ms, while maple had 560 requests with 0 failures and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_ef8b2f66c4c8",
+          "record_id": "slack-user-043:metrics:0"
+        },
+        {
+          "evidence_id": "ev_ef8b2f66c4c8",
+          "record_id": "slack-user-043:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_isolation",
+      "statement": "A same-window maple executor record succeeded, supporting isolation to cedar rather than a platform-wide Slack failure.",
+      "citations": [
+        {
+          "evidence_id": "ev_021b3a6173e6",
+          "record_id": "slack-user-043:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "auth_dependency",
+      "statement": "Dependency context shows provider API reachability, which is consistent with an auth/scope problem rather than a broad provider reachability outage.",
+      "citations": [
+        {
+          "evidence_id": "ev_5101fee03862",
+          "record_id": "slack-user-043:dependencies:0"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "No tool-executor deployment is evidenced in the incident window; the only observed deployment record is an unrelated support-dashboard release.",
+      "citations": [
+        {
+          "evidence_id": "ev_387a4b1218f7",
+          "record_id": "slack-user-043:deployments:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "The supplied canonical evidence does not include connection/workspace/account identity or a same-window successful cedar bot-posting record, so it cannot fully distinguish wrong-account selection or directly verify the reported healthy bot-posting path.",
+      "citations": [
+        {
+          "evidence_id": "ev_81d94d9c517b",
+          "record_id": "slack-user-043:logs:0"
+        },
+        {
+          "evidence_id": "ev_021b3a6173e6",
+          "record_id": "slack-user-043:logs:1"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "slack_user_scope_configuration_remediation",
+    "reconnect_required_scope",
+    "collect_missing_telemetry",
+    "select_intended_connected_account",
+    "use_correct_project_connection",
+    "request_workspace_admin_access",
+    "verify_custom_oauth_app",
+    "replay_after_recovery"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_5101fee03862",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_387a4b1218f7",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_315dcd1e5920",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "slack_configuration",
+          "check_passed": false,
+          "toolkit": "slack",
+          "status": 403,
+          "required_token_kind": "user",
+          "auth_config_bot_scopes": [
+            "search:read"
+          ],
+          "auth_config_user_scopes": [],
+          "error": "missing_scope"
+        },
+        {
+          "record_id": "slack-user-043:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "slack_configuration",
+          "check_passed": true,
+          "toolkit": "slack",
+          "status": 200,
+          "required_token_kind": "user",
+          "auth_config_bot_scopes": [
+            "search:read"
+          ],
+          "auth_config_user_scopes": [
+            "search:read"
+          ],
+          "error": null,
+          "granted_token_kind": "user"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_0e985d9e82d6",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-43",
+          "toolkit": "slack",
+          "status": 403,
+          "required_token_kind": "user",
+          "auth_config_bot_scopes": [
+            "search:read"
+          ],
+          "auth_config_user_scopes": [],
+          "error": "missing_scope"
+        },
+        {
+          "record_id": "slack-user-043:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_ef8b2f66c4c8",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 670,
+          "failures": 400,
+          "business_operations_blocked": 400,
+          "queue_depth": 120,
+          "p95_latency_ms": 1600
+        },
+        {
+          "record_id": "slack-user-043:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 560,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_321a7a77996d",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 50
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_f85c41b33996",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 50
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7902cc5a7bb3",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "missing_scope",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-43",
+          "toolkit": "slack",
+          "status": 403,
+          "required_token_kind": "user",
+          "auth_config_bot_scopes": [
+            "search:read"
+          ],
+          "auth_config_user_scopes": [],
+          "error": "missing_scope"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9dd62671bab3",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "bot",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-43",
+          "toolkit": "slack",
+          "status": 403,
+          "required_token_kind": "user",
+          "auth_config_bot_scopes": [
+            "search:read"
+          ],
+          "auth_config_user_scopes": [],
+          "error": "missing_scope"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_63fcf219c68a",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 670,
+          "failures": 400,
+          "business_operations_blocked": 400,
+          "queue_depth": 120,
+          "p95_latency_ms": 1600
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_010d6a9b44da",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "slack-user-043",
+        "limit": 50
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_81d94d9c517b",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-43",
+          "toolkit": "slack",
+          "status": 403,
+          "required_token_kind": "user",
+          "auth_config_bot_scopes": [
+            "search:read"
+          ],
+          "auth_config_user_scopes": [],
+          "error": "missing_scope"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_021b3a6173e6",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "maple",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-user-043:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 139.72443364898209,
+  "input_tokens": 79872,
+  "output_tokens": 9014
+}

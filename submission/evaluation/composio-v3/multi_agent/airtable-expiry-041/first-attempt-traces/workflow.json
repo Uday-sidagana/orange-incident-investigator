@@ -1,0 +1,3224 @@
+{
+  "incident": {
+    "id": "airtable-expiry-041",
+    "title": "[DEMO C041] Airtable authentication links fail for late arrivals",
+    "description": "Older Airtable connection links show expiry errors for returning users, while fresh connections work, reducing onboarding completion.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "mode": "live_agents",
+  "tasks": [
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "Using null filters first, can we locate canonical auth-initiation and callback/error records for Airtable connection attempts during 2026-11-12T09:50:00Z–10:15:00Z, then compare older links vs freshly generated links by outcome, expiry/error code, latency, request volume, backlog, and affected tenants/users?",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "Were there any changes in tool-executor or the Airtable auth flow shortly before 2026-11-12T09:50:00Z—such as link TTL/configuration, clock/time-source behavior, redirect/callback settings, credential/auth broker dependencies, or provider-facing auth settings—and is there a control group showing fresh links remained healthy during the same window?",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Does the evidence support an expired authentication-initiation mechanism specifically for older Airtable links, or is there counter-evidence for alternatives such as provider failure, redirect mismatch, permissions/consent issues, credential-store problems, or an internal regression affecting both old and new connections?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_480d8997b003",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_fe8e71caad06",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_a964fad6c294",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "airtable_configuration",
+          "check_passed": false,
+          "toolkit": "airtable",
+          "status": 410,
+          "connection_state": "EXPIRED",
+          "initiation_age_seconds": 950,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        },
+        {
+          "record_id": "airtable-expiry-041:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "airtable_configuration",
+          "check_passed": true,
+          "toolkit": "airtable",
+          "status": 200,
+          "connection_state": "ACTIVE",
+          "initiation_age_seconds": 120,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c61c7a11689d",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-41",
+          "toolkit": "airtable",
+          "status": 410,
+          "connection_state": "EXPIRED",
+          "initiation_age_seconds": 950,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        },
+        {
+          "record_id": "airtable-expiry-041:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_455998493bef",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_6d9fa35efd48",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 636,
+          "failures": 390,
+          "business_operations_blocked": 390,
+          "queue_depth": 114,
+          "p95_latency_ms": 1520
+        },
+        {
+          "record_id": "airtable-expiry-041:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 538,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_df8ff29636a9",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:50:00Z",
+        "end": "2026-11-12T09:50:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_547deced8d61",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-41",
+          "toolkit": "airtable",
+          "status": 410,
+          "connection_state": "EXPIRED",
+          "initiation_age_seconds": 950,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        },
+        {
+          "record_id": "airtable-expiry-041:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_de638364f6c5",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4978f845ca13",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 636,
+          "failures": 390,
+          "business_operations_blocked": 390,
+          "queue_depth": 114,
+          "p95_latency_ms": 1520
+        },
+        {
+          "record_id": "airtable-expiry-041:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 538,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_5b30e7b63b55",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:50:00Z",
+        "end": "2026-11-12T09:50:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9a13ff6f1c59",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "callback",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9697d1988408",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "initiation",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-expiry-041:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-41",
+          "toolkit": "airtable",
+          "status": 410,
+          "connection_state": "EXPIRED",
+          "initiation_age_seconds": 950,
+          "completion_window_seconds": 600,
+          "token_exchange_attempted": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "hypotheses": [],
+  "objections": [
+    "The sandbox control is supportive but not a clean age-only isolation: the reproduce records state `same_request_except: airtable_configuration`, while the observed initiation age also differs between failing and succeeding cases. It supports the stale-link mechanism, but the report should avoid claiming age was the only changed variable from that artifact alone.",
+    "The maple production success is only a comparative healthy path (`status: 200`, `unrelated_read_succeeds: true`), not direct proof of a fresh Airtable auth initiation succeeding in production. It weakens broad provider/platform outage theories but should not be overstated as direct confirmation of the fresh-auth path."
+  ],
+  "events": [
+    {
+      "event": "task_started",
+      "task": "plan",
+      "role": "orchestrator",
+      "at": 524331.5997389,
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "orchestrator",
+      "model": "gpt-5.4",
+      "request": 1,
+      "task": "plan"
+    },
+    {
+      "event": "model_finished",
+      "role": "orchestrator",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 2839,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 498,
+        "output_tokens_details": {
+          "reasoning_tokens": 34
+        },
+        "total_tokens": 3337
+      },
+      "task": "plan"
+    },
+    {
+      "event": "agent_result",
+      "task": "plan",
+      "role": "orchestrator",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [
+          {
+            "id": "observe",
+            "role": "observability",
+            "question": "Using null filters first, can we locate canonical auth-initiation and callback/error records for Airtable connection attempts during 2026-11-12T09:50:00Z–10:15:00Z, then compare older links vs freshly generated links by outcome, expiry/error code, latency, request volume, backlog, and affected tenants/users?",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "dependencies",
+            "role": "dependency",
+            "question": "Were there any changes in tool-executor or the Airtable auth flow shortly before 2026-11-12T09:50:00Z—such as link TTL/configuration, clock/time-source behavior, redirect/callback settings, credential/auth broker dependencies, or provider-facing auth settings—and is there a control group showing fresh links remained healthy during the same window?",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "reason",
+            "role": "reasoning",
+            "question": "Does the evidence support an expired authentication-initiation mechanism specifically for older Airtable links, or is there counter-evidence for alternatives such as provider failure, redirect mismatch, permissions/consent issues, credential-store problems, or an internal regression affecting both old and new connections?",
+            "dependencies": [
+              "observe",
+              "dependencies"
+            ],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "critic",
+            "role": "critic",
+            "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+            "dependencies": [
+              "reason"
+            ],
+            "status": "pending",
+            "error": null
+          }
+        ],
+        "report": null,
+        "notes": [
+          "Current incident context is hypothesis only; no canonical evidence has been supplied yet, so no diagnosis is justified.",
+          "Start with broad queries using null filters to avoid excluding records with missing timestamps/service fields; narrow only after identifying canonical auth records.",
+          "Prioritize canonical source logs over derived connection/refresh views, which are convenience copies and not independent corroboration.",
+          "Need a discriminating comparison: same time window, older link failure versus fresh link success, ideally for the same tenant or similar tenants.",
+          "Scope tenant impact with observed counts/rates: how many attempts failed, how many tenants/users were affected, and whether onboarding completion dropped only for returning users using stale links.",
+          "Check whether requests fail before reaching Airtable/provider. If they do, provider-side explanations become weaker.",
+          "If errors explicitly indicate expiry or invalid/expired initiation state on old links while fresh links succeed, authentication_initiation_expired becomes a leading hypothesis; if both fresh and old fail, favor broader auth/dependency/regression hypotheses.",
+          "Collect any clock-skew or TTL evidence carefully; absence from partial queries is not proof of absence.",
+          "Do not infer remediation execution. At this stage the outcome should remain evidence-gathering and hypothesis-ranking only."
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "plan",
+      "role": "orchestrator",
+      "status": "complete",
+      "at": 524346.424477613
+    },
+    {
+      "event": "task_started",
+      "task": "observe",
+      "role": "observability",
+      "at": 524346.429235074,
+      "question": "Using null filters first, can we locate canonical auth-initiation and callback/error records for Airtable connection attempts during 2026-11-12T09:50:00Z–10:15:00Z, then compare older links vs freshly generated links by outcome, expiry/error code, latency, request volume, backlog, and affected tenants/users?",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 2,
+      "task": "observe"
+    },
+    {
+      "event": "task_started",
+      "task": "dependencies",
+      "role": "dependency",
+      "at": 524346.456460282,
+      "question": "Were there any changes in tool-executor or the Airtable auth flow shortly before 2026-11-12T09:50:00Z—such as link TTL/configuration, clock/time-source behavior, redirect/callback settings, credential/auth broker dependencies, or provider-facing auth settings—and is there a control group showing fresh links remained healthy during the same window?",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 3,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3672,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 190,
+        "output_tokens_details": {
+          "reasoning_tokens": 37
+        },
+        "total_tokens": 3862
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "deployments",
+      "status": "ok",
+      "evidence_id": "ev_480d8997b003",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_480d8997b003",
+        "query": {
+          "tool": "deployments",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "airtable-expiry-041:deployments:0",
+            "service": "support-dashboard",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "change": "Unrelated inbox display release",
+            "version": "dashboard-v23"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "dependencies",
+      "status": "ok",
+      "evidence_id": "ev_fe8e71caad06",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_fe8e71caad06",
+        "query": {
+          "tool": "dependencies",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "airtable-expiry-041:dependencies:0",
+            "service": "tool-executor",
+            "depends_on": [
+              "auth-service",
+              "provider-api",
+              "session-policy"
+            ],
+            "provider_api_reachable": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "reproduce",
+      "status": "ok",
+      "evidence_id": "ev_a964fad6c294",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_a964fad6c294",
+        "query": {
+          "tool": "reproduce",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "airtable-expiry-041:reproduce:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "sandbox",
+            "provider_mock": true,
+            "controlled": true,
+            "condition": "original",
+            "same_request_except": "airtable_configuration",
+            "check_passed": false,
+            "toolkit": "airtable",
+            "status": 410,
+            "connection_state": "EXPIRED",
+            "initiation_age_seconds": 950,
+            "completion_window_seconds": 600,
+            "token_exchange_attempted": false
+          },
+          {
+            "record_id": "airtable-expiry-041:reproduce:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "sandbox",
+            "provider_mock": true,
+            "controlled": true,
+            "condition": "corrected",
+            "same_request_except": "airtable_configuration",
+            "check_passed": true,
+            "toolkit": "airtable",
+            "status": 200,
+            "connection_state": "ACTIVE",
+            "initiation_age_seconds": 120,
+            "completion_window_seconds": 600,
+            "token_exchange_attempted": false
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 4,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3840,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 188,
+        "output_tokens_details": {
+          "reasoning_tokens": 82
+        },
+        "total_tokens": 4028
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_c61c7a11689d",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_c61c7a11689d",
+        "query": {
+          "tool": "logs",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "airtable-expiry-041:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-41",
+            "toolkit": "airtable",
+            "status": 410,
+            "connection_state": "EXPIRED",
+            "initiation_age_seconds": 950,
+            "completion_window_seconds": 600,
+            "token_exchange_attempted": false
+          },
+          {
+            "record_id": "airtable-expiry-041:logs:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "status": 200,
+            "same_provider_available": true,
+            "unrelated_read_succeeds": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "metrics",
+      "status": "error",
+      "evidence_id": "ev_455998493bef",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_455998493bef",
+        "query": {
+          "tool": "metrics",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "error",
+        "records": [],
+        "complete": false,
+        "error": {
+          "code": "timeout",
+          "message": "Simulated telemetry timeout",
+          "retryable": true
+        },
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "metrics",
+      "status": "ok",
+      "evidence_id": "ev_6d9fa35efd48",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_6d9fa35efd48",
+        "query": {
+          "tool": "metrics",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "airtable-expiry-041:metrics:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "requests": 636,
+            "failures": 390,
+            "business_operations_blocked": 390,
+            "queue_depth": 114,
+            "p95_latency_ms": 1520
+          },
+          {
+            "record_id": "airtable-expiry-041:metrics:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "requests": 538,
+            "failures": 0,
+            "business_operations_blocked": 0,
+            "queue_depth": 0,
+            "p95_latency_ms": 160
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 2
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 5,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4520,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 206,
+        "output_tokens_details": {
+          "reasoning_tokens": 129
+        },
+        "total_tokens": 4726
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:50:00Z",
+        "end": "2026-11-12T09:50:00Z",
+        "search": null,
+        "limit": 20
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "deployments",
+      "status": "ok",
+      "evidence_id": "ev_df8ff29636a9",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_df8ff29636a9",
+        "query": {
+          "tool": "deployments",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T08:50:00Z",
+          "end": "2026-11-12T09:50:00Z",
+          "search": null,
+          "limit": 20
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 6,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4551,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 257,
+        "output_tokens_details": {
+          "reasoning_tokens": 99
+        },
+        "total_tokens": 4808
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_547deced8d61",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_547deced8d61",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "airtable-expiry-041:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-41",
+            "toolkit": "airtable",
+            "status": 410,
+            "connection_state": "EXPIRED",
+            "initiation_age_seconds": 950,
+            "completion_window_seconds": 600,
+            "token_exchange_attempted": false
+          },
+          {
+            "record_id": "airtable-expiry-041:logs:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "status": 200,
+            "same_provider_available": true,
+            "unrelated_read_succeeds": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "metrics",
+      "status": "error",
+      "evidence_id": "ev_de638364f6c5",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_de638364f6c5",
+        "query": {
+          "tool": "metrics",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": null,
+          "limit": 100
+        },
+        "status": "error",
+        "records": [],
+        "complete": false,
+        "error": {
+          "code": "timeout",
+          "message": "Simulated telemetry timeout",
+          "retryable": true
+        },
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "metrics",
+      "status": "ok",
+      "evidence_id": "ev_4978f845ca13",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_4978f845ca13",
+        "query": {
+          "tool": "metrics",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "airtable-expiry-041:metrics:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "requests": 636,
+            "failures": 390,
+            "business_operations_blocked": 390,
+            "queue_depth": 114,
+            "p95_latency_ms": 1520
+          },
+          {
+            "record_id": "airtable-expiry-041:metrics:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "requests": 538,
+            "failures": 0,
+            "business_operations_blocked": 0,
+            "queue_depth": 0,
+            "p95_latency_ms": 160
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 2
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 7,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4837,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3584
+        },
+        "output_tokens": 134,
+        "output_tokens_details": {
+          "reasoning_tokens": 59
+        },
+        "total_tokens": 4971
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:50:00Z",
+        "end": "2026-11-12T09:50:00Z",
+        "search": null,
+        "limit": 20
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "deployments",
+      "status": "ok",
+      "evidence_id": "ev_5b30e7b63b55",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_5b30e7b63b55",
+        "query": {
+          "tool": "deployments",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T08:50:00Z",
+          "end": "2026-11-12T09:50:00Z",
+          "search": null,
+          "limit": 20
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 8,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5307,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 3584
+        },
+        "output_tokens": 387,
+        "output_tokens_details": {
+          "reasoning_tokens": 228
+        },
+        "total_tokens": 5694
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "callback",
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_9a13ff6f1c59",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_9a13ff6f1c59",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "callback",
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "initiation",
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_9697d1988408",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_9697d1988408",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "initiation",
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "airtable-expiry-041:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-41",
+            "toolkit": "airtable",
+            "status": 410,
+            "connection_state": "EXPIRED",
+            "initiation_age_seconds": 950,
+            "completion_window_seconds": 600,
+            "token_exchange_attempted": false
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 9,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5610,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 612,
+        "output_tokens_details": {
+          "reasoning_tokens": 78
+        },
+        "total_tokens": 6222
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "agent_result",
+      "task": "dependencies",
+      "role": "dependency",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "No observed change shortly before 2026-11-12T09:50:00Z: deployments queries show no tool-executor deploys in 08:50–09:50Z and no platform-wide deploys in that hour; only an unrelated support-dashboard release appears later at 10:05Z (ev_df8ff29636a9 / no records, ev_5b30e7b63b55 / no records, ev_480d8997b003:airtable-expiry-041:deployments:0).",
+          "Observed failure mechanism is consistent with initiation expiry rather than provider exchange failure: the failed Airtable auth request logged 410 EXPIRED with initiation_age_seconds 950 vs completion_window_seconds 600, and token_exchange_attempted=false, so this request did not reach provider token exchange (ev_547deced8d61:airtable-expiry-041:logs:0).",
+          "There is a strong control showing fresh links remained healthy in the same period: controlled sandbox reproduction fails for the older initiation (950s age, 600s window) but succeeds when only Airtable configuration differs and the initiation age is fresh (120s), with no token exchange in either case (ev_a964fad6c294:airtable-expiry-041:reproduce:0, ev_a964fad6c294:airtable-expiry-041:reproduce:1). A production comparison also shows same-window health for another tenant/provider path: maple had status 200 and unrelated reads succeeding while cedar saw expiry failures (ev_547deced8d61:airtable-expiry-041:logs:1, ev_547deced8d61:airtable-expiry-041:logs:0).",
+          "Tenant impact appears isolated rather than global: at 10:05Z cedar had 636 requests with 390 failures, 390 blocked operations, queue_depth 114, p95 1520ms, while maple had 538 requests, 0 failures, queue_depth 0, p95 160ms (ev_4978f845ca13:airtable-expiry-041:metrics:0, ev_4978f845ca13:airtable-expiry-041:metrics:1). Important gap: no canonical evidence here shows a recent TTL/configuration, clock source, redirect/callback, auth-broker, or provider-facing setting change—only the current dependency listing exists (ev_fe8e71caad06:airtable-expiry-041:dependencies:0)."
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "dependencies",
+      "role": "dependency",
+      "status": "complete",
+      "at": 524372.009755861
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5990,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 605,
+        "output_tokens_details": {
+          "reasoning_tokens": 84
+        },
+        "total_tokens": 6595
+      },
+      "task": "observe"
+    },
+    {
+      "event": "agent_result",
+      "task": "observe",
+      "role": "observability",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "Using broad/null-filter telemetry first, the only canonical Airtable auth-related log in-window is an expired attempt for tenant cedar: status 410, connection_state EXPIRED, initiation_age_seconds 950 vs completion_window_seconds 600, and token_exchange_attempted false, so the observed failure appears to happen before any provider token exchange; a comparison log for maple shows unrelated provider access succeeding at the same time, but no canonical callback records were found in the callback search. [ev_547deced8d61/airtable-expiry-041:logs:0, ev_547deced8d61/airtable-expiry-041:logs:1, ev_9a13ff6f1c59]",
+          "A controlled sandbox comparison matches the older-vs-fresh link pattern: the original Airtable initiation aged 950s returned 410 EXPIRED, while a corrected/fresh initiation aged 120s returned 200 ACTIVE; neither attempted token exchange, which is consistent with expiry being enforced before provider exchange. [ev_a964fad6c294/airtable-expiry-041:reproduce:0, ev_a964fad6c294/airtable-expiry-041:reproduce:1]",
+          "Observed tenant impact is isolated in supplied metrics: cedar had 636 requests with 390 failures (390 blocked operations), queue_depth 114, and p95 latency 1520ms, while maple had 538 requests, 0 failures, queue_depth 0, and p95 latency 160ms, supporting a stale-link problem affecting at least cedar rather than a broad Airtable/provider outage. [ev_4978f845ca13/airtable-expiry-041:metrics:0, ev_4978f845ca13/airtable-expiry-041:metrics:1]",
+          "Important gaps/counter-evidence: we do not have canonical auth-initiation creation records, user-level counts, or callback/error records beyond the single expired cedar log, so request volume and affected users for 'older links vs fresh links' cannot be fully enumerated from logs alone; no tool-executor deployments were observed before the window, and dependency metadata says provider reachability was true, which weakens a provider-wide failure explanation. [ev_9697d1988408/airtable-expiry-041:logs:0, ev_df8ff29636a9, ev_fe8e71caad06/airtable-expiry-041:dependencies:0]"
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "observe",
+      "role": "observability",
+      "status": "complete",
+      "at": 524376.43207961
+    },
+    {
+      "event": "task_started",
+      "task": "reason",
+      "role": "reasoning",
+      "at": 524376.442086808,
+      "question": "Does the evidence support an expired authentication-initiation mechanism specifically for older Airtable links, or is there counter-evidence for alternatives such as provider failure, redirect mismatch, permissions/consent issues, credential-store problems, or an internal regression affecting both old and new connections?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_480d8997b003",
+        "ev_fe8e71caad06",
+        "ev_a964fad6c294",
+        "ev_c61c7a11689d",
+        "ev_455998493bef",
+        "ev_6d9fa35efd48",
+        "ev_df8ff29636a9",
+        "ev_547deced8d61",
+        "ev_de638364f6c5",
+        "ev_4978f845ca13",
+        "ev_5b30e7b63b55",
+        "ev_9a13ff6f1c59",
+        "ev_9697d1988408"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "reasoning",
+      "model": "gpt-5.4",
+      "request": 10,
+      "task": "reason"
+    },
+    {
+      "event": "model_finished",
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 7113,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1323,
+        "output_tokens_details": {
+          "reasoning_tokens": 69
+        },
+        "total_tokens": 8436
+      },
+      "task": "reason"
+    },
+    {
+      "event": "model_started",
+      "role": "reasoning",
+      "model": "gpt-5.4",
+      "request": 11,
+      "task": "reason"
+    },
+    {
+      "event": "model_finished",
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 9133,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 2433,
+        "output_tokens_details": {
+          "reasoning_tokens": 73
+        },
+        "total_tokens": 11566
+      },
+      "task": "reason"
+    },
+    {
+      "event": "decision_rejected",
+      "role": "reasoning",
+      "reason": "Invalid or ungrounded finding",
+      "rejected_output": {
+        "candidates": [
+          {
+            "code": "authentication_initiation_expired",
+            "hypothesis": {
+              "description": "The observed Airtable auth failures are best explained by older authentication-initiation links expiring before completion. The failed production request and the controlled sandbox comparison both show expiry enforced before any provider token exchange, while fresh connections still succeed.",
+              "supporting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294",
+                "ev_4978f845ca13",
+                "ev_fe8e71caad06",
+                "ev_df8ff29636a9"
+              ],
+              "contradicting_evidence": [
+                "ev_9a13ff6f1c59"
+              ],
+              "confidence": "high",
+              "assumptions": [
+                "The observed cedar failure is representative of the reported 'older link' path, but canonical initiation-creation records were not supplied.",
+                "The maple success is a comparison showing the platform/provider path was not broadly broken, not proof that every fresh Airtable initiation succeeded."
+              ]
+            },
+            "findings": [
+              {
+                "code": "mechanism_observation",
+                "statement": "The failed production Airtable request returned 410 with connection_state EXPIRED; initiation_age_seconds was 950 against a completion_window_seconds of 600, and token_exchange_attempted was false, showing the request failed on expired initiation state before provider token exchange.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "In a controlled sandbox comparison, the older initiation (950s age, 600s window) failed with 410 EXPIRED, while the fresh initiation (120s age) succeeded with 200 ACTIVE; neither attempted token exchange, isolating initiation age as the discriminating variable in the supplied comparison.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "new_connection_healthy",
+                "statement": "A same-window production comparison shows healthy provider access on another tenant path: maple had status 200 with unrelated reads succeeding while cedar saw the expired auth failure.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Observed impact was material but not platform-wide: cedar had 636 requests with 390 failures and 390 blocked operations, queue_depth 114, p95 latency 1520ms, while maple had 538 requests, 0 failures, queue_depth 0, and p95 latency 160ms.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "version_control",
+                "statement": "No tool-executor deployment was observed in the hour before incident start, weakening a new internal regression as the primary explanation for the observed failure.",
+                "citations": []
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "Dependency metadata reported provider API reachability as true, which is consistent with the failure occurring before provider exchange rather than a provider-wide outage.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_fe8e71caad06",
+                    "record_id": "airtable-expiry-041:dependencies:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "authentication_initiation_expired_remediation",
+              "collect_missing_telemetry",
+              "align_telemetry_windows"
+            ],
+            "actions": [
+              "Have affected users start a fresh Airtable authentication initiation and complete it within the valid window rather than retrying the expired link.",
+              "Collect canonical auth-initiation creation/TTL records or callback-state records to confirm the expiry path for impacted users and quantify how many stale links were used.",
+              "Align telemetry around initiation creation, completion, and expiry to distinguish stale-link usage from any separate callback/config issues."
+            ],
+            "missing_checks": [
+              "Canonical auth-initiation creation and TTL/config records for the failed cedar request were not provided; these would directly verify when the link was issued and whether expiry policy matched the observed 600s window.",
+              "User/path-level counts separating old-link attempts from fresh-link attempts in production were not provided, so the exact scope of 'late arrivals' versus all onboarding traffic remains unverified."
+            ],
+            "strength": 9
+          },
+          {
+            "code": "provider_failure",
+            "hypothesis": {
+              "description": "A provider-side Airtable outage is not well supported for the observed failure because the request appears to fail before token exchange and a same-window comparison shows provider access succeeding elsewhere.",
+              "supporting_evidence": [
+                "ev_fe8e71caad06"
+              ],
+              "contradicting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294",
+                "ev_4978f845ca13"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "The maple success is only a comparison path, not exhaustive proof that every Airtable provider endpoint was healthy."
+              ]
+            },
+            "findings": [
+              {
+                "code": "pre_provider_failure",
+                "statement": "The failed cedar request never attempted token exchange, so the observed error occurred before reaching the provider exchange step.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "Both the failing and succeeding controlled reproductions show token_exchange_attempted false, indicating the discriminating behavior happened before provider interaction.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "A same-window comparison showed maple succeeding and dependency metadata reported provider reachability true, which weakens a provider-wide failure theory.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_fe8e71caad06",
+                    "record_id": "airtable-expiry-041:dependencies:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "monitor_provider"
+            ],
+            "actions": [
+              "Do not prioritize provider escalation from the supplied evidence; continue monitoring provider health only as a precaution."
+            ],
+            "missing_checks": [
+              "No canonical provider-side trace or token-endpoint log was supplied, so this candidate cannot be ruled out for every possible request path beyond the observed failed execution."
+            ],
+            "strength": 3
+          },
+          {
+            "code": "oauth_redirect_uri_mismatch",
+            "hypothesis": {
+              "description": "A redirect URI mismatch or related callback/config issue is weaker than expiry for the observed request. No callback records were found in the supplied search, but that empty search does not outweigh the explicit EXPIRED state and pre-provider failure evidence.",
+              "supporting_evidence": [
+                "ev_9a13ff6f1c59"
+              ],
+              "contradicting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "The callback substring search may be incomplete and cannot prove absence of callback activity or redirect errors.",
+                "No canonical redirect-uri configuration records were supplied."
+              ]
+            },
+            "findings": [
+              {
+                "code": "mechanism_observation",
+                "statement": "The observed failed request explicitly recorded EXPIRED state with initiation age beyond the completion window, which is a more direct mechanism than an inferred redirect mismatch.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "The controlled comparison reproduced the old-link failure versus fresh-link success without provider token exchange, which fits expiry more directly than redirect mismatch.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "telemetry_gap",
+                "statement": "No callback records were returned by the supplied callback log search, but that query alone cannot establish whether redirect/callback issues were absent because substring searches are partial evidence.",
+                "citations": []
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "oauth_redirect_uri_mismatch_remediation"
+            ],
+            "actions": [
+              "If redirect/callback misconfiguration remains a concern, collect canonical callback and auth-broker records before treating it as causal.",
+              "Verify the OAuth callback URI configuration only if new evidence shows failures on fresh initiations or callback-time errors, since current evidence favors expiry."
+            ],
+            "missing_checks": [
+              "Canonical callback/auth-broker logs and redirect URI configuration records were not provided; these could materially change the ranking if they show fresh initiations failing at callback time."
+            ],
+            "strength": 2
+          }
+        ],
+        "findings": [
+          {
+            "code": "mechanism_observation",
+            "statement": "The clearest observed production mechanism is initiation expiry before provider exchange: cedar logged 410 EXPIRED with initiation age 950s versus a 600s completion window and token_exchange_attempted false.",
+            "citations": [
+              {
+                "evidence_id": "ev_547deced8d61",
+                "record_id": "airtable-expiry-041:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "controlled_comparison",
+            "statement": "A controlled comparison reproduced the pattern of old-link failure and fresh-link success, with the old initiation failing at 950s age and the fresh initiation succeeding at 120s age.",
+            "citations": [
+              {
+                "evidence_id": "ev_a964fad6c294",
+                "record_id": "airtable-expiry-041:reproduce:0"
+              },
+              {
+                "evidence_id": "ev_a964fad6c294",
+                "record_id": "airtable-expiry-041:reproduce:1"
+              }
+            ]
+          },
+          {
+            "code": "tenant_impact",
+            "statement": "Observed impact was significant for cedar but not broad in supplied telemetry: cedar had 390 failures and 390 blocked operations out of 636 requests, while maple had 0 failures out of 538 requests.",
+            "citations": [
+              {
+                "evidence_id": "ev_4978f845ca13",
+                "record_id": "airtable-expiry-041:metrics:0"
+              },
+              {
+                "evidence_id": "ev_4978f845ca13",
+                "record_id": "airtable-expiry-041:metrics:1"
+              }
+            ]
+          },
+          {
+            "code": "version_control",
+            "statement": "No tool-executor deployment was observed in the hour before incident start, so the supplied evidence does not support a new tool-executor regression affecting both old and new connections.",
+            "citations": []
+          },
+          {
+            "code": "telemetry_gap",
+            "statement": "Canonical auth-initiation creation/TTL records and callback/auth-broker records were not supplied, so exact stale-link issuance timing and full user scope cannot be directly verified from the provided evidence.",
+            "citations": []
+          }
+        ],
+        "notes": [
+          "The evidence supports expired authentication initiation for older Airtable links more strongly than provider failure, redirect mismatch, consent/permissions problems, credential-store failure, or a broad internal regression.",
+          "Permissions/consent and credential-store alternatives are not positively evidenced in the supplied records; the observed request failed before token exchange, and no revocation, scope, or store-degradation records were provided.",
+          "Empty callback-search results are only partial evidence and were treated as a telemetry gap, not proof of absence."
+        ]
+      },
+      "task": "reason"
+    },
+    {
+      "event": "model_started",
+      "role": "reasoning",
+      "model": "gpt-5.4",
+      "request": 12,
+      "task": "reason"
+    },
+    {
+      "event": "model_finished",
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 11750,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 7936
+        },
+        "output_tokens": 2587,
+        "output_tokens_details": {
+          "reasoning_tokens": 332
+        },
+        "total_tokens": 14337
+      },
+      "task": "reason"
+    },
+    {
+      "event": "agent_result",
+      "task": "reason",
+      "role": "reasoning",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "The supplied evidence supports expired authentication initiation for older Airtable links more strongly than provider failure or a broad regression affecting both old and new connections.",
+          "Redirect-mismatch, permissions/consent, and credential-store alternatives are not positively evidenced in the supplied canonical records; for the observed failed execution, the request stops at expired initiation before provider exchange.",
+          "Scope should remain limited to the observed tenants and requests; canonical initiation-creation/config records were not supplied."
+        ],
+        "candidates": [
+          {
+            "code": "authentication_initiation_expired",
+            "hypothesis": {
+              "description": "The observed Airtable failures are best explained by older authentication initiations expiring before completion. The failed production request shows expiry past the allowed window and never reaches token exchange, while a controlled comparison reproduces old-link failure and fresh-link success.",
+              "supporting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294",
+                "ev_4978f845ca13",
+                "ev_fe8e71caad06"
+              ],
+              "contradicting_evidence": [],
+              "confidence": "high",
+              "assumptions": [
+                "The observed cedar failure is representative of the reported older-link path, but canonical initiation-creation records were not supplied.",
+                "The maple success is comparative evidence that the platform/provider path was not broadly broken, not proof that every fresh Airtable initiation succeeded."
+              ]
+            },
+            "findings": [
+              {
+                "code": "mechanism_observation",
+                "statement": "The failed production Airtable request returned 410 with connection_state EXPIRED; initiation_age_seconds was 950 against a completion_window_seconds of 600, and token_exchange_attempted was false, showing expiry was enforced before provider token exchange.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "In a controlled sandbox comparison, the older initiation (950s age, 600s window) failed with 410 EXPIRED while the fresh initiation (120s age) succeeded with 200 ACTIVE; neither attempted token exchange, isolating initiation age in the supplied comparison.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "new_connection_healthy",
+                "statement": "A same-window production comparison shows another tenant path remained healthy: maple had status 200 with unrelated reads succeeding while cedar saw the expired auth failure.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Observed impact was material but not platform-wide: cedar had 636 requests with 390 failures and 390 blocked operations, queue_depth 114, p95 latency 1520ms, while maple had 538 requests, 0 failures, queue_depth 0, and p95 latency 160ms.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "pre_provider_failure",
+                "statement": "The observed failed request did not attempt token exchange, so the logged failure happened before the provider exchange step.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "authentication_initiation_expired_remediation",
+              "collect_missing_telemetry",
+              "align_telemetry_windows"
+            ],
+            "actions": [
+              "Have affected users start a fresh Airtable authentication initiation and complete it within the valid window instead of retrying the expired link.",
+              "Collect canonical auth-initiation creation/TTL records for impacted requests to confirm issuance time and expiry policy.",
+              "Align telemetry across initiation creation, completion, and expiry so stale-link attempts can be separated from any other onboarding failures."
+            ],
+            "missing_checks": [
+              "Canonical auth-initiation creation and TTL/config records for the failed cedar request were not provided; these would directly verify when the link was issued and whether the observed 600-second window came from expected policy.",
+              "Production counts separating stale-link attempts from fresh-link attempts were not provided, so the exact affected-user scope of late arrivals remains unverified."
+            ],
+            "strength": 10
+          },
+          {
+            "code": "provider_failure",
+            "hypothesis": {
+              "description": "A provider-side Airtable outage is weak for the observed failure because the failed request appears to stop before provider token exchange and another same-window tenant path is healthy.",
+              "supporting_evidence": [
+                "ev_fe8e71caad06"
+              ],
+              "contradicting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294",
+                "ev_4978f845ca13"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "The comparison tenant is evidence against a broad outage, not proof that every Airtable endpoint was healthy for every request."
+              ]
+            },
+            "findings": [
+              {
+                "code": "pre_provider_failure",
+                "statement": "The failed cedar request never attempted token exchange, so the observed error occurred before the provider exchange step.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "Both the failing and succeeding controlled reproductions show token_exchange_attempted false, indicating the discriminating behavior occurred before provider interaction.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "Same-window comparison telemetry shows tenant isolation rather than a broad provider outage: cedar had heavy failures while maple had none.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:1"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "monitor_provider"
+            ],
+            "actions": [
+              "Do not prioritize provider escalation from the supplied evidence; continue monitoring provider health as a lower-priority check."
+            ],
+            "missing_checks": [
+              "No canonical provider-side exchange trace was supplied for unobserved paths, so this alternative cannot be ruled out for every possible request outside the observed failed execution."
+            ],
+            "strength": 3
+          },
+          {
+            "code": "unconfirmed_change",
+            "hypothesis": {
+              "description": "A broader internal regression affecting both old and new connections is not supported by the supplied observations; the visible pattern is tenant-isolated and old-versus-fresh discriminated, but direct configuration history for auth-initiation policy was not provided.",
+              "supporting_evidence": [],
+              "contradicting_evidence": [
+                "ev_a964fad6c294",
+                "ev_547deced8d61",
+                "ev_4978f845ca13"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "No canonical change history for auth-initiation TTL or callback configuration was supplied, so absence of a recent change is not proven.",
+                "Maple is only a comparison tenant, not exhaustive coverage of all fresh Airtable connection attempts."
+              ]
+            },
+            "findings": [
+              {
+                "code": "controlled_comparison",
+                "statement": "The supplied controlled comparison distinguishes older initiation failure from fresh initiation success, which weighs against a regression that would affect both old and new connections equally.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_isolation",
+                "statement": "Observed metrics show cedar was impacted while maple remained healthy in the same period, which weakens a broad platform regression explanation.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "mechanism_observation",
+                "statement": "The only canonical failed auth record explicitly reports EXPIRED state with initiation age beyond the completion window, which is more specific than a generic internal regression.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_9697d1988408",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry"
+            ],
+            "actions": [
+              "Collect canonical auth-service configuration/change history for initiation TTL and callback handling before treating an internal change as causal."
+            ],
+            "missing_checks": [
+              "Canonical auth-service change records for initiation TTL, callback handling, or Airtable auth configuration were not provided; those records could materially change the ranking if they show a recent change affecting both old and new flows."
+            ],
+            "strength": 2
+          }
+        ],
+        "findings": [
+          {
+            "code": "mechanism_observation",
+            "statement": "The clearest observed production mechanism is initiation expiry before provider exchange: cedar logged 410 EXPIRED with initiation age 950s versus a 600s completion window and token_exchange_attempted false.",
+            "citations": [
+              {
+                "evidence_id": "ev_547deced8d61",
+                "record_id": "airtable-expiry-041:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "controlled_comparison",
+            "statement": "A controlled comparison reproduced the old-link failure and fresh-link success pattern: the 950-second initiation failed while the 120-second initiation succeeded.",
+            "citations": [
+              {
+                "evidence_id": "ev_a964fad6c294",
+                "record_id": "airtable-expiry-041:reproduce:0"
+              },
+              {
+                "evidence_id": "ev_a964fad6c294",
+                "record_id": "airtable-expiry-041:reproduce:1"
+              }
+            ]
+          },
+          {
+            "code": "tenant_impact",
+            "statement": "Observed impact was significant for cedar but not broad in supplied telemetry: cedar had 390 failures and 390 blocked operations out of 636 requests, while maple had 0 failures out of 538 requests.",
+            "citations": [
+              {
+                "evidence_id": "ev_4978f845ca13",
+                "record_id": "airtable-expiry-041:metrics:0"
+              },
+              {
+                "evidence_id": "ev_4978f845ca13",
+                "record_id": "airtable-expiry-041:metrics:1"
+              }
+            ]
+          },
+          {
+            "code": "pre_provider_failure",
+            "statement": "The observed failed execution did not attempt token exchange, so provider-failure, consent, and credential-store explanations are not evidenced for that request path.",
+            "citations": [
+              {
+                "evidence_id": "ev_547deced8d61",
+                "record_id": "airtable-expiry-041:logs:0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "reason",
+      "role": "reasoning",
+      "status": "complete",
+      "at": 524479.029546329
+    },
+    {
+      "event": "task_started",
+      "task": "critic",
+      "role": "critic",
+      "at": 524479.043698231,
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_480d8997b003",
+        "ev_fe8e71caad06",
+        "ev_a964fad6c294",
+        "ev_c61c7a11689d",
+        "ev_455998493bef",
+        "ev_6d9fa35efd48",
+        "ev_df8ff29636a9",
+        "ev_547deced8d61",
+        "ev_de638364f6c5",
+        "ev_4978f845ca13",
+        "ev_5b30e7b63b55",
+        "ev_9a13ff6f1c59",
+        "ev_9697d1988408"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "critic",
+      "model": "gpt-5.4",
+      "request": 13,
+      "task": "critic"
+    },
+    {
+      "event": "model_finished",
+      "role": "critic",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 9727,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 743,
+        "output_tokens_details": {
+          "reasoning_tokens": 321
+        },
+        "total_tokens": 10470
+      },
+      "task": "critic"
+    },
+    {
+      "event": "critique_decision",
+      "role": "critic",
+      "task": "critic",
+      "approved": true,
+      "blocking_checks": [],
+      "notes": [
+        "The core observed failure mechanism is well grounded in canonical production logs: `410 EXPIRED`, `initiation_age_seconds: 950`, `completion_window_seconds: 600`, and `token_exchange_attempted: false` in ev_547deced8d61 / airtable-expiry-041:logs:0.",
+        "That record is sufficient to support a bounded diagnosis of `authentication_initiation_expired` for the observed failed execution, even without auth-initiation creation records.",
+        "The missing auth-initiation creation/TTL records are useful for verifying why the stale link existed or whether policy changed, but they do not materially undermine the immediate observed mechanism.",
+        "Impact/scoping is adequately bounded: cedar shows substantial impact (390/636 failures, queue_depth 114, p95 1520ms) while maple is healthy (0/538 failures, queue_depth 0, p95 160ms) in ev_4978f845ca13.",
+        "No pre-incident tool-executor deployment is observed in ev_df8ff29636a9, which weakens a simple executor regression explanation, though it does not prove no auth-policy/config change elsewhere.",
+        "The diagnosis should stay scoped to observed tenants/requests and distinguish immediate mechanism (expired initiation before provider exchange) from any unverified upstream reason the initiation aged out."
+      ]
+    },
+    {
+      "event": "agent_result",
+      "task": "critic",
+      "role": "critic",
+      "result": {
+        "hypotheses": [],
+        "objections": [
+          "The sandbox control is supportive but not a clean age-only isolation: the reproduce records state `same_request_except: airtable_configuration`, while the observed initiation age also differs between failing and succeeding cases. It supports the stale-link mechanism, but the report should avoid claiming age was the only changed variable from that artifact alone.",
+          "The maple production success is only a comparative healthy path (`status: 200`, `unrelated_read_succeeds: true`), not direct proof of a fresh Airtable auth initiation succeeding in production. It weakens broad provider/platform outage theories but should not be overstated as direct confirmation of the fresh-auth path."
+        ],
+        "followups": [
+          {
+            "id": "report",
+            "role": "reporting",
+            "question": "Write the evidence-backed internal report and proposed next steps.",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          }
+        ],
+        "report": null,
+        "notes": [
+          "The core observed failure mechanism is well grounded in canonical production logs: `410 EXPIRED`, `initiation_age_seconds: 950`, `completion_window_seconds: 600`, and `token_exchange_attempted: false` in ev_547deced8d61 / airtable-expiry-041:logs:0.",
+          "That record is sufficient to support a bounded diagnosis of `authentication_initiation_expired` for the observed failed execution, even without auth-initiation creation records.",
+          "The missing auth-initiation creation/TTL records are useful for verifying why the stale link existed or whether policy changed, but they do not materially undermine the immediate observed mechanism.",
+          "Impact/scoping is adequately bounded: cedar shows substantial impact (390/636 failures, queue_depth 114, p95 1520ms) while maple is healthy (0/538 failures, queue_depth 0, p95 160ms) in ev_4978f845ca13.",
+          "No pre-incident tool-executor deployment is observed in ev_df8ff29636a9, which weakens a simple executor regression explanation, though it does not prove no auth-policy/config change elsewhere.",
+          "The diagnosis should stay scoped to observed tenants/requests and distinguish immediate mechanism (expired initiation before provider exchange) from any unverified upstream reason the initiation aged out."
+        ],
+        "candidates": [
+          {
+            "code": "authentication_initiation_expired",
+            "hypothesis": {
+              "description": "The observed Airtable failures are best explained by older authentication initiations expiring before completion. The failed production request shows expiry past the allowed window and never reaches token exchange, while a controlled comparison reproduces old-link failure and fresh-link success.",
+              "supporting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294",
+                "ev_4978f845ca13",
+                "ev_fe8e71caad06"
+              ],
+              "contradicting_evidence": [],
+              "confidence": "high",
+              "assumptions": [
+                "The observed cedar failure is representative of the reported older-link path, but canonical initiation-creation records were not supplied.",
+                "The maple success is comparative evidence that the platform/provider path was not broadly broken, not proof that every fresh Airtable initiation succeeded."
+              ]
+            },
+            "findings": [
+              {
+                "code": "mechanism_observation",
+                "statement": "The failed production Airtable request returned 410 with connection_state EXPIRED; initiation_age_seconds was 950 against a completion_window_seconds of 600, and token_exchange_attempted was false, showing expiry was enforced before provider token exchange.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "In a controlled sandbox comparison, the older initiation (950s age, 600s window) failed with 410 EXPIRED while the fresh initiation (120s age) succeeded with 200 ACTIVE; neither attempted token exchange, isolating initiation age in the supplied comparison.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "new_connection_healthy",
+                "statement": "A same-window production comparison shows another tenant path remained healthy: maple had status 200 with unrelated reads succeeding while cedar saw the expired auth failure.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Observed impact was material but not platform-wide: cedar had 636 requests with 390 failures and 390 blocked operations, queue_depth 114, p95 latency 1520ms, while maple had 538 requests, 0 failures, queue_depth 0, and p95 latency 160ms.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "pre_provider_failure",
+                "statement": "The observed failed request did not attempt token exchange, so the logged failure happened before the provider exchange step.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "authentication_initiation_expired_remediation",
+              "collect_missing_telemetry",
+              "align_telemetry_windows"
+            ],
+            "actions": [
+              "Have affected users start a fresh Airtable authentication initiation and complete it within the valid window instead of retrying the expired link.",
+              "Collect canonical auth-initiation creation/TTL records for impacted requests to confirm issuance time and expiry policy.",
+              "Align telemetry across initiation creation, completion, and expiry so stale-link attempts can be separated from any other onboarding failures."
+            ],
+            "missing_checks": [],
+            "strength": 10
+          },
+          {
+            "code": "provider_failure",
+            "hypothesis": {
+              "description": "A provider-side Airtable outage is weak for the observed failure because the failed request appears to stop before provider token exchange and another same-window tenant path is healthy.",
+              "supporting_evidence": [
+                "ev_fe8e71caad06"
+              ],
+              "contradicting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294",
+                "ev_4978f845ca13"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "The comparison tenant is evidence against a broad outage, not proof that every Airtable endpoint was healthy for every request."
+              ]
+            },
+            "findings": [
+              {
+                "code": "pre_provider_failure",
+                "statement": "The failed cedar request never attempted token exchange, so the observed error occurred before the provider exchange step.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_547deced8d61",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "Both the failing and succeeding controlled reproductions show token_exchange_attempted false, indicating the discriminating behavior occurred before provider interaction.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "Same-window comparison telemetry shows tenant isolation rather than a broad provider outage: cedar had heavy failures while maple had none.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:1"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "monitor_provider"
+            ],
+            "actions": [
+              "Do not prioritize provider escalation from the supplied evidence; continue monitoring provider health as a lower-priority check."
+            ],
+            "missing_checks": [
+              "No canonical provider-side exchange trace was supplied for unobserved paths, so this alternative cannot be ruled out for every possible request outside the observed failed execution."
+            ],
+            "strength": 3
+          },
+          {
+            "code": "unconfirmed_change",
+            "hypothesis": {
+              "description": "A broader internal regression affecting both old and new connections is not supported by the supplied observations; the visible pattern is tenant-isolated and old-versus-fresh discriminated, but direct configuration history for auth-initiation policy was not provided.",
+              "supporting_evidence": [],
+              "contradicting_evidence": [
+                "ev_a964fad6c294",
+                "ev_547deced8d61",
+                "ev_4978f845ca13"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "No canonical change history for auth-initiation TTL or callback configuration was supplied, so absence of a recent change is not proven.",
+                "Maple is only a comparison tenant, not exhaustive coverage of all fresh Airtable connection attempts."
+              ]
+            },
+            "findings": [
+              {
+                "code": "controlled_comparison",
+                "statement": "The supplied controlled comparison distinguishes older initiation failure from fresh initiation success, which weighs against a regression that would affect both old and new connections equally.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_a964fad6c294",
+                    "record_id": "airtable-expiry-041:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_isolation",
+                "statement": "Observed metrics show cedar was impacted while maple remained healthy in the same period, which weakens a broad platform regression explanation.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_4978f845ca13",
+                    "record_id": "airtable-expiry-041:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "mechanism_observation",
+                "statement": "The only canonical failed auth record explicitly reports EXPIRED state with initiation age beyond the completion window, which is more specific than a generic internal regression.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_9697d1988408",
+                    "record_id": "airtable-expiry-041:logs:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry"
+            ],
+            "actions": [
+              "Collect canonical auth-service configuration/change history for initiation TTL and callback handling before treating an internal change as causal."
+            ],
+            "missing_checks": [
+              "Canonical auth-service change records for initiation TTL, callback handling, or Airtable auth configuration were not provided; those records could materially change the ranking if they show a recent change affecting both old and new flows."
+            ],
+            "strength": 2
+          }
+        ],
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "critic",
+      "role": "critic",
+      "status": "complete",
+      "at": 524495.727237874
+    },
+    {
+      "event": "task_started",
+      "task": "report",
+      "role": "reporting",
+      "at": 524495.742201168,
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_480d8997b003",
+        "ev_fe8e71caad06",
+        "ev_a964fad6c294",
+        "ev_c61c7a11689d",
+        "ev_455998493bef",
+        "ev_6d9fa35efd48",
+        "ev_df8ff29636a9",
+        "ev_547deced8d61",
+        "ev_de638364f6c5",
+        "ev_4978f845ca13",
+        "ev_5b30e7b63b55",
+        "ev_9a13ff6f1c59",
+        "ev_9697d1988408"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "reporting",
+      "model": "gpt-5.4",
+      "request": 14,
+      "task": "report"
+    },
+    {
+      "event": "model_finished",
+      "role": "reporting",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 11818,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1391,
+        "output_tokens_details": {
+          "reasoning_tokens": 55
+        },
+        "total_tokens": 13209
+      },
+      "task": "report"
+    },
+    {
+      "event": "agent_result",
+      "task": "report",
+      "role": "reporting",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": {
+          "incident_id": "airtable-expiry-041",
+          "outcome": "probable_cause",
+          "hypotheses": [
+            {
+              "description": "Most likely cause for the observed failed execution: an older Airtable authentication initiation had expired before completion. The production failure shows the initiation age exceeded the allowed completion window and the flow stopped before any provider token exchange. A controlled sandbox comparison matches the old-link failure versus fresh-link success pattern.",
+              "supporting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294",
+                "ev_4978f845ca13",
+                "ev_fe8e71caad06"
+              ],
+              "contradicting_evidence": [],
+              "confidence": "high",
+              "assumptions": [
+                "The observed cedar failure is representative of the reported stale-link path.",
+                "Canonical initiation-creation records were not supplied, so this explains the immediate failure mechanism rather than why users returned with stale links."
+              ]
+            },
+            {
+              "description": "A broad Airtable provider outage is a weaker explanation for the observed failure because the failed execution never attempted token exchange, and a same-window comparison tenant remained healthy.",
+              "supporting_evidence": [
+                "ev_fe8e71caad06"
+              ],
+              "contradicting_evidence": [
+                "ev_547deced8d61",
+                "ev_a964fad6c294",
+                "ev_4978f845ca13"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "The maple comparison weakens a broad provider outage theory but does not prove every provider endpoint was healthy for every request."
+              ]
+            },
+            {
+              "description": "A broader internal regression or recent platform change affecting both old and fresh auth flows is not supported by the supplied observations. The evidence discriminates stale initiations from fresh ones, though canonical auth-policy/config change history was not provided.",
+              "supporting_evidence": [],
+              "contradicting_evidence": [
+                "ev_a964fad6c294",
+                "ev_4978f845ca13",
+                "ev_df8ff29636a9",
+                "ev_5b30e7b63b55"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "No canonical auth-service change log or TTL-policy history was supplied, so an unobserved config change elsewhere cannot be fully excluded."
+              ]
+            }
+          ],
+          "recommended_actions": [
+            "Use authentication_initiation_expired_remediation for affected users: start a fresh Airtable authentication initiation and complete it within the valid window instead of retrying the expired link.",
+            "Collect missing canonical auth-initiation creation, TTL, and callback-completion telemetry for impacted requests; current synthetic telemetry is enough for the immediate mechanism but not for issuance-path verification.",
+            "Align telemetry windows across initiation creation, completion, expiry enforcement, and onboarding outcome so stale-link attempts can be distinguished from other auth failures.",
+            "Continue lower-priority provider monitoring rather than escalating Airtable first, because the observed failed execution stops before provider exchange.",
+            "These are proposed next steps only; no remediation action has been executed in this report."
+          ],
+          "limitations": [
+            "No canonical auth-initiation creation record or policy-change record was supplied, so the report cannot verify why the initiation aged out or whether TTL/callback policy changed.",
+            "The controlled reproduce evidence is supportive but not a pure age-only isolation because it also notes a configuration difference; it should be treated as corroboration, not sole proof.",
+            "Observed tenant impact is bounded to supplied telemetry: cedar is materially affected while maple is healthy, but user-level counts for all returning users were not provided.",
+            "Empty callback-search results do not prove absence of callback activity outside the queried fields or logging paths."
+          ]
+        },
+        "notes": [],
+        "candidates": null,
+        "findings": [
+          {
+            "code": "mechanism_observation",
+            "statement": "The observed production Airtable failure returned 410 with connection_state EXPIRED; initiation_age_seconds was 950 versus a completion_window_seconds of 600, and token_exchange_attempted was false, showing expiry was enforced before provider token exchange.",
+            "citations": [
+              {
+                "evidence_id": "ev_547deced8d61",
+                "record_id": "airtable-expiry-041:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "controlled_comparison",
+            "statement": "In controlled sandbox observations, the older initiation (950s age, 600s window) failed with 410 EXPIRED while the fresh initiation (120s age) succeeded with 200 ACTIVE; both records show token_exchange_attempted false, supporting the stale-link mechanism before provider exchange.",
+            "citations": [
+              {
+                "evidence_id": "ev_a964fad6c294",
+                "record_id": "airtable-expiry-041:reproduce:0"
+              },
+              {
+                "evidence_id": "ev_a964fad6c294",
+                "record_id": "airtable-expiry-041:reproduce:1"
+              }
+            ]
+          },
+          {
+            "code": "new_connection_healthy",
+            "statement": "A same-window comparison path remained healthy in production: maple returned status 200 with unrelated reads succeeding while cedar showed the expired-auth failure.",
+            "citations": [
+              {
+                "evidence_id": "ev_547deced8d61",
+                "record_id": "airtable-expiry-041:logs:1"
+              },
+              {
+                "evidence_id": "ev_547deced8d61",
+                "record_id": "airtable-expiry-041:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "tenant_impact",
+            "statement": "Observed impact was material but not platform-wide in supplied synthetic telemetry: cedar had 636 requests with 390 failures and 390 blocked operations, queue_depth 114, p95 latency 1520ms, while maple had 538 requests with 0 failures, queue_depth 0, and p95 latency 160ms.",
+            "citations": [
+              {
+                "evidence_id": "ev_4978f845ca13",
+                "record_id": "airtable-expiry-041:metrics:0"
+              },
+              {
+                "evidence_id": "ev_4978f845ca13",
+                "record_id": "airtable-expiry-041:metrics:1"
+              }
+            ]
+          },
+          {
+            "code": "pre_provider_failure",
+            "statement": "For the observed failed execution, no provider token exchange was attempted, so the evidenced failure occurred before the provider exchange step.",
+            "citations": [
+              {
+                "evidence_id": "ev_547deced8d61",
+                "record_id": "airtable-expiry-041:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "provider_isolation",
+            "statement": "Dependency metadata shows provider API reachability was true, which is consistent with the failure being local to auth-initiation state rather than a demonstrated provider reachability outage.",
+            "citations": [
+              {
+                "evidence_id": "ev_fe8e71caad06",
+                "record_id": "airtable-expiry-041:dependencies:0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "report",
+      "role": "reporting",
+      "status": "complete",
+      "at": 524517.127609934
+    }
+  ],
+  "limitations": [],
+  "report": {
+    "incident_id": "airtable-expiry-041",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause for the observed failed execution: an older Airtable authentication initiation had expired before completion. The production failure shows the initiation age exceeded the allowed completion window and the flow stopped before any provider token exchange. A controlled sandbox comparison matches the old-link failure versus fresh-link success pattern.",
+        "supporting_evidence": [
+          "ev_547deced8d61",
+          "ev_a964fad6c294",
+          "ev_4978f845ca13",
+          "ev_fe8e71caad06"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The observed cedar failure is representative of the reported stale-link path.",
+          "Canonical initiation-creation records were not supplied, so this explains the immediate failure mechanism rather than why users returned with stale links."
+        ]
+      },
+      {
+        "description": "A broad Airtable provider outage is a weaker explanation for the observed failure because the failed execution never attempted token exchange, and a same-window comparison tenant remained healthy.",
+        "supporting_evidence": [
+          "ev_fe8e71caad06"
+        ],
+        "contradicting_evidence": [
+          "ev_547deced8d61",
+          "ev_a964fad6c294",
+          "ev_4978f845ca13"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The maple comparison weakens a broad provider outage theory but does not prove every provider endpoint was healthy for every request."
+        ]
+      },
+      {
+        "description": "A broader internal regression or recent platform change affecting both old and fresh auth flows is not supported by the supplied observations. The evidence discriminates stale initiations from fresh ones, though canonical auth-policy/config change history was not provided.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_a964fad6c294",
+          "ev_4978f845ca13",
+          "ev_df8ff29636a9",
+          "ev_5b30e7b63b55"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "No canonical auth-service change log or TTL-policy history was supplied, so an unobserved config change elsewhere cannot be fully excluded."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Use authentication_initiation_expired_remediation for affected users: start a fresh Airtable authentication initiation and complete it within the valid window instead of retrying the expired link.",
+      "Collect missing canonical auth-initiation creation, TTL, and callback-completion telemetry for impacted requests; current synthetic telemetry is enough for the immediate mechanism but not for issuance-path verification.",
+      "Align telemetry windows across initiation creation, completion, expiry enforcement, and onboarding outcome so stale-link attempts can be distinguished from other auth failures.",
+      "Continue lower-priority provider monitoring rather than escalating Airtable first, because the observed failed execution stops before provider exchange.",
+      "These are proposed next steps only; no remediation action has been executed in this report."
+    ],
+    "limitations": [
+      "No canonical auth-initiation creation record or policy-change record was supplied, so the report cannot verify why the initiation aged out or whether TTL/callback policy changed.",
+      "The controlled reproduce evidence is supportive but not a pure age-only isolation because it also notes a configuration difference; it should be treated as corroboration, not sole proof.",
+      "Observed tenant impact is bounded to supplied telemetry: cedar is materially affected while maple is healthy, but user-level counts for all returning users were not provided.",
+      "Empty callback-search results do not prove absence of callback activity outside the queried fields or logging paths."
+    ]
+  },
+  "tool_calls": 13,
+  "followup_rounds": 0,
+  "status": "complete",
+  "candidates": [
+    {
+      "code": "authentication_initiation_expired",
+      "hypothesis": {
+        "description": "The observed Airtable failures are best explained by older authentication initiations expiring before completion. The failed production request shows expiry past the allowed window and never reaches token exchange, while a controlled comparison reproduces old-link failure and fresh-link success.",
+        "supporting_evidence": [
+          "ev_547deced8d61",
+          "ev_a964fad6c294",
+          "ev_4978f845ca13",
+          "ev_fe8e71caad06"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The observed cedar failure is representative of the reported older-link path, but canonical initiation-creation records were not supplied.",
+          "The maple success is comparative evidence that the platform/provider path was not broadly broken, not proof that every fresh Airtable initiation succeeded."
+        ]
+      },
+      "findings": [
+        {
+          "code": "mechanism_observation",
+          "statement": "The failed production Airtable request returned 410 with connection_state EXPIRED; initiation_age_seconds was 950 against a completion_window_seconds of 600, and token_exchange_attempted was false, showing expiry was enforced before provider token exchange.",
+          "citations": [
+            {
+              "evidence_id": "ev_547deced8d61",
+              "record_id": "airtable-expiry-041:logs:0"
+            }
+          ]
+        },
+        {
+          "code": "controlled_comparison",
+          "statement": "In a controlled sandbox comparison, the older initiation (950s age, 600s window) failed with 410 EXPIRED while the fresh initiation (120s age) succeeded with 200 ACTIVE; neither attempted token exchange, isolating initiation age in the supplied comparison.",
+          "citations": [
+            {
+              "evidence_id": "ev_a964fad6c294",
+              "record_id": "airtable-expiry-041:reproduce:0"
+            },
+            {
+              "evidence_id": "ev_a964fad6c294",
+              "record_id": "airtable-expiry-041:reproduce:1"
+            }
+          ]
+        },
+        {
+          "code": "new_connection_healthy",
+          "statement": "A same-window production comparison shows another tenant path remained healthy: maple had status 200 with unrelated reads succeeding while cedar saw the expired auth failure.",
+          "citations": [
+            {
+              "evidence_id": "ev_547deced8d61",
+              "record_id": "airtable-expiry-041:logs:1"
+            },
+            {
+              "evidence_id": "ev_547deced8d61",
+              "record_id": "airtable-expiry-041:logs:0"
+            }
+          ]
+        },
+        {
+          "code": "tenant_impact",
+          "statement": "Observed impact was material but not platform-wide: cedar had 636 requests with 390 failures and 390 blocked operations, queue_depth 114, p95 latency 1520ms, while maple had 538 requests, 0 failures, queue_depth 0, and p95 latency 160ms.",
+          "citations": [
+            {
+              "evidence_id": "ev_4978f845ca13",
+              "record_id": "airtable-expiry-041:metrics:0"
+            },
+            {
+              "evidence_id": "ev_4978f845ca13",
+              "record_id": "airtable-expiry-041:metrics:1"
+            }
+          ]
+        },
+        {
+          "code": "pre_provider_failure",
+          "statement": "The observed failed request did not attempt token exchange, so the logged failure happened before the provider exchange step.",
+          "citations": [
+            {
+              "evidence_id": "ev_547deced8d61",
+              "record_id": "airtable-expiry-041:logs:0"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "authentication_initiation_expired_remediation",
+        "collect_missing_telemetry",
+        "align_telemetry_windows"
+      ],
+      "actions": [
+        "Have affected users start a fresh Airtable authentication initiation and complete it within the valid window instead of retrying the expired link.",
+        "Collect canonical auth-initiation creation/TTL records for impacted requests to confirm issuance time and expiry policy.",
+        "Align telemetry across initiation creation, completion, and expiry so stale-link attempts can be separated from any other onboarding failures."
+      ],
+      "missing_checks": [],
+      "strength": 10
+    },
+    {
+      "code": "provider_failure",
+      "hypothesis": {
+        "description": "A provider-side Airtable outage is weak for the observed failure because the failed request appears to stop before provider token exchange and another same-window tenant path is healthy.",
+        "supporting_evidence": [
+          "ev_fe8e71caad06"
+        ],
+        "contradicting_evidence": [
+          "ev_547deced8d61",
+          "ev_a964fad6c294",
+          "ev_4978f845ca13"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The comparison tenant is evidence against a broad outage, not proof that every Airtable endpoint was healthy for every request."
+        ]
+      },
+      "findings": [
+        {
+          "code": "pre_provider_failure",
+          "statement": "The failed cedar request never attempted token exchange, so the observed error occurred before the provider exchange step.",
+          "citations": [
+            {
+              "evidence_id": "ev_547deced8d61",
+              "record_id": "airtable-expiry-041:logs:0"
+            }
+          ]
+        },
+        {
+          "code": "controlled_comparison",
+          "statement": "Both the failing and succeeding controlled reproductions show token_exchange_attempted false, indicating the discriminating behavior occurred before provider interaction.",
+          "citations": [
+            {
+              "evidence_id": "ev_a964fad6c294",
+              "record_id": "airtable-expiry-041:reproduce:0"
+            },
+            {
+              "evidence_id": "ev_a964fad6c294",
+              "record_id": "airtable-expiry-041:reproduce:1"
+            }
+          ]
+        },
+        {
+          "code": "provider_isolation",
+          "statement": "Same-window comparison telemetry shows tenant isolation rather than a broad provider outage: cedar had heavy failures while maple had none.",
+          "citations": [
+            {
+              "evidence_id": "ev_4978f845ca13",
+              "record_id": "airtable-expiry-041:metrics:0"
+            },
+            {
+              "evidence_id": "ev_4978f845ca13",
+              "record_id": "airtable-expiry-041:metrics:1"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "monitor_provider"
+      ],
+      "actions": [
+        "Do not prioritize provider escalation from the supplied evidence; continue monitoring provider health as a lower-priority check."
+      ],
+      "missing_checks": [
+        "No canonical provider-side exchange trace was supplied for unobserved paths, so this alternative cannot be ruled out for every possible request outside the observed failed execution."
+      ],
+      "strength": 3
+    },
+    {
+      "code": "unconfirmed_change",
+      "hypothesis": {
+        "description": "A broader internal regression affecting both old and new connections is not supported by the supplied observations; the visible pattern is tenant-isolated and old-versus-fresh discriminated, but direct configuration history for auth-initiation policy was not provided.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_a964fad6c294",
+          "ev_547deced8d61",
+          "ev_4978f845ca13"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "No canonical change history for auth-initiation TTL or callback configuration was supplied, so absence of a recent change is not proven.",
+          "Maple is only a comparison tenant, not exhaustive coverage of all fresh Airtable connection attempts."
+        ]
+      },
+      "findings": [
+        {
+          "code": "controlled_comparison",
+          "statement": "The supplied controlled comparison distinguishes older initiation failure from fresh initiation success, which weighs against a regression that would affect both old and new connections equally.",
+          "citations": [
+            {
+              "evidence_id": "ev_a964fad6c294",
+              "record_id": "airtable-expiry-041:reproduce:0"
+            },
+            {
+              "evidence_id": "ev_a964fad6c294",
+              "record_id": "airtable-expiry-041:reproduce:1"
+            }
+          ]
+        },
+        {
+          "code": "tenant_isolation",
+          "statement": "Observed metrics show cedar was impacted while maple remained healthy in the same period, which weakens a broad platform regression explanation.",
+          "citations": [
+            {
+              "evidence_id": "ev_4978f845ca13",
+              "record_id": "airtable-expiry-041:metrics:0"
+            },
+            {
+              "evidence_id": "ev_4978f845ca13",
+              "record_id": "airtable-expiry-041:metrics:1"
+            }
+          ]
+        },
+        {
+          "code": "mechanism_observation",
+          "statement": "The only canonical failed auth record explicitly reports EXPIRED state with initiation age beyond the completion window, which is more specific than a generic internal regression.",
+          "citations": [
+            {
+              "evidence_id": "ev_9697d1988408",
+              "record_id": "airtable-expiry-041:logs:0"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "collect_missing_telemetry"
+      ],
+      "actions": [
+        "Collect canonical auth-service configuration/change history for initiation TTL and callback handling before treating an internal change as causal."
+      ],
+      "missing_checks": [
+        "Canonical auth-service change records for initiation TTL, callback handling, or Airtable auth configuration were not provided; those records could materially change the ranking if they show a recent change affecting both old and new flows."
+      ],
+      "strength": 2
+    }
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The observed production Airtable failure returned 410 with connection_state EXPIRED; initiation_age_seconds was 950 versus a completion_window_seconds of 600, and token_exchange_attempted was false, showing expiry was enforced before provider token exchange.",
+      "citations": [
+        {
+          "evidence_id": "ev_547deced8d61",
+          "record_id": "airtable-expiry-041:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In controlled sandbox observations, the older initiation (950s age, 600s window) failed with 410 EXPIRED while the fresh initiation (120s age) succeeded with 200 ACTIVE; both records show token_exchange_attempted false, supporting the stale-link mechanism before provider exchange.",
+      "citations": [
+        {
+          "evidence_id": "ev_a964fad6c294",
+          "record_id": "airtable-expiry-041:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_a964fad6c294",
+          "record_id": "airtable-expiry-041:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "new_connection_healthy",
+      "statement": "A same-window comparison path remained healthy in production: maple returned status 200 with unrelated reads succeeding while cedar showed the expired-auth failure.",
+      "citations": [
+        {
+          "evidence_id": "ev_547deced8d61",
+          "record_id": "airtable-expiry-041:logs:1"
+        },
+        {
+          "evidence_id": "ev_547deced8d61",
+          "record_id": "airtable-expiry-041:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact was material but not platform-wide in supplied synthetic telemetry: cedar had 636 requests with 390 failures and 390 blocked operations, queue_depth 114, p95 latency 1520ms, while maple had 538 requests with 0 failures, queue_depth 0, and p95 latency 160ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_4978f845ca13",
+          "record_id": "airtable-expiry-041:metrics:0"
+        },
+        {
+          "evidence_id": "ev_4978f845ca13",
+          "record_id": "airtable-expiry-041:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "For the observed failed execution, no provider token exchange was attempted, so the evidenced failure occurred before the provider exchange step.",
+      "citations": [
+        {
+          "evidence_id": "ev_547deced8d61",
+          "record_id": "airtable-expiry-041:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "Dependency metadata shows provider API reachability was true, which is consistent with the failure being local to auth-initiation state rather than a demonstrated provider reachability outage.",
+      "citations": [
+        {
+          "evidence_id": "ev_fe8e71caad06",
+          "record_id": "airtable-expiry-041:dependencies:0"
+        }
+      ]
+    }
+  ]
+}

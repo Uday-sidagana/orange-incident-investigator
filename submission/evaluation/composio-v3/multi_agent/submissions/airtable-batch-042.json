@@ -1,0 +1,575 @@
+{
+  "incident_id": "airtable-batch-042",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "airtable-batch-042",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause for the observed cedar failures is Airtable batch-size enforcement in the executor path. The failed production write attempted 25 records while telemetry on that same execution reports max_records_per_call=10, and the synthetic controlled comparison passes when reduced to 10 records. This supports a bounded diagnosis of provider batch record limit for the observed failed executions, not a platform-wide Airtable outage.",
+        "supporting_evidence": [
+          "ev_f912f7b4edda",
+          "ev_fa1d3be17388",
+          "ev_11cdd22233bb",
+          "ev_ef1f54c4e505"
+        ],
+        "contradicting_evidence": [
+          "ev_88a89b675c23",
+          "ev_e4f48313b394"
+        ],
+        "confidence": "high",
+        "assumptions": [
+          "Scope is limited to observed cedar failures in this incident window.",
+          "The synthetic reproduce comparison is supportive but not canonical production proof.",
+          "Empty deployment searches weaken release-attribution, not the immediate batch-limit mechanism."
+        ]
+      },
+      {
+        "description": "A generic provider payload-size limit is a weaker alternative. Larger requests fail and smaller ones pass, but the supplied telemetry identifies a concrete record-count cap rather than payload-byte measurements or provider payload-limit error text.",
+        "supporting_evidence": [
+          "ev_f912f7b4edda",
+          "ev_fa1d3be17388"
+        ],
+        "contradicting_evidence": [
+          "ev_f912f7b4edda",
+          "ev_fa1d3be17388"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "Record count may correlate with payload size, but no serialized byte-size telemetry is provided."
+        ]
+      },
+      {
+        "description": "A recent executor-release regression remains unconfirmed. The incident narrative mentions a recent release, but canonical deployment searches do not show a tool-executor change in the relevant window, and the supplied logs do not include executor version or validator detail needed to tie the 422s to a specific build.",
+        "supporting_evidence": [
+          "ev_fa1d3be17388"
+        ],
+        "contradicting_evidence": [
+          "ev_88a89b675c23",
+          "ev_e4f48313b394",
+          "ev_f912f7b4edda"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "An unrecorded rollout or config drift could exist, but it is not evidenced here.",
+          "The observed 422 could still come from internal validation logic, but no canonical versioned validator trace is supplied."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Use provider_batch_record_limit_remediation for this Airtable action: split updates into batches of at most 10 records, respect provider rate limits, and verify partial completion before retrying. This is a proposed next step and has not been executed.",
+      "Collect missing canonical telemetry on the failing executor path: executor version/build, exact validation error text, and any outbound-attempt markers for AIRTABLE_UPDATE_MULTIPLE_RECORDS.",
+      "Request a tighter synthetic reproduction that keeps Airtable configuration constant while varying only record count, to confirm whether count alone explains the 422.",
+      "If failures persist even at 10 records, collect serialized payload-byte measurements and compare failing versus successful requests before elevating provider_payload_limit.",
+      "Monitor cedar backlog, failure rate, and latency until the queue depth and blocked operations return to baseline; current impact is based on synthetic telemetry and observed records only."
+    ],
+    "limitations": [
+      "Synthetic reproduce observations are supportive only; they are not canonical production executions.",
+      "No supplied canonical log includes executor version, full validator error text, or outbound Airtable request markers.",
+      "Deployment searches returning no executor records do not prove no unrecorded change existed; they only mean release attribution is unverified from supplied evidence."
+    ]
+  },
+  "ranked_cause_codes": [
+    "provider_batch_record_limit",
+    "provider_payload_limit",
+    "unconfirmed_change"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The canonical failed cedar execution returned 422 for AIRTABLE_UPDATE_MULTIPLE_RECORDS with records_in_request=25 while max_records_per_call=10, directly matching a batch-limit violation mechanism.",
+      "citations": [
+        {
+          "evidence_id": "ev_fa1d3be17388",
+          "record_id": "airtable-batch-042:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the synthetic controlled comparison on the same Airtable action, the original condition failed at 25 records with a 10-record max, while the corrected condition passed at 10 records; this discriminates toward batch-size/config mismatch rather than a broad provider outage.",
+      "citations": [
+        {
+          "evidence_id": "ev_f912f7b4edda",
+          "record_id": "airtable-batch-042:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_f912f7b4edda",
+          "record_id": "airtable-batch-042:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "Counter-evidence against an Airtable-side outage is that provider API reachability is true, the observed failed execution shows provider_rate_limited=false on a local 422-style rejection, and another tenant had a successful provider interaction in the same window.",
+      "citations": [
+        {
+          "evidence_id": "ev_ef1f54c4e505",
+          "record_id": "airtable-batch-042:dependencies:0"
+        },
+        {
+          "evidence_id": "ev_fa1d3be17388",
+          "record_id": "airtable-batch-042:logs:0"
+        },
+        {
+          "evidence_id": "ev_fa1d3be17388",
+          "record_id": "airtable-batch-042:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact is concentrated in cedar: 395 failures out of 653 requests, 395 blocked operations, queue depth 117, and p95 latency 1560 ms, while maple shows 0 failures, 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_11cdd22233bb",
+          "record_id": "airtable-batch-042:metrics:0"
+        },
+        {
+          "evidence_id": "ev_11cdd22233bb",
+          "record_id": "airtable-batch-042:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "payload_size_control",
+      "statement": "Large versus small requests behave differently, but the observed discriminator is record count against max_records_per_call rather than measured payload bytes.",
+      "citations": [
+        {
+          "evidence_id": "ev_f912f7b4edda",
+          "record_id": "airtable-batch-042:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_f912f7b4edda",
+          "record_id": "airtable-batch-042:reproduce:1"
+        },
+        {
+          "evidence_id": "ev_fa1d3be17388",
+          "record_id": "airtable-batch-042:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "Canonical deployment searches do not show a tool-executor release or executor-tagged change immediately before the incident; the only observed deployment is an unrelated support-dashboard release.",
+      "citations": [
+        {
+          "evidence_id": "ev_006068bc84d5",
+          "record_id": "airtable-batch-042:deployments:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "Causal attribution to a specific executor release remains unverified because no supplied canonical failing-path record includes executor version or exact validation error text.",
+      "citations": [
+        {
+          "evidence_id": "ev_fa1d3be17388",
+          "record_id": "airtable-batch-042:logs:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "provider_batch_record_limit_remediation",
+    "collect_missing_telemetry",
+    "request_reproduction",
+    "reduce_provider_payload",
+    "monitor_provider"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_006068bc84d5",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_ef1f54c4e505",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_f912f7b4edda",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "airtable_configuration",
+          "check_passed": false,
+          "toolkit": "airtable",
+          "status": 422,
+          "action": "AIRTABLE_UPDATE_MULTIPLE_RECORDS",
+          "records_in_request": 25,
+          "max_records_per_call": 10,
+          "provider_rate_limited": false
+        },
+        {
+          "record_id": "airtable-batch-042:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "airtable_configuration",
+          "check_passed": true,
+          "toolkit": "airtable",
+          "status": 200,
+          "action": "AIRTABLE_UPDATE_MULTIPLE_RECORDS",
+          "records_in_request": 10,
+          "max_records_per_call": 10,
+          "provider_rate_limited": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_86ac4221b8e6",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-42",
+          "toolkit": "airtable",
+          "status": 422,
+          "action": "AIRTABLE_UPDATE_MULTIPLE_RECORDS",
+          "records_in_request": 25,
+          "max_records_per_call": 10,
+          "provider_rate_limited": false
+        },
+        {
+          "record_id": "airtable-batch-042:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2cc96d4f0452",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 653,
+          "failures": 395,
+          "business_operations_blocked": 395,
+          "queue_depth": 117,
+          "p95_latency_ms": 1560
+        },
+        {
+          "record_id": "airtable-batch-042:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 549,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_88a89b675c23",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:30:00Z",
+        "end": "2026-11-12T09:50:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_89212f307544",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_fa1d3be17388",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "AIRTABLE",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-42",
+          "toolkit": "airtable",
+          "status": 422,
+          "action": "AIRTABLE_UPDATE_MULTIPLE_RECORDS",
+          "records_in_request": 25,
+          "max_records_per_call": 10,
+          "provider_rate_limited": false
+        },
+        {
+          "record_id": "airtable-batch-042:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_11cdd22233bb",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 653,
+          "failures": 395,
+          "business_operations_blocked": 395,
+          "queue_depth": 117,
+          "p95_latency_ms": 1560
+        },
+        {
+          "record_id": "airtable-batch-042:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 549,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_e4f48313b394",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T08:30:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "executor",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4bf07db35dd6",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "airtable-batch-042:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-42",
+          "toolkit": "airtable",
+          "status": 422,
+          "action": "AIRTABLE_UPDATE_MULTIPLE_RECORDS",
+          "records_in_request": 25,
+          "max_records_per_call": 10,
+          "provider_rate_limited": false
+        },
+        {
+          "record_id": "airtable-batch-042:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 142.11539077106863,
+  "input_tokens": 78529,
+  "output_tokens": 8336
+}

@@ -1,0 +1,88 @@
+{
+  "models": {
+    "single_agent": "gpt-5.4"
+  },
+  "limits": {
+    "max_provider_attempts": 2,
+    "max_requests": 24,
+    "max_output_tokens": 4000,
+    "max_context_chars": 100000,
+    "max_total_context_chars": 700000,
+    "max_collection_rounds": 20,
+    "max_queries_per_task": 24
+  },
+  "calls": [
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_056a02f4bde61ace016af5f04b5fe887d2bd809e93e7dc7923",
+      "usage": {
+        "input_tokens": 4439,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1536
+        },
+        "output_tokens": 374,
+        "output_tokens_details": {
+          "reasoning_tokens": 52
+        },
+        "total_tokens": 4813
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_056a02f4bde61ace016af5f051487487d2b6ee7ab967a6beb3",
+      "usage": {
+        "input_tokens": 6301,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 395,
+        "output_tokens_details": {
+          "reasoning_tokens": 166
+        },
+        "total_tokens": 6696
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_056a02f4bde61ace016af5f058bc7087d2a735374278501226",
+      "usage": {
+        "input_tokens": 7238,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 5632
+        },
+        "output_tokens": 1697,
+        "output_tokens_details": {
+          "reasoning_tokens": 113
+        },
+        "total_tokens": 8935
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_084ce9874a1a9045016af5f075f9a087d296e53dd70ba8ecd9",
+      "usage": {
+        "input_tokens": 7162,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1106,
+        "output_tokens_details": {
+          "reasoning_tokens": 33
+        },
+        "total_tokens": 8268
+      }
+    }
+  ]
+}

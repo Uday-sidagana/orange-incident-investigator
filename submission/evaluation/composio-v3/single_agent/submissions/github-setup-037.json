@@ -1,0 +1,399 @@
+{
+  "incident_id": "github-setup-037",
+  "approach": "single_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "github-setup-037",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "The most likely cause is an obsolete GitHub V2 setup path: the failing setup called /webhook_endpoints, but the observed V2 behavior is to create/upsert the trigger instance directly, which provisions ingress without a separate endpoint-creation step. That mismatch explains the 404 and why no trigger was created.",
+        "supporting_evidence": [
+          "ev_24c54419bc91",
+          "ev_585556a216e4",
+          "ev_3ef242d960a6"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The knowledge reference reflects the intended GitHub V2 setup behavior during this incident.",
+          "The controlled reproduction differed only in the documented GitHub configuration/path change relevant to setup."
+        ]
+      },
+      {
+        "description": "A generalized provider failure is less likely: one production GitHub-related comparison succeeded in the same window, and the controlled reproduction failed only with the obsolete path but succeeded with the corrected V2 path.",
+        "supporting_evidence": [
+          "ev_24c54419bc91"
+        ],
+        "contradicting_evidence": [
+          "ev_24c54419bc91",
+          "ev_3ef242d960a6",
+          "ev_423be5077604"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The maple comparison is a meaningful same-provider baseline for this incident window."
+        ]
+      },
+      {
+        "description": "A wrong or invalid connected account is unlikely for the observed failure because the failed setup recorded auth_valid=true, and the path-corrected controlled run succeeded without changing the authentication state.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_24c54419bc91",
+          "ev_3ef242d960a6"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The auth_valid field reflects the connection actually used by the failed setup attempt."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Use the supported GitHub V2 trigger-instance create/upsert flow instead of calling /webhook_endpoints during setup.",
+      "Add a guard in migrated setup logic to reject deprecated V2 endpoint-creation paths before issuing the request.",
+      "Rerun blocked cedar setup jobs after correcting the setup path and verify trigger creation plus ingress provisioning on a fresh attempt.",
+      "Collect any missing trigger-worker telemetry around setup-path selection so future regressions are easier to isolate quickly."
+    ],
+    "limitations": [
+      "The connections query returned no records, so connection inventory was not independently confirmed from canonical records.",
+      "One metrics query timed out before succeeding on retry, so observability was briefly incomplete.",
+      "The historical incident note is analogy only and not proof of the current cause."
+    ]
+  },
+  "ranked_cause_codes": [
+    "obsolete_trigger_setup_path",
+    "provider_failure",
+    "wrong_connected_account"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The failed production setup used GitHub V2 with attempted_setup_path=/webhook_endpoints, returned 404, and did not create a trigger despite auth_valid=true.",
+      "citations": [
+        {
+          "evidence_id": "ev_24c54419bc91",
+          "record_id": "github-setup-037:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the controlled reproduction, the original configuration failed on /webhook_endpoints with 404 and no trigger, while the corrected configuration succeeded on /trigger_instances/{slug}/upsert and created the trigger with ingress provisioned.",
+      "citations": [
+        {
+          "evidence_id": "ev_3ef242d960a6",
+          "record_id": "github-setup-037:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_3ef242d960a6",
+          "record_id": "github-setup-037:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "Public GitHub V2 guidance says trigger creation provisions ingress without a separate endpoint-creation step, which matches the successful trigger-instance upsert flow rather than the failing /webhook_endpoints path.",
+      "citations": [
+        {
+          "evidence_id": "ev_585556a216e4",
+          "record_id": "github-setup-037:knowledge:0"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Impact was concentrated in cedar: 370 of 568 requests failed, 370 business operations were blocked, queue depth was 102, and p95 latency was 1360 ms, while maple had 0 failures, 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_423be5077604",
+          "record_id": "github-setup-037:metrics:0"
+        },
+        {
+          "evidence_id": "ev_423be5077604",
+          "record_id": "github-setup-037:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "A same-provider comparison in maple succeeded during the incident window, which argues against a uniform GitHub-wide outage as the primary explanation.",
+      "citations": [
+        {
+          "evidence_id": "ev_24c54419bc91",
+          "record_id": "github-setup-037:logs:1"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "obsolete_trigger_setup_path_remediation",
+    "collect_missing_telemetry"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_24c54419bc91",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-setup-037:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-37",
+          "toolkit": "github",
+          "status": 404,
+          "trigger_generation": "v2",
+          "attempted_setup_path": "/webhook_endpoints",
+          "trigger_created": false,
+          "auth_valid": true
+        },
+        {
+          "record_id": "github-setup-037:logs:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c4a17fee5f88",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_423be5077604",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-setup-037:metrics:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 568,
+          "failures": 370,
+          "business_operations_blocked": 370,
+          "queue_depth": 102,
+          "p95_latency_ms": 1360
+        },
+        {
+          "record_id": "github-setup-037:metrics:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 494,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_274bbc221649",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-setup-037:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_eda0c80243ce",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-setup-037:history:0",
+          "service": "trigger-worker",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_585556a216e4",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-setup-037:knowledge:0",
+          "service": "trigger-worker",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+          "kind": "public_reference",
+          "summary": "GitHub V2 trigger creation provisions its ingress without a separate endpoint-creation step."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4051a069ba48",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_3ef242d960a6",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-setup-037:reproduce:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "github_configuration",
+          "check_passed": false,
+          "toolkit": "github",
+          "status": 404,
+          "trigger_generation": "v2",
+          "attempted_setup_path": "/webhook_endpoints",
+          "trigger_created": false,
+          "auth_valid": true
+        },
+        {
+          "record_id": "github-setup-037:reproduce:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "github_configuration",
+          "check_passed": true,
+          "toolkit": "github",
+          "status": 200,
+          "trigger_generation": "v2",
+          "attempted_setup_path": "/trigger_instances/{slug}/upsert",
+          "trigger_created": true,
+          "auth_valid": true,
+          "ingress_provisioned": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 88.51671699999133,
+  "input_tokens": 24653,
+  "output_tokens": 4540
+}

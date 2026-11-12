@@ -1,0 +1,94 @@
+{
+  "incident": {
+    "id": "signature-006",
+    "title": "Webhook rejection spike after secret rotation",
+    "description": "Customer webhook now rejects deliveries, although the trigger is active.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "webhook-delivery"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "signature-006:logs:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "event_id": "evt-2",
+        "stage": "provider_ingress",
+        "status": 200
+      },
+      {
+        "record_id": "signature-006:logs:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "event_id": "evt-2",
+        "stage": "customer_handler",
+        "status": 401,
+        "error": "signature mismatch",
+        "sender_key_id": "key-2",
+        "receiver_key_id": "key-1"
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "signature-006:metrics:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 200,
+        "failures": 200
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "signature-006:deployments:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Webhook signing key rotated",
+        "sender_key_id": "key-2",
+        "receiver_config_updated": false
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "signature-006:dependencies:0",
+        "service": "webhook-delivery",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "signature-006:history:0",
+        "service": "webhook-delivery",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [
+      {
+        "record_id": "signature-006:reproduce:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "receiver_key_id": "key-1",
+        "status": 401
+      },
+      {
+        "record_id": "signature-006:reproduce:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "receiver_key_id": "key-2",
+        "status": 200
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

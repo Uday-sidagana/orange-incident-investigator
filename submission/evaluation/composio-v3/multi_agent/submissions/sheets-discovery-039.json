@@ -1,0 +1,568 @@
+{
+  "incident_id": "sheets-discovery-039",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "sheets-discovery-039",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause: tool discovery truncation on cedar req-39. The returned googlesheets discovery page contained only 20 tools, indicated more pages, and explicitly shows the requested Sheets action was on a later page even though it still existed in the versioned catalog. This explains a missing action after discovery without requiring a provider-side failure.",
+        "supporting_evidence": [
+          "ev_1b8d7225c1b0",
+          "ev_fa5228b7ff1d",
+          "ev_154da898e8ad"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The affected execution path depended on the observed first discovery page rather than completing pagination.",
+          "The sandbox controlled comparison is supportive synthetic verification, not proof of a production change."
+        ]
+      },
+      {
+        "description": "Less likely alternative: a broad provider failure/outage. This is weakened because the failed path is already explained before provider execution, provider reachability is reported healthy, and a comparison tenant shows same-window provider availability and a successful unrelated read.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_1b8d7225c1b0",
+          "ev_63cc0806cce6",
+          "ev_fa5228b7ff1d"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "If a broad provider outage were primary, comparable provider-facing failures or wider tenant impact would be expected in the supplied telemetry."
+        ]
+      },
+      {
+        "description": "Secondary possibility: tenant-specific connection/configuration surface differences affected how discovery was performed or consumed. The controlled sandbox comparison says changing only 'sheets_configuration' flips the outcome, but there is no canonical production evidence here of grant loss, wrong account selection, revoked consent, or session-policy block for cedar req-39. This remains weaker than truncation.",
+        "supporting_evidence": [
+          "ev_154da898e8ad"
+        ],
+        "contradicting_evidence": [
+          "ev_1b8d7225c1b0",
+          "ev_63cc0806cce6"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The reproduce record's 'sheets_configuration' variable may include client/config behavior beyond pure auth.",
+          "A configuration difference could coexist, but it is not required to explain the observed missing-action-on-first-page mechanism."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry indicates a pre-provider discovery problem; proposed actions below have not been executed.",
+      "Paginate googlesheets discovery for the affected path, or otherwise ensure later pages are retrieved before concluding the action is unavailable.",
+      "If pagination cannot be completed in that path, evaluate increasing the discovery limit for the googlesheets toolkit and then use the exact returned action slug from the intended version.",
+      "Capture and retain the full discovery payload, pagination state, and selected action slug for affected requests so production traces directly distinguish first-page omission from true catalog absence.",
+      "Keep provider monitoring secondary for this incident path unless new canonical evidence shows requests reaching the provider and failing after discovery.",
+      "Collect cedar-specific auth/session-policy/connection records for req-39 only if needed to rule in or out a tenant-specific configuration contributor."
+    ],
+    "limitations": [
+      "Evidence is synthetic incident telemetry plus precomputed sandbox reproduction observations; reproduction records are supportive controls, not canonical production change records.",
+      "No canonical record here includes the exact missing action slug string, only that the requested tool was on a later page and present in the version.",
+      "No canonical cedar auth/session-policy event record is supplied for req-39, so stronger causal claims about wrong account, missing grant, or policy block would be speculative.",
+      "No in-window tool-executor deployment was observed; this limits attribution to a timed internal code change."
+    ]
+  },
+  "ranked_cause_codes": [
+    "tool_discovery_truncation",
+    "provider_failure",
+    "connection_surface_isolation"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "For cedar req-39, tool-executor returned HTTP 200 for googlesheets with list_limit=20, returned_tools=20, has_more=true, and the requested Sheets tool was on a later page while still present in the versioned catalog.",
+      "citations": [
+        {
+          "evidence_id": "ev_1b8d7225c1b0",
+          "record_id": "sheets-discovery-039:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "The observed failure happens before provider execution: the needed action was absent from the returned discovery page even though it existed in the catalog version.",
+      "citations": [
+        {
+          "evidence_id": "ev_1b8d7225c1b0",
+          "record_id": "sheets-discovery-039:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In precomputed sandbox observations, the original condition failed while the corrected condition passed and found the requested tool after pagination completed; both observations still returned 20 tools with has_more=true, making discovery pagination/configuration the discriminating control.",
+      "citations": [
+        {
+          "evidence_id": "ev_154da898e8ad",
+          "record_id": "sheets-discovery-039:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_154da898e8ad",
+          "record_id": "sheets-discovery-039:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact is isolated to cedar in supplied metrics: cedar had 602 requests, 0 transport failures, 380 business operations blocked, queue depth 108, and p95 latency 1440 ms, while comparison tenant maple had 516 requests, 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_fa5228b7ff1d",
+          "record_id": "sheets-discovery-039:metrics:0"
+        },
+        {
+          "evidence_id": "ev_fa5228b7ff1d",
+          "record_id": "sheets-discovery-039:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "Same-window comparison evidence contradicts a broad provider outage: maple shows the same provider available and an unrelated read succeeding.",
+      "citations": [
+        {
+          "evidence_id": "ev_1b8d7225c1b0",
+          "record_id": "sheets-discovery-039:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "verification_control",
+      "statement": "Dependency telemetry reports provider_api_reachable=true, which weakens a provider-outage explanation for this observed discovery path.",
+      "citations": [
+        {
+          "evidence_id": "ev_63cc0806cce6",
+          "record_id": "sheets-discovery-039:dependencies:0"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "The current catalog version still contained the requested tool, so the discrepancy is between catalog contents and the returned discovery payload, not true catalog absence.",
+      "citations": [
+        {
+          "evidence_id": "ev_1b8d7225c1b0",
+          "record_id": "sheets-discovery-039:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "No canonical incident record provided here shows cedar-specific grant loss, wrong connected account selection, revoked consent, scope mismatch, or session-policy block for req-39.",
+      "citations": [
+        {
+          "evidence_id": "ev_1b8d7225c1b0",
+          "record_id": "sheets-discovery-039:logs:0"
+        },
+        {
+          "evidence_id": "ev_63cc0806cce6",
+          "record_id": "sheets-discovery-039:dependencies:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "tool_discovery_truncation_remediation",
+    "collect_missing_telemetry",
+    "monitor_provider",
+    "connection_surface_isolation_remediation"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_1b8d7225c1b0",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-39",
+          "toolkit": "googlesheets",
+          "status": 200,
+          "list_limit": 20,
+          "returned_tools": 20,
+          "has_more": true,
+          "requested_tool_on_later_page": true,
+          "version_contains_tool": true
+        },
+        {
+          "record_id": "sheets-discovery-039:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_fa5228b7ff1d",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 602,
+          "failures": 0,
+          "business_operations_blocked": 380,
+          "queue_depth": 108,
+          "p95_latency_ms": 1440
+        },
+        {
+          "record_id": "sheets-discovery-039:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 516,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_63cc0806cce6",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4103779983c7",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_154da898e8ad",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "sheets_configuration",
+          "check_passed": false,
+          "toolkit": "googlesheets",
+          "status": 200,
+          "list_limit": 20,
+          "returned_tools": 20,
+          "has_more": true,
+          "requested_tool_on_later_page": true,
+          "version_contains_tool": true
+        },
+        {
+          "record_id": "sheets-discovery-039:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "sheets_configuration",
+          "check_passed": true,
+          "toolkit": "googlesheets",
+          "status": 200,
+          "list_limit": 20,
+          "returned_tools": 20,
+          "has_more": true,
+          "requested_tool_on_later_page": true,
+          "version_contains_tool": true,
+          "pagination_completed": true,
+          "requested_tool_found": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_382ef84125f4",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "sheets",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-39",
+          "toolkit": "googlesheets",
+          "status": 200,
+          "list_limit": 20,
+          "returned_tools": 20,
+          "has_more": true,
+          "requested_tool_on_later_page": true,
+          "version_contains_tool": true
+        },
+        {
+          "record_id": "sheets-discovery-039:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9b46018c5c9d",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "sheets",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 602,
+          "failures": 0,
+          "business_operations_blocked": 380,
+          "queue_depth": 108,
+          "p95_latency_ms": 1440
+        },
+        {
+          "record_id": "sheets-discovery-039:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 516,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_abed50f2fc18",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_8b4ad3866dec",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "auth",
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_8a799ecc641b",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "provider",
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7427074c4df1",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "discovery",
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "sheets-discovery-039:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 175.3192928620265,
+  "input_tokens": 78912,
+  "output_tokens": 10546
+}

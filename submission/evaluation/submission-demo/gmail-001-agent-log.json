@@ -1,0 +1,3654 @@
+{
+  "ticket_id": "73a86fc1-17d3-4d17-a7d9-bae4cdcce447",
+  "tasks": [
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3103,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 302,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3405
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Incident onset is at approximately 09:50 UTC, with send failures rising sharply around 10:00 UTC.",
+        "Suspected cause includes authentication changes and executor changes near failure onset time.",
+        "Services involved: tool-router, tool-executor, auth-service.",
+        "No evidence provided yet; investigation requires precise service logs and deployment records to discriminate cause.",
+        "Tenant impact and exact failure patterns are unknown and must be assessed via telemetry.",
+        "Telemetry and logs for error rates, latency spikes, and backlogs are critical to isolate mechanism.",
+        "Dependency review for recent deploys or config updates to auth and executor are necessary to hypothesize causal change.",
+        "Authentication is suspect but needs confirmation from auth-service failure metrics and failure modes recorded.",
+        "No current evidence for provider failure or credentials expiration without telemetry."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T20:08:14.392883+00:00",
+      "finished_at": "2026-11-12T20:08:19.056073+00:00",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "What do failure rate, latency, and error log patterns show specifically for gmail send requests starting from around 09:45 through 10:30 UTC? Are errors clustered in auth-service or executor logs, and which tenants experience failures?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "logs",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_b05aef4b3d12",
+            "query": {
+              "tool": "logs",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261110",
+                "request_id": "atlas-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:0"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261112",
+                "request_id": "atlas-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:1"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261110",
+                "request_id": "birch-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:2"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261112",
+                "request_id": "birch-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:3"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261110",
+                "request_id": "cedar-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:4"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261112",
+                "request_id": "cedar-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:5"
+              },
+              {
+                "timestamp": "2026-11-12T10:06:00Z",
+                "service": "tool-executor",
+                "tenant": "dogwood",
+                "version": "20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "record_id": "gmail-001:logs:6"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_b05aef4b3d12"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 50
+          },
+          "status": "error",
+          "result": {
+            "evidence_id": "ev_ab63071c9661",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 50
+            },
+            "status": "error",
+            "records": [],
+            "complete": false,
+            "error": {
+              "code": "timeout",
+              "message": "Simulated telemetry timeout",
+              "retryable": true
+            },
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_ab63071c9661"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_1ed45d2bfe2e",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261110",
+                "requests": 100,
+                "failures": 0,
+                "p95_ms": 450,
+                "record_id": "gmail-001:metrics:0"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261112",
+                "requests": 100,
+                "failures": 92,
+                "p95_ms": 80,
+                "record_id": "gmail-001:metrics:1"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261110",
+                "requests": 100,
+                "failures": 0,
+                "p95_ms": 450,
+                "record_id": "gmail-001:metrics:2"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261112",
+                "requests": 100,
+                "failures": 92,
+                "p95_ms": 80,
+                "record_id": "gmail-001:metrics:3"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261110",
+                "requests": 100,
+                "failures": 0,
+                "p95_ms": 450,
+                "record_id": "gmail-001:metrics:4"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261112",
+                "requests": 100,
+                "failures": 92,
+                "p95_ms": 80,
+                "record_id": "gmail-001:metrics:5"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 2
+          },
+          "evidence_id": "ev_1ed45d2bfe2e"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "auth-service",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:45:00Z",
+            "end": "2026-11-12T10:30:00Z",
+            "search": "GMAIL_SEND_EMAIL",
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_962fc6215d8c",
+            "query": {
+              "tool": "logs",
+              "service": "auth-service",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:45:00Z",
+              "end": "2026-11-12T10:30:00Z",
+              "search": "GMAIL_SEND_EMAIL",
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_962fc6215d8c"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:45:00Z",
+            "end": "2026-11-12T10:30:00Z",
+            "search": "recipient missing",
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_4ad4abd1f3f3",
+            "query": {
+              "tool": "logs",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:45:00Z",
+              "end": "2026-11-12T10:30:00Z",
+              "search": "recipient missing",
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261112",
+                "request_id": "atlas-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:1"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261112",
+                "request_id": "birch-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:3"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261112",
+                "request_id": "cedar-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:5"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_4ad4abd1f3f3"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3865,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 101,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3966
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5153,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 71,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 5224
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5329,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4992
+            },
+            "output_tokens": 70,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 5399
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Collection ended within its round budget; inspect the exact tool results and unresolved gaps."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T20:08:19.061235+00:00",
+      "finished_at": "2026-11-12T20:08:24.809313+00:00",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "What code or configuration changes were deployed to the auth-service and tool-executor services in the hours before 10:00 UTC? Are there any new auth protocol changes or credential refresh mechanisms that coincide with the onset of failures?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 20
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_31d7386146f1",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 20
+            },
+            "status": "ok",
+            "records": [
+              {
+                "timestamp": "2026-11-12T10:00:00Z",
+                "service": "tool-executor",
+                "version": "20261112",
+                "change": "Recipient normalization refactor",
+                "rollout": "75%",
+                "record_id": "gmail-001:deployments:0"
+              },
+              {
+                "timestamp": "2026-11-12T09:58:00Z",
+                "service": "auth-service",
+                "version": "auth-42",
+                "change": "Logging verbosity update; no credential changes",
+                "record_id": "gmail-001:deployments:1"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_31d7386146f1"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 20
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_a231f3e68a0f",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 20
+            },
+            "status": "ok",
+            "records": [
+              {
+                "service": "tool-router",
+                "depends_on": [
+                  "auth-service",
+                  "tool-executor"
+                ],
+                "record_id": "gmail-001:dependencies:0"
+              },
+              {
+                "service": "tool-executor",
+                "depends_on": [
+                  "version-registry",
+                  "gmail-provider"
+                ],
+                "record_id": "gmail-001:dependencies:1"
+              },
+              {
+                "service": "trigger-worker",
+                "depends_on": [
+                  "webhook-delivery"
+                ],
+                "record_id": "gmail-001:dependencies:2"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_a231f3e68a0f"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3688,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 104,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3792
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4193,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 378,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4571
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Findings for dependencies and deployments around the incident onset at 10:00 UTC:\n\n1. Deployments:\n- tool-executor had a deployment at 10:00 UTC with version 20261112 involving a \"Recipient normalization refactor\" rolled out to 75%.\n- auth-service had a deployment at 09:58 UTC with version auth-42 which was a \"Logging verbosity update; no credential changes.\"\n\n2. Dependencies:\n- tool-router depends on auth-service and tool-executor.\n- tool-executor depends on version-registry and gmail-provider.\n\nAnalysis:\n- The tool-executor deployment at 10:00 UTC included a functional change (recipient normalization refactor).\n- The auth-service deployment at 09:58 UTC was a logging verbosity update with no credential or authentication protocol changes.\n- No new authentication protocol or credential refresh mechanisms were introduced in auth-service around failure onset as per deployment notes.\n- Recipient normalization changes in tool-executor could potentially impact request formation or authorization flow but no explicit auth protocol changes noted there.\n- tool-router depends on both services but no deployment record indicating change there around incident time.\n\nSummary:\n- There is no direct evidence of new authentication protocol changes or credential refresh mechanisms coincident with failures.\n- The recipient normalization refactor in tool-executor near failure onset is a candidate change that might impact authentication or request routing.\n- The auth-service changes appear limited to logging updates only.\n\nNext recommended checks:\n- Verify if recipient normalization change in tool-executor affected auth token handling or credentials usage.\n- Review telemetry/logs for request failures to identify auth failure mode or request formatting anomalies.\n- Check downstream provider logs (gmail-provider) for rejected requests reasons.\n\nThese findings are based on deployment and dependency records:\n- ev_31d7386146f (deployments)\n- ev_a231f3e68a0f (dependencies)"
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T20:08:19.097087+00:00",
+      "finished_at": "2026-11-12T20:08:24.217394+00:00",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Are send failures correlated temporally to known auth changes or executor deployments? Does telemetry suggest authentication failures versus downstream provider errors? Are all tenants affected or subsets, indicating a scoped regression or broad systemic issue?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_31d7386146f1",
+        "ev_a231f3e68a0f",
+        "ev_b05aef4b3d12",
+        "ev_ab63071c9661",
+        "ev_1ed45d2bfe2e",
+        "ev_962fc6215d8c",
+        "ev_4ad4abd1f3f3"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5943,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1124,
+            "output_tokens_details": {
+              "reasoning_tokens": 94
+            },
+            "total_tokens": 7067
+          }
+        },
+        {
+          "model": "gpt-5.4",
+          "status": "error",
+          "usage": null
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 7807,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 6912
+            },
+            "output_tokens": 3317,
+            "output_tokens_details": {
+              "reasoning_tokens": 213
+            },
+            "total_tokens": 11124
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [
+        {
+          "attempt": 2,
+          "delay_seconds": 2
+        }
+      ],
+      "notes": [
+        "Temporal correlation alone does not prove cause, but the executor deployment has a direct mechanism match while the auth-service change is logging-only in the supplied records.",
+        "The lower post-failure p95 latency (80 ms versus 450 ms before) is consistent with fast local rejection rather than waiting on Gmail provider responses.",
+        "The auth-service log query returned no records, but that empty partial query is not treated as proof of absence; current diagnosis relies on executor logs and metrics instead.",
+        "Observed conclusions are scoped to the sampled tenants and requests in provided telemetry, not necessarily every Gmail send failure everywhere in the incident window."
+      ],
+      "candidates": [
+        {
+          "code": "recipient_mapping_regression",
+          "hypothesis": {
+            "description": "Gmail send failures are most consistent with the 10:00 tool-executor recipient normalization refactor dropping the recipient during execution for requests on version 20261112, causing pre-provider 400s rather than authentication failures.",
+            "supporting_evidence": [
+              "ev_31d7386146f1",
+              "ev_b05aef4b3d12",
+              "ev_1ed45d2bfe2e"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "Observed records cover only a subset of tenants, so scope is limited to the sampled tenants and requests.",
+              "The repeated same-error pattern across multiple tenants represents the dominant incident mechanism during the reported window."
+            ]
+          },
+          "findings": [
+            {
+              "code": "version_specific_failure",
+              "statement": "Successful Gmail sends are observed on executor version 20261110 before the incident window, while the same tenants fail on version 20261112 after the 10:00 deployment.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:0"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:2"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:4"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "mechanism_observation",
+              "statement": "Failed requests on version 20261112 report 'recipient missing after executor normalization' even though input_recipient_present is true.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "The failing Gmail send requests do not reach the provider (provider_called=false), so the observed failure happens inside executor processing before any downstream Gmail API call.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Observed impact is multi-tenant but not universal: atlas, birch, and cedar each jump from 0/100 failures at 09:55 on v20261110 to 92/100 failures at 10:05 on v20261112, while dogwood still shows a successful send on v20261110 at 10:06.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:1"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:2"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:3"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:4"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:5"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:6"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "A tool-executor deployment introducing 'Recipient normalization refactor' started at 10:00 UTC, temporally matching the observed failure onset.",
+              "citations": [
+                {
+                  "evidence_id": "ev_31d7386146f1",
+                  "record_id": "gmail-001:deployments:0"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "rollback_executor",
+            "repair_recipient_mapping",
+            "replay_after_recovery"
+          ],
+          "actions": [
+            "Prioritize the 10:00 executor deployment as the leading correlate and assess rollback/disablement of version 20261112 for Gmail send traffic.",
+            "Inspect and correct recipient normalization/serialization in the executor path for GMAIL_SEND_EMAIL.",
+            "After recovery, consider replay only the failed pre-provider requests that are safe to resend."
+          ],
+          "missing_checks": [
+            "Need broader version-by-tenant coverage during the rollout window to quantify exactly which tenants were on 20261112 versus 20261110 and confirm full incident scope."
+          ],
+          "strength": 10
+        },
+        {
+          "code": "missing_grant",
+          "hypothesis": {
+            "description": "Authentication or scope problems are unlikely to explain the observed failures, but remain a weaker competing hypothesis because auth-service changed nearby in time.",
+            "supporting_evidence": [
+              "ev_31d7386146f1"
+            ],
+            "contradicting_evidence": [
+              "ev_b05aef4b3d12"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "This candidate is included only as a temporal competitor raised by the incident question, not because the mechanism is well supported."
+            ]
+          },
+          "findings": [
+            {
+              "code": "scope_present",
+              "statement": "Both successful pre-incident and failed post-incident executor logs show granted_scopes including gmail.send, which argues against a missing Gmail send grant for the sampled requests.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:0"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:2"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:4"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "Observed failures occur before any provider call, which is inconsistent with the usual manifestation of downstream authentication rejection by Gmail.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "The nearby auth-service deployment was a logging verbosity update with no credential changes, reducing support for an auth-regression explanation.",
+              "citations": [
+                {
+                  "evidence_id": "ev_31d7386146f1",
+                  "record_id": "gmail-001:deployments:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Do not prioritize reauthentication as the primary remediation based on current evidence.",
+            "If reassurance is needed, review auth-service request/error telemetry for the same request IDs and window to confirm no hidden auth failures preceded executor handling."
+          ],
+          "missing_checks": [
+            "No canonical auth-service request/error records for these exact failed executions were returned; direct auth-path telemetry would further exclude an unseen auth prerequisite failure."
+          ],
+          "strength": 2
+        },
+        {
+          "code": "provider_failure",
+          "hypothesis": {
+            "description": "A Gmail provider outage is not supported for the sampled failures because the failing requests did not reach the provider, though it remains a generic alternative explanation for any unobserved failures outside this sample.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "ev_b05aef4b3d12",
+              "ev_1ed45d2bfe2e"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "This candidate applies only as an unobserved alternative for requests not represented in the provided logs and metrics."
+            ]
+          },
+          "findings": [
+            {
+              "code": "pre_provider_failure",
+              "statement": "The sampled failed requests show provider_called=false, so provider-side Gmail errors cannot explain those observed failures.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "provider_isolation",
+              "statement": "A comparison request on version 20261110 succeeds after the incident start, showing Gmail send capability still works for at least one request path during the window.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:6"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Observed failures cluster on tenants running v20261112 with sharply lower p95 latency (80 ms versus 450 ms before), which fits fast local rejection rather than slower downstream provider errors.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:1"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:2"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:3"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:4"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:5"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "monitor_provider"
+          ],
+          "actions": [
+            "Do not treat Gmail provider instability as the leading cause for the observed sampled failures.",
+            "Continue routine provider monitoring only for coverage of any separate unobserved incidents."
+          ],
+          "missing_checks": [
+            "Need provider-facing telemetry only if investigating other failed requests not represented by the sampled pre-provider executor failures."
+          ],
+          "strength": 1
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T20:08:24.818776+00:00",
+      "finished_at": "2026-11-12T20:10:43.218556+00:00",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_31d7386146f1",
+        "ev_a231f3e68a0f",
+        "ev_b05aef4b3d12",
+        "ev_ab63071c9661",
+        "ev_1ed45d2bfe2e",
+        "ev_962fc6215d8c",
+        "ev_4ad4abd1f3f3"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 9658,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 521,
+            "output_tokens_details": {
+              "reasoning_tokens": 131
+            },
+            "total_tokens": 10179
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "The leading diagnosis is adequately grounded for the observed failed executions: executor logs on v20261112 explicitly show 'recipient missing after executor normalization' with input_recipient_present=true and provider_called=false (ev_b05aef4b3d12 / gmail-001:logs:1, :3, :5).",
+        "The deployment evidence provides a discriminating nearby change with a matching mechanism: tool-executor deployed 'Recipient normalization refactor' at 10:00, while auth-service's 09:58 change is recorded as logging-only with no credential changes (ev_31d7386146f1 / gmail-001:deployments:0, :1).",
+        "Metrics strengthen the internal-regression explanation: affected tenants move from 0/100 failures to 92/100 failures and p95 drops from 450 ms to 80 ms after the new executor version, which is consistent with fast local rejection rather than downstream Gmail/auth latency (ev_1ed45d2bfe2e / gmail-001:metrics:0-5).",
+        "The report is appropriately scoped to sampled tenants/requests rather than claiming all failures everywhere had the same cause. Dogwood's 10:06 success on v20261110 supports partial-rollout impact rather than universal provider or auth failure (ev_b05aef4b3d12 / gmail-001:logs:6).",
+        "I would treat broader tenant/version coverage as optional scope quantification, not a causal blocker. It could refine blast radius but is unlikely to overturn the leading mechanism for the observed failures.",
+        "The empty auth-service log search is not material evidence either way and should not be used to prove absence; however, the diagnosis does not depend on it, so this is a note rather than a blocker."
+      ],
+      "candidates": [
+        {
+          "code": "recipient_mapping_regression",
+          "hypothesis": {
+            "description": "Gmail send failures are most consistent with the 10:00 tool-executor recipient normalization refactor dropping the recipient during execution for requests on version 20261112, causing pre-provider 400s rather than authentication failures.",
+            "supporting_evidence": [
+              "ev_31d7386146f1",
+              "ev_b05aef4b3d12",
+              "ev_1ed45d2bfe2e"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "Observed records cover only a subset of tenants, so scope is limited to the sampled tenants and requests.",
+              "The repeated same-error pattern across multiple tenants represents the dominant incident mechanism during the reported window."
+            ]
+          },
+          "findings": [
+            {
+              "code": "version_specific_failure",
+              "statement": "Successful Gmail sends are observed on executor version 20261110 before the incident window, while the same tenants fail on version 20261112 after the 10:00 deployment.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:0"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:2"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:4"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "mechanism_observation",
+              "statement": "Failed requests on version 20261112 report 'recipient missing after executor normalization' even though input_recipient_present is true.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "The failing Gmail send requests do not reach the provider (provider_called=false), so the observed failure happens inside executor processing before any downstream Gmail API call.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Observed impact is multi-tenant but not universal: atlas, birch, and cedar each jump from 0/100 failures at 09:55 on v20261110 to 92/100 failures at 10:05 on v20261112, while dogwood still shows a successful send on v20261110 at 10:06.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:1"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:2"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:3"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:4"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:5"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:6"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "A tool-executor deployment introducing 'Recipient normalization refactor' started at 10:00 UTC, temporally matching the observed failure onset.",
+              "citations": [
+                {
+                  "evidence_id": "ev_31d7386146f1",
+                  "record_id": "gmail-001:deployments:0"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "rollback_executor",
+            "repair_recipient_mapping",
+            "replay_after_recovery"
+          ],
+          "actions": [
+            "Prioritize the 10:00 executor deployment as the leading correlate and assess rollback/disablement of version 20261112 for Gmail send traffic.",
+            "Inspect and correct recipient normalization/serialization in the executor path for GMAIL_SEND_EMAIL.",
+            "After recovery, consider replay only the failed pre-provider requests that are safe to resend."
+          ],
+          "missing_checks": [],
+          "strength": 10
+        },
+        {
+          "code": "missing_grant",
+          "hypothesis": {
+            "description": "Authentication or scope problems are unlikely to explain the observed failures, but remain a weaker competing hypothesis because auth-service changed nearby in time.",
+            "supporting_evidence": [
+              "ev_31d7386146f1"
+            ],
+            "contradicting_evidence": [
+              "ev_b05aef4b3d12"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "This candidate is included only as a temporal competitor raised by the incident question, not because the mechanism is well supported."
+            ]
+          },
+          "findings": [
+            {
+              "code": "scope_present",
+              "statement": "Both successful pre-incident and failed post-incident executor logs show granted_scopes including gmail.send, which argues against a missing Gmail send grant for the sampled requests.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:0"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:2"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:4"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "Observed failures occur before any provider call, which is inconsistent with the usual manifestation of downstream authentication rejection by Gmail.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "The nearby auth-service deployment was a logging verbosity update with no credential changes, reducing support for an auth-regression explanation.",
+              "citations": [
+                {
+                  "evidence_id": "ev_31d7386146f1",
+                  "record_id": "gmail-001:deployments:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Do not prioritize reauthentication as the primary remediation based on current evidence.",
+            "If reassurance is needed, review auth-service request/error telemetry for the same request IDs and window to confirm no hidden auth failures preceded executor handling."
+          ],
+          "missing_checks": [
+            "No canonical auth-service request/error records for these exact failed executions were returned; direct auth-path telemetry would further exclude an unseen auth prerequisite failure."
+          ],
+          "strength": 2
+        },
+        {
+          "code": "provider_failure",
+          "hypothesis": {
+            "description": "A Gmail provider outage is not supported for the sampled failures because the failing requests did not reach the provider, though it remains a generic alternative explanation for any unobserved failures outside this sample.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [
+              "ev_b05aef4b3d12",
+              "ev_1ed45d2bfe2e"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "This candidate applies only as an unobserved alternative for requests not represented in the provided logs and metrics."
+            ]
+          },
+          "findings": [
+            {
+              "code": "pre_provider_failure",
+              "statement": "The sampled failed requests show provider_called=false, so provider-side Gmail errors cannot explain those observed failures.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "provider_isolation",
+              "statement": "A comparison request on version 20261110 succeeds after the incident start, showing Gmail send capability still works for at least one request path during the window.",
+              "citations": [
+                {
+                  "evidence_id": "ev_b05aef4b3d12",
+                  "record_id": "gmail-001:logs:6"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Observed failures cluster on tenants running v20261112 with sharply lower p95 latency (80 ms versus 450 ms before), which fits fast local rejection rather than slower downstream provider errors.",
+              "citations": [
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:1"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:2"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:3"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:4"
+                },
+                {
+                  "evidence_id": "ev_1ed45d2bfe2e",
+                  "record_id": "gmail-001:metrics:5"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "monitor_provider"
+          ],
+          "actions": [
+            "Do not treat Gmail provider instability as the leading cause for the observed sampled failures.",
+            "Continue routine provider monitoring only for coverage of any separate unobserved incidents."
+          ],
+          "missing_checks": [
+            "Need provider-facing telemetry only if investigating other failed requests not represented by the sampled pre-provider executor failures."
+          ],
+          "strength": 1
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T20:10:43.231161+00:00",
+      "critique": {
+        "approved": true,
+        "blocking_checks": [],
+        "notes": [
+          "The leading diagnosis is adequately grounded for the observed failed executions: executor logs on v20261112 explicitly show 'recipient missing after executor normalization' with input_recipient_present=true and provider_called=false (ev_b05aef4b3d12 / gmail-001:logs:1, :3, :5).",
+          "The deployment evidence provides a discriminating nearby change with a matching mechanism: tool-executor deployed 'Recipient normalization refactor' at 10:00, while auth-service's 09:58 change is recorded as logging-only with no credential changes (ev_31d7386146f1 / gmail-001:deployments:0, :1).",
+          "Metrics strengthen the internal-regression explanation: affected tenants move from 0/100 failures to 92/100 failures and p95 drops from 450 ms to 80 ms after the new executor version, which is consistent with fast local rejection rather than downstream Gmail/auth latency (ev_1ed45d2bfe2e / gmail-001:metrics:0-5).",
+          "The report is appropriately scoped to sampled tenants/requests rather than claiming all failures everywhere had the same cause. Dogwood's 10:06 success on v20261110 supports partial-rollout impact rather than universal provider or auth failure (ev_b05aef4b3d12 / gmail-001:logs:6).",
+          "I would treat broader tenant/version coverage as optional scope quantification, not a causal blocker. It could refine blast radius but is unlikely to overturn the leading mechanism for the observed failures.",
+          "The empty auth-service log search is not material evidence either way and should not be used to prove absence; however, the diagnosis does not depend on it, so this is a note rather than a blocker."
+        ]
+      },
+      "finished_at": "2026-11-12T20:10:54.284015+00:00",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_31d7386146f1",
+        "ev_a231f3e68a0f",
+        "ev_b05aef4b3d12",
+        "ev_ab63071c9661",
+        "ev_1ed45d2bfe2e",
+        "ev_962fc6215d8c",
+        "ev_4ad4abd1f3f3"
+      ],
+      "status": "failed",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 11260,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1825,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 13085
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 13332,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1769,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 15101
+          }
+        }
+      ],
+      "validation_errors": [
+        {
+          "reason": "Duplicate finding codes",
+          "rejected_output": {
+            "report": {
+              "incident_id": "gmail-001",
+              "outcome": "probable_cause",
+              "hypotheses": [
+                {
+                  "description": "Gmail send failures are most consistent with the 10:00 tool-executor recipient normalization refactor dropping the recipient during execution for requests on version 20261112, causing pre-provider 400 errors rather than authentication failures.",
+                  "supporting_evidence": [
+                    "ev_31d7386146f1",
+                    "ev_b05aef4b3d12",
+                    "ev_1ed45d2bfe2e"
+                  ],
+                  "contradicting_evidence": [],
+                  "confidence": "high",
+                  "assumptions": [
+                    "Observed records cover only a subset of tenants, so scope is limited to the sampled tenants and requests.",
+                    "The repeated same-error pattern across multiple tenants represents the dominant incident mechanism during the reported window."
+                  ]
+                },
+                {
+                  "description": "Authentication or scope problems are unlikely to explain the observed failures, but remain a weaker competing hypothesis because auth-service changed near failure onset time.",
+                  "supporting_evidence": [
+                    "ev_31d7386146f1"
+                  ],
+                  "contradicting_evidence": [
+                    "ev_b05aef4b3d12"
+                  ],
+                  "confidence": "low",
+                  "assumptions": [
+                    "This candidate is included only as a temporal competitor raised by the incident question, not because the mechanism is well supported."
+                  ]
+                },
+                {
+                  "description": "A Gmail provider outage is not supported for the sampled failures because the failing requests did not reach the provider, though it remains a generic alternative explanation for any unobserved failures outside this sample.",
+                  "supporting_evidence": [],
+                  "contradicting_evidence": [
+                    "ev_b05aef4b3d12",
+                    "ev_1ed45d2bfe2e"
+                  ],
+                  "confidence": "low",
+                  "assumptions": [
+                    "This candidate applies only as an unobserved alternative for requests not represented in the provided logs and metrics."
+                  ]
+                }
+              ],
+              "recommended_actions": [
+                "Prioritize the 10:00 tool-executor deployment (version 20261112) as the leading correlate and assess rollback or disablement for Gmail send traffic.",
+                "Inspect and correct recipient normalization/serialization logic in the tool-executor handling of GMAIL_SEND_EMAIL requests.",
+                "After recovery, consider replaying only those failed pre-provider requests that are safe to resend.",
+                "Do not prioritize reauthentication remediation based on current evidence; review auth-service telemetry if needed to confirm no hidden auth failures.",
+                "Continue routine monitoring of the Gmail provider for unrelated incidents; no provider-side failure is supported for this incident."
+              ],
+              "limitations": [
+                "Telemetry and logs cover only sampled tenants and requests; other failure modes or tenant impacts might exist outside the sample.",
+                "No direct auth-service request or error telemetry linked to these failing GMAIL_SEND_EMAIL executions was found to definitively exclude authentication prerequisite failures.",
+                "Provider-facing telemetry was not available, but provider calls were explicitly false for failed attempts in the sample, limiting the need for provider investigation here."
+              ]
+            },
+            "ranked_cause_codes": [
+              "recipient_mapping_regression",
+              "missing_grant",
+              "provider_failure"
+            ],
+            "findings": [
+              {
+                "code": "version_control",
+                "statement": "Two changes occurred near onset, but only the tool-executor deployment contains a functional Gmail-send path change: tool-executor v20261112 at 10:00 with 'Recipient normalization refactor', while auth-service 09:58 was a logging-only update without credential changes.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_31d7386146f1",
+                    "record_id": "gmail-001:deployments:0"
+                  },
+                  {
+                    "evidence_id": "ev_31d7386146f1",
+                    "record_id": "gmail-001:deployments:1"
+                  }
+                ]
+              },
+              {
+                "code": "mechanism_observation",
+                "statement": "Failed executions explicitly report 'recipient missing after executor normalization' despite input_recipient_present=true, demonstrating internal request shaping failure.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:3"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:5"
+                  }
+                ]
+              },
+              {
+                "code": "pre_provider_failure",
+                "statement": "Failures occur before provider invocation (provider_called=false), inconsistent with downstream Gmail API or authentication rejections for these requests.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:3"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:5"
+                  }
+                ]
+              },
+              {
+                "code": "scope_present",
+                "statement": "Failed requests retain 'gmail.send' granted scopes, arguing against missing or revoked Gmail send grants causing failures.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:3"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:5"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Multi-tenant impact observed with tenants atlas, birch, and cedar showing failure rate rising from 0% to 92% on executor version 20261112 starting 10:00, while dogwood tenant's requests on prior version remain successful.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:1"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:2"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:3"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:4"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:5"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:6"
+                  }
+                ]
+              },
+              {
+                "code": "version_specific_failure",
+                "statement": "Successful sends on executor version 20261110 precede the incident, while failures on the same tenants occur on version 20261112 after 10:00 deployment.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:0"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:2"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:3"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:4"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:5"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "A request using prior executor version successfully calls provider after failure start time, isolating failure to the new executor version and not the Gmail provider.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:6"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Failing tenants show sharply lower latency p95 (80 ms) compared to pre-incident (450 ms), consistent with fast executor local rejection vs. slower provider rejections.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:1"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:2"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:3"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:4"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:5"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "rollback_executor",
+              "repair_recipient_mapping",
+              "replay_after_recovery",
+              "collect_missing_telemetry",
+              "monitor_provider"
+            ]
+          }
+        },
+        {
+          "reason": "Duplicate finding codes",
+          "rejected_output": {
+            "report": {
+              "incident_id": "gmail-001",
+              "outcome": "probable_cause",
+              "hypotheses": [
+                {
+                  "description": "Gmail send failures are caused by the 'Recipient normalization refactor' deployed in tool-executor version 20261112 at 10:00, which drops the recipient during execution, leading to pre-provider 400 errors indicating missing recipients despite original input recipients being present.",
+                  "supporting_evidence": [
+                    "ev_31d7386146f1",
+                    "ev_b05aef4b3d12",
+                    "ev_1ed45d2bfe2e"
+                  ],
+                  "contradicting_evidence": [],
+                  "confidence": "high",
+                  "assumptions": [
+                    "Data covers sampled tenants only; conclusions scoped accordingly.",
+                    "Identical failure pattern across multiple tenants reflects dominant cause during incident window."
+                  ]
+                },
+                {
+                  "description": "Authentication or scope-related issues are unlikely to explain failures, given auth-service deployed a logging-only change with no credential modifications, and failed requests retain gmail.send scopes; however, this remains a minor competing hypothesis due to deployment timing.",
+                  "supporting_evidence": [
+                    "ev_31d7386146f1"
+                  ],
+                  "contradicting_evidence": [
+                    "ev_b05aef4b3d12"
+                  ],
+                  "confidence": "low",
+                  "assumptions": [
+                    "Included due to temporal proximity of auth-service deployment, despite lack of supporting failure evidence."
+                  ]
+                },
+                {
+                  "description": "Gmail provider failure is unsupported as a cause because failing requests do not reach the provider; remains a generic alternative explanation only for any unobserved failures outside analyzed sample.",
+                  "supporting_evidence": [],
+                  "contradicting_evidence": [
+                    "ev_b05aef4b3d12",
+                    "ev_1ed45d2bfe2e"
+                  ],
+                  "confidence": "low",
+                  "assumptions": [
+                    "Applies only to unobserved requests beyond provided logs and metrics."
+                  ]
+                }
+              ],
+              "recommended_actions": [
+                "Prioritize rollback or disablement of tool-executor version 20261112 for Gmail send traffic due to recipient normalization issues.",
+                "Inspect and fix recipient normalization and serialization logic in tool-executor handling of GMAIL_SEND_EMAIL requests.",
+                "After recovery, consider replaying safely replayable failed requests that did not reach provider.",
+                "Do not prioritize authentication remediation given current evidence; monitor auth-service telemetry if further reassurance needed.",
+                "Maintain routine Gmail provider monitoring; no provider-side failure indicated by current data."
+              ],
+              "limitations": [
+                "Evidence and telemetry cover sampled tenants and requests; other failure modes or tenants may exist outside sample.",
+                "No direct auth-service telemetry linked to failing executions found; auth failures cannot be completely excluded without further data.",
+                "Provider-facing telemetry unavailable, but provider call absence in failed requests limits need for provider investigation."
+              ]
+            },
+            "ranked_cause_codes": [
+              "recipient_mapping_regression",
+              "missing_grant",
+              "provider_failure"
+            ],
+            "findings": [
+              {
+                "code": "version_control",
+                "statement": "At incident onset, tool-executor deployed version 20261112 with 'Recipient normalization refactor' at 10:00, a functional change on Gmail send path; auth-service deployed a logging-only update with no credential change at 09:58.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_31d7386146f1",
+                    "record_id": "gmail-001:deployments:0"
+                  },
+                  {
+                    "evidence_id": "ev_31d7386146f1",
+                    "record_id": "gmail-001:deployments:1"
+                  }
+                ]
+              },
+              {
+                "code": "mechanism_observation",
+                "statement": "Failures explicitly report 'recipient missing after executor normalization' despite input_recipient_present=true, showing internal executor processing dropped recipient.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:3"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:5"
+                  }
+                ]
+              },
+              {
+                "code": "pre_provider_failure",
+                "statement": "Failing requests have provider_called=false, indicating failures occur before contacting Gmail provider, inconsistent with downstream authentication or provider errors for these requests.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:3"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:5"
+                  }
+                ]
+              },
+              {
+                "code": "scope_present",
+                "statement": "Failed requests retain 'gmail.send' scope, negating missing or revoked grant causes for failures in sampled executions.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:3"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:5"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Failures sharply increased from 0% to 92% on executor version 20261112 at 10:00 in tenants atlas, birch, cedar, while dogwood using older version remains unaffected.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:1"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:2"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:3"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:4"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:5"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:6"
+                  }
+                ]
+              },
+              {
+                "code": "version_specific_failure",
+                "statement": "Successful Gmail sends on executor v20261110 before incident contrast with failures on same tenants after 10:00 deployment of executor v20261112.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:0"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:2"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:3"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:4"
+                  },
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:5"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "A request sent using executor v20261110 during incident window succeeded calling provider, isolating failure to new executor version and not Gmail provider.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_b05aef4b3d12",
+                    "record_id": "gmail-001:logs:6"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Latency p95 dropped from 450 ms pre-incident to 80 ms post-failure on affected tenants, consistent with fast executor local rejection rather than slower downstream provider errors.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:1"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:2"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:3"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:4"
+                  },
+                  {
+                    "evidence_id": "ev_1ed45d2bfe2e",
+                    "record_id": "gmail-001:metrics:5"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "rollback_executor",
+              "repair_recipient_mapping",
+              "replay_after_recovery",
+              "collect_missing_telemetry",
+              "monitor_provider"
+            ]
+          }
+        }
+      ],
+      "retries": [],
+      "notes": [],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T20:10:54.303085+00:00",
+      "finished_at": "2026-11-12T20:11:21.850650+00:00",
+      "error": null
+    },
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3103,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 342,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3445
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Incident suggests send failures started near 10:00 UTC, concentrated on Gmail sends across multiple tenants.",
+        "Services implicated: tool-router, tool-executor, auth-service. Change windows overlapped start time of failures.",
+        "No telemetry data yet to confirm failure counts, error types or authentication attempts.",
+        "No logs currently available for auth-service or executor to analyze capabilities or error messages.",
+        "No information on external provider status or throttling available yet.",
+        "Need to review recent deployments or configuration changes for auth-service and executor to detect possible faults or regressions.",
+        "Tenant impact and comparison to unaffected tenants unknown; essential to understand scope and isolate cause.",
+        "No evidence yet if failures are due to provider issues or internal platform changes.",
+        "Must avoid jumping to conclusions without logs or metrics before collecting evidence."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T20:13:58.525918+00:00",
+      "finished_at": "2026-11-12T20:14:04.836154+00:00",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "What are the detailed failure rate, latency, and error code metrics from 09:30 to 10:30 UTC for the Gmail send operations across affected tenants compared to unaffected tenants? Are there any anomalies in auth-service logs, tool-executor logs, and tool-router logs specifically around 09:50 to 10:15 UTC?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "error",
+          "result": {
+            "evidence_id": "ev_ad6168647e48",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "error",
+            "records": [],
+            "complete": false,
+            "error": {
+              "code": "timeout",
+              "message": "Simulated telemetry timeout",
+              "retryable": true
+            },
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_ad6168647e48"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_8bc72b2d7ee7",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261110",
+                "requests": 100,
+                "failures": 0,
+                "p95_ms": 450,
+                "record_id": "gmail-001:metrics:0"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261112",
+                "requests": 100,
+                "failures": 92,
+                "p95_ms": 80,
+                "record_id": "gmail-001:metrics:1"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261110",
+                "requests": 100,
+                "failures": 0,
+                "p95_ms": 450,
+                "record_id": "gmail-001:metrics:2"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261112",
+                "requests": 100,
+                "failures": 92,
+                "p95_ms": 80,
+                "record_id": "gmail-001:metrics:3"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261110",
+                "requests": 100,
+                "failures": 0,
+                "p95_ms": 450,
+                "record_id": "gmail-001:metrics:4"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261112",
+                "requests": 100,
+                "failures": 92,
+                "p95_ms": 80,
+                "record_id": "gmail-001:metrics:5"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 2
+          },
+          "evidence_id": "ev_8bc72b2d7ee7"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_bc5ce298927e",
+            "query": {
+              "tool": "logs",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261110",
+                "request_id": "atlas-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:0"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261112",
+                "request_id": "atlas-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:1"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261110",
+                "request_id": "birch-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:2"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261112",
+                "request_id": "birch-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:3"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261110",
+                "request_id": "cedar-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:4"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261112",
+                "request_id": "cedar-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:5"
+              },
+              {
+                "timestamp": "2026-11-12T10:06:00Z",
+                "service": "tool-executor",
+                "tenant": "dogwood",
+                "version": "20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "record_id": "gmail-001:logs:6"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_bc5ce298927e"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "auth-service",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_a1680da7de80",
+            "query": {
+              "tool": "logs",
+              "service": "auth-service",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_a1680da7de80"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_53851e5cd0e1",
+            "query": {
+              "tool": "logs",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261110",
+                "request_id": "atlas-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:0"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "atlas",
+                "version": "20261112",
+                "request_id": "atlas-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:1"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261110",
+                "request_id": "birch-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:2"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "birch",
+                "version": "20261112",
+                "request_id": "birch-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:3"
+              },
+              {
+                "timestamp": "2026-11-12T09:55:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261110",
+                "request_id": "cedar-20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "error": null,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:4"
+              },
+              {
+                "timestamp": "2026-11-12T10:05:00Z",
+                "service": "tool-executor",
+                "tenant": "cedar",
+                "version": "20261112",
+                "request_id": "cedar-20261112",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 400,
+                "error": "recipient missing after executor normalization",
+                "provider_called": false,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "input_recipient_present": true,
+                "record_id": "gmail-001:logs:5"
+              },
+              {
+                "timestamp": "2026-11-12T10:06:00Z",
+                "service": "tool-executor",
+                "tenant": "dogwood",
+                "version": "20261110",
+                "tool": "GMAIL_SEND_EMAIL",
+                "status": 200,
+                "provider_called": true,
+                "granted_scopes": [
+                  "gmail.send"
+                ],
+                "record_id": "gmail-001:logs:6"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_53851e5cd0e1"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-router",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_00c54dee31cc",
+            "query": {
+              "tool": "logs",
+              "service": "tool-router",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_00c54dee31cc"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3891,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 101,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3992
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5176,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 219,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 5395
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 6305,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 5120
+            },
+            "output_tokens": 684,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 6989
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Findings:\n\n1. Failure rate and latency metrics (ev_8bc72b2d7ee7, records gmail-001:metrics:0 to gmail-001:metrics:5):\n   - From 09:55 to 10:05 UTC, tenants atlas, birch, and cedar on versions 20261110 had zero failures and high latency (p95 around 450 ms).\n   - At 10:05 UTC, after upgrade to version 20261112, the same tenants showed a sharp rise in failures to 92 per 100 requests with decreased latency (p95 dropped to about 80 ms).\n   - This directly aligns with onset of failures near 10:00 UTC and confirms high failure rate post-deployment for these tenants.\n\n2. Detailed logs from tool-executor during failure window (ev_bc5ce298927e and ev_53851e5cd0e1, records gmail-001:logs:0 to gmail-001:logs:5):\n   - For affected tenants (atlas, birch, cedar) after 10:00 on version 20261112, all failed send operations returned status 400 with error \"recipient missing after executor normalization.\"\n   - Prior to this, on version 20261110, sends succeeded with status 200 and no error.\n   - Provider was not called for the failures, indicating the issue was within the executor service before provider invocation.\n   - Input recipient was present in logs despite error message, suggesting a normalization or processing bug in executor.\n   - Tenant dogwood on older version did not encounter errors, showing isolation to upgraded tenants.\n\n3. Logs for auth-service and tool-router during failure window (ev_a1680da7de80, ev_00c54dee31cc):\n   - No anomalous logs or errors found in auth-service or tool-router from 09:50 to 10:15 UTC.\n   - This suggests authentication and routing layers operated normally and that the failure mechanism resides in the tool-executor.\n\nSummary:\n- The increase in Gmail send failures across multiple tenants around 10:00 UTC strongly correlates with executor version upgrade to 20261112.\n- Failures are characterized by a 400 error \"recipient missing after executor normalization\" despite recipient presence, indicating a regression in request normalization logic within tool-executor.\n- No errors or anomalies in auth-service or tool-router logs, reducing likelihood of auth or routing contributing to failures.\n- Failure tenants impacted are those on upgraded version; tenants on prior versions are unaffected.\n- Latency dropped during failures as requests fail fast without invoking provider.\n\nThis evidence supports a probable cause: A regression in the tool-executor 20261112 version introduced a bug in recipient normalization causing send request rejections with a missing recipient error prior to provider call.\n\nNo detected issues in authentication or routing service logs.\n\nConfidence: High, based on strong temporal correlation, error specificity, version difference, and tenant impact pattern.\n\nNext recommended checks if further validation needed:\n- Code review or rollback candidate for executor 20261112 to recipient normalization.\n- Confirm no related changes in auth or routing but logs did not show anomalies.\n- Controlled repro with affected version sender inputs to replicate \"recipient missing\" error.\n\nFindings codes: failure mechanism (mechanism_observation), tenant isolation (tenant_impact), controlled comparison (controlled_comparison)."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T20:14:04.852301+00:00",
+      "finished_at": "2026-11-12T20:14:15.452194+00:00",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "What were the exact changes deployed to the auth-service and tool-executor components before and around 10:00 UTC? Were any configuration or credential updates applied at that time? Are there known external provider incidents or rate limits reported in the same timeframe?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_8a9b60053602",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "timestamp": "2026-11-12T10:00:00Z",
+                "service": "tool-executor",
+                "version": "20261112",
+                "change": "Recipient normalization refactor",
+                "rollout": "75%",
+                "record_id": "gmail-001:deployments:0"
+              },
+              {
+                "timestamp": "2026-11-12T09:58:00Z",
+                "service": "auth-service",
+                "version": "auth-42",
+                "change": "Logging verbosity update; no credential changes",
+                "record_id": "gmail-001:deployments:1"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_8a9b60053602"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_6250305722e5",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "service": "tool-router",
+                "depends_on": [
+                  "auth-service",
+                  "tool-executor"
+                ],
+                "record_id": "gmail-001:dependencies:0"
+              },
+              {
+                "service": "tool-executor",
+                "depends_on": [
+                  "version-registry",
+                  "gmail-provider"
+                ],
+                "record_id": "gmail-001:dependencies:1"
+              },
+              {
+                "service": "trigger-worker",
+                "depends_on": [
+                  "webhook-delivery"
+                ],
+                "record_id": "gmail-001:dependencies:2"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_6250305722e5"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": "auth-service",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_f071b09a711b",
+            "query": {
+              "tool": "dependencies",
+              "service": "auth-service",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_f071b09a711b"
+        },
+        {
+          "query": {
+            "tool": "reproduce",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_836936aff776",
+            "query": {
+              "tool": "reproduce",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "service": "tool-executor",
+                "version": "20261110",
+                "tenant": "sandbox",
+                "tool": "GMAIL_SEND_EMAIL",
+                "same_input": true,
+                "provider_mock": true,
+                "status": 200,
+                "observation": "recipient forwarded",
+                "record_id": "gmail-001:reproduce:0"
+              },
+              {
+                "service": "tool-executor",
+                "version": "20261112",
+                "tenant": "sandbox",
+                "tool": "GMAIL_SEND_EMAIL",
+                "same_input": true,
+                "provider_mock": true,
+                "status": 400,
+                "observation": "recipient dropped by normalization",
+                "record_id": "gmail-001:reproduce:1"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_836936aff776"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3698,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 104,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3802
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4201,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 68,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4269
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4370,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4096
+            },
+            "output_tokens": 45,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4415
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Collection ended within its round budget; inspect the exact tool results and unresolved gaps."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T20:14:04.931986+00:00",
+      "finished_at": "2026-11-12T20:14:09.939542+00:00",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Given the close timing of auth and executor changes with the onset of failures, do the telemetry and logs support an authentication failure mechanism versus an executor internal error? Is the failure pattern tenant-isolated or widespread, and what known conditions distinguish or confirm the suspected root cause?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_ad6168647e48",
+        "ev_8bc72b2d7ee7",
+        "ev_bc5ce298927e",
+        "ev_8a9b60053602",
+        "ev_6250305722e5",
+        "ev_f071b09a711b",
+        "ev_a1680da7de80",
+        "ev_53851e5cd0e1",
+        "ev_00c54dee31cc",
+        "ev_836936aff776"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 6515,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1593,
+            "output_tokens_details": {
+              "reasoning_tokens": 287
+            },
+            "total_tokens": 8108
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 8454,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 3305,
+            "output_tokens_details": {
+              "reasoning_tokens": 485
+            },
+            "total_tokens": 11759
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Telemetry supports an executor internal regression over an authentication failure for the observed Gmail send failures.",
+        "The failure pattern is widespread across the observed tenants, not tenant-isolated, but the evidence set covers sampled tenants and requests rather than exhaustive platform-wide traffic.",
+        "The sharp p95 drop from ~450 ms to ~80 ms during failure is consistent with fast local rejection rather than slower provider/auth round trips.",
+        "Empty auth-service and tool-router log queries are not record-backed evidence of absence, so they are treated only as coverage limits, not findings."
+      ],
+      "candidates": [
+        {
+          "code": "recipient_mapping_regression",
+          "hypothesis": {
+            "description": "Observed Gmail send failures are best explained by an executor regression introduced with tool-executor version 20261112: recipient normalization drops a present recipient before provider dispatch, causing fast pre-provider 400s rather than authentication failures.",
+            "supporting_evidence": [
+              "ev_8bc72b2d7ee7",
+              "ev_bc5ce298927e",
+              "ev_8a9b60053602",
+              "ev_836936aff776"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "Diagnosis is scoped to the observed failed Gmail send executions and sampled tenants, not every possible failure in the incident window.",
+              "The sandbox reproduce result verifies the normalization variable under the provided same-input comparison, not all production paths."
+            ]
+          },
+          "findings": [
+            {
+              "code": "tenant_impact",
+              "statement": "Impact is widespread across the observed tenants atlas, birch, and cedar: each moved from 0/100 failures before the change to 92/100 failures after the change.",
+              "citations": [
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:1"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:2"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:3"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:4"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:5"
+                }
+              ]
+            },
+            {
+              "code": "version_specific_failure",
+              "statement": "Failures align with tool-executor version 20261112, while the prior 20261110 version shows successful Gmail sends.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:0"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:2"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:4"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "mechanism_observation",
+              "statement": "On failed requests, the executor logs show 'recipient missing after executor normalization' even though input_recipient_present=true.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "Failed executions do not reach Gmail: provider_called=false on the failing requests, indicating an internal executor failure before provider or auth exchange with Gmail.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "A same-input controlled reproduce comparison isolates the changed behavior to executor version 20261112: 20261110 forwards the recipient and returns 200, while 20261112 drops the recipient and returns 400.",
+              "citations": [
+                {
+                  "evidence_id": "ev_836936aff776",
+                  "record_id": "gmail-001:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_836936aff776",
+                  "record_id": "gmail-001:reproduce:1"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "A tool-executor deployment at 10:00 introduced a 'Recipient normalization refactor', matching the onset and mechanism of the observed failures.",
+              "citations": [
+                {
+                  "evidence_id": "ev_8a9b60053602",
+                  "record_id": "gmail-001:deployments:0"
+                }
+              ]
+            },
+            {
+              "code": "scope_present",
+              "statement": "Granted Gmail send scope is present on both successful and failed requests, which argues against a missing-grant authentication failure for these executions.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:0"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:2"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:4"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "rollback_executor",
+            "repair_recipient_mapping",
+            "request_reproduction",
+            "disable_blind_send_retries"
+          ],
+          "actions": [
+            "Prioritize executor rollback or isolation from version 20261112 for Gmail send traffic.",
+            "Inspect and correct the recipient normalization path introduced by the refactor.",
+            "Use the same-input reproduce case as a regression test before re-exposing the changed path.",
+            "Avoid blind retries of these 400s until the executor mapping issue is corrected, because the failure occurs before provider send."
+          ],
+          "missing_checks": [],
+          "strength": 9
+        },
+        {
+          "code": "unconfirmed_change",
+          "hypothesis": {
+            "description": "The nearby auth-service change is a weaker alternative explanation based only on timing, but available evidence does not show an authentication mechanism causing these Gmail send failures.",
+            "supporting_evidence": [
+              "ev_8a9b60053602"
+            ],
+            "contradicting_evidence": [
+              "ev_bc5ce298927e",
+              "ev_836936aff776"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "Auth-service logs for the window are unavailable in the supplied evidence, so this alternative cannot be disproved for all possible requests.",
+              "This candidate addresses the customer's auth suspicion, not the strongest mechanism for the observed failed executions."
+            ]
+          },
+          "findings": [
+            {
+              "code": "version_control",
+              "statement": "An auth-service deployment occurred shortly before the failures, but the recorded change was only a logging verbosity update with no credential changes.",
+              "citations": [
+                {
+                  "evidence_id": "ev_8a9b60053602",
+                  "record_id": "gmail-001:deployments:1"
+                }
+              ]
+            },
+            {
+              "code": "scope_present",
+              "statement": "Failed requests still show the expected gmail.send grant, which does not fit a missing-grant authentication failure on those executions.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "Failures terminate inside tool-executor before any provider call, so the observed failures do not require Gmail-side auth rejection to explain them.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "The sandbox same-input comparison reproduces the failure by changing executor version alone, without needing an auth change to trigger it.",
+              "citations": [
+                {
+                  "evidence_id": "ev_836936aff776",
+                  "record_id": "gmail-001:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_836936aff776",
+                  "record_id": "gmail-001:reproduce:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "align_telemetry_windows"
+          ],
+          "actions": [
+            "Do not prioritize auth remediation for the observed Gmail send failures unless new evidence shows auth-path errors.",
+            "If reassurance is needed, collect auth-service request-correlated logs or traces for the same failed request IDs to close the residual timing-only concern."
+          ],
+          "missing_checks": [
+            "Request-correlated auth-service telemetry for the failed executions is unavailable; if present and conflicting, it could narrow any secondary auth contribution beyond the observed executor failure."
+          ],
+          "strength": 2
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T20:14:15.480596+00:00",
+      "finished_at": "2026-11-12T20:15:35.795156+00:00",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_ad6168647e48",
+        "ev_8bc72b2d7ee7",
+        "ev_bc5ce298927e",
+        "ev_8a9b60053602",
+        "ev_6250305722e5",
+        "ev_f071b09a711b",
+        "ev_a1680da7de80",
+        "ev_53851e5cd0e1",
+        "ev_00c54dee31cc",
+        "ev_836936aff776"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 9947,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 477,
+            "output_tokens_details": {
+              "reasoning_tokens": 79
+            },
+            "total_tokens": 10424
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "The leading diagnosis is adequately grounded in canonical records: failing executions on tool-executor 20261112 log `provider_called=false` with `input_recipient_present=true` and error `recipient missing after executor normalization` (ev_bc5ce298927e / gmail-001:logs:1, :3, :5). That directly supports an internal pre-provider executor failure mechanism rather than Gmail or auth rejection for the observed failed sends.",
+        "The same-input reproduce evidence is a useful discriminating control, not proof of all production paths. The report scopes that correctly to the observed mechanism and sampled requests.",
+        "Latency behavior is directionally consistent with early internal rejection: p95 drops from ~450 ms before to ~80 ms after failures rise to 92/100 for atlas, birch, and cedar (ev_8bc72b2d7ee7 / gmail-001:metrics:0-5).",
+        "The nearby auth deployment is weak counter-hypothesis only. The available deployment record says 'Logging verbosity update; no credential changes' (ev_8a9b60053602 / gmail-001:deployments:1), and the failed requests never reach the provider. Missing auth-service request-correlated logs are therefore optional reassurance, not a material blocker to the bounded diagnosis.",
+        "Good scoping: the evidence supports cross-tenant impact for the observed tenants and version-specific behavior, but not every tenant or every Gmail failure everywhere. Dogwood on 20261110 succeeding at 10:06 is useful counter-evidence against a universal provider outage, though it is only a single request sample (ev_bc5ce298927e / gmail-001:logs:6).",
+        "Minor quality issue only: findings contain duplicated statements/codes. That does not undermine the causal conclusion, but deduplication would improve clarity."
+      ],
+      "candidates": [
+        {
+          "code": "recipient_mapping_regression",
+          "hypothesis": {
+            "description": "Observed Gmail send failures are best explained by an executor regression introduced with tool-executor version 20261112: recipient normalization drops a present recipient before provider dispatch, causing fast pre-provider 400s rather than authentication failures.",
+            "supporting_evidence": [
+              "ev_8bc72b2d7ee7",
+              "ev_bc5ce298927e",
+              "ev_8a9b60053602",
+              "ev_836936aff776"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "Diagnosis is scoped to the observed failed Gmail send executions and sampled tenants, not every possible failure in the incident window.",
+              "The sandbox reproduce result verifies the normalization variable under the provided same-input comparison, not all production paths."
+            ]
+          },
+          "findings": [
+            {
+              "code": "tenant_impact",
+              "statement": "Impact is widespread across the observed tenants atlas, birch, and cedar: each moved from 0/100 failures before the change to 92/100 failures after the change.",
+              "citations": [
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:1"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:2"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:3"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:4"
+                },
+                {
+                  "evidence_id": "ev_8bc72b2d7ee7",
+                  "record_id": "gmail-001:metrics:5"
+                }
+              ]
+            },
+            {
+              "code": "version_specific_failure",
+              "statement": "Failures align with tool-executor version 20261112, while the prior 20261110 version shows successful Gmail sends.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:0"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:2"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:4"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "mechanism_observation",
+              "statement": "On failed requests, the executor logs show 'recipient missing after executor normalization' even though input_recipient_present=true.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "Failed executions do not reach Gmail: provider_called=false on the failing requests, indicating an internal executor failure before provider or auth exchange with Gmail.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "A same-input controlled reproduce comparison isolates the changed behavior to executor version 20261112: 20261110 forwards the recipient and returns 200, while 20261112 drops the recipient and returns 400.",
+              "citations": [
+                {
+                  "evidence_id": "ev_836936aff776",
+                  "record_id": "gmail-001:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_836936aff776",
+                  "record_id": "gmail-001:reproduce:1"
+                }
+              ]
+            },
+            {
+              "code": "version_control",
+              "statement": "A tool-executor deployment at 10:00 introduced a 'Recipient normalization refactor', matching the onset and mechanism of the observed failures.",
+              "citations": [
+                {
+                  "evidence_id": "ev_8a9b60053602",
+                  "record_id": "gmail-001:deployments:0"
+                }
+              ]
+            },
+            {
+              "code": "scope_present",
+              "statement": "Granted Gmail send scope is present on both successful and failed requests, which argues against a missing-grant authentication failure for these executions.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:0"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:2"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:4"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "rollback_executor",
+            "repair_recipient_mapping",
+            "request_reproduction",
+            "disable_blind_send_retries"
+          ],
+          "actions": [
+            "Prioritize executor rollback or isolation from version 20261112 for Gmail send traffic.",
+            "Inspect and correct the recipient normalization path introduced by the refactor.",
+            "Use the same-input reproduce case as a regression test before re-exposing the changed path.",
+            "Avoid blind retries of these 400s until the executor mapping issue is corrected, because the failure occurs before provider send."
+          ],
+          "missing_checks": [],
+          "strength": 9
+        },
+        {
+          "code": "unconfirmed_change",
+          "hypothesis": {
+            "description": "The nearby auth-service change is a weaker alternative explanation based only on timing, but available evidence does not show an authentication mechanism causing these Gmail send failures.",
+            "supporting_evidence": [
+              "ev_8a9b60053602"
+            ],
+            "contradicting_evidence": [
+              "ev_bc5ce298927e",
+              "ev_836936aff776"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "Auth-service logs for the window are unavailable in the supplied evidence, so this alternative cannot be disproved for all possible requests.",
+              "This candidate addresses the customer's auth suspicion, not the strongest mechanism for the observed failed executions."
+            ]
+          },
+          "findings": [
+            {
+              "code": "version_control",
+              "statement": "An auth-service deployment occurred shortly before the failures, but the recorded change was only a logging verbosity update with no credential changes.",
+              "citations": [
+                {
+                  "evidence_id": "ev_8a9b60053602",
+                  "record_id": "gmail-001:deployments:1"
+                }
+              ]
+            },
+            {
+              "code": "scope_present",
+              "statement": "Failed requests still show the expected gmail.send grant, which does not fit a missing-grant authentication failure on those executions.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "pre_provider_failure",
+              "statement": "Failures terminate inside tool-executor before any provider call, so the observed failures do not require Gmail-side auth rejection to explain them.",
+              "citations": [
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:1"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:3"
+                },
+                {
+                  "evidence_id": "ev_bc5ce298927e",
+                  "record_id": "gmail-001:logs:5"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "The sandbox same-input comparison reproduces the failure by changing executor version alone, without needing an auth change to trigger it.",
+              "citations": [
+                {
+                  "evidence_id": "ev_836936aff776",
+                  "record_id": "gmail-001:reproduce:0"
+                },
+                {
+                  "evidence_id": "ev_836936aff776",
+                  "record_id": "gmail-001:reproduce:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "align_telemetry_windows"
+          ],
+          "actions": [
+            "Do not prioritize auth remediation for the observed Gmail send failures unless new evidence shows auth-path errors.",
+            "If reassurance is needed, collect auth-service request-correlated logs or traces for the same failed request IDs to close the residual timing-only concern."
+          ],
+          "missing_checks": [
+            "Request-correlated auth-service telemetry for the failed executions is unavailable; if present and conflicting, it could narrow any secondary auth contribution beyond the observed executor failure."
+          ],
+          "strength": 2
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "attempt": 2,
+      "started_at": "2026-11-12T20:15:35.817022+00:00",
+      "critique": {
+        "approved": true,
+        "blocking_checks": [],
+        "notes": [
+          "The leading diagnosis is adequately grounded in canonical records: failing executions on tool-executor 20261112 log `provider_called=false` with `input_recipient_present=true` and error `recipient missing after executor normalization` (ev_bc5ce298927e / gmail-001:logs:1, :3, :5). That directly supports an internal pre-provider executor failure mechanism rather than Gmail or auth rejection for the observed failed sends.",
+          "The same-input reproduce evidence is a useful discriminating control, not proof of all production paths. The report scopes that correctly to the observed mechanism and sampled requests.",
+          "Latency behavior is directionally consistent with early internal rejection: p95 drops from ~450 ms before to ~80 ms after failures rise to 92/100 for atlas, birch, and cedar (ev_8bc72b2d7ee7 / gmail-001:metrics:0-5).",
+          "The nearby auth deployment is weak counter-hypothesis only. The available deployment record says 'Logging verbosity update; no credential changes' (ev_8a9b60053602 / gmail-001:deployments:1), and the failed requests never reach the provider. Missing auth-service request-correlated logs are therefore optional reassurance, not a material blocker to the bounded diagnosis.",
+          "Good scoping: the evidence supports cross-tenant impact for the observed tenants and version-specific behavior, but not every tenant or every Gmail failure everywhere. Dogwood on 20261110 succeeding at 10:06 is useful counter-evidence against a universal provider outage, though it is only a single request sample (ev_bc5ce298927e / gmail-001:logs:6).",
+          "Minor quality issue only: findings contain duplicated statements/codes. That does not undermine the causal conclusion, but deduplication would improve clarity."
+        ]
+      },
+      "finished_at": "2026-11-12T20:15:45.460130+00:00",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_ad6168647e48",
+        "ev_8bc72b2d7ee7",
+        "ev_bc5ce298927e",
+        "ev_8a9b60053602",
+        "ev_6250305722e5",
+        "ev_f071b09a711b",
+        "ev_a1680da7de80",
+        "ev_53851e5cd0e1",
+        "ev_00c54dee31cc",
+        "ev_836936aff776"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 11619,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1209,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 12828
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [],
+      "candidates": [],
+      "objections": [],
+      "report": {
+        "incident_id": "gmail-001",
+        "outcome": "probable_cause",
+        "hypotheses": [
+          {
+            "description": "Observed Gmail send failures across multiple tenants are caused by a regression introduced with tool-executor version 20261112, specifically a recipient normalization refactor that drops a present recipient before the provider call, resulting in immediate executor 400 failures without provider or authentication involvement.",
+            "supporting_evidence": [
+              "ev_8bc72b2d7ee7",
+              "ev_bc5ce298927e",
+              "ev_8a9b60053602",
+              "ev_836936aff776"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "high",
+            "assumptions": [
+              "Investigation scope is limited to observed tenants and sampled requests with matching reproduce cases in sandbox.",
+              "Reproduce tests confirm behavior under same input but may not cover all production paths."
+            ]
+          }
+        ],
+        "recommended_actions": [
+          "Prioritize isolation or rollback of tool-executor version 20261112 for Gmail send workflows to restore functionality.",
+          "Investigate and repair the recipient normalization logic introduced in the 20261112 executor deployment.",
+          "Use reproduce tests with same input to validate fixes and prevent regression before wider rollout.",
+          "Disable automatic blind retries for these failures until the executor normalization is fixed, as retries currently fail fast pre-provider."
+        ],
+        "limitations": [
+          "No auth-service telemetry correlated to failed requests was available for review; cannot fully exclude minor secondary auth impacts though evidence strongly favors executor regression.",
+          "Telemetry and logs cover sampled tenants and requests, not exhaustive platform-wide data.",
+          "Reproduce results are based on mocks and do not confirm production provider behavior directly."
+        ]
+      },
+      "attempt": 2,
+      "started_at": "2026-11-12T20:15:45.506913+00:00",
+      "finished_at": "2026-11-12T20:15:55.988462+00:00",
+      "error": null
+    }
+  ],
+  "notice": "Observable decisions and evidence, not private chain-of-thought. Earlier tickets may lack per-task model/tool attribution."
+}

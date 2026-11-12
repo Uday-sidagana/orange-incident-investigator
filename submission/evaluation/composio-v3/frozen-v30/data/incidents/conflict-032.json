@@ -1,0 +1,82 @@
+{
+  "incident": {
+    "id": "conflict-032",
+    "title": "Conflicting telemetry prevents a reliable diagnosis",
+    "description": "Two dashboards disagree about the same request and time window. The customer reports intermittent failures, but source timestamps cannot be reconciled.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "conflict-032:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "request_id": "conflicted-request",
+        "status": 500,
+        "telemetry_window_consistent": false,
+        "source_clock": "unverified"
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "conflict-032:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "reported_status": 200,
+        "telemetry_window_consistent": false,
+        "source_clock": "different_window"
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "conflict-032:deployments:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Executor release near the reported window",
+        "version": "candidate-release"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "conflict-032:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "conflict-032:history:0",
+        "service": "tool-executor",
+        "symptom": "Intermittent failure",
+        "cause": "Earlier provider outage",
+        "verified": true
+      },
+      {
+        "record_id": "conflict-032:history:1",
+        "service": "tool-executor",
+        "symptom": "Intermittent failure",
+        "cause": "Earlier executor regression",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "reproduce": {
+      "incomplete": true
+    },
+    "metrics": {
+      "incomplete": true
+    }
+  }
+}

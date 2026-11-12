@@ -1,0 +1,456 @@
+{
+  "incident_id": "slack-schedule-052",
+  "approach": "single_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "slack-schedule-052",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause: the request used scheduled-message attachment semantics that do not perform a Slack file upload, so the text was scheduled successfully but no file was uploaded or linked. This matches the observed execution and the controlled reproduction where only Slack configuration changed the result.",
+        "supporting_evidence": [
+          "ev_8cc7c610f677",
+          "ev_4584563cb3ea",
+          "ev_4c097f357a92"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The sandbox controlled comparison is representative of the production request shape for this incident.",
+          "The public reference summary accurately describes the relevant Slack scheduled-message behavior."
+        ]
+      },
+      {
+        "description": "Less likely alternative: a Slack/provider outage prevented file delivery. This is weakened because provider API reachability was healthy, another Slack read succeeded, and the failing execution never performed a file upload.",
+        "supporting_evidence": [
+          "ev_547344881112",
+          "ev_acf3f7bc32b4"
+        ],
+        "contradicting_evidence": [
+          "ev_4584563cb3ea",
+          "ev_4c097f357a92"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The comparison read path is a useful indicator that Slack was generally reachable during the incident window."
+        ]
+      },
+      {
+        "description": "Less likely alternative: an internal regression from a contemporaneous deployment. This is weak because no tool-executor deployment was observed in the incident window, and the only listed deployment was to an unrelated service.",
+        "supporting_evidence": [
+          "ev_91e48067499a",
+          "ev_531b827f1540"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "low",
+        "assumptions": [
+          "Deployment records are complete for the incident window."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "scheduled_attachment_semantics_remediation",
+      "request_reproduction",
+      "collect_missing_telemetry"
+    ],
+    "limitations": [
+      "Observed production logs in evidence show one canonical failing cedar execution and a comparison maple record, not exhaustive coverage of every failing request.",
+      "The empty tool-executor deployment query reduces but does not absolutely eliminate unrecorded change risk.",
+      "Metrics show business impact and queue depth for cedar, but they do not directly prove every blocked operation had this same mechanism."
+    ]
+  },
+  "ranked_cause_codes": [
+    "scheduled_attachment_semantics",
+    "provider_failure",
+    "unconfirmed_change"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The observed failing execution scheduled the Slack message successfully but used legacy scheduled-message attachment semantics and did not perform a file upload, produce a file link, or deliver any file.",
+      "citations": [
+        {
+          "evidence_id": "ev_8cc7c610f677",
+          "record_id": "slack-schedule-052:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In a controlled sandbox reproduction, the original Slack configuration reproduced the failure with no file upload and zero delivered files, while the corrected Slack configuration performed a file upload, included a file link in the body, and delivered one file.",
+      "citations": [
+        {
+          "evidence_id": "ev_4584563cb3ea",
+          "record_id": "slack-schedule-052:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_4584563cb3ea",
+          "record_id": "slack-schedule-052:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "A broad Slack/provider outage is not the best fit: provider API reachability was reported healthy, and a same-provider unrelated read succeeded for a comparison tenant during the same time.",
+      "citations": [
+        {
+          "evidence_id": "ev_547344881112",
+          "record_id": "slack-schedule-052:dependencies:0"
+        },
+        {
+          "evidence_id": "ev_acf3f7bc32b4",
+          "record_id": "slack-schedule-052:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact was concentrated in cedar: cedar had 823 requests, 0 platform failures, 445 business operations blocked, queue depth 147, and p95 latency 1960 ms, while comparison tenant maple had 659 requests, 0 failures, 0 business operations blocked, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_443bbd74eb40",
+          "record_id": "slack-schedule-052:metrics:0"
+        },
+        {
+          "evidence_id": "ev_443bbd74eb40",
+          "record_id": "slack-schedule-052:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "verification_control",
+      "statement": "Reference knowledge aligns with the mechanism: scheduled-message formatting attachments are not a file-upload operation.",
+      "citations": [
+        {
+          "evidence_id": "ev_4c097f357a92",
+          "record_id": "slack-schedule-052:knowledge:0"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "No tool-executor deployment was observed in the incident window, and the only listed deployment was an unrelated support-dashboard release.",
+      "citations": [
+        {
+          "evidence_id": "ev_531b827f1540",
+          "record_id": "slack-schedule-052:deployments:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "scheduled_attachment_semantics_remediation",
+    "request_reproduction",
+    "collect_missing_telemetry"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_acf3f7bc32b4",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-schedule-052:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-52",
+          "toolkit": "slack",
+          "status": 200,
+          "message_scheduled": true,
+          "attachment_semantics": "legacy_message_formatting",
+          "file_upload_performed": false,
+          "file_link_in_body": false,
+          "delivered_file_count": 0
+        },
+        {
+          "record_id": "slack-schedule-052:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4c097f357a92",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-schedule-052:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+          "kind": "public_reference",
+          "summary": "Scheduled-message formatting attachments are not a file-upload operation."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_531b827f1540",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-schedule-052:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_443bbd74eb40",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-schedule-052:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 823,
+          "failures": 0,
+          "business_operations_blocked": 445,
+          "queue_depth": 147,
+          "p95_latency_ms": 1960
+        },
+        {
+          "record_id": "slack-schedule-052:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 659,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_43a73b31dbb1",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-schedule-052:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4584563cb3ea",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-schedule-052:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "slack_configuration",
+          "check_passed": false,
+          "toolkit": "slack",
+          "status": 200,
+          "message_scheduled": true,
+          "attachment_semantics": "legacy_message_formatting",
+          "file_upload_performed": false,
+          "file_link_in_body": false,
+          "delivered_file_count": 0
+        },
+        {
+          "record_id": "slack-schedule-052:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "slack_configuration",
+          "check_passed": true,
+          "toolkit": "slack",
+          "status": 200,
+          "message_scheduled": true,
+          "attachment_semantics": "legacy_message_formatting",
+          "file_upload_performed": true,
+          "file_link_in_body": true,
+          "delivered_file_count": 1
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_91e48067499a",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_547344881112",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-schedule-052:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_8cc7c610f677",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-schedule-052:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-52",
+          "toolkit": "slack",
+          "status": 200,
+          "message_scheduled": true,
+          "attachment_semantics": "legacy_message_formatting",
+          "file_upload_performed": false,
+          "file_link_in_body": false,
+          "delivered_file_count": 0
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 57.698729650932364,
+  "input_tokens": 24358,
+  "output_tokens": 3620
+}

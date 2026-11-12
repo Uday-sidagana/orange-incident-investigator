@@ -1,0 +1,43 @@
+{
+  "dataset_version": "3.1",
+  "case_ids": [
+    "sheets-discovery-039",
+    "airtable-expiry-041",
+    "slack-user-043",
+    "slack-redirect-046",
+    "gmail-shape-047"
+  ],
+  "model": "gpt-5.4",
+  "models": {
+    "orchestrator": "gpt-5.4",
+    "observability": "gpt-5.4",
+    "dependency": "gpt-5.4",
+    "reasoning": "gpt-5.4",
+    "critic": "gpt-5.4",
+    "reporting": "gpt-5.4"
+  },
+  "runtime_hashes": {
+    "src/orange_incident/llm_agents.py": "dc7399be17fe279ddfd7391fffd129683e2c7f0d45bd7520417f307037973e5b",
+    "src/orange_incident/single_agent.py": "7da4e2d9cad0dd86131bbd8b59724d064dd2b09ee5ccf26e559a3202888833f7",
+    "src/orange_incident/engine.py": "3902808ba036ec014b1b8ad75aee55a777011d76b53af40ff1ee44e2b4f6599b",
+    "src/orange_incident/tools.py": "10a5d1e3460d2db77c5e560e2d80ea2a259d1902fbb5048c44cf393925cf8bc8",
+    "src/orange_incident/models.py": "3d88e44d0eb365ccacb7ef9623397616698d4edef1e16a96502d0cd4899d905a",
+    "src/orange_incident/contracts.py": "50263b97919e16be08fcaff4fe69a69c8e660514d14815e916a33474dba43de4",
+    "data/rubric.json": "092acdd23f99fc1005146436f988568bf4e7d15bd1b35d327ddc4d689763d5e1"
+  },
+  "fixture_hashes": {
+    "sheets-discovery-039": "b722ccc288ab8f68c13bc0ce0eadee843ca89dc3589d437a302b42d9b3c454fb",
+    "airtable-expiry-041": "5ff9b30e0add7794d1dc1d4fa5707393264b9a275471c67767a4afb4736654b8",
+    "slack-user-043": "ec19d00dd1d2ee0f0b4481fe0dd87287882495e1059fa11b464c81eed7f5d350",
+    "slack-redirect-046": "caf5fb3706ce7bb4f1ba019af63fa9fb3a12a56a0b3a2c1baec3216466f28e04",
+    "gmail-shape-047": "7aa8fa7b7a484f2b9c2e9814988a02c11ed59f3a46b834fbbb48cff2f508ad7f"
+  },
+  "changes": "Only the documented successful-control fields changed. Original first-attempt results retained separately.",
+  "global_limits": {
+    "model_requests_per_run": 24,
+    "tool_attempts_per_run": 24,
+    "deadline_seconds": 360,
+    "output_tokens_per_request": 4000,
+    "max_total_context_chars": 700000
+  }
+}

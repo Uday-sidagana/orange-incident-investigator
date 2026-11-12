@@ -1,0 +1,86 @@
+{
+  "incident": {
+    "id": "tenant-009",
+    "title": "Connected account not found after migration",
+    "description": "Atlas reports missing connections after moving its consumer app to a new project.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "auth-service"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "tenant-009:logs:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "request_project": "project-b",
+        "connection_project": "project-a",
+        "status": 404,
+        "connection_exists": true
+      },
+      {
+        "record_id": "tenant-009:logs:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "request_project": "project-a",
+        "connection_project": "project-a",
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "tenant-009:metrics:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 80,
+        "failures": 80
+      },
+      {
+        "record_id": "tenant-009:metrics:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 80,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "tenant-009:deployments:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "change": "Application project changed from project-a to project-b"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "tenant-009:dependencies:0",
+        "service": "auth-service",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "tenant-009:history:0",
+        "service": "auth-service",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

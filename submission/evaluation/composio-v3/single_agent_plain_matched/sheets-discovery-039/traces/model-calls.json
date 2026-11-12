@@ -1,0 +1,88 @@
+{
+  "models": {
+    "single_agent": "gpt-5.4"
+  },
+  "limits": {
+    "max_provider_attempts": 2,
+    "max_requests": 24,
+    "max_output_tokens": 4000,
+    "max_context_chars": 100000,
+    "max_total_context_chars": 700000,
+    "max_collection_rounds": 20,
+    "max_queries_per_task": 24
+  },
+  "calls": [
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_058f261c85e2093c016af5fda22fb487d2958db1c21ce8a06e",
+      "usage": {
+        "input_tokens": 4433,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1536
+        },
+        "output_tokens": 335,
+        "output_tokens_details": {
+          "reasoning_tokens": 55
+        },
+        "total_tokens": 4768
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_058f261c85e2093c016af5fda72f3487d2b1a15f39a0f212ef",
+      "usage": {
+        "input_tokens": 6174,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1536
+        },
+        "output_tokens": 161,
+        "output_tokens_details": {
+          "reasoning_tokens": 113
+        },
+        "total_tokens": 6335
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_058f261c85e2093c016af5fdab47b487d2b2c581934ba56cb6",
+      "usage": {
+        "input_tokens": 6496,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1144,
+        "output_tokens_details": {
+          "reasoning_tokens": 119
+        },
+        "total_tokens": 7640
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_04ce943d210f3916016af5fdbef91887d2825024a084c49529",
+      "usage": {
+        "input_tokens": 6452,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1190,
+        "output_tokens_details": {
+          "reasoning_tokens": 86
+        },
+        "total_tokens": 7642
+      }
+    }
+  ]
+}

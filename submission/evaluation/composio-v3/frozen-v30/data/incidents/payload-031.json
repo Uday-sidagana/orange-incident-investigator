@@ -1,0 +1,120 @@
+{
+  "incident": {
+    "id": "payload-031",
+    "title": "Large attachments fail while small messages send",
+    "description": "Attachment sends return 413 for large files. Plain text and small attachments work, and authentication appears healthy.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "payload-031:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "provider_status": 413,
+        "payload_bytes": 40000000,
+        "max_request_bytes": 25000000,
+        "upload_reference_valid": true,
+        "status": 413
+      },
+      {
+        "record_id": "payload-031:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "provider_status": 200,
+        "payload_bytes": 10000,
+        "max_request_bytes": 25000000,
+        "upload_reference_valid": true,
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "payload-031:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "payload-031:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "payload-031:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "payload-031:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "payload-031:history:0",
+        "service": "tool-executor",
+        "symptom": "Large attachments fail while small messages send",
+        "cause": "An earlier attachment problem was a client timeout followed by an unsafe retry.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "payload-031:knowledge:0",
+        "service": "tool-executor",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "payload-031:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "payload_size",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "payload-031:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "payload_size",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

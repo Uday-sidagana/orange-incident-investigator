@@ -1,0 +1,123 @@
+{
+  "incident": {
+    "id": "body-029",
+    "title": "Webhook signatures fail after middleware refactor",
+    "description": "Webhook requests started failing signature verification after a JSON middleware change. The signing secret was not rotated.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "webhook-delivery"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "body-029:logs:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "raw_body_hash": "raw-body-a",
+        "verified_body_hash": "reserialized-body-b",
+        "signature_matches_raw": true,
+        "signature_matches_reencoded": false,
+        "status": 401
+      },
+      {
+        "record_id": "body-029:logs:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "raw_body_hash": "raw-body-a",
+        "verified_body_hash": "raw-body-a",
+        "signature_matches_raw": true,
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "body-029:metrics:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "body-029:metrics:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "body-029:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "body-029:dependencies:0",
+        "service": "webhook-delivery",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "body-029:history:0",
+        "service": "webhook-delivery",
+        "symptom": "Webhook signatures fail after middleware refactor",
+        "cause": "An older signature incident involved host clock skew rather than body transformation.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "body-029:knowledge:0",
+        "service": "webhook-delivery",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "body-029:reproduce:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "signature_input_bytes",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "body-029:reproduce:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "signature_input_bytes",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 1
+    }
+  }
+}

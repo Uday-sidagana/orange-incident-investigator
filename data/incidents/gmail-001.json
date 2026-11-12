@@ -1,0 +1,358 @@
+{
+  "incident": {
+    "id": "gmail-001",
+    "title": "Gmail send failures across tenants",
+    "description": "Send failures rose around 10:00 UTC. Customers suspect authentication; executor and auth changes occurred nearby.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-router",
+      "tool-executor",
+      "auth-service"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "timestamp": "2026-11-12T09:55:00Z",
+        "service": "tool-executor",
+        "tenant": "atlas",
+        "version": "20261110",
+        "request_id": "atlas-20261110",
+        "tool": "GMAIL_SEND_EMAIL",
+        "status": 200,
+        "error": null,
+        "provider_called": true,
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "input_recipient_present": true,
+        "record_id": "gmail-001:logs:0"
+      },
+      {
+        "timestamp": "2026-11-12T10:05:00Z",
+        "service": "tool-executor",
+        "tenant": "atlas",
+        "version": "20261112",
+        "request_id": "atlas-20261112",
+        "tool": "GMAIL_SEND_EMAIL",
+        "status": 400,
+        "error": "recipient missing after executor normalization",
+        "provider_called": false,
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "input_recipient_present": true,
+        "record_id": "gmail-001:logs:1"
+      },
+      {
+        "timestamp": "2026-11-12T09:55:00Z",
+        "service": "tool-executor",
+        "tenant": "birch",
+        "version": "20261110",
+        "request_id": "birch-20261110",
+        "tool": "GMAIL_SEND_EMAIL",
+        "status": 200,
+        "error": null,
+        "provider_called": true,
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "input_recipient_present": true,
+        "record_id": "gmail-001:logs:2"
+      },
+      {
+        "timestamp": "2026-11-12T10:05:00Z",
+        "service": "tool-executor",
+        "tenant": "birch",
+        "version": "20261112",
+        "request_id": "birch-20261112",
+        "tool": "GMAIL_SEND_EMAIL",
+        "status": 400,
+        "error": "recipient missing after executor normalization",
+        "provider_called": false,
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "input_recipient_present": true,
+        "record_id": "gmail-001:logs:3"
+      },
+      {
+        "timestamp": "2026-11-12T09:55:00Z",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": "20261110",
+        "request_id": "cedar-20261110",
+        "tool": "GMAIL_SEND_EMAIL",
+        "status": 200,
+        "error": null,
+        "provider_called": true,
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "input_recipient_present": true,
+        "record_id": "gmail-001:logs:4"
+      },
+      {
+        "timestamp": "2026-11-12T10:05:00Z",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": "20261112",
+        "request_id": "cedar-20261112",
+        "tool": "GMAIL_SEND_EMAIL",
+        "status": 400,
+        "error": "recipient missing after executor normalization",
+        "provider_called": false,
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "input_recipient_present": true,
+        "record_id": "gmail-001:logs:5"
+      },
+      {
+        "timestamp": "2026-11-12T10:06:00Z",
+        "service": "tool-executor",
+        "tenant": "dogwood",
+        "version": "20261110",
+        "tool": "GMAIL_SEND_EMAIL",
+        "status": 200,
+        "provider_called": true,
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "record_id": "gmail-001:logs:6"
+      }
+    ],
+    "metrics": [
+      {
+        "timestamp": "2026-11-12T09:55:00Z",
+        "service": "tool-executor",
+        "tenant": "atlas",
+        "version": "20261110",
+        "requests": 100,
+        "failures": 0,
+        "p95_ms": 450,
+        "record_id": "gmail-001:metrics:0"
+      },
+      {
+        "timestamp": "2026-11-12T10:05:00Z",
+        "service": "tool-executor",
+        "tenant": "atlas",
+        "version": "20261112",
+        "requests": 100,
+        "failures": 92,
+        "p95_ms": 80,
+        "record_id": "gmail-001:metrics:1"
+      },
+      {
+        "timestamp": "2026-11-12T09:55:00Z",
+        "service": "tool-executor",
+        "tenant": "birch",
+        "version": "20261110",
+        "requests": 100,
+        "failures": 0,
+        "p95_ms": 450,
+        "record_id": "gmail-001:metrics:2"
+      },
+      {
+        "timestamp": "2026-11-12T10:05:00Z",
+        "service": "tool-executor",
+        "tenant": "birch",
+        "version": "20261112",
+        "requests": 100,
+        "failures": 92,
+        "p95_ms": 80,
+        "record_id": "gmail-001:metrics:3"
+      },
+      {
+        "timestamp": "2026-11-12T09:55:00Z",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": "20261110",
+        "requests": 100,
+        "failures": 0,
+        "p95_ms": 450,
+        "record_id": "gmail-001:metrics:4"
+      },
+      {
+        "timestamp": "2026-11-12T10:05:00Z",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": "20261112",
+        "requests": 100,
+        "failures": 92,
+        "p95_ms": 80,
+        "record_id": "gmail-001:metrics:5"
+      }
+    ],
+    "deployments": [
+      {
+        "timestamp": "2026-11-12T10:00:00Z",
+        "service": "tool-executor",
+        "version": "20261112",
+        "change": "Recipient normalization refactor",
+        "rollout": "75%",
+        "record_id": "gmail-001:deployments:0"
+      },
+      {
+        "timestamp": "2026-11-12T09:58:00Z",
+        "service": "auth-service",
+        "version": "auth-42",
+        "change": "Logging verbosity update; no credential changes",
+        "record_id": "gmail-001:deployments:1"
+      }
+    ],
+    "dependencies": [
+      {
+        "service": "tool-router",
+        "depends_on": [
+          "auth-service",
+          "tool-executor"
+        ],
+        "record_id": "gmail-001:dependencies:0"
+      },
+      {
+        "service": "tool-executor",
+        "depends_on": [
+          "version-registry",
+          "gmail-provider"
+        ],
+        "record_id": "gmail-001:dependencies:1"
+      },
+      {
+        "service": "trigger-worker",
+        "depends_on": [
+          "webhook-delivery"
+        ],
+        "record_id": "gmail-001:dependencies:2"
+      }
+    ],
+    "history": [
+      {
+        "id": "historical-01",
+        "service": "tool-executor",
+        "symptom": "Gmail send failed with permission error",
+        "cause": "Missing gmail.send grant",
+        "resolution": "Reconnect with approved required scope",
+        "verified": true,
+        "record_id": "gmail-001:history:0"
+      },
+      {
+        "id": "historical-02",
+        "service": "tool-executor",
+        "symptom": "Validation failure after argument mapping change",
+        "cause": "Adapter omitted nested argument",
+        "resolution": "Rollback mapping change",
+        "verified": true,
+        "record_id": "gmail-001:history:1"
+      }
+    ],
+    "knowledge": [
+      {
+        "id": "kb-gmail",
+        "url": "https://docs.composio.dev/kb/guide/toolkits-gmail",
+        "summary": "Check recipient nesting, toolkit version, and actual granted scopes. Verify execution status before retrying a timed-out send.",
+        "kind": "reference_guidance",
+        "record_id": "gmail-001:knowledge:0"
+      }
+    ],
+    "reproduce": [
+      {
+        "service": "tool-executor",
+        "version": "20261110",
+        "tenant": "sandbox",
+        "tool": "GMAIL_SEND_EMAIL",
+        "same_input": true,
+        "provider_mock": true,
+        "status": 200,
+        "observation": "recipient forwarded",
+        "record_id": "gmail-001:reproduce:0"
+      },
+      {
+        "service": "tool-executor",
+        "version": "20261112",
+        "tenant": "sandbox",
+        "tool": "GMAIL_SEND_EMAIL",
+        "same_input": true,
+        "provider_mock": true,
+        "status": 400,
+        "observation": "recipient dropped by normalization",
+        "record_id": "gmail-001:reproduce:1"
+      }
+    ],
+    "connections": [
+      {
+        "record_id": "connection-view-1837623f2493",
+        "connection_id": "tool-executor:atlas",
+        "service": "tool-executor",
+        "tenant": "atlas",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "gmail-001:logs:0",
+          "gmail-001:logs:1"
+        ]
+      },
+      {
+        "record_id": "connection-view-703328094fd2",
+        "connection_id": "tool-executor:birch",
+        "service": "tool-executor",
+        "tenant": "birch",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "gmail-001:logs:2",
+          "gmail-001:logs:3"
+        ]
+      },
+      {
+        "record_id": "connection-view-f5d68734db8d",
+        "connection_id": "tool-executor:cedar",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "gmail-001:logs:4",
+          "gmail-001:logs:5"
+        ]
+      },
+      {
+        "record_id": "connection-view-b8a6a767ac07",
+        "connection_id": "tool-executor:dogwood",
+        "service": "tool-executor",
+        "tenant": "dogwood",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "gmail-001:logs:6"
+        ]
+      }
+    ],
+    "refresh_history": []
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 1
+    },
+    "history": {
+      "incomplete": true
+    }
+  }
+}

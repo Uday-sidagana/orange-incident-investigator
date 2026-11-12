@@ -1,0 +1,405 @@
+{
+  "incident_id": "github-org-035",
+  "approach": "single_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "github-org-035",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Cedar's organization-scoped GitHub jobs are failing because the OAuth app is pending approval under a restricted GitHub organization policy, while the credential itself remains valid and personal repository access still works.",
+        "supporting_evidence": [
+          "ev_18bc6f424c5f",
+          "ev_56132ad6f014",
+          "ev_e8828aa1d3ea",
+          "ev_7f728bcbf896"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The failing cedar jobs target organization resources governed by the observed restricted organization policy.",
+          "The controlled sandbox comparison exercises the same approval gate as the affected production workflow."
+        ]
+      },
+      {
+        "description": "A broader GitHub or platform outage caused the 403s.",
+        "supporting_evidence": [
+          "ev_d3ba728e0973"
+        ],
+        "contradicting_evidence": [
+          "ev_18bc6f424c5f",
+          "ev_7f728bcbf896",
+          "ev_e8828aa1d3ea",
+          "ev_c64bab0692c8"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The historical analogy could still be relevant despite lacking current corroboration."
+        ]
+      },
+      {
+        "description": "There was some other unconfirmed change in cedar's GitHub setup unrelated to organization approval.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_18bc6f424c5f",
+          "ev_e8828aa1d3ea"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "A change not visible in the supplied telemetry could have altered GitHub access state."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "github_organization_approval_remediation",
+      "request_workspace_admin_access",
+      "replay_after_recovery"
+    ],
+    "limitations": [
+      "No canonical provider-side audit record is included to show when the organization approval state changed or who must approve it.",
+      "The empty connection and refresh convenience views do not independently verify what reconnect path or account was used."
+    ]
+  },
+  "ranked_cause_codes": [
+    "github_organization_approval",
+    "provider_failure",
+    "unconfirmed_change"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The failing cedar execution returned 403 while token_valid=true and personal_repository_access=true, and the same log shows organization_oauth_policy=restricted with organization_app_approval=pending, matching an organization-approval block rather than a broken personal token.",
+      "citations": [
+        {
+          "evidence_id": "ev_18bc6f424c5f",
+          "record_id": "github-org-035:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "policy_control",
+      "statement": "Public reference material states that GitHub organizations may require owner approval of an OAuth app, consistent with the pending-approval state observed on the failing request.",
+      "citations": [
+        {
+          "evidence_id": "ev_56132ad6f014",
+          "record_id": "github-org-035:knowledge:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the controlled sandbox comparison, the original configuration with organization_app_approval=pending failed with 403, while the corrected configuration differing in GitHub configuration passed with 200 after organization_app_approval changed to approved.",
+      "citations": [
+        {
+          "evidence_id": "ev_e8828aa1d3ea",
+          "record_id": "github-org-035:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_e8828aa1d3ea",
+          "record_id": "github-org-035:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Impact is concentrated in cedar: 360 of 534 requests failed, 360 business operations were blocked, and queue_depth reached 96, while comparison tenant maple had 0 failures and no backlog.",
+      "citations": [
+        {
+          "evidence_id": "ev_7f728bcbf896",
+          "record_id": "github-org-035:metrics:0"
+        },
+        {
+          "evidence_id": "ev_7f728bcbf896",
+          "record_id": "github-org-035:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "The same provider is observed healthy for another tenant/workload: maple had status 200 and an unrelated GitHub read succeeded, arguing against a global GitHub outage.",
+      "citations": [
+        {
+          "evidence_id": "ev_18bc6f424c5f",
+          "record_id": "github-org-035:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "backlog",
+      "statement": "The cedar failures accumulated into operational backlog, with queue_depth 96 during the incident window.",
+      "citations": [
+        {
+          "evidence_id": "ev_7f728bcbf896",
+          "record_id": "github-org-035:metrics:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "github_organization_approval_remediation",
+    "request_workspace_admin_access",
+    "replay_after_recovery"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_18bc6f424c5f",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-org-035:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-35",
+          "toolkit": "github",
+          "status": 403,
+          "personal_repository_access": true,
+          "organization_oauth_policy": "restricted",
+          "organization_app_approval": "pending",
+          "token_valid": true
+        },
+        {
+          "record_id": "github-org-035:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7f728bcbf896",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-org-035:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 534,
+          "failures": 360,
+          "business_operations_blocked": 360,
+          "queue_depth": 96,
+          "p95_latency_ms": 1280
+        },
+        {
+          "record_id": "github-org-035:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 472,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c64bab0692c8",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-org-035:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_d3ba728e0973",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-org-035:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_56132ad6f014",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-org-035:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+          "kind": "public_reference",
+          "summary": "GitHub organizations may require owner approval of an OAuth app."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_60381b3249b3",
+      "query": {
+        "tool": "refresh_history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4f495d9ca37e",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_e8828aa1d3ea",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-org-035:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "github_configuration",
+          "check_passed": false,
+          "toolkit": "github",
+          "status": 403,
+          "personal_repository_access": true,
+          "organization_oauth_policy": "restricted",
+          "organization_app_approval": "pending",
+          "token_valid": true
+        },
+        {
+          "record_id": "github-org-035:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "github_configuration",
+          "check_passed": true,
+          "toolkit": "github",
+          "status": 200,
+          "personal_repository_access": true,
+          "organization_oauth_policy": "restricted",
+          "organization_app_approval": "approved",
+          "token_valid": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 79.3815760940779,
+  "input_tokens": 30607,
+  "output_tokens": 4581
+}

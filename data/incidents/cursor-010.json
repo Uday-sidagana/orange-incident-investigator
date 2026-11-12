@@ -1,0 +1,104 @@
+{
+  "incident": {
+    "id": "cursor-010",
+    "title": "No events after Gmail trigger reconnect",
+    "description": "Sending tools work, but new messages are not delivered after an account reconnect.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "trigger-worker"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "cursor-010:logs:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "connection_id": "ca-new",
+        "connection_status": "ACTIVE",
+        "send_status": 200
+      },
+      {
+        "record_id": "cursor-010:logs:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "trigger_id": "ti-old",
+        "connection_id": "ca-old",
+        "enabled": false,
+        "last_poll": "2026-11-12T09:40:00Z"
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "cursor-010:metrics:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "new_messages": 12,
+        "trigger_events": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "cursor-010:deployments:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Account reconnected under a different application user ID",
+        "old_connection": "ca-old",
+        "new_connection": "ca-new"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "cursor-010:dependencies:0",
+        "service": "trigger-worker",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "cursor-010:history:0",
+        "service": "trigger-worker",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [
+      {
+        "record_id": "connection-view-a48b1aa639c0",
+        "connection_id": "ca-new",
+        "service": "trigger-worker",
+        "tenant": null,
+        "connection_status": "ACTIVE",
+        "granted_scopes": null,
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "cursor-010:logs:0"
+        ]
+      },
+      {
+        "record_id": "connection-view-61d636e73263",
+        "connection_id": "ca-old",
+        "service": "trigger-worker",
+        "tenant": null,
+        "connection_status": "not_recorded",
+        "granted_scopes": null,
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "cursor-010:logs:1"
+        ]
+      }
+    ],
+    "refresh_history": []
+  },
+  "failures": {}
+}

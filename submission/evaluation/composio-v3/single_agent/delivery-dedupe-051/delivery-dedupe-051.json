@@ -1,0 +1,386 @@
+{
+  "incident_id": "delivery-dedupe-051",
+  "approach": "single_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "delivery-dedupe-051",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause: the downstream webhook receiver processed retry deliveries non-idempotently. For Cedar, a single provider ingress event led to two delivery attempts with the same stable event identifier appearing on both receipts, receiver deduplication was false, and two downstream records were created. A controlled reproduction changed only delivery configuration and showed that enabling receiver deduplication reduced downstream records from 2 to 1 while provider ingress remained 1 and delivery attempts remained 2.",
+        "supporting_evidence": [
+          "ev_9ee12baf1f86",
+          "ev_7549ab5beb31",
+          "ev_823e9f64bb40",
+          "ev_fc71d3df4047"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The observed Cedar request is representative of the reported duplicate-record symptom during the incident window.",
+          "The sandbox controlled reproduction is materially comparable to production for this retry/deduplication mechanism."
+        ]
+      },
+      {
+        "description": "Alternative explanation: duplicate records were caused by duplicate provider ingress or platform-side duplicate ingestion before delivery. This is not well supported because the observed Cedar execution recorded provider_ingress_events=1, and the controlled reproduction preserved one ingress event while still reproducing duplicates only when receiver deduplication was disabled.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_9ee12baf1f86",
+          "ev_7549ab5beb31"
+        ],
+        "confidence": "high",
+        "assumptions": []
+      },
+      {
+        "description": "Alternative explanation: an internal regression or contemporaneous deployment caused the duplication. Current evidence is weak: the only observed deployment was an unrelated support-dashboard release, and the historical case is explicitly analogy only, not current proof.",
+        "supporting_evidence": [
+          "ev_b3798ebb937d"
+        ],
+        "contradicting_evidence": [
+          "ev_bcebcc5d08f8"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "No relevant unobserved trigger-worker deployment occurred outside the supplied deployment records."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "webhook_receiver_not_idempotent_remediation",
+      "verify_send_before_retry",
+      "disable_blind_send_retries",
+      "monitor_provider"
+    ],
+    "limitations": [
+      "No canonical log in the supplied evidence identifies the exact transient webhook failure mode that triggered the retry; the diagnosis is based on the observed retry/deduplication behavior.",
+      "No customer endpoint traces were provided, so receiver behavior is inferred from trigger-worker telemetry and the controlled reproduction rather than direct endpoint logs.",
+      "The empty connections query does not prove absence of related configuration because derived connection views are not independent corroboration."
+    ]
+  },
+  "ranked_cause_codes": [
+    "webhook_receiver_not_idempotent",
+    "unsafe_send_retry",
+    "unconfirmed_change"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "For Cedar, the observed failed execution shows one provider ingress event but two delivery attempts; both receipts carried the same stable event identifier, receiver deduplication was false, and two downstream records were created. This matches duplicate processing of a retried delivery rather than duplicate provider ingress.",
+      "citations": [
+        {
+          "evidence_id": "ev_9ee12baf1f86",
+          "record_id": "delivery-dedupe-051:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the controlled reproduction, the original condition reproduced the production pattern with one provider ingress event, two delivery attempts, receiver deduplication false, and two downstream records; the corrected condition changed delivery configuration so receiver deduplication was true and downstream records dropped to one while ingress and delivery attempts stayed the same.",
+      "citations": [
+        {
+          "evidence_id": "ev_7549ab5beb31",
+          "record_id": "delivery-dedupe-051:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_7549ab5beb31",
+          "record_id": "delivery-dedupe-051:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Impact was observed for Cedar but not the comparison tenant Maple at the same timestamp. Cedar had 440 business operations blocked, queue depth 144, and p95 latency 1920 ms, while Maple had 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_fc71d3df4047",
+          "record_id": "delivery-dedupe-051:metrics:0"
+        },
+        {
+          "evidence_id": "ev_fc71d3df4047",
+          "record_id": "delivery-dedupe-051:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "A same-time comparison tenant indicates the provider was reachable in general: Maple shows same_provider_available=true and unrelated reads succeeding, which argues against a broad provider outage as the main cause of Cedar's duplicate records.",
+      "citations": [
+        {
+          "evidence_id": "ev_9ee12baf1f86",
+          "record_id": "delivery-dedupe-051:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "verification_control",
+      "statement": "Public trigger guidance states webhook delivery is at-least-once and receivers need stable-identifier deduplication, which is consistent with the observed duplicate retry behavior using the same stable event identifier.",
+      "citations": [
+        {
+          "evidence_id": "ev_823e9f64bb40",
+          "record_id": "delivery-dedupe-051:knowledge:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "webhook_receiver_not_idempotent_remediation",
+    "verify_send_before_retry",
+    "disable_blind_send_retries",
+    "monitor_provider"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_9ee12baf1f86",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-51",
+          "status": 200,
+          "provider_ingress_events": 1,
+          "delivery_attempts": 2,
+          "stable_event_id": "event-demo-051",
+          "receipt_event_ids": [
+            "event-demo-051",
+            "event-demo-051"
+          ],
+          "receiver_deduplication": false,
+          "downstream_records": 2
+        },
+        {
+          "record_id": "delivery-dedupe-051:logs:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_fc71d3df4047",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:metrics:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 806,
+          "failures": 0,
+          "business_operations_blocked": 440,
+          "queue_depth": 144,
+          "p95_latency_ms": 1920
+        },
+        {
+          "record_id": "delivery-dedupe-051:metrics:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 648,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_bcebcc5d08f8",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_b3798ebb937d",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:history:0",
+          "service": "trigger-worker",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_823e9f64bb40",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:knowledge:0",
+          "service": "trigger-worker",
+          "url": "https://docs.composio.dev/kb/guide/platform-triggers",
+          "kind": "public_reference",
+          "summary": "Webhook delivery is at-least-once, so receivers need stable-identifier deduplication."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_483fc39ef242",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7549ab5beb31",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "delivery-dedupe-051:reproduce:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "delivery_configuration",
+          "check_passed": false,
+          "status": 200,
+          "provider_ingress_events": 1,
+          "delivery_attempts": 2,
+          "stable_event_id": "event-demo-051",
+          "receipt_event_ids": [
+            "event-demo-051",
+            "event-demo-051"
+          ],
+          "receiver_deduplication": false,
+          "downstream_records": 2
+        },
+        {
+          "record_id": "delivery-dedupe-051:reproduce:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "delivery_configuration",
+          "check_passed": true,
+          "status": 200,
+          "provider_ingress_events": 1,
+          "delivery_attempts": 2,
+          "stable_event_id": "event-demo-051",
+          "receipt_event_ids": [
+            "event-demo-051",
+            "event-demo-051"
+          ],
+          "receiver_deduplication": true,
+          "downstream_records": 1
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 50.22174823808018,
+  "input_tokens": 17090,
+  "output_tokens": 3383
+}

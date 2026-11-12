@@ -1,0 +1,559 @@
+{
+  "incident_id": "slack-ingress-045",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "slack-ingress-045",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Observed cedar Slack trigger failures were most likely caused by provider event ingress misrouting: the Slack app event-subscription webhook URL pointed to a different destination than the expected platform ingress, so upstream event creation succeeded but the event did not reach Composio ingress.",
+        "supporting_evidence": [
+          "ev_e0da4a4f4911",
+          "ev_0f6e4180abd9",
+          "ev_c2145cce1576",
+          "ev_805d726b2db1",
+          "ev_2cc69a606e4e",
+          "ev_dbcf1bd552ed",
+          "ev_3ea0d03cd005"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "This diagnosis is scoped to the observed cedar failure path and should not be generalized to every missed Slack event in the full window.",
+          "The controlled sandbox comparison isolates Slack configuration, but it does not prove the full production change history."
+        ]
+      },
+      {
+        "description": "A webhook secret mismatch is a weaker alternative, but current evidence argues against it because the observed failed execution did not reach platform ingress, which would be a prerequisite for in-platform signature verification failure.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_e0da4a4f4911",
+          "ev_0f6e4180abd9",
+          "ev_c2145cce1576"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "This alternative would require ingress attempts not shown in the supplied canonical records."
+        ]
+      },
+      {
+        "description": "A broader workspace app policy or Slack app settings issue could explain how the webhook URL became incorrect, but that is an upstream explanation for the misconfiguration rather than the directly observed failure mechanism.",
+        "supporting_evidence": [
+          "ev_e0da4a4f4911",
+          "ev_c2145cce1576"
+        ],
+        "contradicting_evidence": [
+          "ev_2cc69a606e4e",
+          "ev_dbcf1bd552ed"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "No supplied canonical audit trail identifies who or what changed the Slack app settings during the incident window."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry indicates the immediate next step is provider_event_ingress_misrouting_remediation: restore the Slack app event-subscription/webhook URL to the expected ingress endpoint and verify with a newly generated message.",
+      "Collect missing canonical Slack app audit/configuration evidence for 2026-11-12T09:50:00Z to 2026-11-12T10:15:00Z to determine when the webhook URL changed and whether any other Slack app setting changed at the same time.",
+      "Align ingress and application telemetry for the incident window before generalizing this mechanism beyond the observed cedar failure path.",
+      "Only if later canonical ingress logs show requests reaching the platform but failing verification, compare the active Slack signing secret with verifier configuration."
+    ],
+    "limitations": [
+      "The supplied evidence does not include canonical Slack app audit history identifying the actor or exact change time for the settings change.",
+      "The supplied evidence does not include full-window raw ingress access logs, so non-receipt is directly established for the observed failed execution, not exhaustively for every Slack event in the window.",
+      "Recommended actions are proposals only and have not been executed."
+    ]
+  },
+  "ranked_cause_codes": [
+    "provider_event_ingress_misrouting",
+    "webhook_secret_mismatch",
+    "workspace_app_policy"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "For cedar request req-45, trigger-worker recorded provider_event_created=true, app_event_webhook_url=https://other.example.invalid/events, expected_ingress_url=https://ingress.example.invalid/slack, and composio_ingress_received=false. This shows the observed failed execution never reached platform ingress.",
+      "citations": [
+        {
+          "evidence_id": "ev_e0da4a4f4911",
+          "record_id": "slack-ingress-045:logs:0"
+        },
+        {
+          "evidence_id": "ev_0f6e4180abd9",
+          "record_id": "slack-ingress-045:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In a controlled sandbox comparison, changing only Slack configuration distinguished failure from success: with the original webhook URL pointing to other.example.invalid, ingress was not received; with the corrected webhook URL matching the expected ingress, the provider event reached Composio ingress.",
+      "citations": [
+        {
+          "evidence_id": "ev_c2145cce1576",
+          "record_id": "slack-ingress-045:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_c2145cce1576",
+          "record_id": "slack-ingress-045:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact was tenant-specific. Cedar showed 704 requests, 0 transport failures, 410 business operations blocked, queue depth 126, and p95 latency 1680 ms, while maple showed 582 requests, 0 failures, 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_805d726b2db1",
+          "record_id": "slack-ingress-045:metrics:0"
+        },
+        {
+          "evidence_id": "ev_805d726b2db1",
+          "record_id": "slack-ingress-045:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "Counter-evidence to a provider-wide or platform-wide outage is present: maple had successful unrelated Slack/provider activity on the same worker, and trigger-worker dependencies reported provider API reachable.",
+      "citations": [
+        {
+          "evidence_id": "ev_e0da4a4f4911",
+          "record_id": "slack-ingress-045:logs:1"
+        },
+        {
+          "evidence_id": "ev_2cc69a606e4e",
+          "record_id": "slack-ingress-045:logs:1"
+        },
+        {
+          "evidence_id": "ev_dbcf1bd552ed",
+          "record_id": "slack-ingress-045:dependencies:0"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "Deployment timing does not positively support an internal trigger-worker regression here: the only listed deployment in evidence during the window was an unrelated support-dashboard release.",
+      "citations": [
+        {
+          "evidence_id": "ev_3ea0d03cd005",
+          "record_id": "slack-ingress-045:deployments:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "provider_event_ingress_misrouting_remediation",
+    "collect_missing_telemetry",
+    "align_telemetry_windows",
+    "synchronize_signing_secret",
+    "request_workspace_admin_access"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_dbcf1bd552ed",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:dependencies:0",
+          "service": "trigger-worker",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_3ea0d03cd005",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_67e1b4632057",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:reproduce:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "slack_configuration",
+          "check_passed": false,
+          "toolkit": "slack",
+          "status": 200,
+          "provider_event_created": true,
+          "app_event_webhook_url": "https://other.example.invalid/events",
+          "expected_ingress_url": "https://ingress.example.invalid/slack",
+          "composio_ingress_received": false
+        },
+        {
+          "record_id": "slack-ingress-045:reproduce:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "slack_configuration",
+          "check_passed": true,
+          "toolkit": "slack",
+          "status": 200,
+          "provider_event_created": true,
+          "app_event_webhook_url": "https://ingress.example.invalid/slack",
+          "expected_ingress_url": "https://ingress.example.invalid/slack",
+          "composio_ingress_received": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_e0da4a4f4911",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-45",
+          "toolkit": "slack",
+          "status": 200,
+          "provider_event_created": true,
+          "app_event_webhook_url": "https://other.example.invalid/events",
+          "expected_ingress_url": "https://ingress.example.invalid/slack",
+          "composio_ingress_received": false
+        },
+        {
+          "record_id": "slack-ingress-045:logs:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_3bf8889fd488",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "error",
+      "records": [],
+      "complete": false,
+      "error": {
+        "code": "timeout",
+        "message": "Simulated telemetry timeout",
+        "retryable": true
+      },
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_805d726b2db1",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:metrics:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 704,
+          "failures": 0,
+          "business_operations_blocked": 410,
+          "queue_depth": 126,
+          "p95_latency_ms": 1680
+        },
+        {
+          "record_id": "slack-ingress-045:metrics:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 582,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 2
+    },
+    {
+      "evidence_id": "ev_0f6e4180abd9",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "req-45",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:logs:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-45",
+          "toolkit": "slack",
+          "status": 200,
+          "provider_event_created": true,
+          "app_event_webhook_url": "https://other.example.invalid/events",
+          "expected_ingress_url": "https://ingress.example.invalid/slack",
+          "composio_ingress_received": false
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9bcb8c9479cb",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "slack",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:dependencies:0",
+          "service": "trigger-worker",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_0bd634ea5b09",
+      "query": {
+        "tool": "deployments",
+        "service": "trigger-worker",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:00:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_7556b59fdade",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "request_url",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2cc69a606e4e",
+      "query": {
+        "tool": "logs",
+        "service": "trigger-worker",
+        "tenant": "maple",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "slack",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:logs:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c2145cce1576",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "webhook_url",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-ingress-045:reproduce:0",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "slack_configuration",
+          "check_passed": false,
+          "toolkit": "slack",
+          "status": 200,
+          "provider_event_created": true,
+          "app_event_webhook_url": "https://other.example.invalid/events",
+          "expected_ingress_url": "https://ingress.example.invalid/slack",
+          "composio_ingress_received": false
+        },
+        {
+          "record_id": "slack-ingress-045:reproduce:1",
+          "service": "trigger-worker",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "slack_configuration",
+          "check_passed": true,
+          "toolkit": "slack",
+          "status": 200,
+          "provider_event_created": true,
+          "app_event_webhook_url": "https://ingress.example.invalid/slack",
+          "expected_ingress_url": "https://ingress.example.invalid/slack",
+          "composio_ingress_received": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 134.90240338409785,
+  "input_tokens": 78672,
+  "output_tokens": 8802
+}

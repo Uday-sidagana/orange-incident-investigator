@@ -1,0 +1,6 @@
+case,multi_correct,single_correct,multi_grounded,single_grounded,multi_seconds,single_seconds,multi_tokens,single_tokens
+sheets-discovery-039,True,True,True,True,171.30725461407565,50.169667319976725,94642,19944
+airtable-expiry-041,True,True,True,True,151.0760136799654,50.92407788604032,96640,26637
+slack-user-043,True,True,True,True,139.72443364898209,62.135067991912365,88886,36216
+slack-redirect-046,True,True,True,True,154.28048644203227,41.24440892506391,90051,19233
+gmail-shape-047,True,True,True,True,167.0269853490172,53.773343518027104,102201,27375

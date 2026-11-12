@@ -1,0 +1,127 @@
+{
+  "incident": {
+    "id": "schema-020",
+    "title": "SDK upgrade introduces pre-execution validation errors",
+    "description": "A send action fails validation after a client SDK upgrade. The customer can see the recipient value in their application logs, and the provider is healthy.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-router"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "schema-020:logs:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "validation_error": "missing_required_argument",
+        "expected_argument_path": "arguments.recipient_email",
+        "provided_argument_paths": [
+          "recipient_email"
+        ],
+        "provider_called": false,
+        "status": 400
+      },
+      {
+        "record_id": "schema-020:logs:1",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "expected_argument_path": "arguments.recipient_email",
+        "provided_argument_paths": [
+          "arguments.recipient_email"
+        ],
+        "provider_called": true,
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "schema-020:metrics:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "schema-020:metrics:1",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "schema-020:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "schema-020:dependencies:0",
+        "service": "tool-router",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "schema-020:history:0",
+        "service": "tool-router",
+        "symptom": "SDK upgrade introduces pre-execution validation errors",
+        "cause": "A past recipient error was an executor mapping regression; this request fails earlier at the router boundary.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "schema-020:knowledge:0",
+        "service": "tool-router",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "schema-020:reproduce:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "argument_nesting",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "schema-020:reproduce:1",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "argument_nesting",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "history": {
+      "incomplete": true
+    }
+  }
+}

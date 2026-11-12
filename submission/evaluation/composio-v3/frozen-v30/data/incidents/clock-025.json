@@ -1,0 +1,123 @@
+{
+  "incident": {
+    "id": "clock-025",
+    "title": "Signed webhook deliveries are rejected as stale",
+    "description": "A webhook handler rejects valid-looking signatures after a host migration. The sender and receiver use the same configured signing key.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "webhook-delivery"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "clock-025:logs:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "signature_valid": true,
+        "timestamp_skew_seconds": 480,
+        "allowed_skew_seconds": 300,
+        "handler_error": "timestamp_outside_window",
+        "status": 401
+      },
+      {
+        "record_id": "clock-025:logs:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "signature_valid": true,
+        "timestamp_skew_seconds": 2,
+        "allowed_skew_seconds": 300,
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "clock-025:metrics:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "clock-025:metrics:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "clock-025:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "clock-025:dependencies:0",
+        "service": "webhook-delivery",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "clock-025:history:0",
+        "service": "webhook-delivery",
+        "symptom": "Signed webhook deliveries are rejected as stale",
+        "cause": "An earlier webhook 401 was a signing-secret mismatch.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "clock-025:knowledge:0",
+        "service": "webhook-delivery",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "clock-025:reproduce:0",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "receiver_clock",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "clock-025:reproduce:1",
+        "service": "webhook-delivery",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "receiver_clock",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 1
+    }
+  }
+}

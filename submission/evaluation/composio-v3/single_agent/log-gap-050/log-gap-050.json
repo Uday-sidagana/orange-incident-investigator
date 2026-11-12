@@ -1,0 +1,258 @@
+{
+  "incident_id": "log-gap-050",
+  "approach": "single_agent",
+  "run_status": "failed",
+  "report": {
+    "incident_id": "log-gap-050",
+    "outcome": "inconclusive",
+    "hypotheses": [],
+    "recommended_actions": [
+      "Review execution failure and obtain missing evidence."
+    ],
+    "limitations": [
+      "Hypothesis and cause alignment failed"
+    ]
+  },
+  "ranked_cause_codes": [],
+  "findings": [],
+  "action_codes": [],
+  "trace": [
+    {
+      "evidence_id": "ev_2d558aae1327",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "log-gap-050:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-redacted-demo",
+          "status": 500,
+          "audit_row_present": true,
+          "payload_storage_enabled": false,
+          "request_payload": null,
+          "response_payload": null,
+          "underlying_error_code": null
+        },
+        {
+          "record_id": "log-gap-050:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_fa27345b6b60",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "log-gap-050:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/dashboard-log-storage",
+          "kind": "public_reference",
+          "summary": "Disabling payload storage preserves audit metadata while omitting new request and response content."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4c08a39ee23f",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "log-gap-050:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_3de55c8e0057",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "log-gap-050:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_6fb2af1ac9f7",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "partial",
+      "records": [
+        {
+          "record_id": "log-gap-050:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 789,
+          "failures": 435,
+          "business_operations_blocked": 435,
+          "queue_depth": 141,
+          "p95_latency_ms": 1880
+        },
+        {
+          "record_id": "log-gap-050:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 637,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": false,
+      "error": null,
+      "warning": "Results are incomplete; absence is not proof",
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_68086c1cb24b",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "log-gap-050:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-redacted-demo",
+          "status": 500,
+          "audit_row_present": true,
+          "payload_storage_enabled": false,
+          "request_payload": null,
+          "response_payload": null,
+          "underlying_error_code": null
+        },
+        {
+          "record_id": "log-gap-050:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_3624e83f598e",
+      "query": {
+        "tool": "knowledge",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "payload storage",
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "log-gap-050:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/dashboard-log-storage",
+          "kind": "public_reference",
+          "summary": "Disabling payload storage preserves audit metadata while omitting new request and response content."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 80.30629747000057,
+  "input_tokens": 30413,
+  "output_tokens": 4650
+}

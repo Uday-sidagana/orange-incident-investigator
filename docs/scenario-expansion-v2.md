@@ -1,0 +1,30 @@
+# Twenty additional investigation scenarios
+
+Reviewer answer key for synthetic cases. Runtime policies inspect telemetry; they do not load this document or evaluator labels. Reproductions use mocked providers and do not change live infrastructure.
+
+| ID | Complaint | Expected cause | Verification / next step |
+| --- | --- | --- | --- |
+| oauth-013 | Custom Gmail connections fail during consent | The custom OAuth app is blocked at consent verification before token exchange. | Use a suitably verified OAuth app for the requested scopes, then reconnect and verify consent. |
+| policy-014 | OAuth connections blocked for an education tenant | An education workspace administrator policy blocks this OAuth app. | Ask the workspace administrator to review and authorize the intended app under the organization policy; changing scopes alone does not resolve it. |
+| revoked-015 | Previously healthy connection cannot refresh | Revoked consent prevents the expired connection from refreshing. | Reconnect the intended account with renewed consent; verify refresh and the affected action. |
+| race-016 | Intermittent refresh failures under concurrent load | Concurrent refreshes reuse an older generation of a rotated refresh token. | Serialize refresh per connection and atomically store rotated credentials; verify parallel executions before rollout. |
+| account-017 | Successful action returns another mailbox’s data | The router selects a different connected account from the one the request intended. | Select the intended connected account explicitly and verify its owner and returned resource. |
+| role-018 | Authorized connection cannot perform an admin action | OAuth scopes are present, but the provider account lacks the role required by this resource operation. | Use an account authorized for the required resource role, or request the minimum necessary role; retest the action. |
+| member-019 | Slack bot is authenticated but cannot post | The authenticated Slack bot is not a member of the destination channel. | Invite the intended bot to the destination channel and retry the known rejected notification once. |
+| schema-020 | SDK upgrade introduces pre-execution validation errors | The client sends a required argument at the wrong path before provider execution. | Use the current tool schema and correct nested argument shape; verify the serialized request and a controlled execution. |
+| version-021 | Known tool cannot be found in a pinned toolkit | The application pins a toolkit version that does not contain the requested action. | Select a tested toolkit version containing the action and verify compatibility before changing the production pin. |
+| secret-022 | Provider API-key integration starts returning 401 | The integration still uses an expired provider API-key version. | Replace the stored provider API key securely, verify a read-only action, then retest the affected operation. |
+| region-023 | Existing resource returns 404 from one region | Requests use a provider region different from the connection resource region. | Route the connection to its correct regional provider endpoint and verify the same resource. |
+| allowlist-024 | Provider rejects traffic after egress migration | The provider rejects the new egress route because it is not allowlisted. | Confirm the expected egress route with the customer and update the provider allowlist or restore an approved route. |
+| clock-025 | Signed webhook deliveries are rejected as stale | The receiver clock puts an otherwise valid webhook signature outside its timestamp window. | Synchronize the receiver clock and verify delivery while keeping replay-window validation enabled. |
+| subscription-026 | Recorded trigger events never reach a new subscription | The webhook subscription omits the event type needed for trigger delivery. | Subscribe the intended destination to the correct delivery event type and verify a new matching event. |
+| polling-027 | A new Gmail trigger misses older inbox messages | Healthy polling intentionally excludes messages that existed before its baseline. | Fetch historical messages separately; verify trigger delivery with a message created after the baseline. |
+| history-028 | Gmail polling stops after an extended pause | The stored history cursor is no longer accepted by the provider. | Resynchronize the cursor using the provider-supported recovery path, account for the missed interval, and verify a new event. |
+| body-029 | Webhook signatures fail after middleware refactor | Signature verification uses transformed JSON bytes rather than the original request body. | Verify the original raw request bytes before parsing or reserializing JSON; keep signature verification enabled. |
+| dns-030 | Internal credential lookups fail after DNS change | Internal name resolution prevents credential lookup before any provider request. | Restore the intended internal DNS record or resolver configuration and verify resolution and credential lookup. |
+| payload-031 | Large attachments fail while small messages send | The serialized attachment request exceeds the provider request-size limit. | Reduce the attachment/request size or use a supported upload path; verify the final serialized payload before retrying. |
+| conflict-032 | Conflicting telemetry prevents a reliable diagnosis | Inconclusive: telemetry windows disagree and verification is incomplete. | Align source clocks and observation windows, then collect matching request telemetry before confirming a cause. |
+
+Each case includes tenant impact metrics and synthetic logs, misleading historical context or unrelated changes, and explicit verification requirements. Eighteen cases use controlled original/corrected reproductions; polling uses before/after-baseline observations; the conflicting-telemetry case must stay inconclusive.
+
+Review especially: realistic customer wording, the first diagnostic check, alternative causes with the same error, and the minimum evidence needed before suggesting a fix. No model weights or prompts have been trained by adding these fixtures.

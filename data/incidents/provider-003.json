@@ -1,0 +1,108 @@
+{
+  "incident": {
+    "id": "provider-003",
+    "title": "Slack execution error spike",
+    "description": "Slack requests fail across tenants. An executor rollout is suspected.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "provider-003:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "version": "old",
+        "status": 503,
+        "provider_called": true,
+        "provider_status": 503
+      },
+      {
+        "record_id": "provider-003:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "version": "new",
+        "status": 503,
+        "provider_called": true,
+        "provider_status": 503
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "provider-003:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "provider": "slack",
+        "requests": 1000,
+        "failures": 850
+      },
+      {
+        "record_id": "provider-003:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "provider": "gmail",
+        "requests": 1000,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "provider-003:deployments:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "version": "new",
+        "change": "Executor logging update"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "provider-003:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "provider-003:history:0",
+        "service": "tool-executor",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [
+      {
+        "record_id": "provider-003:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "version": "old",
+        "provider_mock": false,
+        "status": 503
+      },
+      {
+        "record_id": "provider-003:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "version": "new",
+        "provider_mock": false,
+        "status": 503
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "logs": {
+      "timeout_attempts": 1
+    }
+  }
+}

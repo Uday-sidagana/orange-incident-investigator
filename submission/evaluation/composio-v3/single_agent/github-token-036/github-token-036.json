@@ -1,0 +1,478 @@
+{
+  "incident_id": "github-token-036",
+  "approach": "single_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "github-token-036",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause: the new GitHub relay incorrectly requires a raw provider access token from the connected-account response, but GitHub connected-account responses redact that token by design. The connection remains active and authenticated tool execution still works, so the relay misclassifies a healthy connection as unauthenticated.",
+        "supporting_evidence": [
+          "ev_349e9e66af16",
+          "ev_1947c9b8c84d",
+          "ev_c5af76d59927",
+          "ev_09a96d0607b0"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The blocked cedar business operations correspond to the relay path described in the complaint, not a separate unobserved failure mode.",
+          "The sandbox controlled comparison is representative of the production relay configuration difference."
+        ]
+      },
+      {
+        "description": "Alternative considered: a GitHub/provider outage or invalid connection/authentication state. This is less likely because the observed connection is active, authenticated tool execution succeeds, and a comparison tenant shows the same provider available with unrelated reads succeeding.",
+        "supporting_evidence": [
+          "ev_1947c9b8c84d"
+        ],
+        "contradicting_evidence": [
+          "ev_349e9e66af16",
+          "ev_c5af76d59927"
+        ],
+        "confidence": "high",
+        "assumptions": [
+          "The successful tool execution and read path are sufficient indicators that provider auth was usable at the time of observation."
+        ]
+      },
+      {
+        "description": "Alternative considered: an internal regression from a contemporaneous deployment. Evidence is weak because the only observed deployment is an unrelated support-dashboard release, not tool-executor.",
+        "supporting_evidence": [
+          "ev_36037a947c61",
+          "ev_24d1a211a924"
+        ],
+        "contradicting_evidence": [
+          "ev_1947c9b8c84d"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "No unobserved tool-executor deployment occurred within the incident window."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "redacted_token_relay_design_remediation",
+      "collect_missing_telemetry",
+      "monitor_provider"
+    ],
+    "limitations": [
+      "Observed logs are sparse for the exact failed relay job; the canonical record shows the mechanism state but not a provider-side call attempt.",
+      "The empty connections query is not treated as proof of absence because derived connection views are not independent corroboration.",
+      "Historical similarity to an earlier provider outage is analogy only and not current proof."
+    ]
+  },
+  "ranked_cause_codes": [
+    "redacted_token_relay_design",
+    "provider_failure",
+    "unconfirmed_change"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "At the incident time for tenant cedar, the GitHub connected account was active and tool execution succeeded, but the relay required a raw token while the connected-account token field was REDACTED. This directly matches a design mismatch rather than a broken connection.",
+      "citations": [
+        {
+          "evidence_id": "ev_672196ccc3ae",
+          "record_id": "github-token-036:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the controlled sandbox comparison, the original condition failed with the same pattern (active connection, REDACTED token, relay_requires_raw_token=true), while the corrected condition succeeded when the relay no longer required the raw token and instead used the authenticated proxy path.",
+      "citations": [
+        {
+          "evidence_id": "ev_c5af76d59927",
+          "record_id": "github-token-036:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_c5af76d59927",
+          "record_id": "github-token-036:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "verification_control",
+      "statement": "Public product knowledge states that GitHub connected-account responses redact provider tokens while authenticated execution remains available, which explains why Composio tool executions work even though the relay cannot extract a raw token.",
+      "citations": [
+        {
+          "evidence_id": "ev_349e9e66af16",
+          "record_id": "github-token-036:knowledge:0"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Impact appears tenant-specific in the observed window: cedar shows 365 business operations blocked, queue depth 99, and p95 latency 1320 ms despite 0 request failures, while comparison tenant maple shows 0 blocked operations, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_9cd316fe337a",
+          "record_id": "github-token-036:metrics:0"
+        },
+        {
+          "evidence_id": "ev_710404032c95",
+          "record_id": "github-token-036:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "A provider-wide GitHub outage is not supported by the observed records: a comparison tenant had the same provider available with unrelated reads succeeding, and cedar's own authenticated tool execution also returned 200.",
+      "citations": [
+        {
+          "evidence_id": "ev_1947c9b8c84d",
+          "record_id": "github-token-036:logs:0"
+        },
+        {
+          "evidence_id": "ev_1947c9b8c84d",
+          "record_id": "github-token-036:logs:1"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "redacted_token_relay_design_remediation",
+    "collect_missing_telemetry",
+    "monitor_provider"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_349e9e66af16",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+          "kind": "public_reference",
+          "summary": "Connected-account responses redact GitHub provider tokens; authenticated execution remains available."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1947c9b8c84d",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-36",
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": true,
+          "tool_execution_status": 200
+        },
+        {
+          "record_id": "github-token-036:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_09a96d0607b0",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 551,
+          "failures": 0,
+          "business_operations_blocked": 365,
+          "queue_depth": 99,
+          "p95_latency_ms": 1320
+        },
+        {
+          "record_id": "github-token-036:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 483,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_36037a947c61",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_24d1a211a924",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c5af76d59927",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "github_configuration",
+          "check_passed": false,
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": true,
+          "tool_execution_status": 200
+        },
+        {
+          "record_id": "github-token-036:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "github_configuration",
+          "check_passed": true,
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": false,
+          "tool_execution_status": 200,
+          "execution_path": "authenticated_proxy",
+          "relay_completed": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1e7e0bea6d53",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_672196ccc3ae",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-36",
+          "toolkit": "github",
+          "status": 200,
+          "connected_account_active": true,
+          "provider_token_field": "REDACTED",
+          "relay_requires_raw_token": true,
+          "tool_execution_status": 200
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9cd316fe337a",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 551,
+          "failures": 0,
+          "business_operations_blocked": 365,
+          "queue_depth": 99,
+          "p95_latency_ms": 1320
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_710404032c95",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": "maple",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "github-token-036:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 483,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 61.59027208702173,
+  "input_tokens": 25140,
+  "output_tokens": 3572
+}

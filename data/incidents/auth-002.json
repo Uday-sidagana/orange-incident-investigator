@@ -1,0 +1,140 @@
+{
+  "incident": {
+    "id": "auth-002",
+    "title": "Gmail failures isolated to one tenant",
+    "description": "Atlas reports a send outage after a release; other tenants appear healthy.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "auth-002:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "status": 403,
+        "provider_error": "insufficientPermissions",
+        "granted_scopes": [
+          "gmail.readonly"
+        ],
+        "required_scope": "gmail.send"
+      },
+      {
+        "record_id": "auth-002:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "status": 200,
+        "granted_scopes": [
+          "gmail.send"
+        ]
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "auth-002:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 100
+      },
+      {
+        "record_id": "auth-002:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "auth-002:deployments:0",
+        "service": "dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated dashboard CSS deployment"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "auth-002:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "auth-002:history:0",
+        "service": "tool-executor",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [
+      {
+        "record_id": "auth-002:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "status": 403,
+        "granted_scopes": [
+          "gmail.readonly"
+        ]
+      },
+      {
+        "record_id": "auth-002:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "status": 200,
+        "granted_scopes": [
+          "gmail.send"
+        ]
+      }
+    ],
+    "connections": [
+      {
+        "record_id": "connection-view-f3911161fa5a",
+        "connection_id": "tool-executor:atlas",
+        "service": "tool-executor",
+        "tenant": "atlas",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "gmail.readonly"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "auth-002:logs:0"
+        ]
+      },
+      {
+        "record_id": "connection-view-d1913aee8651",
+        "connection_id": "tool-executor:birch",
+        "service": "tool-executor",
+        "tenant": "birch",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "gmail.send"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "auth-002:logs:1"
+        ]
+      }
+    ],
+    "refresh_history": []
+  },
+  "failures": {}
+}

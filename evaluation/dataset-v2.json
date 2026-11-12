@@ -1,0 +1,28 @@
+{
+  "version": "2.0",
+  "incident_count": 32,
+  "added_incidents": [
+    "oauth-013",
+    "policy-014",
+    "revoked-015",
+    "race-016",
+    "account-017",
+    "role-018",
+    "member-019",
+    "schema-020",
+    "version-021",
+    "secret-022",
+    "region-023",
+    "allowlist-024",
+    "clock-025",
+    "subscription-026",
+    "polling-027",
+    "history-028",
+    "body-029",
+    "dns-030",
+    "payload-031",
+    "conflict-032"
+  ],
+  "previous_incident_count": 12,
+  "note": "Authored synthetic workflow cases; simulation success is not live-agent performance."
+}

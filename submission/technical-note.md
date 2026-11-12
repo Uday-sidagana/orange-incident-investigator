@@ -1,0 +1,17 @@
+# Technical note
+
+I adapted my support-automation experience into an incident-investigation prototype, keeping operational symptoms—failure rates, latency, delivery backlogs and tenant impact—central. The objective is an evidence-backed investigation, not merely a plausible support reply.
+
+The system uses six roles: orchestrator, observability, dependency, reasoning, critic and reporting. A typed task graph runs independent collection concurrently, shares observed evidence and gates downstream tasks on dependencies. The critic can request targeted follow-up and reassessment. Tool capabilities differ by role. Citation validation rejects references to unobserved records, and incomplete queries cannot prove absence.
+
+Nine read-only tools expose synthetic logs, metrics, changes, dependencies, history, knowledge and precomputed controls, plus derived connection/refresh views. Those views aid inspection without becoming independent corroboration. The dataset contains 52 synthetic incidents. Public Composio documentation inspired failure mechanisms; no private customer tickets or real production telemetry were imported. Plain intake and Linear/Slack updates are real when configured, while remedies and customer responses remain proposals.
+
+Reliability mechanisms include bounded retries, task/request/tool limits, a deadline, context bounds, persisted activity and a durable notification outbox. Restarted investigations require explicit retry. Custom complaints do not inherit demo evidence and may conclude inconclusively. Review records feedback; it does not train model weights. Knowledge-base guidance is a labeled, last-priority fallback rather than proof of the current incident.
+
+A matched 20-case comparison used GPT-5.4 for both approaches, identical saved incident text, tools and global limits. Both achieved 17/20 correct causes/outcomes; grounded-correct reports were 17/20 for the team and 15/20 for the single agent. Mean latency was 163.5 versus 64.4 seconds; reported total tokens were 1,904,967 versus 638,481. Extra collaboration improved annotated evidence coverage here at substantial cost, without improving cause accuracy.
+
+The evaluation preserves failures and discloses two corrections: matching baseline inputs after Plain rewrote descriptions, and separate five-case checks after correcting stale synthetic control fields. A later operational context-budget recovery is reported separately, not substituted into the original score. The latest runtime is not re-benchmarked.
+
+Limitations include an author-visible, closed-vocabulary synthetic cohort, one sampled result per architecture/case, shared-resource latency measurements and annotation-based grounding that does not prove prose entailment. The portal is local and unauthenticated; general Plain ingestion, live telemetry, shared KB retrieval, enrichment and repair execution remain incomplete. Priorities are blind repeated evaluations, semantic remediation review, authenticated telemetry adapters and production-grade intake isolation.
+
+Codex implemented much of the code, tests and documentation. My role was domain framing, workflow requirements, integration setup, acceptance feedback and identifying investigation/knowledge-boundary gaps; the authentic collaboration transcript is included.

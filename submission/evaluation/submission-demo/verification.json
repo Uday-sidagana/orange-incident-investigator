@@ -1,0 +1,31 @@
+{
+  "cases": [
+    {
+      "scenario_id": "gmail-001",
+      "ticket_id": "73a86fc1-17d3-4d17-a7d9-bae4cdcce447",
+      "outcome": "probable_cause",
+      "cause": [
+        "recipient_mapping_regression"
+      ],
+      "latency_seconds": 117.51677793590352,
+      "all_tasks_complete": true,
+      "all_deliveries_acknowledged": true,
+      "attempts": 2
+    },
+    {
+      "scenario_id": "unknown-012",
+      "ticket_id": "14a7ab29-14ed-42c8-9a29-14c3cd9f344c",
+      "outcome": "inconclusive",
+      "cause": [
+        "unconfirmed_change",
+        "provider_failure",
+        "missing_grant"
+      ],
+      "latency_seconds": 111.067806769046,
+      "all_tasks_complete": true,
+      "all_deliveries_acknowledged": true,
+      "attempts": 1
+    }
+  ],
+  "notice": "Gmail first attempt failed final-report duplicate-code validation. An explicit retry after a generic consolidation/prompt fix succeeded; the original report is preserved. This is demo rehearsal, not benchmark replacement."
+}

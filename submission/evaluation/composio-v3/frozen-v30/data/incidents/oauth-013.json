@@ -1,0 +1,124 @@
+{
+  "incident": {
+    "id": "oauth-013",
+    "title": "Custom Gmail connections fail during consent",
+    "description": "New Gmail connections fail before returning to our application. Existing connected accounts still send successfully. The customer suspects a missing send scope.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "auth-service"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "oauth-013:logs:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "oauth_error": "unverified_app",
+        "app_verification_status": "unverified",
+        "requested_scope_sensitive": true,
+        "token_exchange_attempted": false,
+        "status": 403
+      },
+      {
+        "record_id": "oauth-013:logs:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "app_verification_status": "verified",
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "oauth-013:metrics:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "oauth-013:metrics:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "oauth-013:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "oauth-013:dependencies:0",
+        "service": "auth-service",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "oauth-013:history:0",
+        "service": "auth-service",
+        "symptom": "Custom Gmail connections fail during consent",
+        "cause": "A past consent error was caused by a missing requested scope.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "oauth-013:knowledge:0",
+        "service": "auth-service",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "oauth-013:reproduce:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "oauth_app_verification",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "oauth-013:reproduce:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "oauth_app_verification",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 1
+    },
+    "history": {
+      "incomplete": true
+    }
+  }
+}

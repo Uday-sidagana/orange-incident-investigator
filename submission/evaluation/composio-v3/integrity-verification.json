@@ -1,0 +1,15 @@
+{
+  "all_40_original_scores_reproduced_from_frozen_v30": true,
+  "citation_totals": {
+    "multi_agent": {
+      "emitted_citations": 198,
+      "valid_emitted_citations": 198,
+      "emitted_citation_validity": 1.0
+    },
+    "single_agent": {
+      "emitted_citations": 150,
+      "valid_emitted_citations": 150,
+      "emitted_citation_validity": 1.0
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "matched_baseline_scores_reproduced": 25,
+  "plain_read_probe": {
+    "case": "github-org-035",
+    "original_plain_message_verified": true,
+    "summary_differs_from_original": true
+  }
+}

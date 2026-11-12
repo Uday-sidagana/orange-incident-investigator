@@ -1,0 +1,86 @@
+{
+  "incident": {
+    "id": "quota-004",
+    "title": "Notion rate-limit spike",
+    "description": "Notion requests are failing and latency is rising during a bulk import.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "quota-004:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "status": 429,
+        "provider_status": 429,
+        "retry_after_seconds": 60
+      },
+      {
+        "record_id": "quota-004:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "quota-004:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests_per_minute": 900,
+        "provider_limit_per_minute": 180,
+        "queue_depth": 800,
+        "p95_ms": 12000
+      },
+      {
+        "record_id": "quota-004:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests_per_minute": 20,
+        "queue_depth": 0,
+        "p95_ms": 400
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "quota-004:deployments:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Bulk import concurrency changed from 2 to 40",
+        "tenant": "atlas"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "quota-004:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "quota-004:history:0",
+        "service": "tool-executor",
+        "symptom": "Requests fail after a release",
+        "cause": "Earlier unrelated argument mapping defect",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

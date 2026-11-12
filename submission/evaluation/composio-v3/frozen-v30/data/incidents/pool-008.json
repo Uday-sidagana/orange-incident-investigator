@@ -1,0 +1,75 @@
+{
+  "incident": {
+    "id": "pool-008",
+    "title": "Tool discovery latency spike",
+    "description": "Tool listing is slow across tenants, with few explicit errors.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-router"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "pool-008:logs:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "operation": "catalog_lookup",
+        "wait_for_pool_ms": 8000,
+        "query_ms": 15
+      },
+      {
+        "record_id": "pool-008:logs:1",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "operation": "catalog_lookup",
+        "wait_for_pool_ms": 7900,
+        "query_ms": 12
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "pool-008:metrics:0",
+        "service": "catalog-db",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "pool_in_use": 20,
+        "pool_capacity": 20,
+        "cpu_percent": 20,
+        "p95_ms": 8200
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "pool-008:deployments:0",
+        "service": "tool-router",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Catalog DB connection pool reduced from 100 to 20",
+        "config_key": "pool_capacity"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "pool-008:dependencies:0",
+        "service": "tool-router",
+        "depends_on": [
+          "catalog-db"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "pool-008:history:0",
+        "service": "tool-router",
+        "symptom": "Slow discovery",
+        "cause": "Earlier expensive SQL query",
+        "verified": true
+      }
+    ],
+    "knowledge": [],
+    "reproduce": [],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

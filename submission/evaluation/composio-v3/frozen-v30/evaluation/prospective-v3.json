@@ -1,0 +1,162 @@
+[
+  {
+    "id": "notion-access-033",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-notion",
+    "source_guidance": "Notion resource access is granted to its integration, rather than through conventional OAuth scopes.",
+    "expected_cause": "notion_resource_not_shared",
+    "expected_action": "Share only the intended page with the existing Notion integration and verify access; do not widen unrelated permissions.",
+    "synthetic": true
+  },
+  {
+    "id": "notion-event-034",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-notion",
+    "source_guidance": "Different Notion event families have separate trigger catalog entries.",
+    "expected_cause": "trigger_event_kind_mismatch",
+    "expected_action": "Select the current trigger for the intended update event and verify a new edit; preserve the existing connection.",
+    "synthetic": true
+  },
+  {
+    "id": "github-org-035",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-github",
+    "source_guidance": "GitHub organizations may require owner approval of an OAuth app.",
+    "expected_cause": "github_organization_approval",
+    "expected_action": "Request approval from the GitHub organization owner for the intended OAuth app, then retest the organization resource.",
+    "synthetic": true
+  },
+  {
+    "id": "github-token-036",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-github",
+    "source_guidance": "Connected-account responses redact GitHub provider tokens; authenticated execution remains available.",
+    "expected_cause": "redacted_token_relay_design",
+    "expected_action": "Route the provider request through authenticated tool/proxy execution rather than extracting a provider token.",
+    "synthetic": true
+  },
+  {
+    "id": "github-setup-037",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-github",
+    "source_guidance": "GitHub V2 trigger creation provisions its ingress without a separate endpoint-creation step.",
+    "expected_cause": "obsolete_trigger_setup_path",
+    "expected_action": "Create/upsert the V2 trigger directly through the supported trigger-instance path and verify a new event.",
+    "synthetic": true
+  },
+  {
+    "id": "sheets-plane-038",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-googlesheets",
+    "source_guidance": "Platform and consumer Connect MCP maintain separate connection contexts.",
+    "expected_cause": "connection_surface_isolation",
+    "expected_action": "Connect Sheets through the MCP authentication flow used by this client; do not assume Platform connections are shared.",
+    "synthetic": true
+  },
+  {
+    "id": "sheets-discovery-039",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-googlesheets",
+    "source_guidance": "Tool discovery can return only its default first page; follow pagination or request a larger limit.",
+    "expected_cause": "tool_discovery_truncation",
+    "expected_action": "Paginate or raise the discovery limit, then execute the exact returned action slug on the intended version.",
+    "synthetic": true
+  },
+  {
+    "id": "sheets-id-040",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-googlesheets",
+    "source_guidance": "The Sheets MCP operation expects a spreadsheet identifier rather than a name-search request.",
+    "expected_cause": "spreadsheet_identifier_kind",
+    "expected_action": "Pass the intended spreadsheet ID, then verify the target and requested range before writing.",
+    "synthetic": true
+  },
+  {
+    "id": "airtable-expiry-041",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-airtable",
+    "source_guidance": "An unfinished connection initiation expires after its allowed ten-minute window.",
+    "expected_cause": "authentication_initiation_expired",
+    "expected_action": "Start a fresh authentication initiation and complete it within its valid window; avoid retrying the expired link.",
+    "synthetic": true
+  },
+  {
+    "id": "airtable-batch-042",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-airtable",
+    "source_guidance": "The Airtable multi-record update action has a ten-record batch bound.",
+    "expected_cause": "provider_batch_record_limit",
+    "expected_action": "Split updates into batches of at most ten records, respect provider rate limits, and verify partial completion before retrying.",
+    "synthetic": true
+  },
+  {
+    "id": "slack-user-043",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+    "source_guidance": "Slack separates user-token permissions from bot permissions in its auth configuration.",
+    "expected_cause": "slack_user_scope_configuration",
+    "expected_action": "Configure the needed user_scopes and reconnect the intended user; bot scopes do not authorize user-token actions.",
+    "synthetic": true
+  },
+  {
+    "id": "slack-plan-044",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+    "source_guidance": "Slack assistant context search depends on both feature enablement and workspace plan eligibility.",
+    "expected_cause": "provider_feature_entitlement",
+    "expected_action": "Check workspace eligibility and feature enablement; use a supported search alternative or obtain the required plan before retesting.",
+    "synthetic": true
+  },
+  {
+    "id": "slack-ingress-045",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+    "source_guidance": "Slack app event-subscription destination changes can interrupt trigger ingress.",
+    "expected_cause": "provider_event_ingress_misrouting",
+    "expected_action": "Restore the intended Slack app event-subscription ingress and verify a newly generated message before considering replay.",
+    "synthetic": true
+  },
+  {
+    "id": "slack-redirect-046",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+    "source_guidance": "A shortened connection link is distinct from the static OAuth callback URI.",
+    "expected_cause": "oauth_redirect_uri_mismatch",
+    "expected_action": "Match the OAuth app redirect setting to the auth config callback URI; keep the short per-connection link separate.",
+    "synthetic": true
+  },
+  {
+    "id": "gmail-shape-047",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-gmail",
+    "source_guidance": "Gmail attachment execution accepts uploaded file objects rather than signed URL strings.",
+    "expected_cause": "attachment_reference_shape",
+    "expected_action": "Upload the file and pass the supported file object, then validate the serialized attachment argument before sending.",
+    "synthetic": true
+  },
+  {
+    "id": "gmail-file-048",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-gmail",
+    "source_guidance": "Temporary uploaded file references are short-lived; avoid using stale references in delayed jobs.",
+    "expected_cause": "temporary_file_reference_expired",
+    "expected_action": "Upload a fresh file shortly before execution and use its current reference; verify send status before any retry.",
+    "synthetic": true
+  },
+  {
+    "id": "session-policy-049",
+    "source_url": "https://docs.composio.dev/kb/guide/platform-session-tool-policies",
+    "source_guidance": "Session tool restrictions apply independently of provider OAuth grants.",
+    "expected_cause": "session_tool_policy_block",
+    "expected_action": "Keep least privilege: use an explicitly authorized narrow tool exception only if the workflow should write, then verify the effective policy.",
+    "synthetic": true
+  },
+  {
+    "id": "log-gap-050",
+    "source_url": "https://docs.composio.dev/kb/guide/dashboard-log-storage",
+    "source_guidance": "Disabling payload storage preserves audit metadata while omitting new request and response content.",
+    "expected_cause": null,
+    "expected_action": "Collect a fresh permitted reproduction, request IDs and diagnostic metadata; missing stored payloads cannot establish the execution failure cause.",
+    "synthetic": true
+  },
+  {
+    "id": "delivery-dedupe-051",
+    "source_url": "https://docs.composio.dev/kb/guide/platform-triggers",
+    "source_guidance": "Webhook delivery is at-least-once, so receivers need stable-identifier deduplication.",
+    "expected_cause": "webhook_receiver_not_idempotent",
+    "expected_action": "Deduplicate receiver processing using a stable event/log identifier and verify retry behavior without assuming duplicate provider ingress.",
+    "synthetic": true
+  },
+  {
+    "id": "slack-schedule-052",
+    "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+    "source_guidance": "Scheduled-message formatting attachments are not a file-upload operation.",
+    "expected_cause": "scheduled_attachment_semantics",
+    "expected_action": "Upload the file separately and include its supported link in the scheduled message body, then verify the scheduled result.",
+    "synthetic": true
+  }
+]

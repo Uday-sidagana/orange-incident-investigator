@@ -1,0 +1,1391 @@
+{
+  "ticket_id": "13ba47f6-f0f9-4a8c-b540-607e46eb61b0",
+  "tasks": [
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 2843,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 705,
+            "output_tokens_details": {
+              "reasoning_tokens": 39
+            },
+            "total_tokens": 3548
+          }
+        }
+      ],
+      "notes": [
+        "Current incident scope is limited to reported missing request/response payload visibility for tool-executor audit rows between 09:50 and 10:15 UTC; no canonical evidence has been provided yet.",
+        "Do not infer absence from empty partial queries. Start with null filters so missing timestamp/service fields do not exclude useful records, then narrow using discovered execution/request IDs.",
+        "Prefer canonical source records over derived connection/refresh or convenience views; derived copies are not independent corroboration.",
+        "Key scoping data to gather: affected tenant(s), exact execution IDs, count/failure rate of rows with errors but missing payloads, comparison rate for rows with complete payloads, and whether latency/backlog increased in audit/log persistence.",
+        "Need tenant-impact comparison: Cedar versus at least one unaffected tenant or service in the same window, if such records exist.",
+        "Need a same-request correlation check: executor event, audit row, payload storage/write event, and any redaction/retention decision log for identical IDs.",
+        "Historical similarities or deployment timing can generate hypotheses but are not proof without record-level correlation.",
+        "Because the complaint centers on visibility rather than necessarily request execution failure, distinguish execution success/failure from observability failure: the missing payloads may block investigation even if the underlying request reached its destination.",
+        "If payloads are absent in canonical executor output before any provider call, investigate internal serialization/persistence/regression first; if payloads exist upstream but not in audit views, investigate logging pipeline, redaction, or copy lag.",
+        "Useful discriminators: a healthy execution in the same tenant/time range, a different tenant on the same executor version, and before/during/after comparisons around the incident window.",
+        "At present the correct outcome is inconclusive pending evidence collection; no cause code or finding code is justified yet."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:17:18.107527+00:00",
+      "finished_at": "2026-11-12T17:17:36.355989+00:00",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "What canonical tool-executor records show the affected Cedar executions during 2026-11-12T09:50:00Z to 2026-11-12T10:15:00Z when queried first with null filters, and for those same execution/request IDs do the raw executor/audit records contain error metadata while request arguments and response bodies are absent, truncated, redacted, or delayed? Please collect exact record IDs plus counts/rates of impacted vs normal executions, latency, and any backlog around audit/log ingestion.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "logs",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_df6be1bfe035",
+            "query": {
+              "tool": "logs",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "log-gap-050:logs:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "request_id": "req-redacted-demo",
+                "status": 500,
+                "audit_row_present": true,
+                "payload_storage_enabled": false,
+                "request_payload": null,
+                "response_payload": null,
+                "underlying_error_code": null
+              },
+              {
+                "record_id": "log-gap-050:logs:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "status": 200,
+                "same_provider_available": true,
+                "unrelated_read_succeeds": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_df6be1bfe035"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 100
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_97d681b5ec6e",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 100
+            },
+            "status": "partial",
+            "records": [
+              {
+                "record_id": "log-gap-050:metrics:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "requests": 789,
+                "failures": 435,
+                "business_operations_blocked": 435,
+                "queue_depth": 141,
+                "p95_latency_ms": 1880
+              },
+              {
+                "record_id": "log-gap-050:metrics:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "requests": 637,
+                "failures": 0,
+                "business_operations_blocked": 0,
+                "queue_depth": 0,
+                "p95_latency_ms": 160
+              }
+            ],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_97d681b5ec6e"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": "cedar",
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_e62367042a00",
+            "query": {
+              "tool": "logs",
+              "service": "tool-executor",
+              "tenant": "cedar",
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "log-gap-050:logs:0",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "cedar",
+                "request_id": "req-redacted-demo",
+                "status": 500,
+                "audit_row_present": true,
+                "payload_storage_enabled": false,
+                "request_payload": null,
+                "response_payload": null,
+                "underlying_error_code": null
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_e62367042a00"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "tool-executor",
+            "tenant": "maple",
+            "version": null,
+            "start": "2026-11-12T09:50:00Z",
+            "end": "2026-11-12T10:15:00Z",
+            "search": null,
+            "limit": 100
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_b1f4405b6802",
+            "query": {
+              "tool": "logs",
+              "service": "tool-executor",
+              "tenant": "maple",
+              "version": null,
+              "start": "2026-11-12T09:50:00Z",
+              "end": "2026-11-12T10:15:00Z",
+              "search": null,
+              "limit": 100
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "log-gap-050:logs:1",
+                "service": "tool-executor",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "tenant": "maple",
+                "status": 200,
+                "same_provider_available": true,
+                "unrelated_read_succeeds": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_b1f4405b6802"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3997,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 152,
+            "output_tokens_details": {
+              "reasoning_tokens": 46
+            },
+            "total_tokens": 4149
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4669,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 251,
+            "output_tokens_details": {
+              "reasoning_tokens": 176
+            },
+            "total_tokens": 4920
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5109,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4608
+            },
+            "output_tokens": 138,
+            "output_tokens_details": {
+              "reasoning_tokens": 63
+            },
+            "total_tokens": 5247
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5267,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 605,
+            "output_tokens_details": {
+              "reasoning_tokens": 42
+            },
+            "total_tokens": 5872
+          }
+        }
+      ],
+      "notes": [
+        "Null-filter canonical query first surfaced the affected Cedar executor row at 2026-11-12T10:05:00Z: evidence ev_df6be1bfe035 record log-gap-050:logs:0 shows tenant=cedar, request_id=req-redacted-demo, status=500, audit_row_present=true, payload_storage_enabled=false, request_payload=null, response_payload=null, underlying_error_code=null. The narrowed Cedar window query returns the same canonical row again in ev_e62367042a00 record log-gap-050:logs:0; no execution_id or separate raw audit record ID is present in supplied evidence.",
+        "For the same observed Cedar request ID, the canonical executor record shows an error/audit row exists while both request and response payloads are absent, but the supplied records do not distinguish absent vs redacted vs truncated vs delayed beyond payload_storage_enabled=false and null payload fields on ev_df6be1bfe035/log-gap-050:logs:0 and ev_e62367042a00/log-gap-050:logs:0. No raw executor/audit companion record with richer error metadata was provided, so the metadata gap itself remains material.",
+        "Observed impact is tenant-specific in the supplied sample: Cedar metrics at ev_97d681b5ec6e record log-gap-050:metrics:0 show 789 requests, 435 failures (55.1%), 435 business operations blocked, queue_depth=141, p95_latency_ms=1880; comparison tenant Maple at ev_97d681b5ec6e record log-gap-050:metrics:1 shows 637 requests, 0 failures, queue_depth=0, p95_latency_ms=160. The null-filter logs comparison also shows Maple healthy at ev_df6be1bfe035 record log-gap-050:logs:1 / ev_b1f4405b6802 record log-gap-050:logs:1 with status=200 and same_provider_available=true, which is counter-evidence to a broad provider outage.",
+        "Backlog/ingestion evidence is limited: Cedar\u2019s queue_depth=141 and elevated latency are consistent with pressure during the window (ev_97d681b5ec6e/log-gap-050:metrics:0), but there are no canonical audit-pipeline timestamps, write-attempt records, or before/after samples to prove delayed log ingestion. Partial reproduce/metrics queries (ev_a60300bfd7e9, ev_61a9ca18ab35, ev_97d681b5ec6e) cannot establish absence, and no tool-executor deployment is shown in-window (ev_1e9531475a70 has no records)."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:17:36.362582+00:00",
+      "finished_at": "2026-11-12T17:18:03.631813+00:00",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "Were there any changes or degradations in the logging/audit pipeline, payload capture/redaction settings, storage dependencies, serialization libraries, or tool-executor deployments close to 2026-11-12T09:50:00Z, and is the issue isolated to Cedar or visible across other tenants/services in the same interval? Compare before/during/after windows and note any tenant-specific configuration differences affecting payload retention.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_6bba7f4ff426",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "log-gap-050:dependencies:0",
+                "service": "tool-executor",
+                "depends_on": [
+                  "auth-service",
+                  "provider-api",
+                  "session-policy"
+                ],
+                "provider_api_reachable": true
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_6bba7f4ff426"
+        },
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_4c08a39ee23f",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "log-gap-050:deployments:0",
+                "service": "support-dashboard",
+                "timestamp": "2026-11-12T10:05:00Z",
+                "change": "Unrelated inbox display release",
+                "version": "dashboard-v23"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_4c08a39ee23f"
+        },
+        {
+          "query": {
+            "tool": "reproduce",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_a60300bfd7e9",
+            "query": {
+              "tool": "reproduce",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_a60300bfd7e9"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:30:00Z",
+            "end": "2026-11-12T10:30:00Z",
+            "search": null,
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_a005f77af0d1",
+            "query": {
+              "tool": "dependencies",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:30:00Z",
+              "end": "2026-11-12T10:30:00Z",
+              "search": null,
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_a005f77af0d1"
+        },
+        {
+          "query": {
+            "tool": "reproduce",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:30:00Z",
+            "end": "2026-11-12T10:30:00Z",
+            "search": null,
+            "limit": 50
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_61a9ca18ab35",
+            "query": {
+              "tool": "reproduce",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:30:00Z",
+              "end": "2026-11-12T10:30:00Z",
+              "search": null,
+              "limit": 50
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_61a9ca18ab35"
+        },
+        {
+          "query": {
+            "tool": "deployments",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T09:30:00Z",
+            "end": "2026-11-12T10:30:00Z",
+            "search": null,
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_1e9531475a70",
+            "query": {
+              "tool": "deployments",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T09:30:00Z",
+              "end": "2026-11-12T10:30:00Z",
+              "search": null,
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_1e9531475a70"
+        },
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": "Cedar",
+            "limit": 50
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_84e5d41d6331",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": "Cedar",
+              "limit": 50
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_84e5d41d6331"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3799,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 189,
+            "output_tokens_details": {
+              "reasoning_tokens": 36
+            },
+            "total_tokens": 3988
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4445,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 301,
+            "output_tokens_details": {
+              "reasoning_tokens": 70
+            },
+            "total_tokens": 4746
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5081,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 3584
+            },
+            "output_tokens": 239,
+            "output_tokens_details": {
+              "reasoning_tokens": 83
+            },
+            "total_tokens": 5320
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5030,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 463,
+            "output_tokens_details": {
+              "reasoning_tokens": 27
+            },
+            "total_tokens": 5493
+          }
+        }
+      ],
+      "notes": [
+        "No canonical change near 09:50\u201310:15 was found for tool-executor or its dependencies: the scoped deployment query for tool-executor returned no records, and the only deployment in the broader window was an unrelated support-dashboard release at 10:05Z (ev_1e9531475a70; ev_4c08a39ee23f/log-gap-050:deployments:0).",
+        "At 10:05Z, Cedar\u2019s failing tool-executor audit row shows audit_row_present=true but request/response payloads null with payload_storage_enabled=false, indicating payload capture/retention was disabled for that observed execution; this is an internal observability/persistence setting signal, not provider unreachability by itself (ev_df6be1bfe035/log-gap-050:logs:0; ev_6bba7f4ff426/log-gap-050:dependencies:0).",
+        "Observed impact is tenant-specific in the supplied data: Cedar had 435 failures out of 789 requests (~55%), 435 blocked business ops, queue depth 141, and p95 latency 1880 ms at 10:05Z, while Maple at the same time had 0/637 failures, queue depth 0, p95 160 ms, and an unrelated read on the same provider succeeded (ev_97d681b5ec6e/log-gap-050:metrics:0; ev_97d681b5ec6e/log-gap-050:metrics:1; ev_df6be1bfe035/log-gap-050:logs:1).",
+        "Important gaps: no before/after canonical logs or metrics were provided to compare payload retention state around the window; no audit-pipeline/storage/redaction/serialization-specific records were surfaced; reproduce/metrics queries are partial, so absence of broader cross-tenant or cross-service cases cannot be concluded from the empty/incomplete results (ev_a60300bfd7e9; ev_61a9ca18ab35; ev_97d681b5ec6e)."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:17:36.392661+00:00",
+      "finished_at": "2026-11-12T17:18:00.763583+00:00",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Among the leading hypotheses\u2014(1) telemetry/audit copy gap where error rows are written but payload fields are missing, (2) intentional redaction/configuration causing payload omission, (3) executor-side regression failing to serialize or persist payloads, or (4) storage/backlog/timing issue delaying payload availability\u2014which is best supported by canonical records for the same executions, and what discriminating control comparison exists between an affected execution and a nearby healthy execution with complete payload capture?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_6bba7f4ff426",
+        "ev_4c08a39ee23f",
+        "ev_a60300bfd7e9",
+        "ev_df6be1bfe035",
+        "ev_97d681b5ec6e",
+        "ev_a005f77af0d1",
+        "ev_61a9ca18ab35",
+        "ev_1e9531475a70",
+        "ev_e62367042a00",
+        "ev_84e5d41d6331",
+        "ev_b1f4405b6802"
+      ],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "history",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_3de55c8e0057",
+            "query": {
+              "tool": "history",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "log-gap-050:history:0",
+                "service": "tool-executor",
+                "symptom": "A similar workflow stopped following a release",
+                "cause": "An earlier provider outage",
+                "relation": "historical analogy only, not current proof"
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_3de55c8e0057"
+        },
+        {
+          "query": {
+            "tool": "knowledge",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_fa27345b6b60",
+            "query": {
+              "tool": "knowledge",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [
+              {
+                "record_id": "log-gap-050:knowledge:0",
+                "service": "tool-executor",
+                "url": "https://docs.composio.dev/kb/guide/dashboard-log-storage",
+                "kind": "public_reference",
+                "summary": "Disabling payload storage preserves audit metadata while omitting new request and response content."
+              }
+            ],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_fa27345b6b60"
+        },
+        {
+          "query": {
+            "tool": "history",
+            "service": "tool-executor",
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": "payload",
+            "limit": 10
+          },
+          "status": "ok",
+          "result": {
+            "evidence_id": "ev_69a88569aa51",
+            "query": {
+              "tool": "history",
+              "service": "tool-executor",
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": "payload",
+              "limit": 10
+            },
+            "status": "ok",
+            "records": [],
+            "complete": true,
+            "error": null,
+            "warning": null,
+            "attempt": 1
+          },
+          "evidence_id": "ev_69a88569aa51"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 6425,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 338,
+            "output_tokens_details": {
+              "reasoning_tokens": 231
+            },
+            "total_tokens": 6763
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 7111,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 282,
+            "output_tokens_details": {
+              "reasoning_tokens": 232
+            },
+            "total_tokens": 7393
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 7477,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 6656
+            },
+            "output_tokens": 745,
+            "output_tokens_details": {
+              "reasoning_tokens": 95
+            },
+            "total_tokens": 8222
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 8853,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 2714,
+            "output_tokens_details": {
+              "reasoning_tokens": 516
+            },
+            "total_tokens": 11567
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 11297,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 7936
+            },
+            "output_tokens": 2162,
+            "output_tokens_details": {
+              "reasoning_tokens": 276
+            },
+            "total_tokens": 13459
+          }
+        }
+      ],
+      "notes": [
+        "Best-supported among the listed hypotheses: (2) intentional redaction/configuration causing payload omission, scoped to the observed Cedar execution and based on payload_storage_enabled=false in the canonical executor record.",
+        "Hypothesis (1) pure telemetry/audit copy gap is weaker because the canonical executor record itself already lacks payloads.",
+        "Hypothesis (3) executor-side regression is not supported by any observed tool-executor deployment and lacks a record-level mechanism in supplied canonicals.",
+        "Hypothesis (4) storage/backlog/timing could coexist with Cedar's elevated queue depth and latency, but current canonicals do not show payloads appearing later or any audit-write delay.",
+        "The requested discriminating control comparison with a nearby healthy execution that has complete payload capture is not present in supplied evidence."
+      ],
+      "candidates": [
+        {
+          "code": "unconfirmed_change",
+          "hypothesis": {
+            "description": "The strongest supported explanation for the missing request/response bodies is a configuration or intentional-omission state, not a dashboard-only copy gap: the canonical executor record for Cedar already shows the audit row present with payload_storage_enabled=false and both payload fields null. Public reference material matches that exact row shape when payload storage is disabled. This is better supported than an executor serialization regression or a pure delay-only explanation for the observed execution.",
+            "supporting_evidence": [
+              "ev_df6be1bfe035",
+              "ev_e62367042a00",
+              "ev_fa27345b6b60"
+            ],
+            "contradicting_evidence": [
+              "ev_97d681b5ec6e"
+            ],
+            "confidence": "medium",
+            "assumptions": [
+              "The public payload-storage behavior described in the knowledge record applies to this tool-executor environment.",
+              "Cedar's elevated queue depth and latency may explain execution distress, but they do not by themselves explain why the canonical executor row already reports payload_storage_enabled=false.",
+              "No supplied canonical record identifies who or what changed the payload-storage state."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "For the affected Cedar execution, the canonical tool-executor log shows an audit row was written while request and response payloads were null and payload_storage_enabled was false.",
+              "citations": [
+                {
+                  "evidence_id": "ev_df6be1bfe035",
+                  "record_id": "log-gap-050:logs:0"
+                },
+                {
+                  "evidence_id": "ev_e62367042a00",
+                  "record_id": "log-gap-050:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "verification_control",
+              "statement": "Public reference material states that disabling payload storage preserves audit metadata while omitting new request and response content, which matches the observed Cedar row shape.",
+              "citations": [
+                {
+                  "evidence_id": "ev_fa27345b6b60",
+                  "record_id": "log-gap-050:knowledge:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Observed impact is severe but tenant-scoped in the supplied snapshot: Cedar had 435 failures out of 789 requests with 435 blocked business operations, queue depth 141, and p95 latency 1880 ms, while Maple had 0 failures out of 637 requests, queue depth 0, and p95 latency 160 ms.",
+              "citations": [
+                {
+                  "evidence_id": "ev_97d681b5ec6e",
+                  "record_id": "log-gap-050:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_97d681b5ec6e",
+                  "record_id": "log-gap-050:metrics:1"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "The only nearby control in supplied canonicals is partial: at the same timestamp Maple shows a healthy execution and same_provider_available=true, which argues against a broad provider outage, but no healthy record with explicit complete payload capture was supplied, so the requested payload-completeness control is missing.",
+              "citations": [
+                {
+                  "evidence_id": "ev_df6be1bfe035",
+                  "record_id": "log-gap-050:logs:0"
+                },
+                {
+                  "evidence_id": "ev_b1f4405b6802",
+                  "record_id": "log-gap-050:logs:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "align_telemetry_windows",
+            "request_reproduction"
+          ],
+          "actions": [
+            "Collect canonical audit/config decision records for request_id=req-redacted-demo to confirm why payload_storage_enabled was false.",
+            "Align executor, audit, and persistence telemetry for the same request IDs before/during/after the incident window.",
+            "Request a nearby healthy comparison execution that explicitly shows complete request/response payload capture, because the current Maple control does not establish payload completeness."
+          ],
+          "missing_checks": [
+            "A canonical same-request config or audit decision record explaining why payload_storage_enabled was false.",
+            "A nearby healthy execution record with explicit complete payload capture for a true controlled comparison.",
+            "Before/during/after Cedar records showing whether payload storage state changed during the incident window."
+          ],
+          "strength": 8
+        },
+        {
+          "code": "provider_failure",
+          "hypothesis": {
+            "description": "A provider-side failure could contribute to Cedar's 500s, but it is not the best explanation for the missing payload fields. The available comparison data argues against a broad provider outage, and the payload omission is more directly explained by the observed disabled payload-storage state.",
+            "supporting_evidence": [
+              "ev_97d681b5ec6e"
+            ],
+            "contradicting_evidence": [
+              "ev_6bba7f4ff426",
+              "ev_df6be1bfe035",
+              "ev_b1f4405b6802"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "This hypothesis addresses the execution failures, not the payload-visibility mechanism itself.",
+              "No provider-side trace is supplied, so scope is limited to the observed records."
+            ]
+          },
+          "findings": [
+            {
+              "code": "provider_isolation",
+              "statement": "A nearby Maple execution on the same provider succeeded and was marked same_provider_available=true, which is counter-evidence to a broad provider outage as the main explanation for the observed scope.",
+              "citations": [
+                {
+                  "evidence_id": "ev_df6be1bfe035",
+                  "record_id": "log-gap-050:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b1f4405b6802",
+                  "record_id": "log-gap-050:logs:1"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Cedar experienced substantial failures and blocked operations during the window while Maple did not.",
+              "citations": [
+                {
+                  "evidence_id": "ev_97d681b5ec6e",
+                  "record_id": "log-gap-050:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_97d681b5ec6e",
+                  "record_id": "log-gap-050:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "monitor_provider",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Monitor Cedar-specific upstream errors separately from the payload-visibility issue.",
+            "Collect canonical upstream error details for Cedar requests because the observed executor row has underlying_error_code null."
+          ],
+          "missing_checks": [
+            "A same-request trace showing whether req-redacted-demo reached the provider.",
+            "Canonical upstream/provider error records for Cedar requests in the same window."
+          ],
+          "strength": 3
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "started_at": "2026-11-12T17:18:03.643050+00:00",
+      "finished_at": "2026-11-12T17:19:52.009004+00:00",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_6bba7f4ff426",
+        "ev_4c08a39ee23f",
+        "ev_a60300bfd7e9",
+        "ev_df6be1bfe035",
+        "ev_97d681b5ec6e",
+        "ev_a005f77af0d1",
+        "ev_61a9ca18ab35",
+        "ev_1e9531475a70",
+        "ev_e62367042a00",
+        "ev_84e5d41d6331",
+        "ev_b1f4405b6802",
+        "ev_3de55c8e0057",
+        "ev_fa27345b6b60",
+        "ev_69a88569aa51"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 8967,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 888,
+            "output_tokens_details": {
+              "reasoning_tokens": 307
+            },
+            "total_tokens": 9855
+          }
+        }
+      ],
+      "notes": [
+        "The core bounded diagnosis is adequately supported for the observed symptom: the affected Cedar canonical executor record already shows `audit_row_present=true`, `payload_storage_enabled=false`, and null request/response payloads (`ev_df6be1bfe035/log-gap-050:logs:0`; duplicated by `ev_e62367042a00/log-gap-050:logs:0`). That is sufficient to approve the explanation that this is not merely a downstream dashboard copy gap for that execution.",
+        "The public knowledge record is acceptable as corroboration of row semantics, not as independent proof of current production state (`ev_fa27345b6b60/log-gap-050:knowledge:0`). The approval should stay scoped to the observed execution/tenant behavior, not to a proven global configuration cause.",
+        "Cedar impact is well scoped and compared: 435/789 failures, 435 blocked ops, queue depth 141, p95 1880 ms versus Maple 0/637, queue depth 0, p95 160 ms (`ev_97d681b5ec6e/log-gap-050:metrics:0`; `ev_97d681b5ec6e/log-gap-050:metrics:1`).",
+        "Maple's healthy same-time record with `same_provider_available=true` is useful counter-evidence against a broad provider outage, but it does not verify payload completeness; treating that as an optional caveat rather than a blocker is appropriate (`ev_b1f4405b6802/log-gap-050:logs:1`).",
+        "The proposed missing checks about proving why `payload_storage_enabled` was false, finding a healthy payload-complete control, or showing before/during/after state are helpful for attribution and reassurance, but they are not required to approve the bounded mechanism for the observed missing-payload symptom.",
+        "Partial reproduce/metrics results do not negate the diagnosis and should not be used to imply absence of wider issues (`ev_a60300bfd7e9`, `ev_61a9ca18ab35`, `ev_97d681b5ec6e`)."
+      ],
+      "candidates": [
+        {
+          "code": "unconfirmed_change",
+          "hypothesis": {
+            "description": "The strongest supported explanation for the missing request/response bodies is a configuration or intentional-omission state, not a dashboard-only copy gap: the canonical executor record for Cedar already shows the audit row present with payload_storage_enabled=false and both payload fields null. Public reference material matches that exact row shape when payload storage is disabled. This is better supported than an executor serialization regression or a pure delay-only explanation for the observed execution.",
+            "supporting_evidence": [
+              "ev_df6be1bfe035",
+              "ev_e62367042a00",
+              "ev_fa27345b6b60"
+            ],
+            "contradicting_evidence": [
+              "ev_97d681b5ec6e"
+            ],
+            "confidence": "medium",
+            "assumptions": [
+              "The public payload-storage behavior described in the knowledge record applies to this tool-executor environment.",
+              "Cedar's elevated queue depth and latency may explain execution distress, but they do not by themselves explain why the canonical executor row already reports payload_storage_enabled=false.",
+              "No supplied canonical record identifies who or what changed the payload-storage state."
+            ]
+          },
+          "findings": [
+            {
+              "code": "mechanism_observation",
+              "statement": "For the affected Cedar execution, the canonical tool-executor log shows an audit row was written while request and response payloads were null and payload_storage_enabled was false.",
+              "citations": [
+                {
+                  "evidence_id": "ev_df6be1bfe035",
+                  "record_id": "log-gap-050:logs:0"
+                },
+                {
+                  "evidence_id": "ev_e62367042a00",
+                  "record_id": "log-gap-050:logs:0"
+                }
+              ]
+            },
+            {
+              "code": "verification_control",
+              "statement": "Public reference material states that disabling payload storage preserves audit metadata while omitting new request and response content, which matches the observed Cedar row shape.",
+              "citations": [
+                {
+                  "evidence_id": "ev_fa27345b6b60",
+                  "record_id": "log-gap-050:knowledge:0"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Observed impact is severe but tenant-scoped in the supplied snapshot: Cedar had 435 failures out of 789 requests with 435 blocked business operations, queue depth 141, and p95 latency 1880 ms, while Maple had 0 failures out of 637 requests, queue depth 0, and p95 latency 160 ms.",
+              "citations": [
+                {
+                  "evidence_id": "ev_97d681b5ec6e",
+                  "record_id": "log-gap-050:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_97d681b5ec6e",
+                  "record_id": "log-gap-050:metrics:1"
+                }
+              ]
+            },
+            {
+              "code": "controlled_comparison",
+              "statement": "The only nearby control in supplied canonicals is partial: at the same timestamp Maple shows a healthy execution and same_provider_available=true, which argues against a broad provider outage, but no healthy record with explicit complete payload capture was supplied, so the requested payload-completeness control is missing.",
+              "citations": [
+                {
+                  "evidence_id": "ev_df6be1bfe035",
+                  "record_id": "log-gap-050:logs:0"
+                },
+                {
+                  "evidence_id": "ev_b1f4405b6802",
+                  "record_id": "log-gap-050:logs:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "align_telemetry_windows",
+            "request_reproduction"
+          ],
+          "actions": [
+            "Collect canonical audit/config decision records for request_id=req-redacted-demo to confirm why payload_storage_enabled was false.",
+            "Align executor, audit, and persistence telemetry for the same request IDs before/during/after the incident window.",
+            "Request a nearby healthy comparison execution that explicitly shows complete request/response payload capture, because the current Maple control does not establish payload completeness."
+          ],
+          "missing_checks": [],
+          "strength": 8
+        },
+        {
+          "code": "provider_failure",
+          "hypothesis": {
+            "description": "A provider-side failure could contribute to Cedar's 500s, but it is not the best explanation for the missing payload fields. The available comparison data argues against a broad provider outage, and the payload omission is more directly explained by the observed disabled payload-storage state.",
+            "supporting_evidence": [
+              "ev_97d681b5ec6e"
+            ],
+            "contradicting_evidence": [
+              "ev_6bba7f4ff426",
+              "ev_df6be1bfe035",
+              "ev_b1f4405b6802"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "This hypothesis addresses the execution failures, not the payload-visibility mechanism itself.",
+              "No provider-side trace is supplied, so scope is limited to the observed records."
+            ]
+          },
+          "findings": [
+            {
+              "code": "provider_isolation",
+              "statement": "A nearby Maple execution on the same provider succeeded and was marked same_provider_available=true, which is counter-evidence to a broad provider outage as the main explanation for the observed scope.",
+              "citations": [
+                {
+                  "evidence_id": "ev_df6be1bfe035",
+                  "record_id": "log-gap-050:logs:1"
+                },
+                {
+                  "evidence_id": "ev_b1f4405b6802",
+                  "record_id": "log-gap-050:logs:1"
+                }
+              ]
+            },
+            {
+              "code": "tenant_impact",
+              "statement": "Cedar experienced substantial failures and blocked operations during the window while Maple did not.",
+              "citations": [
+                {
+                  "evidence_id": "ev_97d681b5ec6e",
+                  "record_id": "log-gap-050:metrics:0"
+                },
+                {
+                  "evidence_id": "ev_97d681b5ec6e",
+                  "record_id": "log-gap-050:metrics:1"
+                }
+              ]
+            }
+          ],
+          "action_codes": [
+            "monitor_provider",
+            "collect_missing_telemetry"
+          ],
+          "actions": [
+            "Monitor Cedar-specific upstream errors separately from the payload-visibility issue.",
+            "Collect canonical upstream error details for Cedar requests because the observed executor row has underlying_error_code null."
+          ],
+          "missing_checks": [
+            "A same-request trace showing whether req-redacted-demo reached the provider.",
+            "Canonical upstream/provider error records for Cedar requests in the same window."
+          ],
+          "strength": 3
+        }
+      ],
+      "objections": [
+        "The selected cause code `unconfirmed_change` is weaker than the narrative support: supplied evidence shows `payload_storage_enabled=false` for the affected canonical executor row, but does not show that any change occurred during the incident window or who/what set it.",
+        "The `version_control` finding is under-cited as written: the claim that no tool-executor deployment occurred in-window depends on the empty scoped deployment query (`ev_1e9531475a70`), while the cited record (`ev_4c08a39ee23f/log-gap-050:deployments:0`) only establishes an unrelated support-dashboard release."
+      ],
+      "report": null,
+      "started_at": "2026-11-12T17:19:52.034634+00:00",
+      "critique": {
+        "approved": true,
+        "blocking_checks": [],
+        "notes": [
+          "The core bounded diagnosis is adequately supported for the observed symptom: the affected Cedar canonical executor record already shows `audit_row_present=true`, `payload_storage_enabled=false`, and null request/response payloads (`ev_df6be1bfe035/log-gap-050:logs:0`; duplicated by `ev_e62367042a00/log-gap-050:logs:0`). That is sufficient to approve the explanation that this is not merely a downstream dashboard copy gap for that execution.",
+          "The public knowledge record is acceptable as corroboration of row semantics, not as independent proof of current production state (`ev_fa27345b6b60/log-gap-050:knowledge:0`). The approval should stay scoped to the observed execution/tenant behavior, not to a proven global configuration cause.",
+          "Cedar impact is well scoped and compared: 435/789 failures, 435 blocked ops, queue depth 141, p95 1880 ms versus Maple 0/637, queue depth 0, p95 160 ms (`ev_97d681b5ec6e/log-gap-050:metrics:0`; `ev_97d681b5ec6e/log-gap-050:metrics:1`).",
+          "Maple's healthy same-time record with `same_provider_available=true` is useful counter-evidence against a broad provider outage, but it does not verify payload completeness; treating that as an optional caveat rather than a blocker is appropriate (`ev_b1f4405b6802/log-gap-050:logs:1`).",
+          "The proposed missing checks about proving why `payload_storage_enabled` was false, finding a healthy payload-complete control, or showing before/during/after state are helpful for attribution and reassurance, but they are not required to approve the bounded mechanism for the observed missing-payload symptom.",
+          "Partial reproduce/metrics results do not negate the diagnosis and should not be used to imply absence of wider issues (`ev_a60300bfd7e9`, `ev_61a9ca18ab35`, `ev_97d681b5ec6e`)."
+        ]
+      },
+      "finished_at": "2026-11-12T17:20:10.317692+00:00",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_6bba7f4ff426",
+        "ev_4c08a39ee23f",
+        "ev_a60300bfd7e9",
+        "ev_df6be1bfe035",
+        "ev_97d681b5ec6e",
+        "ev_a005f77af0d1",
+        "ev_61a9ca18ab35",
+        "ev_1e9531475a70",
+        "ev_e62367042a00",
+        "ev_84e5d41d6331",
+        "ev_b1f4405b6802",
+        "ev_3de55c8e0057",
+        "ev_fa27345b6b60",
+        "ev_69a88569aa51"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 11253,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1372,
+            "output_tokens_details": {
+              "reasoning_tokens": 66
+            },
+            "total_tokens": 12625
+          }
+        }
+      ],
+      "notes": [],
+      "candidates": [],
+      "objections": [],
+      "report": {
+        "incident_id": "log-gap-050",
+        "outcome": "probable_cause",
+        "hypotheses": [
+          {
+            "description": "Probable cause for the observed missing request/response bodies is a payload-capture-disabled state on the canonical tool-executor record for Cedar, not a downstream dashboard-only copy gap. The affected executor log already shows audit_row_present=true, payload_storage_enabled=false, and null request/response payloads; public reference material matches that row shape when payload storage is disabled. This explains the missing payload visibility for the observed Cedar execution, but the supplied evidence does not identify who or what set that state.",
+            "supporting_evidence": [
+              "ev_df6be1bfe035",
+              "ev_e62367042a00",
+              "ev_fa27345b6b60"
+            ],
+            "contradicting_evidence": [
+              "ev_97d681b5ec6e"
+            ],
+            "confidence": "medium",
+            "assumptions": [
+              "The public payload-storage behavior described in the knowledge record applies to this production environment.",
+              "Cedar's failures, backlog, and latency may be related to execution distress, but they do not by themselves explain why the canonical row shows payload_storage_enabled=false.",
+              "No supplied canonical record attributes the disabled payload-storage state to a specific actor or change event."
+            ]
+          },
+          {
+            "description": "A provider-side failure may have contributed to Cedar's 500s, but it is not the best explanation for the missing payload fields. The same-time Maple record shows the provider was available and an unrelated read succeeded, which argues against a broad provider outage. This remains an alternative explanation for some Cedar execution failures, not for the payload omission mechanism itself.",
+            "supporting_evidence": [
+              "ev_97d681b5ec6e"
+            ],
+            "contradicting_evidence": [
+              "ev_6bba7f4ff426",
+              "ev_df6be1bfe035",
+              "ev_b1f4405b6802"
+            ],
+            "confidence": "low",
+            "assumptions": [
+              "This alternative addresses Cedar's execution failures more than the missing-payload symptom.",
+              "No same-request upstream trace was supplied, so provider reachability for req-redacted-demo is unverified."
+            ]
+          }
+        ],
+        "recommended_actions": [
+          "Collect canonical config/decision telemetry for request_id=req-redacted-demo to determine why payload_storage_enabled was false; recommended action only, not executed.",
+          "Align executor, audit, and persistence telemetry by request ID before/during/after the incident window to distinguish disabled capture from delayed persistence; recommended action only, not executed.",
+          "Request a nearby healthy canonical execution that explicitly shows request/response payload capture, because the current Maple control only helps scope provider health; recommended action only, not executed.",
+          "Monitor Cedar-specific upstream error details separately from the payload-visibility issue, since underlying_error_code is null on the observed executor row; recommended action only, not executed.",
+          "Treat synthetic telemetry cautiously: partial reproduce/metrics results are incomplete and should not be used to prove absence of wider impact; recommended action only, not executed."
+        ],
+        "limitations": [
+          "Synthetic telemetry is incomplete in places: reproduce and metrics evidence include partial results, so absence elsewhere is not proven.",
+          "No canonical record identifies the actor, configuration source, or timestamp that set payload_storage_enabled=false.",
+          "No same-request provider trace was supplied to confirm whether req-redacted-demo reached the provider.",
+          "No healthy control record with explicit payload completeness was supplied.",
+          "The history record is analogy only and does not prove the current cause."
+        ]
+      },
+      "started_at": "2026-11-12T17:20:10.351943+00:00",
+      "finished_at": "2026-11-12T17:20:29.656559+00:00",
+      "error": null
+    }
+  ],
+  "notice": "Observable decisions and evidence, not private chain-of-thought. Earlier tickets may lack per-task model/tool attribution."
+}

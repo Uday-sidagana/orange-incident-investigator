@@ -1,0 +1,138 @@
+{
+  "incident": {
+    "id": "member-019",
+    "title": "Slack bot is authenticated but cannot post",
+    "description": "The Slack bot token authenticates successfully, but notifications never arrive in the selected channel. The customer suspects an expired token.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "member-019:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "provider_error": "not_in_channel",
+        "provider_ok": false,
+        "token_authenticated": true,
+        "bot_is_channel_member": false,
+        "granted_scopes": [
+          "chat:write"
+        ],
+        "status": 200
+      },
+      {
+        "record_id": "member-019:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "provider_ok": true,
+        "token_authenticated": true,
+        "bot_is_channel_member": true,
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "member-019:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "member-019:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "member-019:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "member-019:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "member-019:history:0",
+        "service": "tool-executor",
+        "symptom": "Slack bot is authenticated but cannot post",
+        "cause": "An earlier Slack posting error used an unsupported app-level token.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "member-019:knowledge:0",
+        "service": "tool-executor",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "member-019:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "channel_membership",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "member-019:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "channel_membership",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [
+      {
+        "record_id": "connection-view-a031c40d7bfc",
+        "connection_id": "tool-executor:atlas",
+        "service": "tool-executor",
+        "tenant": "atlas",
+        "connection_status": "not_recorded",
+        "granted_scopes": [
+          "chat:write"
+        ],
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "member-019:logs:0"
+        ]
+      }
+    ],
+    "refresh_history": []
+  },
+  "failures": {}
+}

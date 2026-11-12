@@ -1,0 +1,88 @@
+{
+  "models": {
+    "single_agent": "gpt-5.4"
+  },
+  "limits": {
+    "max_provider_attempts": 2,
+    "max_requests": 24,
+    "max_output_tokens": 4000,
+    "max_context_chars": 100000,
+    "max_total_context_chars": 700000,
+    "max_collection_rounds": 20,
+    "max_queries_per_task": 24
+  },
+  "calls": [
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0c317cb493485abb016af5f18976e487d28282512ec9cfe3ac",
+      "usage": {
+        "input_tokens": 4432,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 1536
+        },
+        "output_tokens": 402,
+        "output_tokens_details": {
+          "reasoning_tokens": 36
+        },
+        "total_tokens": 4834
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0c317cb493485abb016af5f18f052887d28bb4887f2bc8dbc7",
+      "usage": {
+        "input_tokens": 6441,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 347,
+        "output_tokens_details": {
+          "reasoning_tokens": 118
+        },
+        "total_tokens": 6788
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0c317cb493485abb016af5f195215087d2a1e69ff097574acc",
+      "usage": {
+        "input_tokens": 7397,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 5632
+        },
+        "output_tokens": 1855,
+        "output_tokens_details": {
+          "reasoning_tokens": 181
+        },
+        "total_tokens": 9252
+      }
+    },
+    {
+      "role": "single_agent",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "response_id": "resp_0ec0988fc519cb1e016af5f1b50c8c87d2b9e0b9eb2677f580",
+      "usage": {
+        "input_tokens": 7637,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1329,
+        "output_tokens_details": {
+          "reasoning_tokens": 230
+        },
+        "total_tokens": 8966
+      }
+    }
+  ]
+}

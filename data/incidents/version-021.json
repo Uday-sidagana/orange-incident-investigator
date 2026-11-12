@@ -1,0 +1,127 @@
+{
+  "incident": {
+    "id": "version-021",
+    "title": "Known tool cannot be found in a pinned toolkit",
+    "description": "A recently added Gmail settings action is listed in the catalog but returns tool-not-found for one application. Other applications execute it.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "version-registry"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "version-021:logs:0",
+        "service": "version-registry",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "action_known_in_registry": true,
+        "tool_available_on_requested_version": false,
+        "requested_version": "20261001",
+        "resolved_version": "20261001",
+        "available_versions": [
+          "20261112"
+        ],
+        "status": 404
+      },
+      {
+        "record_id": "version-021:logs:1",
+        "service": "version-registry",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "action_known_in_registry": true,
+        "tool_available_on_requested_version": true,
+        "requested_version": "20261112",
+        "resolved_version": "20261112",
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "version-021:metrics:0",
+        "service": "version-registry",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "version-021:metrics:1",
+        "service": "version-registry",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "version-021:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "version-021:dependencies:0",
+        "service": "version-registry",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "version-021:history:0",
+        "service": "version-registry",
+        "symptom": "Known tool cannot be found in a pinned toolkit",
+        "cause": "An earlier tool discovery problem came from project permissions.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "version-021:knowledge:0",
+        "service": "version-registry",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "version-021:reproduce:0",
+        "service": "version-registry",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "toolkit_pin",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "version-021:reproduce:1",
+        "service": "version-registry",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "toolkit_pin",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {
+    "metrics": {
+      "timeout_attempts": 1
+    }
+  }
+}

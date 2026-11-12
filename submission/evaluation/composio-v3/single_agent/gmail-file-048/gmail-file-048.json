@@ -1,0 +1,465 @@
+{
+  "incident_id": "gmail-file-048",
+  "approach": "single_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "gmail-file-048",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "The observed Cedar failures were caused by temporary uploaded file references expiring before delayed Gmail attachment jobs executed, causing local file lookup to return 410 and preventing any provider call.",
+        "supporting_evidence": [
+          "ev_7d05f5935bff",
+          "ev_9eab7d67d403",
+          "ev_b51bb7272c31",
+          "ev_73fef531d552",
+          "ev_5dc86063a888"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "The failing Cedar jobs used the same temporary-file-reference pattern seen in the controlled reproduction.",
+          "Queue delay was sufficient for some uploaded references to expire before execution."
+        ]
+      },
+      {
+        "description": "The broader workflow may also depend on delayed-job attachment handling semantics that are incompatible with short-lived uploaded file references, making delayed execution specifically vulnerable even when immediate sends succeed.",
+        "supporting_evidence": [
+          "ev_b51bb7272c31",
+          "ev_5dc86063a888",
+          "ev_9eab7d67d403"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "medium",
+        "assumptions": [
+          "The queue-backed Cedar workflow reuses uploaded file references instead of refreshing or re-uploading them near execution time."
+        ]
+      },
+      {
+        "description": "A Gmail/provider outage was responsible for the failures.",
+        "supporting_evidence": [
+          "ev_fd8bad3f8934"
+        ],
+        "contradicting_evidence": [
+          "ev_7d05f5935bff",
+          "ev_73fef531d552",
+          "ev_9eab7d67d403",
+          "ev_5dc86063a888"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "This relies only on an incomplete historical analogy, not current request-path evidence."
+        ]
+      },
+      {
+        "description": "Credential or consent issues on the Gmail connection caused the failures.",
+        "supporting_evidence": [],
+        "contradicting_evidence": [
+          "ev_7d05f5935bff",
+          "ev_9eab7d67d403"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "The credential_valid field reflects the same connection used by the failing jobs."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Use a fresh file upload/reference close to execution time rather than reusing delayed temporary references.",
+      "Review the delayed-job design for attachment handling and switch to a pattern supported for scheduled/delayed execution.",
+      "Before retrying blocked sends, verify the attachment reference is still valid and the send reaches provider execution."
+    ],
+    "limitations": [
+      "History results are explicitly partial and cannot prove absence of other similar incidents.",
+      "No direct per-request queue-age timestamp was provided; expiration timing is inferred from the complaint, backlog, and reproduced mechanism.",
+      "The reproduce tool provides precomputed sandbox observations, so similarity to production depends on the stated controlled conditions."
+    ]
+  },
+  "ranked_cause_codes": [
+    "temporary_file_reference_expired",
+    "scheduled_attachment_semantics",
+    "provider_failure",
+    "missing_grant"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The Cedar failure at 10:05 returned status 410 with file_reference_expired=true and file_lookup_status=410; credentials were valid and the provider was not called.",
+      "citations": [
+        {
+          "evidence_id": "ev_7d05f5935bff",
+          "record_id": "gmail-file-048:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In controlled reproduction, the original condition reproduced the same expired-file 410 without a provider call, while the corrected condition passed with file_lookup_status=200 and provider_called=true.",
+      "citations": [
+        {
+          "evidence_id": "ev_9eab7d67d403",
+          "record_id": "gmail-file-048:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_9eab7d67d403",
+          "record_id": "gmail-file-048:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "The observed failed path stopped before Gmail execution, and dependency telemetry still reported provider_api_reachable=true, which argues against a current provider-side outage for this request path.",
+      "citations": [
+        {
+          "evidence_id": "ev_7d05f5935bff",
+          "record_id": "gmail-file-048:logs:0"
+        },
+        {
+          "evidence_id": "ev_73fef531d552",
+          "record_id": "gmail-file-048:dependencies:0"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Impact was concentrated in Cedar: 425 of 755 requests failed, blocking 425 business operations, with queue_depth 135 and p95 latency 1800 ms; comparison tenant Maple had 0 failures, 0 blocked operations, queue_depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_5dc86063a888",
+          "record_id": "gmail-file-048:metrics:0"
+        },
+        {
+          "evidence_id": "ev_5dc86063a888",
+          "record_id": "gmail-file-048:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "A comparison tenant using the same provider family remained healthy, and an unrelated read succeeded, which is counter-evidence to a provider-wide Gmail failure.",
+      "citations": [
+        {
+          "evidence_id": "ev_7d05f5935bff",
+          "record_id": "gmail-file-048:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "backlog",
+      "statement": "Cedar showed elevated queue depth alongside the failures, consistent with jobs sitting long enough for short-lived file references to become stale.",
+      "citations": [
+        {
+          "evidence_id": "ev_5dc86063a888",
+          "record_id": "gmail-file-048:metrics:0"
+        }
+      ]
+    },
+    {
+      "code": "verification_control",
+      "statement": "Public product guidance states temporary uploaded file references are short-lived and should not be reused in delayed jobs, matching the observed and reproduced mechanism.",
+      "citations": [
+        {
+          "evidence_id": "ev_b51bb7272c31",
+          "record_id": "gmail-file-048:knowledge:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "temporary_file_reference_expired_remediation",
+    "scheduled_attachment_semantics_remediation",
+    "verify_send_before_retry"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_7d05f5935bff",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-file-048:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-48",
+          "toolkit": "gmail",
+          "status": 410,
+          "file_reference_expired": true,
+          "file_lookup_status": 410,
+          "provider_called": false,
+          "credential_valid": true
+        },
+        {
+          "record_id": "gmail-file-048:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_5dc86063a888",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-file-048:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 755,
+          "failures": 425,
+          "business_operations_blocked": 425,
+          "queue_depth": 135,
+          "p95_latency_ms": 1800
+        },
+        {
+          "record_id": "gmail-file-048:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 615,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_c74275c18e3d",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-file-048:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_fd8bad3f8934",
+      "query": {
+        "tool": "history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "partial",
+      "records": [
+        {
+          "record_id": "gmail-file-048:history:0",
+          "service": "tool-executor",
+          "symptom": "A similar workflow stopped following a release",
+          "cause": "An earlier provider outage",
+          "relation": "historical analogy only, not current proof"
+        }
+      ],
+      "complete": false,
+      "error": null,
+      "warning": "Results are incomplete; absence is not proof",
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_b51bb7272c31",
+      "query": {
+        "tool": "knowledge",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-file-048:knowledge:0",
+          "service": "tool-executor",
+          "url": "https://docs.composio.dev/kb/guide/toolkits-gmail",
+          "kind": "public_reference",
+          "summary": "Temporary uploaded file references are short-lived; avoid using stale references in delayed jobs."
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_9eab7d67d403",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-file-048:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "gmail_configuration",
+          "check_passed": false,
+          "toolkit": "gmail",
+          "status": 410,
+          "file_reference_expired": true,
+          "file_lookup_status": 410,
+          "provider_called": false,
+          "credential_valid": true
+        },
+        {
+          "record_id": "gmail-file-048:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "gmail_configuration",
+          "check_passed": true,
+          "toolkit": "gmail",
+          "status": 200,
+          "file_reference_expired": false,
+          "file_lookup_status": 200,
+          "provider_called": true,
+          "credential_valid": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_8e16b62571f7",
+      "query": {
+        "tool": "refresh_history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_73fef531d552",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-file-048:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_299ba610a24a",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 92.04675270605367,
+  "input_tokens": 31509,
+  "output_tokens": 5012
+}

@@ -1,0 +1,60 @@
+{
+  "verified_at_utc": "2026-11-12T20:17:13.874891+00:00",
+  "clean_install": {
+    "python": "3.11",
+    "dependencies": "requirements-lock.txt",
+    "editable_install": "passed",
+    "full_test_suite_passed": 247,
+    "warning": "Starlette TestClient httpx deprecation warning; tests passed."
+  },
+  "dataset": {
+    "incidents": 52,
+    "records": 513,
+    "failure_injection_incidents": 21
+  },
+  "offline_gmail_simulation": "completed probable_cause recipient_mapping_regression",
+  "packaged_evaluation": {
+    "scores_reproduced": 50,
+    "input_hashes_verified": 25
+  },
+  "technical_note_words": 407,
+  "webpage_dom_checks": {
+    "scenarios": 52,
+    "comparison_rows": 20,
+    "javascript_errors": [],
+    "limitation": "Functional jsdom validation; not screenshot-based browser visual QA."
+  },
+  "live_demo_rehearsal": [
+    {
+      "scenario_id": "gmail-001",
+      "ticket_id": "73a86fc1-17d3-4d17-a7d9-bae4cdcce447",
+      "outcome": "probable_cause",
+      "cause": [
+        "recipient_mapping_regression"
+      ],
+      "latency_seconds": 117.51677793590352,
+      "all_tasks_complete": true,
+      "all_deliveries_acknowledged": true,
+      "attempts": 2
+    },
+    {
+      "scenario_id": "unknown-012",
+      "ticket_id": "14a7ab29-14ed-42c8-9a29-14c3cd9f344c",
+      "outcome": "inconclusive",
+      "cause": [
+        "unconfirmed_change",
+        "provider_failure",
+        "missing_grant"
+      ],
+      "latency_seconds": 111.067806769046,
+      "all_tasks_complete": true,
+      "all_deliveries_acknowledged": true,
+      "attempts": 1
+    }
+  ],
+  "pending_candidate_actions": [
+    "Record and upload demo video",
+    "Grant private GitHub access to reviewer identities when supplied, or attach ZIP",
+    "Add video/download links and send the drafted submission email"
+  ]
+}

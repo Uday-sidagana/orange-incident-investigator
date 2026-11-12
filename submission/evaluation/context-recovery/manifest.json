@@ -1,0 +1,26 @@
+{
+  "purpose": "Post-benchmark operational recovery, not a replacement benchmark score",
+  "case_id": "github-token-036",
+  "ticket_id": "312dd75b-5c86-4813-8994-f974a495ebc6",
+  "models": {
+    "orchestrator": "gpt-4.1-mini",
+    "observability": "gpt-4.1-mini",
+    "dependency": "gpt-4.1-mini",
+    "reasoning": "gpt-5.4",
+    "critic": "gpt-5.4",
+    "reporting": "gpt-4.1-mini"
+  },
+  "model_requests": 24,
+  "tool_attempts": 24,
+  "deadline_seconds": 360,
+  "max_total_context_chars": 700000,
+  "changes": [
+    "Canonical observation deduplication",
+    "Reuse native collection summary instead of another model request",
+    "Reserve context capacity before critic follow-ups"
+  ],
+  "source_hashes": {
+    "src/orange_incident/llm_agents.py": "4b6dd1bffcaa2cb70f15beb676aa0b71513e63055294f61aa480ec5ee6d495be",
+    "src/orange_incident/context_projection.py": "3efe285c436c4bd89ddef3b80c5e3650e51742abfb485c9b35c2f31d591bcfe9"
+  }
+}

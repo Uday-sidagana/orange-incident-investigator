@@ -1,0 +1,176 @@
+{
+  "incident": {
+    "id": "revoked-015",
+    "title": "Previously healthy connection cannot refresh",
+    "description": "An active Gmail connection started returning authentication failures overnight. A platform release occurred nearby, but other accounts remain healthy.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "auth-service"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "revoked-015:logs:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "connection_status": "ACTIVE",
+        "credential_cache": "expired",
+        "refresh_status": 400,
+        "refresh_error": "invalid_grant",
+        "consent_state": "revoked",
+        "status": 401
+      },
+      {
+        "record_id": "revoked-015:logs:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "connection_status": "ACTIVE",
+        "refresh_status": 200,
+        "consent_state": "active",
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "revoked-015:metrics:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "revoked-015:metrics:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "revoked-015:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "revoked-015:dependencies:0",
+        "service": "auth-service",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "revoked-015:history:0",
+        "service": "auth-service",
+        "symptom": "Previously healthy connection cannot refresh",
+        "cause": "A previous refresh outage was caused by a credential-store timeout.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "revoked-015:knowledge:0",
+        "service": "auth-service",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "revoked-015:reproduce:0",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "consent_reconnection",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "revoked-015:reproduce:1",
+        "service": "auth-service",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "consent_reconnection",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [
+      {
+        "record_id": "connection-view-98952882ca55",
+        "connection_id": "auth-service:atlas",
+        "service": "auth-service",
+        "tenant": "atlas",
+        "connection_status": "ACTIVE",
+        "granted_scopes": null,
+        "token_state": "expired",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "revoked-015:logs:0"
+        ]
+      },
+      {
+        "record_id": "connection-view-d9c228122a24",
+        "connection_id": "auth-service:birch",
+        "service": "auth-service",
+        "tenant": "birch",
+        "connection_status": "ACTIVE",
+        "granted_scopes": null,
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "revoked-015:logs:1"
+        ]
+      }
+    ],
+    "refresh_history": [
+      {
+        "record_id": "refresh-view-revoked-015:logs:0",
+        "connection_id": "auth-service:atlas",
+        "service": "auth-service",
+        "tenant": "atlas",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "refresh_status": 400,
+        "connection_status": "ACTIVE",
+        "credential_cache": "expired",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "revoked-015:logs:0"
+        ]
+      },
+      {
+        "record_id": "refresh-view-revoked-015:logs:1",
+        "connection_id": "auth-service:birch",
+        "service": "auth-service",
+        "tenant": "birch",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "refresh_status": 200,
+        "connection_status": "ACTIVE",
+        "credential_cache": null,
+        "source_kind": "derived_view",
+        "derived_from": [
+          "revoked-015:logs:1"
+        ]
+      }
+    ]
+  },
+  "failures": {}
+}

@@ -1,0 +1,1426 @@
+{
+  "ticket_id": "089143ae-14d2-41dd-961d-628bdb62d54d",
+  "tasks": [
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 2989,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 316,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3305
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "No independent telemetry or verified logs are available yet; investigation relies on user-submitted observations only.",
+        "No error details, account identifiers or request IDs were provided so far to narrow down the root cause.",
+        "Formal evidence is missing to determine whether this is a permission, credential, or provider issue.",
+        "No current information about any recent deployments, configuration changes, or OAuth app status.",
+        "No data on latency, failure rates, or backlog to compare normal versus failure state.",
+        "Gmail sending stoppage can be caused by scopes missing, revoked consent, expired credentials, or provider feature or region restrictions, all hypotheses requiring evidence.",
+        "No access to live or historical telemetry limits ability to exclude provider rate limits or outages.",
+        "Further evidence collection and targeted queries into recent OAuth token status, permission changes, API errors, and provider health are needed to narrow root cause."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T18:27:28.187973+00:00",
+      "finished_at": "2026-11-12T18:27:42.014623+00:00",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "Please provide any available concrete error messages, timestamps, request IDs, logs or traces from the moment sending Gmail messages stopped working to help verify and localize the failure.",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "logs",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_82d3771e64ce",
+            "query": {
+              "tool": "logs",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_82d3771e64ce"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_59ca8bc3795e",
+            "query": {
+              "tool": "metrics",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_59ca8bc3795e"
+        },
+        {
+          "query": {
+            "tool": "connections",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_d05f3661f4fc",
+            "query": {
+              "tool": "connections",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_d05f3661f4fc"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3739,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 143,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3882
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4231,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 158,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 4389
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "No concrete error messages, logs, request IDs, or telemetry records are available from the platform for any service or tenant, including Gmail sending, from the queried timeframe or broadly.\n\nCurrently, there is no directly observed failure mechanism or telemetry to localize or verify the Gmail sending stoppage. To proceed, I need from the user or application side at least one of the following:\n- Exact error messages or status codes seen during Gmail sending\n- Request IDs or timestamps of failed Gmail integration attempts\n- Account identifiers or permission lists used for Gmail integration\n- Any available logs or trace excerpts around the failure start\n\nWithout these, independent verification or diagnosis is not possible based solely on platform logs and telemetry, which show no relevant records.\n\nPlease provide specific failure details or logs to continue investigation."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T18:27:42.051945+00:00",
+      "finished_at": "2026-11-12T18:27:48.295320+00:00",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "Have there been any recent changes to OAuth consent, scopes, credential rotations, account permissions, or Gmail API feature availability that could impact sending? Are there any known provider-side outages or API rate limiting affecting Gmail?",
+      "dependencies": [],
+      "available_evidence_ids": [],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "dependencies",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_b83f85b31cf0",
+            "query": {
+              "tool": "dependencies",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_b83f85b31cf0"
+        },
+        {
+          "query": {
+            "tool": "deployments",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_f82f82be39fe",
+            "query": {
+              "tool": "deployments",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_f82f82be39fe"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3573,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 104,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3677
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 3906,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 89,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 3995
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "No recent changes in OAuth consent, scopes, credential rotations, account permissions, or Gmail API feature availability are found in dependencies data.\nNo known provider-side outages or Gmail API rate limiting are found in deployments data within accessible records.\n\nNo independent evidence is available yet. Please provide error messages, request IDs, account information, or logs for a more specific investigation. At this point, missing telemetry and detailed logs prevent narrowing the root cause further."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T18:27:42.699520+00:00",
+      "finished_at": "2026-11-12T18:27:47.504196+00:00",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Given the lack of detailed evidence, what specific telemetry or log fields could confirm or refute common causes such as expired credentials, revoked OAuth consent, rate limits, or provider failures? What tests or queries can distinguish between provider-side, permission, or configuration issues causing Gmail sending to stop?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_b83f85b31cf0",
+        "ev_f82f82be39fe",
+        "ev_82d3771e64ce",
+        "ev_59ca8bc3795e",
+        "ev_d05f3661f4fc"
+      ],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "history",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_1b301ae7b388",
+            "query": {
+              "tool": "history",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_1b301ae7b388"
+        },
+        {
+          "query": {
+            "tool": "knowledge",
+            "service": null,
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_8c7226379b6b",
+            "query": {
+              "tool": "knowledge",
+              "service": null,
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_8c7226379b6b"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4024,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 133,
+            "output_tokens_details": {
+              "reasoning_tokens": 26
+            },
+            "total_tokens": 4157
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4411,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1377,
+            "output_tokens_details": {
+              "reasoning_tokens": 43
+            },
+            "total_tokens": 5788
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5284,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 2242,
+            "output_tokens_details": {
+              "reasoning_tokens": 471
+            },
+            "total_tokens": 7526
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 7231,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4864
+            },
+            "output_tokens": 1106,
+            "output_tokens_details": {
+              "reasoning_tokens": 399
+            },
+            "total_tokens": 8337
+          }
+        }
+      ],
+      "validation_errors": [
+        {
+          "reason": "Invalid or ungrounded finding",
+          "rejected_output": {
+            "candidates": [
+              {
+                "code": "oauth_consent_revoked",
+                "hypothesis": {
+                  "description": "A Gmail OAuth grant may no longer authorize send access, causing send attempts to fail before or during token refresh. This is a common explanation for a sudden stop, but there is no direct production evidence yet.",
+                  "supporting_evidence": [
+                    "ev_82d3771e64ce",
+                    "ev_59ca8bc3795e",
+                    "ev_d05f3661f4fc",
+                    "ev_1b301ae7b388"
+                  ],
+                  "contradicting_evidence": [],
+                  "confidence": "low",
+                  "assumptions": [
+                    "Current investigation has no canonical execution logs, request IDs, or connection records for the failed send attempts.",
+                    "User-reported 'suddenly stopped' could fit consent revocation, admin policy change, or missing scope, but timing alone is not discriminating."
+                  ]
+                },
+                "findings": [
+                  {
+                    "code": "telemetry_gap",
+                    "statement": "Available observability queries are partial and returned no canonical records for logs, metrics, connection state, or execution history, so neither revoked consent nor its alternatives can be confirmed from platform telemetry.",
+                    "citations": []
+                  },
+                  {
+                    "code": "grant_control",
+                    "statement": "To confirm or refute revoked Gmail consent, inspect the failed execution and token-refresh path for provider auth errors such as invalid_grant, access_denied, token revoked, or explicit consent revocation during refresh/send.",
+                    "citations": []
+                  }
+                ],
+                "action_codes": [
+                  "collect_missing_telemetry",
+                  "request_reproduction",
+                  "align_telemetry_windows",
+                  "reconnect_revoked_consent",
+                  "reconnect_required_scope"
+                ],
+                "actions": [
+                  "Collect at least one failed send attempt with exact timestamp, workspace/project, connection ID, account email or provider subject, execution/request ID, and provider HTTP status/body if captured.",
+                  "Query execution logs for Gmail send and token refresh outcomes around the failure window; look specifically for 401/403 responses, invalid_grant, revoked_token, insufficientPermissions, or failed refresh before provider dispatch.",
+                  "Review connection/auth records for grant status, last successful refresh time, scope list, token expiry, last reconnect event, and whether the connected identity changed.",
+                  "If logs show revoked consent or missing scopes, propose reconnecting the intended Gmail account with the required Gmail send scopes and verify the returned identity matches the expected mailbox."
+                ],
+                "missing_checks": [
+                  "Canonical execution log for at least one failed Gmail send attempt.",
+                  "Canonical auth/refresh record showing provider error code and message.",
+                  "Connection metadata identifying the intended Gmail account and granted scopes."
+                ],
+                "strength": 4
+              },
+              {
+                "code": "provider_rate_limit",
+                "hypothesis": {
+                  "description": "Gmail or Google API quota/rate limiting could stop sends if traffic increased or retries accumulated, but there is no observed latency, throughput, or 429 telemetry yet.",
+                  "supporting_evidence": [
+                    "ev_59ca8bc3795e",
+                    "ev_82d3771e64ce",
+                    "ev_1b301ae7b388"
+                  ],
+                  "contradicting_evidence": [],
+                  "confidence": "low",
+                  "assumptions": [
+                    "A user-visible 'stopped working' can reflect provider 429s or quota exhaustion, but no request volume or retry pattern is available.",
+                    "Absence of outage data in partial dependency/deployment queries does not refute tenant-specific quota exhaustion."
+                  ]
+                },
+                "findings": [
+                  {
+                    "code": "telemetry_gap",
+                    "statement": "No canonical metrics or execution records are available to compare failure rate, backlog, concurrency, or provider response distribution before and after the reported stop.",
+                    "citations": []
+                  },
+                  {
+                    "code": "rate_limit_response",
+                    "statement": "The discriminating signal for this hypothesis would be provider responses such as HTTP 429, Google quotaExceeded, userRateLimitExceeded, or rateLimitExceeded, ideally with Retry-After or quota metadata.",
+                    "citations": []
+                  }
+                ],
+                "action_codes": [
+                  "collect_missing_telemetry",
+                  "request_reproduction",
+                  "align_telemetry_windows",
+                  "respect_retry_after",
+                  "reduce_concurrency",
+                  "backoff_provider"
+                ],
+                "actions": [
+                  "Query Gmail send attempts for provider HTTP status, error.reason, error.code, Retry-After, and quota-related response bodies in the reported window.",
+                  "Compare affected tenant request rate, concurrency, retry count, and queue/backlog against the last known healthy period to see whether failures rise with load.",
+                  "Check whether failures are isolated to one tenant/account or present across multiple accounts using the same Gmail provider path; tenant isolation would favor quota/account limits over a broad provider outage.",
+                  "If rate limiting is confirmed, propose honoring Retry-After, reducing concurrency, and suppressing blind retries that could worsen quota pressure."
+                ],
+                "missing_checks": [
+                  "Provider response payloads for failed send attempts.",
+                  "Per-tenant volume/concurrency comparison against a healthy baseline.",
+                  "Evidence showing whether another Gmail-connected tenant remained healthy in the same period."
+                ],
+                "strength": 3
+              },
+              {
+                "code": "provider_failure",
+                "hypothesis": {
+                  "description": "A provider-side Gmail/API outage or transient upstream failure is possible, but there is no direct evidence that requests reached Gmail, nor any broad multi-tenant failure signal.",
+                  "supporting_evidence": [
+                    "ev_b83f85b31cf0",
+                    "ev_f82f82be39fe",
+                    "ev_82d3771e64ce",
+                    "ev_59ca8bc3795e"
+                  ],
+                  "contradicting_evidence": [],
+                  "confidence": "low",
+                  "assumptions": [
+                    "Partial dependency/deployment queries cannot establish provider health or absence of outages.",
+                    "This explanation is weaker than permission/credential causes unless requests are shown reaching Gmail and failing upstream."
+                  ]
+                },
+                "findings": [
+                  {
+                    "code": "telemetry_gap",
+                    "statement": "Current evidence does not show whether the failed execution reached Gmail at all, so provider-side failure cannot be separated from internal auth/configuration failure.",
+                    "citations": []
+                  },
+                  {
+                    "code": "provider_isolation",
+                    "statement": "To support a provider-failure diagnosis, look for concurrent upstream 5xx/timeouts across multiple tenants or accounts after requests are accepted and dispatched to Gmail.",
+                    "citations": []
+                  }
+                ],
+                "action_codes": [
+                  "collect_missing_telemetry",
+                  "request_reproduction",
+                  "align_telemetry_windows",
+                  "monitor_provider"
+                ],
+                "actions": [
+                  "Query send pipeline stages to determine whether the request was accepted, queued, credentialed, dispatched, and whether a provider response was recorded.",
+                  "Search for Gmail upstream 5xx, gateway timeouts, or transport errors across other tenants in the same timeframe to distinguish tenant-local issues from shared provider impact.",
+                  "Capture end-to-end latency breakdowns: queue wait, auth refresh time, provider round-trip, and retries. A failure before dispatch argues against provider outage.",
+                  "Check whether a control account/tenant using Gmail sends successfully in the same region and window; a healthy control weakens the provider-wide explanation."
+                ],
+                "missing_checks": [
+                  "Dispatch-stage telemetry showing whether provider ingress was attempted.",
+                  "Cross-tenant comparison for concurrent Gmail upstream errors.",
+                  "At least one canonical failed request with provider round-trip timing or transport result."
+                ],
+                "strength": 2
+              }
+            ],
+            "findings": [
+              {
+                "code": "telemetry_gap",
+                "statement": "All available queries for dependencies, deployments, logs, metrics, connections, history, and knowledge are partial and returned no canonical records, so no direct failure mechanism, tenant impact, latency shift, backlog, or provider response can be established from current evidence.",
+                "citations": []
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Observed impact is limited to an unverified user report that one application's Gmail sending stopped; there is no canonical tenant-level failure count or comparison tenant/control telemetry.",
+                "citations": []
+              }
+            ],
+            "notes": [
+              "Most useful fields to request from the reporter or platform are: exact failure timestamp with timezone; workspace/project/tenant; execution ID or request ID; Gmail account email or stable provider subject; connection ID; operation name; HTTP status; provider error code/message/reason; refresh-token outcome; granted scopes; last successful send time; retry count; queue/dispatch timestamps; and raw provider response body if captured.",
+              "How to distinguish common causes with logs/queries: expired credentials or revoked consent -> refresh/send 401 or invalid_grant/access_denied plus stale last_refresh_success_at; missing scope/permission -> 403 insufficientPermissions/notAuthorized with scope list mismatch; wrong connected account -> connected identity differs from intended sender; rate limit -> 429 or quotaExceeded/userRateLimitExceeded with Retry-After and rising retry volume; provider failure -> upstream 5xx/timeouts after dispatch across multiple tenants; configuration/project mismatch -> execution uses different connection/project/account than intended.",
+              "Best first query set once identifiers exist: 1) execution history filtered by time window plus Gmail send operation, 2) canonical logs for the same execution ID, 3) connection/auth records for the referenced connection, 4) metrics comparing failure rate and latency to last healthy period, 5) cross-tenant Gmail error search for the same window.",
+              "Because the current dataset has no canonical records, these are triage hypotheses and data requests, not confirmed causes or confirmed healthy checks."
+            ]
+          }
+        }
+      ],
+      "retries": [],
+      "notes": [
+        "Current evidence is insufficient for a grounded root-cause ranking. The only observed facts are that the user reported Gmail sending stopped and all available queries were partial with no returned canonical records; partial empty queries cannot confirm health or absence of failures.",
+        "To narrow common Gmail send failures, collect at least one failed attempt with these identifiers: exact timestamp with timezone, workspace/project/tenant, execution ID or request ID, connection ID, Gmail account email or stable provider subject, operation name, and last known successful send timestamp.",
+        "Most discriminating execution-log fields: pipeline stage reached (accepted/queued/auth refresh/dispatched/provider response), internal error class, provider HTTP status, provider error.code, provider error.reason, provider error.message, retry count, queue wait time, provider round-trip latency, and whether a raw provider response body was captured.",
+        "Fields that confirm or refute expired credentials or revoked consent: refresh attempt result, refresh error string, refresh HTTP status, token expiry time, last_refresh_success_at, grant status, reconnect history, and provider auth errors such as invalid_grant, unauthorized_client, access_denied, revoked token, or similar 401/403 auth failures.",
+        "Fields that confirm or refute missing scope or permission issues: granted scope list, required scope list for the send operation, provider 403 details such as insufficientPermissions or notAuthorized, sender identity used, delegated send-as alias used, and any workspace/admin policy error text.",
+        "Fields that confirm or refute wrong account or configuration issues: resolved connection ID, resolved connected account identity, project/workspace ID used by the execution, sender/from address requested, provider subject/email returned by the connection, and whether the execution referenced a different connection than the intended mailbox.",
+        "Fields that confirm or refute rate limiting: provider HTTP 429, Google quotaExceeded / userRateLimitExceeded / rateLimitExceeded reasons, Retry-After header, request volume, concurrency, retry amplification, queue backlog, and whether failures correlate with increased send rate.",
+        "Fields that confirm or refute provider-side failures: evidence that the request was actually dispatched to Gmail, upstream 5xx or timeout responses, transport/gateway errors after dispatch, latency spikes in provider round-trip, and concurrent similar upstream failures across other tenants/accounts in the same window.",
+        "Best next queries once one failed execution or time window is known: (1) execution history for Gmail send attempts in that window, (2) canonical logs for the same execution/request IDs, (3) auth/refresh records for the referenced connection, (4) metrics comparing failure rate/latency/retries/backlog to the last healthy period, and (5) cross-tenant search for Gmail upstream 5xx/429/auth failures in the same interval.",
+        "Simple decision rules: if failure occurs before dispatch with refresh/auth errors, favor credential or consent causes; if dispatch occurs and provider returns 403, favor permission/scope/workspace policy; if provider returns 429 with quota reasons, favor provider_rate_limit; if dispatch occurs and multiple tenants show 5xx/timeouts, favor provider_failure; if identity/project/connection do not match the intended mailbox, favor wrong_connected_account or project/configuration mismatch.",
+        "Without those records, any diagnosis remains speculative. The fastest useful customer follow-up is: send one exact failed timestamp, the Gmail account involved, any visible error text/code, and either a request/execution ID or a log excerpt around the failure."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T18:27:48.315659+00:00",
+      "finished_at": "2026-11-12T18:29:19.720141+00:00",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_b83f85b31cf0",
+        "ev_f82f82be39fe",
+        "ev_82d3771e64ce",
+        "ev_59ca8bc3795e",
+        "ev_d05f3661f4fc",
+        "ev_1b301ae7b388",
+        "ev_8c7226379b6b"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4161,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 422,
+            "output_tokens_details": {
+              "reasoning_tokens": 44
+            },
+            "total_tokens": 4583
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "The current report is appropriately inconclusive; that is the correct state given the evidence.",
+        "Treat the empty partial queries as a finding of telemetry unavailability, not corroboration that Gmail sending was healthy or that no recent changes occurred.",
+        "Do not use derived connection/refresh copies, if later provided, as independent confirmation without canonical log or provider records."
+      ],
+      "candidates": [],
+      "objections": [
+        "There is no grounded diagnosis to approve: the incident currently contains only a user report and meta-notes about missing data.",
+        "Any statement ruling out provider outage, OAuth scope/consent changes, credential issues, permissions, or platform regressions is unsupported here because the dependency/deployments/logs/metrics queries were partial and empty, not complete negative evidence.",
+        "There is no tenant impact, failure-rate, latency, backlog, or comparison evidence, so scope and severity cannot be established."
+      ],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T18:29:19.729161+00:00",
+      "critique": {
+        "approved": false,
+        "blocking_checks": [
+          "No canonical production evidence exists for any failed Gmail send attempt (for example an exact error/status, request or execution ID, tenant/workspace, connection/account, and timestamp), so there is no observed failure mechanism to diagnose or verify.",
+          "All recorded queries were partial and returned no records, which establishes only a telemetry gap\u2014not health, absence of impact, provider status, permissions state, credential validity, or an internal regression. This missing verification could materially change any leading explanation."
+        ],
+        "notes": [
+          "The current report is appropriately inconclusive; that is the correct state given the evidence.",
+          "Treat the empty partial queries as a finding of telemetry unavailability, not corroboration that Gmail sending was healthy or that no recent changes occurred.",
+          "Do not use derived connection/refresh copies, if later provided, as independent confirmation without canonical log or provider records."
+        ]
+      },
+      "finished_at": "2026-11-12T18:29:27.979265+00:00",
+      "error": null
+    },
+    {
+      "id": "check-1-0",
+      "role": "observability",
+      "question": "Can you obtain one concrete failed Gmail send record with exact timestamp/timezone plus any execution ID, request ID, tenant/workspace/project identifier, and the exact error/status returned?",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_b83f85b31cf0",
+        "ev_f82f82be39fe",
+        "ev_82d3771e64ce",
+        "ev_59ca8bc3795e",
+        "ev_d05f3661f4fc",
+        "ev_1b301ae7b388",
+        "ev_8c7226379b6b"
+      ],
+      "status": "complete",
+      "queries": [
+        {
+          "query": {
+            "tool": "logs",
+            "service": "gmail",
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": "error",
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_36ae094cfba8",
+            "query": {
+              "tool": "logs",
+              "service": "gmail",
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": "error",
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_36ae094cfba8"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "gmail",
+            "tenant": null,
+            "version": null,
+            "start": null,
+            "end": null,
+            "search": "fail",
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_d4478a5a33bc",
+            "query": {
+              "tool": "logs",
+              "service": "gmail",
+              "tenant": null,
+              "version": null,
+              "start": null,
+              "end": null,
+              "search": "fail",
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_d4478a5a33bc"
+        },
+        {
+          "query": {
+            "tool": "logs",
+            "service": "gmail",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T00:00:00.000000+00:00",
+            "end": "2026-11-13T00:00:00.000000+00:00",
+            "search": null,
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_789447995fd0",
+            "query": {
+              "tool": "logs",
+              "service": "gmail",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T00:00:00.000000+00:00",
+              "end": "2026-11-13T00:00:00.000000+00:00",
+              "search": null,
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_789447995fd0"
+        },
+        {
+          "query": {
+            "tool": "metrics",
+            "service": "gmail",
+            "tenant": null,
+            "version": null,
+            "start": "2026-11-12T00:00:00.000000+00:00",
+            "end": "2026-11-13T00:00:00.000000+00:00",
+            "search": "failure",
+            "limit": 10
+          },
+          "status": "partial",
+          "result": {
+            "evidence_id": "ev_c9960908f53d",
+            "query": {
+              "tool": "metrics",
+              "service": "gmail",
+              "tenant": null,
+              "version": null,
+              "start": "2026-11-12T00:00:00.000000+00:00",
+              "end": "2026-11-13T00:00:00.000000+00:00",
+              "search": "failure",
+              "limit": 10
+            },
+            "status": "partial",
+            "records": [],
+            "complete": false,
+            "error": null,
+            "warning": "Results are incomplete; absence is not proof",
+            "attempt": 1
+          },
+          "evidence_id": "ev_c9960908f53d"
+        }
+      ],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4868,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 257,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 5125
+          }
+        },
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5516,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4736
+            },
+            "output_tokens": 313,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 5829
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "No concrete failed Gmail send record with exact timestamp, execution ID, request ID, tenant/workspace/project identifier, or exact error/status returned is currently available in the platform logs or metrics for the Gmail service. Multiple queries for error or failure logs as well as general Gmail logs and failure-related metrics returned partial and incomplete results with no relevant data for the incident timeframe or broadly.\n\nTherefore, based on the observed evidence, no direct failure telemetry or error records are present in the available production data to verify or localize the Gmail sending stoppage reported by the user.\n\nTo proceed with a focused investigation, I need from the user or their application:\n- At least one exact timestamp (with timezone) of a failed Gmail send attempt,\n- The request or execution ID of that attempt,\n- The tenant, workspace or project identifier associated,\n- The exact error message or status code returned by the Gmail API,\n- Any logs or trace excerpts around the failure time.\n\nWithout these specifics, independent diagnosis or narrowing the cause from platform telemetry is not possible at this time.\n\nSummary:\n- No observed failed Gmail send record with required UID, timestamp, and error/status exists (ev_36ae094cfba8, ev_d4478a5a33bc, ev_789447995fd0, ev_c9960908f53d).\n- All Gmail service logs and metrics queries were partial and empty regarding relevant failure data.\n- No telemetry evidence to confirm or explain the user's Gmail sending stoppage complaint.\n- Request user-provided concrete failure details for targeted further investigation."
+      ],
+      "candidates": [],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T18:29:27.998205+00:00",
+      "finished_at": "2026-11-12T18:29:35.684782+00:00",
+      "error": null
+    },
+    {
+      "id": "reason-1",
+      "role": "reasoning",
+      "question": "Reassess all explanations after the requested verification checks.",
+      "dependencies": [
+        "check-1-0"
+      ],
+      "available_evidence_ids": [
+        "ev_b83f85b31cf0",
+        "ev_f82f82be39fe",
+        "ev_82d3771e64ce",
+        "ev_59ca8bc3795e",
+        "ev_d05f3661f4fc",
+        "ev_1b301ae7b388",
+        "ev_8c7226379b6b",
+        "ev_36ae094cfba8",
+        "ev_d4478a5a33bc",
+        "ev_789447995fd0",
+        "ev_c9960908f53d"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 4880,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 198,
+            "output_tokens_details": {
+              "reasoning_tokens": 91
+            },
+            "total_tokens": 5078
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5131,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 4608
+            },
+            "output_tokens": 613,
+            "output_tokens_details": {
+              "reasoning_tokens": 120
+            },
+            "total_tokens": 5744
+          }
+        },
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5921,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 1685,
+            "output_tokens_details": {
+              "reasoning_tokens": 516
+            },
+            "total_tokens": 7606
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "Current state remains appropriately inconclusive.",
+        "No grounded diagnosis can be approved from user-submitted observations alone.",
+        "The partial empty queries indicate telemetry unavailability for this investigation, not healthy Gmail sending, not absence of changes, and not absence of provider errors.",
+        "No tenant impact, failure-rate, latency, backlog, or comparison evidence is available, so severity and scope cannot be established from the present record.",
+        "Most useful next data to narrow cause: exact failure timestamp with timezone, request/execution ID, tenant/workspace/project, connection ID, Gmail account identity, operation name, exact returned error/status, and last known successful send time."
+      ],
+      "candidates": [
+        {
+          "code": "unconfirmed_change",
+          "hypothesis": {
+            "description": "No grounded root cause can be approved. The only direct observation is a user report that Gmail sending stopped; every attempted dependency, deployment, log, metric, connection, history, and knowledge lookup was partial and returned no canonical incident records, so the immediate cause could still be a provider issue, consent/scope change, credential problem, permission issue, wrong account selection, or an internal regression.",
+            "supporting_evidence": [
+              "ev_b83f85b31cf0",
+              "ev_f82f82be39fe",
+              "ev_82d3771e64ce",
+              "ev_59ca8bc3795e",
+              "ev_d05f3661f4fc",
+              "ev_1b301ae7b388",
+              "ev_8c7226379b6b",
+              "ev_36ae094cfba8",
+              "ev_d4478a5a33bc",
+              "ev_789447995fd0",
+              "ev_c9960908f53d"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "Partial empty queries do not establish absence of Gmail failures or recent changes.",
+              "No tenant scope, request ID, execution ID, connection ID, or exact provider error is available in canonical telemetry.",
+              "This conclusion is limited to the currently supplied incident context and not to Gmail sending globally."
+            ]
+          },
+          "findings": [],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "request_reproduction",
+            "align_telemetry_windows"
+          ],
+          "actions": [
+            "Collect one concrete failed send example: exact timestamp with timezone, workspace/project/tenant, execution ID or request ID, connection ID, Gmail account identity, operation name, and exact returned error/status.",
+            "Request a reproduction or preserved application log for a failed attempt so the search can be narrowed to a specific execution window.",
+            "Align the investigation window with the customer's last known successful send and first failed send to distinguish sudden breakage from an older latent issue."
+          ],
+          "missing_checks": [
+            "At least one canonical failed execution or provider response record is needed to identify whether the failure occurs before provider dispatch, during token refresh, or at Gmail.",
+            "A concrete connection/account identifier is needed to test for wrong connected account, revoked consent, missing grant, or account-specific permissions.",
+            "A precise failed-at timestamp and last-known-good timestamp are needed to compare with any provider or platform changes and avoid attributing the incident to coincidental timing."
+          ],
+          "strength": 9
+        },
+        {
+          "code": "oauth_consent_revoked",
+          "hypothesis": {
+            "description": "One plausible Gmail-specific explanation is that the connected Google account lost effective consent or required scopes, causing sends to start failing suddenly, but there is no direct token refresh or provider authorization evidence here.",
+            "supporting_evidence": [
+              "ev_b83f85b31cf0",
+              "ev_82d3771e64ce",
+              "ev_d05f3661f4fc"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "The report of a sudden stop is compatible with revoked consent or scope drift but does not distinguish it from other causes.",
+              "No independent refresh, scope, or consent telemetry was retrieved."
+            ]
+          },
+          "findings": [],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "reconnect_revoked_consent",
+            "reconnect_required_scope"
+          ],
+          "actions": [
+            "Obtain the exact Gmail/API error text or OAuth refresh error from one failed execution before concluding consent was revoked.",
+            "If the eventual error shows revoked consent or insufficient scope, reconnect the intended Google account with the required scopes.",
+            "Verify that the reconnected account is the same intended sender identity before retrying."
+          ],
+          "missing_checks": [
+            "Need one canonical failed send or refresh record showing revoked consent, insufficient permissions, or refresh failure.",
+            "Need the intended sender account identity to distinguish revoked consent from wrong-account selection."
+          ],
+          "strength": 3
+        },
+        {
+          "code": "provider_failure",
+          "hypothesis": {
+            "description": "A Gmail or Google API provider-side failure remains possible, but there is no observed provider response, rate-limit signal, outage record, or comparative tenant impact to support it over account-specific causes.",
+            "supporting_evidence": [
+              "ev_f82f82be39fe",
+              "ev_82d3771e64ce",
+              "ev_59ca8bc3795e",
+              "ev_c9960908f53d"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "No accessible outage or failure metrics were returned, but the relevant queries were partial and therefore non-excluding.",
+              "Without comparison traffic, provider-wide impact cannot be estimated."
+            ]
+          },
+          "findings": [],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "monitor_provider",
+            "backoff_provider"
+          ],
+          "actions": [
+            "Look for one failed provider response with HTTP status/error body before treating this as a provider outage.",
+            "Compare the affected tenant's Gmail sends with at least one unaffected tenant or account once telemetry is available to determine isolation.",
+            "If a provider rate/error response is eventually confirmed, monitor and back off rather than retry blindly."
+          ],
+          "missing_checks": [
+            "Need a canonical provider response or platform dispatch record showing the request reached Gmail and failed there.",
+            "Need comparison telemetry to determine whether impact is tenant-specific or broader provider isolation."
+          ],
+          "strength": 2
+        }
+      ],
+      "objections": [],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T18:29:35.707597+00:00",
+      "finished_at": "2026-11-12T18:30:22.428342+00:00",
+      "error": null
+    },
+    {
+      "id": "critic-1",
+      "role": "critic",
+      "question": "Determine whether verification resolved the material gaps.",
+      "dependencies": [
+        "reason-1"
+      ],
+      "available_evidence_ids": [
+        "ev_b83f85b31cf0",
+        "ev_f82f82be39fe",
+        "ev_82d3771e64ce",
+        "ev_59ca8bc3795e",
+        "ev_d05f3661f4fc",
+        "ev_1b301ae7b388",
+        "ev_8c7226379b6b",
+        "ev_36ae094cfba8",
+        "ev_d4478a5a33bc",
+        "ev_789447995fd0",
+        "ev_c9960908f53d"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-5.4-2026-03-05",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 5579,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 436,
+            "output_tokens_details": {
+              "reasoning_tokens": 58
+            },
+            "total_tokens": 6015
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [
+        "The current inconclusive position is appropriate given the evidence.",
+        "The empty partial queries should be treated as telemetry unavailability, not as corroboration for or against provider failure, OAuth/permission issues, credential problems, or internal regressions.",
+        "A last-known-good timestamp would help correlate timing, but it is secondary to obtaining one concrete failed execution record."
+      ],
+      "candidates": [
+        {
+          "code": "unconfirmed_change",
+          "hypothesis": {
+            "description": "No grounded root cause can be approved. The only direct observation is a user report that Gmail sending stopped; every attempted dependency, deployment, log, metric, connection, history, and knowledge lookup was partial and returned no canonical incident records, so the immediate cause could still be a provider issue, consent/scope change, credential problem, permission issue, wrong account selection, or an internal regression.",
+            "supporting_evidence": [
+              "ev_b83f85b31cf0",
+              "ev_f82f82be39fe",
+              "ev_82d3771e64ce",
+              "ev_59ca8bc3795e",
+              "ev_d05f3661f4fc",
+              "ev_1b301ae7b388",
+              "ev_8c7226379b6b",
+              "ev_36ae094cfba8",
+              "ev_d4478a5a33bc",
+              "ev_789447995fd0",
+              "ev_c9960908f53d"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "Partial empty queries do not establish absence of Gmail failures or recent changes.",
+              "No tenant scope, request ID, execution ID, connection ID, or exact provider error is available in canonical telemetry.",
+              "This conclusion is limited to the currently supplied incident context and not to Gmail sending globally."
+            ]
+          },
+          "findings": [],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "request_reproduction",
+            "align_telemetry_windows"
+          ],
+          "actions": [
+            "Collect one concrete failed send example: exact timestamp with timezone, workspace/project/tenant, execution ID or request ID, connection ID, Gmail account identity, operation name, and exact returned error/status.",
+            "Request a reproduction or preserved application log for a failed attempt so the search can be narrowed to a specific execution window.",
+            "Align the investigation window with the customer's last known successful send and first failed send to distinguish sudden breakage from an older latent issue."
+          ],
+          "missing_checks": [
+            "Obtain at least one canonical failed Gmail send or refresh record for the affected execution, including exact timestamp, tenant/workspace/project, execution/request ID, and the exact returned error or status; without this, the failure point (pre-provider, token refresh, or Gmail/provider response) is unverified.",
+            "Obtain the specific connection/account identity involved in the failed send so account-specific causes such as wrong connected account, revoked consent, missing grant, or permission/scope mismatch can be tested against the observed failure."
+          ],
+          "strength": 9
+        },
+        {
+          "code": "oauth_consent_revoked",
+          "hypothesis": {
+            "description": "One plausible Gmail-specific explanation is that the connected Google account lost effective consent or required scopes, causing sends to start failing suddenly, but there is no direct token refresh or provider authorization evidence here.",
+            "supporting_evidence": [
+              "ev_b83f85b31cf0",
+              "ev_82d3771e64ce",
+              "ev_d05f3661f4fc"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "The report of a sudden stop is compatible with revoked consent or scope drift but does not distinguish it from other causes.",
+              "No independent refresh, scope, or consent telemetry was retrieved."
+            ]
+          },
+          "findings": [],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "reconnect_revoked_consent",
+            "reconnect_required_scope"
+          ],
+          "actions": [
+            "Obtain the exact Gmail/API error text or OAuth refresh error from one failed execution before concluding consent was revoked.",
+            "If the eventual error shows revoked consent or insufficient scope, reconnect the intended Google account with the required scopes.",
+            "Verify that the reconnected account is the same intended sender identity before retrying."
+          ],
+          "missing_checks": [
+            "Need one canonical failed send or refresh record showing revoked consent, insufficient permissions, or refresh failure.",
+            "Need the intended sender account identity to distinguish revoked consent from wrong-account selection."
+          ],
+          "strength": 3
+        },
+        {
+          "code": "provider_failure",
+          "hypothesis": {
+            "description": "A Gmail or Google API provider-side failure remains possible, but there is no observed provider response, rate-limit signal, outage record, or comparative tenant impact to support it over account-specific causes.",
+            "supporting_evidence": [
+              "ev_f82f82be39fe",
+              "ev_82d3771e64ce",
+              "ev_59ca8bc3795e",
+              "ev_c9960908f53d"
+            ],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "No accessible outage or failure metrics were returned, but the relevant queries were partial and therefore non-excluding.",
+              "Without comparison traffic, provider-wide impact cannot be estimated."
+            ]
+          },
+          "findings": [],
+          "action_codes": [
+            "collect_missing_telemetry",
+            "monitor_provider",
+            "backoff_provider"
+          ],
+          "actions": [
+            "Look for one failed provider response with HTTP status/error body before treating this as a provider outage.",
+            "Compare the affected tenant's Gmail sends with at least one unaffected tenant or account once telemetry is available to determine isolation.",
+            "If a provider rate/error response is eventually confirmed, monitor and back off rather than retry blindly."
+          ],
+          "missing_checks": [
+            "Need a canonical provider response or platform dispatch record showing the request reached Gmail and failed there.",
+            "Need comparison telemetry to determine whether impact is tenant-specific or broader provider isolation."
+          ],
+          "strength": 2
+        }
+      ],
+      "objections": [
+        "Verification did not resolve the material gaps: there is still no canonical failure record, provider response, or connection-specific evidence.",
+        "All telemetry queries shown were partial and returned no records, which supports only a telemetry gap, not health, absence of failures, or absence of recent changes.",
+        "There is no observed tenant impact, failure-rate, latency, backlog, or comparison evidence, so scope and severity remain unverified.",
+        "Further collection cannot fit the remaining execution budget; report uncertainty and required checks."
+      ],
+      "report": null,
+      "attempt": 1,
+      "started_at": "2026-11-12T18:30:22.442101+00:00",
+      "critique": {
+        "approved": false,
+        "blocking_checks": [
+          "Obtain at least one canonical failed Gmail send or refresh record for the affected execution, including exact timestamp, tenant/workspace/project, execution/request ID, and the exact returned error or status; without this, the failure point (pre-provider, token refresh, or Gmail/provider response) is unverified.",
+          "Obtain the specific connection/account identity involved in the failed send so account-specific causes such as wrong connected account, revoked consent, missing grant, or permission/scope mismatch can be tested against the observed failure."
+        ],
+        "notes": [
+          "The current inconclusive position is appropriate given the evidence.",
+          "The empty partial queries should be treated as telemetry unavailability, not as corroboration for or against provider failure, OAuth/permission issues, credential problems, or internal regressions.",
+          "A last-known-good timestamp would help correlate timing, but it is secondary to obtaining one concrete failed execution record."
+        ]
+      },
+      "finished_at": "2026-11-12T18:30:31.138653+00:00",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_b83f85b31cf0",
+        "ev_f82f82be39fe",
+        "ev_82d3771e64ce",
+        "ev_59ca8bc3795e",
+        "ev_d05f3661f4fc",
+        "ev_1b301ae7b388",
+        "ev_8c7226379b6b",
+        "ev_36ae094cfba8",
+        "ev_d4478a5a33bc",
+        "ev_789447995fd0",
+        "ev_c9960908f53d"
+      ],
+      "status": "complete",
+      "queries": [],
+      "model_calls": [
+        {
+          "model": "gpt-4.1-mini-2025-04-14",
+          "status": "completed",
+          "usage": {
+            "input_tokens": 6824,
+            "input_tokens_details": {
+              "cache_write_tokens": 0,
+              "cached_tokens": 0
+            },
+            "output_tokens": 850,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 7674
+          }
+        }
+      ],
+      "validation_errors": [],
+      "retries": [],
+      "notes": [],
+      "candidates": [],
+      "objections": [],
+      "report": {
+        "incident_id": "089143ae-14d2-41dd-961d-628bdb62d54d",
+        "outcome": "inconclusive",
+        "hypotheses": [
+          {
+            "description": "No grounded root cause can be approved. The only direct observation is a user report that Gmail sending stopped; every attempted dependency, deployment, log, metric, connection, history, and knowledge lookup was partial and returned no canonical incident records, so the immediate cause could still be a provider issue, consent/scope change, credential problem, permission issue, wrong account selection, or an internal regression.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "Partial empty queries do not establish absence of Gmail failures or recent changes.",
+              "No tenant scope, request ID, execution ID, connection ID, or exact provider error is available in canonical telemetry.",
+              "This conclusion is limited to the currently supplied incident context and not to Gmail sending globally."
+            ]
+          },
+          {
+            "description": "One plausible Gmail-specific explanation is that the connected Google account lost effective consent or required scopes, causing sends to start failing suddenly, but there is no direct token refresh or provider authorization evidence here.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "The report of a sudden stop is compatible with revoked consent or scope drift but does not distinguish it from other causes.",
+              "No independent refresh, scope, or consent telemetry was retrieved."
+            ]
+          },
+          {
+            "description": "A Gmail or Google API provider-side failure remains possible, but there is no observed provider response, rate-limit signal, outage record, or comparative tenant impact to support it over account-specific causes.",
+            "supporting_evidence": [],
+            "contradicting_evidence": [],
+            "confidence": "low",
+            "assumptions": [
+              "No accessible outage or failure metrics were returned, but the relevant queries were partial and therefore non-excluding.",
+              "Without comparison traffic, provider-wide impact cannot be estimated."
+            ]
+          }
+        ],
+        "recommended_actions": [
+          "Collect one concrete failed send example: exact timestamp with timezone, workspace/project/tenant, execution ID or request ID, connection ID, Gmail account identity, operation name, and exact returned error/status.",
+          "Request a reproduction or preserved application log for a failed attempt so the search can be narrowed to a specific execution window.",
+          "Align the investigation window with the customer's last known successful send and first failed send to distinguish sudden breakage from an older latent issue.",
+          "Obtain the exact Gmail/API error text or OAuth refresh error from one failed execution before concluding consent was revoked.",
+          "If the eventual error shows revoked consent or insufficient scope, reconnect the intended Google account with the required scopes.",
+          "Verify that the reconnected account is the same intended sender identity before retrying.",
+          "Look for one failed provider response with HTTP status/error body before treating this as a provider outage.",
+          "Compare the affected tenant's Gmail sends with at least one unaffected tenant or account once telemetry is available to determine isolation.",
+          "If a provider rate/error response is eventually confirmed, monitor and back off rather than retry blindly."
+        ],
+        "limitations": [
+          "No independent telemetry or verified logs are available yet; investigation relies on user-submitted observations only.",
+          "No error details, account identifiers or request IDs were provided so far to narrow down the root cause.",
+          "All dependency, deployment, logs, metrics, connection, history, and knowledge queries were partial and yielded no canonical Gmail failure evidence for the incident timeframe.",
+          "No tenant impact, failure-rate, latency, backlog, or comparison telemetry evidence is available to establish scope or severity.",
+          "Partial empty queries only indicate telemetry unavailability, not health or absence of failures.",
+          "Without a canonical failed Gmail send or refresh record including exact timestamp, tenant, execution/request ID, and exact error, the failure point cannot be located.",
+          "No evidence to confirm or exclude provider failure, OAuth permission or consent issues, credential problems, or internal regressions.",
+          "Further collection exceeds remaining execution budget; current diagnosis remains tentative and incomplete.",
+          "Critic did not approve a probable cause; further evidence is required."
+        ]
+      },
+      "attempt": 1,
+      "started_at": "2026-11-12T18:30:31.158342+00:00",
+      "finished_at": "2026-11-12T18:30:38.690419+00:00",
+      "error": null
+    }
+  ],
+  "notice": "Observable decisions and evidence, not private chain-of-thought. Earlier tickets may lack per-task model/tool attribution."
+}

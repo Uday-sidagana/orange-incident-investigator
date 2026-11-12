@@ -1,0 +1,3012 @@
+{
+  "incident": {
+    "id": "slack-plan-044",
+    "title": "[DEMO C044] Slack AI search fails while ordinary search remains healthy",
+    "description": "Assistant context search in Slack is failing for the customer, while ordinary search and other Slack tools continue working despite scope updates and reconnection.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "mode": "live_agents",
+  "tasks": [
+    {
+      "id": "plan",
+      "role": "orchestrator",
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "observe",
+      "role": "observability",
+      "question": "Starting with null filters, what canonical tool-executor records exist for the affected tenant between 2026-11-12T09:50:00Z and 2026-11-12T10:15:00Z for both the failing Slack AI/assistant-context search calls and successful ordinary Slack search/tool calls, including request IDs, exact operation names, status/error payloads, latency, queue/backlog timing, connected-account identifiers, and whether the failed requests reached Slack or failed before provider egress?",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "dependencies",
+      "role": "dependency",
+      "question": "Were there any changes during or shortly before the incident that could isolate only the Slack AI search path—such as executor deploys/version changes, Slack tool definition or routing changes, connection/credential refresh events, Slack scope or app configuration updates, account-selection changes, or tenant-specific policy/config changes—and is there a controlled comparison showing the same connection/account succeeds for ordinary Slack search while only the AI search operation fails?",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "reason",
+      "role": "reasoning",
+      "question": "Given the observed records, which hypothesis best fits the discriminating evidence: provider-side feature/entitlement or Slack-side rejection specific to AI search, missing grant/scope or wrong connected account for the AI-specific endpoint, or an internal regression/configuration issue in the executor path for assistant-context search—and what counter-evidence rules out a broad Slack outage since ordinary search and other Slack tools reportedly remain healthy?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "critic",
+      "role": "critic",
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "status": "complete",
+      "error": null
+    },
+    {
+      "id": "report",
+      "role": "reporting",
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "status": "complete",
+      "error": null
+    }
+  ],
+  "evidence": [
+    {
+      "evidence_id": "ev_47db0c677f21",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1703dddeb851",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_653cba5bf644",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "slack_configuration",
+          "check_passed": false,
+          "toolkit": "slack",
+          "status": 403,
+          "action": "assistant.search.context",
+          "workspace_plan": "standard",
+          "agents_ai_apps_enabled": true,
+          "is_ai_search_enabled": false,
+          "required_plan": "business_plus"
+        },
+        {
+          "record_id": "slack-plan-044:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "slack_configuration",
+          "check_passed": true,
+          "toolkit": "slack",
+          "status": 200,
+          "action": "assistant.search.context",
+          "workspace_plan": "business_plus",
+          "agents_ai_apps_enabled": true,
+          "is_ai_search_enabled": true,
+          "required_plan": "business_plus"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_d6f598e6dbcd",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-44",
+          "toolkit": "slack",
+          "status": 403,
+          "action": "assistant.search.context",
+          "workspace_plan": "standard",
+          "agents_ai_apps_enabled": true,
+          "is_ai_search_enabled": false,
+          "required_plan": "business_plus"
+        },
+        {
+          "record_id": "slack-plan-044:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_ca9fc6b38229",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_69e64a15f5e7",
+      "query": {
+        "tool": "refresh_history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_72d7f95aef85",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 687,
+          "failures": 405,
+          "business_operations_blocked": 405,
+          "queue_depth": 123,
+          "p95_latency_ms": 1640
+        },
+        {
+          "record_id": "slack-plan-044:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 571,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_a5b32714d1bd",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-44",
+          "toolkit": "slack",
+          "status": 403,
+          "action": "assistant.search.context",
+          "workspace_plan": "standard",
+          "agents_ai_apps_enabled": true,
+          "is_ai_search_enabled": false,
+          "required_plan": "business_plus"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_a39fda00ceb5",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:20:00Z",
+        "end": "2026-11-12T10:20:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_20b1da1ec830",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "slack",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_58285a7ec1f7",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "search",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "slack_configuration",
+          "check_passed": false,
+          "toolkit": "slack",
+          "status": 403,
+          "action": "assistant.search.context",
+          "workspace_plan": "standard",
+          "agents_ai_apps_enabled": true,
+          "is_ai_search_enabled": false,
+          "required_plan": "business_plus"
+        },
+        {
+          "record_id": "slack-plan-044:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "slack_configuration",
+          "check_passed": true,
+          "toolkit": "slack",
+          "status": 200,
+          "action": "assistant.search.context",
+          "workspace_plan": "business_plus",
+          "agents_ai_apps_enabled": true,
+          "is_ai_search_enabled": true,
+          "required_plan": "business_plus"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_44871d902f5f",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "ordinary search",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_dc1189db3749",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "search",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "slack-plan-044:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-44",
+          "toolkit": "slack",
+          "status": 403,
+          "action": "assistant.search.context",
+          "workspace_plan": "standard",
+          "agents_ai_apps_enabled": true,
+          "is_ai_search_enabled": false,
+          "required_plan": "business_plus"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "hypotheses": [],
+  "objections": [],
+  "events": [
+    {
+      "event": "task_started",
+      "task": "plan",
+      "role": "orchestrator",
+      "at": 524517.561535707,
+      "question": "Scope and coordinate the evidence-led incident investigation.",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "orchestrator",
+      "model": "gpt-5.4",
+      "request": 1,
+      "task": "plan"
+    },
+    {
+      "event": "model_finished",
+      "role": "orchestrator",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 2845,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 762,
+        "output_tokens_details": {
+          "reasoning_tokens": 33
+        },
+        "total_tokens": 3607
+      },
+      "task": "plan"
+    },
+    {
+      "event": "agent_result",
+      "task": "plan",
+      "role": "orchestrator",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [
+          {
+            "id": "observe",
+            "role": "observability",
+            "question": "Starting with null filters, what canonical tool-executor records exist for the affected tenant between 2026-11-12T09:50:00Z and 2026-11-12T10:15:00Z for both the failing Slack AI/assistant-context search calls and successful ordinary Slack search/tool calls, including request IDs, exact operation names, status/error payloads, latency, queue/backlog timing, connected-account identifiers, and whether the failed requests reached Slack or failed before provider egress?",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "dependencies",
+            "role": "dependency",
+            "question": "Were there any changes during or shortly before the incident that could isolate only the Slack AI search path—such as executor deploys/version changes, Slack tool definition or routing changes, connection/credential refresh events, Slack scope or app configuration updates, account-selection changes, or tenant-specific policy/config changes—and is there a controlled comparison showing the same connection/account succeeds for ordinary Slack search while only the AI search operation fails?",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "reason",
+            "role": "reasoning",
+            "question": "Given the observed records, which hypothesis best fits the discriminating evidence: provider-side feature/entitlement or Slack-side rejection specific to AI search, missing grant/scope or wrong connected account for the AI-specific endpoint, or an internal regression/configuration issue in the executor path for assistant-context search—and what counter-evidence rules out a broad Slack outage since ordinary search and other Slack tools reportedly remain healthy?",
+            "dependencies": [
+              "observe",
+              "dependencies"
+            ],
+            "status": "pending",
+            "error": null
+          },
+          {
+            "id": "critic",
+            "role": "critic",
+            "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+            "dependencies": [
+              "reason"
+            ],
+            "status": "pending",
+            "error": null
+          }
+        ],
+        "report": null,
+        "notes": [
+          "Current scope is narrow: reported impact is a customer-specific failure of Slack assistant-context/AI search from 09:50Z to 10:15Z, while ordinary Slack search and other Slack tools are reportedly healthy; treat that as a hypothesis until confirmed by canonical records.",
+          "Begin investigation with null/empty filters so missing timestamps or service labels do not exclude useful logs; then pivot using exact request IDs, tenant ID, operation name, and connected-account identifiers found in the records.",
+          "Need tenant-impact comparison, not just anecdotes: compare failure rate, latency, and backlog for the affected tenant's AI search requests versus its ordinary Slack search requests over the same window; if possible also compare with another tenant using the same AI search operation.",
+          "Key discriminator: determine whether failed requests reached Slack. If no provider egress exists and the executor emitted a local validation/auth/policy error, prioritize internal regression, configuration, permissions, or credential hypotheses over provider failure.",
+          "If Slack was reached, capture exact provider response codes/messages for the failing AI search path and compare them with successful ordinary search on the same connection/account; this can separate provider_feature_entitlement, missing_grant/scope, workspace policy, and wrong account from general provider failure.",
+          "Reconnects and scope updates are not proof of correctness; verify post-reconnect identity, scopes, token type, and connected-account selection from canonical auth/connection records rather than derived convenience views.",
+          "Look for controlled comparisons where only one variable differs: same tenant and same connection with ordinary search success versus AI search failure; or same AI search operation across tenants/connections if available. This is stronger than timing correlation with any deployment.",
+          "Check for telemetry gaps explicitly. If AI search requests have sparse logs, record the gap rather than inferring absence from empty partial queries; missing causal telemetry may keep the outcome inconclusive.",
+          "Do not conclude a broad Slack provider outage unless multiple tenants/operations show correlated upstream failures; healthy ordinary Slack operations in the same window would be counter-evidence.",
+          "Likely next evidence collection buckets: executor request logs, canonical provider-egress logs, auth/refresh events, tool routing/version metadata, and tenant/account configuration records for the Slack AI search capability."
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "plan",
+      "role": "orchestrator",
+      "status": "complete",
+      "at": 524538.095163341
+    },
+    {
+      "event": "task_started",
+      "task": "observe",
+      "role": "observability",
+      "at": 524538.101158157,
+      "question": "Starting with null filters, what canonical tool-executor records exist for the affected tenant between 2026-11-12T09:50:00Z and 2026-11-12T10:15:00Z for both the failing Slack AI/assistant-context search calls and successful ordinary Slack search/tool calls, including request IDs, exact operation names, status/error payloads, latency, queue/backlog timing, connected-account identifiers, and whether the failed requests reached Slack or failed before provider egress?",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 2,
+      "task": "observe"
+    },
+    {
+      "event": "task_started",
+      "task": "dependencies",
+      "role": "dependency",
+      "at": 524538.1273672,
+      "question": "Were there any changes during or shortly before the incident that could isolate only the Slack AI search path—such as executor deploys/version changes, Slack tool definition or routing changes, connection/credential refresh events, Slack scope or app configuration updates, account-selection changes, or tenant-specific policy/config changes—and is there a controlled comparison showing the same connection/account succeeds for ordinary Slack search while only the AI search operation fails?",
+      "dependencies": [],
+      "available_evidence_ids": []
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 3,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 3886,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 192,
+        "output_tokens_details": {
+          "reasoning_tokens": 39
+        },
+        "total_tokens": 4078
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "dependencies",
+      "status": "ok",
+      "evidence_id": "ev_47db0c677f21",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_47db0c677f21",
+        "query": {
+          "tool": "dependencies",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:dependencies:0",
+            "service": "tool-executor",
+            "depends_on": [
+              "auth-service",
+              "provider-api",
+              "session-policy"
+            ],
+            "provider_api_reachable": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "deployments",
+      "status": "ok",
+      "evidence_id": "ev_1703dddeb851",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_1703dddeb851",
+        "query": {
+          "tool": "deployments",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:deployments:0",
+            "service": "support-dashboard",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "change": "Unrelated inbox display release",
+            "version": "dashboard-v23"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "reproduce",
+      "status": "ok",
+      "evidence_id": "ev_653cba5bf644",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_653cba5bf644",
+        "query": {
+          "tool": "reproduce",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 10
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:reproduce:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "sandbox",
+            "provider_mock": true,
+            "controlled": true,
+            "condition": "original",
+            "same_request_except": "slack_configuration",
+            "check_passed": false,
+            "toolkit": "slack",
+            "status": 403,
+            "action": "assistant.search.context",
+            "workspace_plan": "standard",
+            "agents_ai_apps_enabled": true,
+            "is_ai_search_enabled": false,
+            "required_plan": "business_plus"
+          },
+          {
+            "record_id": "slack-plan-044:reproduce:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "sandbox",
+            "provider_mock": true,
+            "controlled": true,
+            "condition": "corrected",
+            "same_request_except": "slack_configuration",
+            "check_passed": true,
+            "toolkit": "slack",
+            "status": 200,
+            "action": "assistant.search.context",
+            "workspace_plan": "business_plus",
+            "agents_ai_apps_enabled": true,
+            "is_ai_search_enabled": true,
+            "required_plan": "business_plus"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 4,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4077,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 232,
+        "output_tokens_details": {
+          "reasoning_tokens": 40
+        },
+        "total_tokens": 4309
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_d6f598e6dbcd",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_d6f598e6dbcd",
+        "query": {
+          "tool": "logs",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-44",
+            "toolkit": "slack",
+            "status": 403,
+            "action": "assistant.search.context",
+            "workspace_plan": "standard",
+            "agents_ai_apps_enabled": true,
+            "is_ai_search_enabled": false,
+            "required_plan": "business_plus"
+          },
+          {
+            "record_id": "slack-plan-044:logs:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "status": 200,
+            "same_provider_available": true,
+            "unrelated_read_succeeds": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "connections",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "connections",
+      "status": "ok",
+      "evidence_id": "ev_ca9fc6b38229",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_ca9fc6b38229",
+        "query": {
+          "tool": "connections",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "refresh_history",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "refresh_history",
+      "status": "ok",
+      "evidence_id": "ev_69e64a15f5e7",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_69e64a15f5e7",
+        "query": {
+          "tool": "refresh_history",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "metrics",
+      "status": "ok",
+      "evidence_id": "ev_72d7f95aef85",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_72d7f95aef85",
+        "query": {
+          "tool": "metrics",
+          "service": null,
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:metrics:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "requests": 687,
+            "failures": 405,
+            "business_operations_blocked": 405,
+            "queue_depth": 123,
+            "p95_latency_ms": 1640
+          },
+          {
+            "record_id": "slack-plan-044:metrics:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "maple",
+            "requests": 571,
+            "failures": 0,
+            "business_operations_blocked": 0,
+            "queue_depth": 0,
+            "p95_latency_ms": 160
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 5,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5073,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 185,
+        "output_tokens_details": {
+          "reasoning_tokens": 110
+        },
+        "total_tokens": 5258
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_a5b32714d1bd",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_a5b32714d1bd",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": "cedar",
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": null,
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-44",
+            "toolkit": "slack",
+            "status": 403,
+            "action": "assistant.search.context",
+            "workspace_plan": "standard",
+            "agents_ai_apps_enabled": true,
+            "is_ai_search_enabled": false,
+            "required_plan": "business_plus"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 6,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 4745,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 297,
+        "output_tokens_details": {
+          "reasoning_tokens": 89
+        },
+        "total_tokens": 5042
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:20:00Z",
+        "end": "2026-11-12T10:20:00Z",
+        "search": null,
+        "limit": 20
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "deployments",
+      "status": "ok",
+      "evidence_id": "ev_a39fda00ceb5",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_a39fda00ceb5",
+        "query": {
+          "tool": "deployments",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:20:00Z",
+          "end": "2026-11-12T10:20:00Z",
+          "search": null,
+          "limit": 20
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": "slack",
+        "limit": 20
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "dependencies",
+      "status": "ok",
+      "evidence_id": "ev_20b1da1ec830",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_20b1da1ec830",
+        "query": {
+          "tool": "dependencies",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": null,
+          "end": null,
+          "search": "slack",
+          "limit": 20
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:dependencies:0",
+            "service": "tool-executor",
+            "depends_on": [
+              "auth-service",
+              "provider-api",
+              "session-policy"
+            ],
+            "provider_api_reachable": true
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "search",
+        "limit": 20
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "reproduce",
+      "status": "ok",
+      "evidence_id": "ev_58285a7ec1f7",
+      "records": 2,
+      "result": {
+        "evidence_id": "ev_58285a7ec1f7",
+        "query": {
+          "tool": "reproduce",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "search",
+          "limit": 20
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:reproduce:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "sandbox",
+            "provider_mock": true,
+            "controlled": true,
+            "condition": "original",
+            "same_request_except": "slack_configuration",
+            "check_passed": false,
+            "toolkit": "slack",
+            "status": 403,
+            "action": "assistant.search.context",
+            "workspace_plan": "standard",
+            "agents_ai_apps_enabled": true,
+            "is_ai_search_enabled": false,
+            "required_plan": "business_plus"
+          },
+          {
+            "record_id": "slack-plan-044:reproduce:1",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "sandbox",
+            "provider_mock": true,
+            "controlled": true,
+            "condition": "corrected",
+            "same_request_except": "slack_configuration",
+            "check_passed": true,
+            "toolkit": "slack",
+            "status": 200,
+            "action": "assistant.search.context",
+            "workspace_plan": "business_plus",
+            "agents_ai_apps_enabled": true,
+            "is_ai_search_enabled": true,
+            "required_plan": "business_plus"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 7,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5606,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 4608
+        },
+        "output_tokens": 149,
+        "output_tokens_details": {
+          "reasoning_tokens": 72
+        },
+        "total_tokens": 5755
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "tool_started",
+      "role": "dependency",
+      "task": "dependencies",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "ordinary search",
+        "limit": 20
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "dependency",
+      "task": "dependencies",
+      "tool": "reproduce",
+      "status": "ok",
+      "evidence_id": "ev_44871d902f5f",
+      "records": 0,
+      "result": {
+        "evidence_id": "ev_44871d902f5f",
+        "query": {
+          "tool": "reproduce",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "ordinary search",
+          "limit": 20
+        },
+        "status": "ok",
+        "records": [],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "dependency",
+      "model": "gpt-5.4",
+      "request": 8,
+      "task": "dependencies"
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5457,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 4608
+        },
+        "output_tokens": 203,
+        "output_tokens_details": {
+          "reasoning_tokens": 129
+        },
+        "total_tokens": 5660
+      },
+      "task": "observe"
+    },
+    {
+      "event": "tool_started",
+      "role": "observability",
+      "task": "observe",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "search",
+        "limit": 100
+      }
+    },
+    {
+      "event": "tool_finished",
+      "role": "observability",
+      "task": "observe",
+      "tool": "logs",
+      "status": "ok",
+      "evidence_id": "ev_dc1189db3749",
+      "records": 1,
+      "result": {
+        "evidence_id": "ev_dc1189db3749",
+        "query": {
+          "tool": "logs",
+          "service": "tool-executor",
+          "tenant": null,
+          "version": null,
+          "start": "2026-11-12T09:50:00Z",
+          "end": "2026-11-12T10:15:00Z",
+          "search": "search",
+          "limit": 100
+        },
+        "status": "ok",
+        "records": [
+          {
+            "record_id": "slack-plan-044:logs:0",
+            "service": "tool-executor",
+            "timestamp": "2026-11-12T10:05:00Z",
+            "tenant": "cedar",
+            "request_id": "req-44",
+            "toolkit": "slack",
+            "status": 403,
+            "action": "assistant.search.context",
+            "workspace_plan": "standard",
+            "agents_ai_apps_enabled": true,
+            "is_ai_search_enabled": false,
+            "required_plan": "business_plus"
+          }
+        ],
+        "complete": true,
+        "error": null,
+        "warning": null,
+        "attempt": 1
+      }
+    },
+    {
+      "event": "model_started",
+      "role": "observability",
+      "model": "gpt-5.4",
+      "request": 9,
+      "task": "observe"
+    },
+    {
+      "event": "model_finished",
+      "role": "dependency",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 5992,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 481,
+        "output_tokens_details": {
+          "reasoning_tokens": 31
+        },
+        "total_tokens": 6473
+      },
+      "task": "dependencies"
+    },
+    {
+      "event": "agent_result",
+      "task": "dependencies",
+      "role": "dependency",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "No executor change is evidenced around the window: the targeted deployment query for tool-executor from 09:20Z–10:20Z returned no records, while the only observed deployment was an unrelated support-dashboard release at 10:05Z (ev_a39fda00ceb5; ev_1703dddeb851/slack-plan-044:deployments:0).",
+          "Observed failure is isolated to the Slack AI-search path in cedar: tool-executor logged assistant.search.context returning 403 with workspace_plan=standard, required_plan=business_plus, and is_ai_search_enabled=false; provider API was generally reachable (ev_a5b32714d1bd/slack-plan-044:logs:0; ev_47db0c677f21/slack-plan-044:dependencies:0).",
+          "Controlled comparison supports a configuration/entitlement discriminator, not a broad provider outage: in sandbox, the same assistant.search.context request failed under the original Slack configuration (standard plan, AI search disabled) and passed when only Slack configuration was corrected to business_plus with AI search enabled (ev_58285a7ec1f7/slack-plan-044:reproduce:0; ev_58285a7ec1f7/slack-plan-044:reproduce:1).",
+          "Important gaps remain for the user’s exact question: canonical connection and refresh records show no events, but that does not verify whether there were Slack scope/app/account-selection or tenant policy changes; and there is no canonical same-tenant same-connection ordinary-search success record for cedar—only a comparison tenant (maple) with healthy unrelated Slack reads and zero failures versus cedar’s 405/687 failures, queue depth 123, p95 1640 ms (ev_ca9fc6b38229; ev_69e64a15f5e7; ev_d6f598e6dbcd/slack-plan-044:logs:1; ev_72d7f95aef85/slack-plan-044:metrics:0; ev_72d7f95aef85/slack-plan-044:metrics:1)."
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "dependencies",
+      "role": "dependency",
+      "status": "complete",
+      "at": 524562.338887646
+    },
+    {
+      "event": "model_finished",
+      "role": "observability",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 6259,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 594,
+        "output_tokens_details": {
+          "reasoning_tokens": 68
+        },
+        "total_tokens": 6853
+      },
+      "task": "observe"
+    },
+    {
+      "event": "agent_result",
+      "task": "observe",
+      "role": "observability",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "Canonical failing executor record in-window for the affected tenant is only ev_a5b32714d1bd / slack-plan-044:logs:0: 2026-11-12T10:05:00Z, tenant=cedar, request_id=req-44, toolkit=slack, action=assistant.search.context, status=403, workspace_plan=standard, agents_ai_apps_enabled=true, is_ai_search_enabled=false, required_plan=business_plus. No latency, queue-wait, backlog-timing, connected-account identifier, or provider-egress field is present on this canonical log record.",
+          "Canonical healthy comparison records are sparse: ev_d6f598e6dbcd / slack-plan-044:logs:1 shows at 2026-11-12T10:05:00Z tenant=maple status=200 with same_provider_available=true and unrelated_read_succeeds=true, but it does not include request_id, exact Slack operation name, latency, connected-account, or error payload. There is no canonical cedar ordinary Slack search/tool success record in the supplied logs for 2026-11-12T09:50:00Z–10:15:00Z.",
+          "Tenant-impact metrics do show a sharp affected-vs-control difference at 10:05Z: cedar had 687 requests / 405 failures / 405 business_operations_blocked / queue_depth 123 / p95_latency_ms 1640 in ev_72d7f95aef85 / slack-plan-044:metrics:0, while maple had 571 requests / 0 failures / queue_depth 0 / p95_latency_ms 160 in ev_72d7f95aef85 / slack-plan-044:metrics:1. This supports localized impact and backlog/latency elevation for cedar, but does not isolate which cedar operations contributed beyond the single assistant.search.context log record.",
+          "Whether req-44 reached Slack is not established by canonical egress telemetry in the supplied evidence. The only direct canonical facts are provider_api_reachable=true at the service dependency level in ev_47db0c677f21 / slack-plan-044:dependencies:0 and the local executor log fields on req-44; connections and refresh-history views are empty (ev_ca9fc6b38229, ev_69e64a15f5e7) and no canonical provider-egress/request trace or connected-account identifier was supplied, so pre-provider failure vs upstream 403 remains unverified from canonical records alone."
+        ],
+        "candidates": null,
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "observe",
+      "role": "observability",
+      "status": "complete",
+      "at": 524564.740001691
+    },
+    {
+      "event": "task_started",
+      "task": "reason",
+      "role": "reasoning",
+      "at": 524564.748223214,
+      "question": "Given the observed records, which hypothesis best fits the discriminating evidence: provider-side feature/entitlement or Slack-side rejection specific to AI search, missing grant/scope or wrong connected account for the AI-specific endpoint, or an internal regression/configuration issue in the executor path for assistant-context search—and what counter-evidence rules out a broad Slack outage since ordinary search and other Slack tools reportedly remain healthy?",
+      "dependencies": [
+        "observe",
+        "dependencies"
+      ],
+      "available_evidence_ids": [
+        "ev_47db0c677f21",
+        "ev_1703dddeb851",
+        "ev_653cba5bf644",
+        "ev_d6f598e6dbcd",
+        "ev_ca9fc6b38229",
+        "ev_69e64a15f5e7",
+        "ev_72d7f95aef85",
+        "ev_a5b32714d1bd",
+        "ev_a39fda00ceb5",
+        "ev_20b1da1ec830",
+        "ev_58285a7ec1f7",
+        "ev_44871d902f5f",
+        "ev_dc1189db3749"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "reasoning",
+      "model": "gpt-5.4",
+      "request": 10,
+      "task": "reason"
+    },
+    {
+      "event": "model_finished",
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 7298,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 999,
+        "output_tokens_details": {
+          "reasoning_tokens": 157
+        },
+        "total_tokens": 8297
+      },
+      "task": "reason"
+    },
+    {
+      "event": "model_started",
+      "role": "reasoning",
+      "model": "gpt-5.4",
+      "request": 11,
+      "task": "reason"
+    },
+    {
+      "event": "model_finished",
+      "role": "reasoning",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 9404,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 2771,
+        "output_tokens_details": {
+          "reasoning_tokens": 83
+        },
+        "total_tokens": 12175
+      },
+      "task": "reason"
+    },
+    {
+      "event": "agent_result",
+      "task": "reason",
+      "role": "reasoning",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": null,
+        "notes": [
+          "Best fit: provider_feature_entitlement specific to Slack AI search, not a broad Slack outage.",
+          "Counter-evidence against provider-wide Slack failure is meaningful but scoped: maple shows healthy Slack reads, not cedar ordinary-search success on the same connection.",
+          "Empty connections/refresh-history results are not proof of absence; they only leave auth/account-selection verification unresolved."
+        ],
+        "candidates": [
+          {
+            "code": "provider_feature_entitlement",
+            "hypothesis": {
+              "description": "The observed cedar failures best fit Slack AI-search feature/plan entitlement rejection specific to assistant.search.context: the failing request shows workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, while a controlled comparison passes when only Slack configuration is changed to a Business Plus workspace with AI search enabled.",
+              "supporting_evidence": [
+                "ev_a5b32714d1bd",
+                "ev_58285a7ec1f7",
+                "ev_d6f598e6dbcd",
+                "ev_72d7f95aef85",
+                "ev_47db0c677f21"
+              ],
+              "contradicting_evidence": [
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "confidence": "high",
+              "assumptions": [
+                "The cedar log fields reflect the effective Slack workspace capability for the failing assistant.search.context call.",
+                "The sandbox controlled comparison is valid only for the changed Slack configuration variable; it does not prove every cedar failure had identical provider-side handling.",
+                "Empty connection/refresh views do not disprove this mechanism; they only leave identity/scope history unverified."
+              ]
+            },
+            "findings": [
+              {
+                "code": "mechanism_observation",
+                "statement": "The canonical failing cedar request is assistant.search.context returning 403 with workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, which directly matches an AI-search entitlement/eligibility failure rather than a broad Slack outage.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a5b32714d1bd",
+                    "record_id": "slack-plan-044:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "In a controlled sandbox comparison, the same assistant.search.context request failed under the original Slack configuration and succeeded when only Slack configuration was corrected to Business Plus with AI search enabled.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Impact appears localized rather than platform-wide: cedar showed 405 failures out of 687 requests, 405 business operations blocked, queue depth 123, and p95 latency 1640 ms, while maple had 571 requests with 0 failures, queue depth 0, and p95 latency 160 ms.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_72d7f95aef85",
+                    "record_id": "slack-plan-044:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_72d7f95aef85",
+                    "record_id": "slack-plan-044:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "Counter-evidence against a broad Slack outage is present: another tenant had successful Slack reads in the same window, and the dependency view reports the provider API generally reachable.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_d6f598e6dbcd",
+                    "record_id": "slack-plan-044:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_47db0c677f21",
+                    "record_id": "slack-plan-044:dependencies:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "provider_feature_entitlement_remediation",
+              "request_workspace_admin_access",
+              "collect_missing_telemetry",
+              "align_telemetry_windows"
+            ],
+            "actions": [
+              "Verify with the workspace admin whether cedar's Slack workspace is actually on a plan that supports AI search and whether the AI-search feature is enabled for the intended workspace.",
+              "If AI search is unsupported on the current plan, use a supported non-AI search alternative or upgrade/enable the required Slack capability before retesting assistant.search.context.",
+              "Collect canonical provider-egress or auth/account-selection telemetry for req-44 to confirm whether the 403 was emitted upstream by Slack or locally mapped by the executor.",
+              "Align telemetry for cedar assistant.search.context attempts with any same-window successful Slack operations on the same connection to confirm the issue is isolated to the AI-search capability."
+            ],
+            "missing_checks": [
+              "Canonical provider-egress trace or response payload for req-44 is missing, so upstream Slack rejection versus local executor mapping of the 403 is not directly verified.",
+              "No canonical same-tenant cedar ordinary-search success record is supplied, so the complaint that ordinary search stayed healthy is only indirectly supported by other-tenant comparison and narrative, not directly proven for cedar.",
+              "No canonical connected-account identifier or auth-scope record is supplied for the failing request, so mis-selected account or missing AI-specific grant is not fully excluded."
+            ],
+            "strength": 9
+          },
+          {
+            "code": "missing_grant",
+            "hypothesis": {
+              "description": "A weaker competing explanation is that assistant.search.context used a connection/account lacking an AI-search-specific grant or scope, causing 403s only on that endpoint while other Slack tools remained healthy.",
+              "supporting_evidence": [
+                "ev_a5b32714d1bd",
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "contradicting_evidence": [
+                "ev_58285a7ec1f7",
+                "ev_d6f598e6dbcd"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "AI search could require scopes or grants distinct from ordinary Slack reads.",
+                "The empty connection and refresh views are incomplete for proving or disproving grant state."
+              ]
+            },
+            "findings": [
+              {
+                "code": "telemetry_gap",
+                "statement": "The supplied canonical records do not include connected-account identifiers, token type, or granted scopes for the failing cedar request, so a missing AI-specific grant cannot be directly tested from the evidence.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a5b32714d1bd",
+                    "record_id": "slack-plan-044:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "mechanism_observation",
+                "statement": "The only canonical failing record is a 403 on assistant.search.context, which is compatible with a grant/scope issue but does not itself distinguish grant failure from feature entitlement.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a5b32714d1bd",
+                    "record_id": "slack-plan-044:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "The controlled comparison favors workspace capability over grant repair, because the observed pass condition changed Slack configuration to Business Plus with AI search enabled rather than showing a scope-only correction.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:1"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "reconnect_required_scope",
+              "slack_user_scope_configuration_remediation",
+              "select_intended_connected_account"
+            ],
+            "actions": [
+              "Inspect canonical auth records for the exact cedar connection used by req-44 to verify granted scopes/user scopes and token type for assistant.search.context.",
+              "Confirm the intended connected account was selected for the AI-search call and that reconnect/scope updates applied to that same account.",
+              "If Slack documents distinct AI-search scopes, reconnect with the required scopes and retest only after confirming the correct account identity."
+            ],
+            "missing_checks": [
+              "Canonical auth/connection records for the exact failing connection are absent.",
+              "No provider response body or scope error detail is supplied to distinguish missing grant from entitlement.",
+              "No controlled reproduction varying only grant/scope while keeping workspace plan constant is provided."
+            ],
+            "strength": 4
+          },
+          {
+            "code": "unconfirmed_change",
+            "hypothesis": {
+              "description": "An internal executor regression or configuration issue in the assistant-context search path is less likely but not fully eliminated because no canonical provider-egress trace is supplied for req-44.",
+              "supporting_evidence": [
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "contradicting_evidence": [
+                "ev_a39fda00ceb5",
+                "ev_1703dddeb851",
+                "ev_58285a7ec1f7",
+                "ev_47db0c677f21",
+                "ev_d6f598e6dbcd"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "A local mapping bug could theoretically stamp Slack-like entitlement fields without an upstream rejection, but no evidence directly shows that here.",
+                "Absence of a tool-executor deployment reduces but does not eliminate the possibility of an internal config drift."
+              ]
+            },
+            "findings": [
+              {
+                "code": "version_control",
+                "statement": "There is no observed tool-executor deployment in the incident window, and the only deployment record is an unrelated support-dashboard release.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_1703dddeb851",
+                    "record_id": "slack-plan-044:deployments:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "The controlled reproduction shows the request outcome changing with Slack configuration, which argues against an executor-path regression as the primary discriminator.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "Broad internal platform breakage is not supported because another tenant had healthy Slack reads while cedar showed localized failures and backlog.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_d6f598e6dbcd",
+                    "record_id": "slack-plan-044:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_72d7f95aef85",
+                    "record_id": "slack-plan-044:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_72d7f95aef85",
+                    "record_id": "slack-plan-044:metrics:1"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "rollback_executor",
+              "request_reproduction"
+            ],
+            "actions": [
+              "Before considering executor rollback, collect canonical provider-egress traces and any executor-side validation/policy markers for req-44 to determine whether the 403 originated internally or upstream.",
+              "Request a controlled reproduction against the same executor path while holding workspace plan/feature state constant, to test for an internal mapping or routing defect.",
+              "Compare assistant.search.context handling across tenants on the same executor version only after obtaining operation-specific traces."
+            ],
+            "missing_checks": [
+              "Canonical provider-egress telemetry for req-44 is missing.",
+              "No same-version cross-tenant assistant.search.context comparison is supplied.",
+              "No canonical executor validation/policy log line is supplied to prove a local rejection path."
+            ],
+            "strength": 2
+          }
+        ],
+        "findings": [
+          {
+            "code": "mechanism_observation",
+            "statement": "The strongest observed mechanism is an AI-search entitlement mismatch: cedar's failing assistant.search.context request logged 403 with workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus.",
+            "citations": [
+              {
+                "evidence_id": "ev_a5b32714d1bd",
+                "record_id": "slack-plan-044:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "controlled_comparison",
+            "statement": "A controlled comparison changes the outcome solely by changing Slack configuration from standard/AI-search-disabled to Business Plus/AI-search-enabled, supporting capability/entitlement over generalized outage or executor regression.",
+            "citations": [
+              {
+                "evidence_id": "ev_653cba5bf644",
+                "record_id": "slack-plan-044:reproduce:0"
+              },
+              {
+                "evidence_id": "ev_653cba5bf644",
+                "record_id": "slack-plan-044:reproduce:1"
+              }
+            ]
+          },
+          {
+            "code": "provider_isolation",
+            "statement": "Broad Slack outage is countered by same-window healthy Slack activity for maple and general provider reachability.",
+            "citations": [
+              {
+                "evidence_id": "ev_d6f598e6dbcd",
+                "record_id": "slack-plan-044:logs:1"
+              },
+              {
+                "evidence_id": "ev_47db0c677f21",
+                "record_id": "slack-plan-044:dependencies:0"
+              }
+            ]
+          },
+          {
+            "code": "tenant_impact",
+            "statement": "Observed production impact is concentrated in cedar, which had elevated failures, blocked operations, backlog, and latency relative to maple.",
+            "citations": [
+              {
+                "evidence_id": "ev_72d7f95aef85",
+                "record_id": "slack-plan-044:metrics:0"
+              },
+              {
+                "evidence_id": "ev_72d7f95aef85",
+                "record_id": "slack-plan-044:metrics:1"
+              }
+            ]
+          },
+          {
+            "code": "telemetry_gap",
+            "statement": "Material gaps remain: no canonical provider-egress trace, no exact cedar ordinary-search success record, and no canonical connected-account/scope record for req-44, so wrong-account or missing-grant alternatives are not fully excluded.",
+            "citations": [
+              {
+                "evidence_id": "ev_a5b32714d1bd",
+                "record_id": "slack-plan-044:logs:0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "reason",
+      "role": "reasoning",
+      "status": "complete",
+      "at": 524634.65033422
+    },
+    {
+      "event": "task_started",
+      "task": "critic",
+      "role": "critic",
+      "at": 524634.665986892,
+      "question": "Challenge the diagnosis, evidence grounding and verification gaps.",
+      "dependencies": [
+        "reason"
+      ],
+      "available_evidence_ids": [
+        "ev_47db0c677f21",
+        "ev_1703dddeb851",
+        "ev_653cba5bf644",
+        "ev_d6f598e6dbcd",
+        "ev_ca9fc6b38229",
+        "ev_69e64a15f5e7",
+        "ev_72d7f95aef85",
+        "ev_a5b32714d1bd",
+        "ev_a39fda00ceb5",
+        "ev_20b1da1ec830",
+        "ev_58285a7ec1f7",
+        "ev_44871d902f5f",
+        "ev_dc1189db3749"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "critic",
+      "model": "gpt-5.4",
+      "request": 12,
+      "task": "critic"
+    },
+    {
+      "event": "model_finished",
+      "role": "critic",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 10357,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 894,
+        "output_tokens_details": {
+          "reasoning_tokens": 434
+        },
+        "total_tokens": 11251
+      },
+      "task": "critic"
+    },
+    {
+      "event": "critique_decision",
+      "role": "critic",
+      "task": "critic",
+      "approved": true,
+      "blocking_checks": [],
+      "notes": [
+        "The leading diagnosis is adequately grounded for the observed failed execution: the canonical cedar log shows assistant.search.context 403 with workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus (ev_a5b32714d1bd/slack-plan-044:logs:0).",
+        "The controlled comparison is discriminating enough to support a bounded probable cause: the same request failed under the original Slack configuration and passed when only Slack configuration was corrected to Business Plus with AI search enabled (ev_58285a7ec1f7/slack-plan-044:reproduce:0, ev_58285a7ec1f7/slack-plan-044:reproduce:1).",
+        "Broad provider or platform outage is reasonably challenged by counter-evidence: maple had healthy same-window Slack activity and cedar-vs-maple metrics show localized impact rather than fleetwide failure (ev_d6f598e6dbcd/slack-plan-044:logs:1; ev_72d7f95aef85/slack-plan-044:metrics:0; ev_72d7f95aef85/slack-plan-044:metrics:1).",
+        "I would not keep provider-egress trace as a blocking requirement here. Even without proving whether the 403 was emitted upstream or locally mapped, the observed prerequisite for this execution appears unsatisfied, so provider_feature_entitlement remains a reasonable bounded diagnosis.",
+        "I would also not require a same-tenant ordinary-search success record to approve the diagnosis of the failed execution. Its absence limits confirmation of the complaint's broader contrast, but it does not materially undermine the observed AI-search failure mechanism.",
+        "The main residual uncertainty is root-cause labeling, not the immediate failure mechanism: without connected-account identity, wrong workspace/account selection or an auth-surface mixup cannot be fully excluded. That is worth follow-up, but not enough to reject the current bounded diagnosis."
+      ]
+    },
+    {
+      "event": "agent_result",
+      "task": "critic",
+      "role": "critic",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [
+          {
+            "id": "report",
+            "role": "reporting",
+            "question": "Write the evidence-backed internal report and proposed next steps.",
+            "dependencies": [],
+            "status": "pending",
+            "error": null
+          }
+        ],
+        "report": null,
+        "notes": [
+          "The leading diagnosis is adequately grounded for the observed failed execution: the canonical cedar log shows assistant.search.context 403 with workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus (ev_a5b32714d1bd/slack-plan-044:logs:0).",
+          "The controlled comparison is discriminating enough to support a bounded probable cause: the same request failed under the original Slack configuration and passed when only Slack configuration was corrected to Business Plus with AI search enabled (ev_58285a7ec1f7/slack-plan-044:reproduce:0, ev_58285a7ec1f7/slack-plan-044:reproduce:1).",
+          "Broad provider or platform outage is reasonably challenged by counter-evidence: maple had healthy same-window Slack activity and cedar-vs-maple metrics show localized impact rather than fleetwide failure (ev_d6f598e6dbcd/slack-plan-044:logs:1; ev_72d7f95aef85/slack-plan-044:metrics:0; ev_72d7f95aef85/slack-plan-044:metrics:1).",
+          "I would not keep provider-egress trace as a blocking requirement here. Even without proving whether the 403 was emitted upstream or locally mapped, the observed prerequisite for this execution appears unsatisfied, so provider_feature_entitlement remains a reasonable bounded diagnosis.",
+          "I would also not require a same-tenant ordinary-search success record to approve the diagnosis of the failed execution. Its absence limits confirmation of the complaint's broader contrast, but it does not materially undermine the observed AI-search failure mechanism.",
+          "The main residual uncertainty is root-cause labeling, not the immediate failure mechanism: without connected-account identity, wrong workspace/account selection or an auth-surface mixup cannot be fully excluded. That is worth follow-up, but not enough to reject the current bounded diagnosis."
+        ],
+        "candidates": [
+          {
+            "code": "provider_feature_entitlement",
+            "hypothesis": {
+              "description": "The observed cedar failures best fit Slack AI-search feature/plan entitlement rejection specific to assistant.search.context: the failing request shows workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, while a controlled comparison passes when only Slack configuration is changed to a Business Plus workspace with AI search enabled.",
+              "supporting_evidence": [
+                "ev_a5b32714d1bd",
+                "ev_58285a7ec1f7",
+                "ev_d6f598e6dbcd",
+                "ev_72d7f95aef85",
+                "ev_47db0c677f21"
+              ],
+              "contradicting_evidence": [
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "confidence": "high",
+              "assumptions": [
+                "The cedar log fields reflect the effective Slack workspace capability for the failing assistant.search.context call.",
+                "The sandbox controlled comparison is valid only for the changed Slack configuration variable; it does not prove every cedar failure had identical provider-side handling.",
+                "Empty connection/refresh views do not disprove this mechanism; they only leave identity/scope history unverified."
+              ]
+            },
+            "findings": [
+              {
+                "code": "mechanism_observation",
+                "statement": "The canonical failing cedar request is assistant.search.context returning 403 with workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, which directly matches an AI-search entitlement/eligibility failure rather than a broad Slack outage.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a5b32714d1bd",
+                    "record_id": "slack-plan-044:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "In a controlled sandbox comparison, the same assistant.search.context request failed under the original Slack configuration and succeeded when only Slack configuration was corrected to Business Plus with AI search enabled.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "tenant_impact",
+                "statement": "Impact appears localized rather than platform-wide: cedar showed 405 failures out of 687 requests, 405 business operations blocked, queue depth 123, and p95 latency 1640 ms, while maple had 571 requests with 0 failures, queue depth 0, and p95 latency 160 ms.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_72d7f95aef85",
+                    "record_id": "slack-plan-044:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_72d7f95aef85",
+                    "record_id": "slack-plan-044:metrics:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "Counter-evidence against a broad Slack outage is present: another tenant had successful Slack reads in the same window, and the dependency view reports the provider API generally reachable.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_d6f598e6dbcd",
+                    "record_id": "slack-plan-044:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_47db0c677f21",
+                    "record_id": "slack-plan-044:dependencies:0"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "provider_feature_entitlement_remediation",
+              "request_workspace_admin_access",
+              "collect_missing_telemetry",
+              "align_telemetry_windows"
+            ],
+            "actions": [
+              "Verify with the workspace admin whether cedar's Slack workspace is actually on a plan that supports AI search and whether the AI-search feature is enabled for the intended workspace.",
+              "If AI search is unsupported on the current plan, use a supported non-AI search alternative or upgrade/enable the required Slack capability before retesting assistant.search.context.",
+              "Collect canonical provider-egress or auth/account-selection telemetry for req-44 to confirm whether the 403 was emitted upstream by Slack or locally mapped by the executor.",
+              "Align telemetry for cedar assistant.search.context attempts with any same-window successful Slack operations on the same connection to confirm the issue is isolated to the AI-search capability."
+            ],
+            "missing_checks": [],
+            "strength": 9
+          },
+          {
+            "code": "missing_grant",
+            "hypothesis": {
+              "description": "A weaker competing explanation is that assistant.search.context used a connection/account lacking an AI-search-specific grant or scope, causing 403s only on that endpoint while other Slack tools remained healthy.",
+              "supporting_evidence": [
+                "ev_a5b32714d1bd",
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "contradicting_evidence": [
+                "ev_58285a7ec1f7",
+                "ev_d6f598e6dbcd"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "AI search could require scopes or grants distinct from ordinary Slack reads.",
+                "The empty connection and refresh views are incomplete for proving or disproving grant state."
+              ]
+            },
+            "findings": [
+              {
+                "code": "telemetry_gap",
+                "statement": "The supplied canonical records do not include connected-account identifiers, token type, or granted scopes for the failing cedar request, so a missing AI-specific grant cannot be directly tested from the evidence.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a5b32714d1bd",
+                    "record_id": "slack-plan-044:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "mechanism_observation",
+                "statement": "The only canonical failing record is a 403 on assistant.search.context, which is compatible with a grant/scope issue but does not itself distinguish grant failure from feature entitlement.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_a5b32714d1bd",
+                    "record_id": "slack-plan-044:logs:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "The controlled comparison favors workspace capability over grant repair, because the observed pass condition changed Slack configuration to Business Plus with AI search enabled rather than showing a scope-only correction.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:1"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "reconnect_required_scope",
+              "slack_user_scope_configuration_remediation",
+              "select_intended_connected_account"
+            ],
+            "actions": [
+              "Inspect canonical auth records for the exact cedar connection used by req-44 to verify granted scopes/user scopes and token type for assistant.search.context.",
+              "Confirm the intended connected account was selected for the AI-search call and that reconnect/scope updates applied to that same account.",
+              "If Slack documents distinct AI-search scopes, reconnect with the required scopes and retest only after confirming the correct account identity."
+            ],
+            "missing_checks": [
+              "Canonical auth/connection records for the exact failing connection are absent.",
+              "No provider response body or scope error detail is supplied to distinguish missing grant from entitlement.",
+              "No controlled reproduction varying only grant/scope while keeping workspace plan constant is provided."
+            ],
+            "strength": 4
+          },
+          {
+            "code": "unconfirmed_change",
+            "hypothesis": {
+              "description": "An internal executor regression or configuration issue in the assistant-context search path is less likely but not fully eliminated because no canonical provider-egress trace is supplied for req-44.",
+              "supporting_evidence": [
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "contradicting_evidence": [
+                "ev_a39fda00ceb5",
+                "ev_1703dddeb851",
+                "ev_58285a7ec1f7",
+                "ev_47db0c677f21",
+                "ev_d6f598e6dbcd"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "A local mapping bug could theoretically stamp Slack-like entitlement fields without an upstream rejection, but no evidence directly shows that here.",
+                "Absence of a tool-executor deployment reduces but does not eliminate the possibility of an internal config drift."
+              ]
+            },
+            "findings": [
+              {
+                "code": "version_control",
+                "statement": "There is no observed tool-executor deployment in the incident window, and the only deployment record is an unrelated support-dashboard release.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_1703dddeb851",
+                    "record_id": "slack-plan-044:deployments:0"
+                  }
+                ]
+              },
+              {
+                "code": "controlled_comparison",
+                "statement": "The controlled reproduction shows the request outcome changing with Slack configuration, which argues against an executor-path regression as the primary discriminator.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:0"
+                  },
+                  {
+                    "evidence_id": "ev_58285a7ec1f7",
+                    "record_id": "slack-plan-044:reproduce:1"
+                  }
+                ]
+              },
+              {
+                "code": "provider_isolation",
+                "statement": "Broad internal platform breakage is not supported because another tenant had healthy Slack reads while cedar showed localized failures and backlog.",
+                "citations": [
+                  {
+                    "evidence_id": "ev_d6f598e6dbcd",
+                    "record_id": "slack-plan-044:logs:1"
+                  },
+                  {
+                    "evidence_id": "ev_72d7f95aef85",
+                    "record_id": "slack-plan-044:metrics:0"
+                  },
+                  {
+                    "evidence_id": "ev_72d7f95aef85",
+                    "record_id": "slack-plan-044:metrics:1"
+                  }
+                ]
+              }
+            ],
+            "action_codes": [
+              "collect_missing_telemetry",
+              "rollback_executor",
+              "request_reproduction"
+            ],
+            "actions": [
+              "Before considering executor rollback, collect canonical provider-egress traces and any executor-side validation/policy markers for req-44 to determine whether the 403 originated internally or upstream.",
+              "Request a controlled reproduction against the same executor path while holding workspace plan/feature state constant, to test for an internal mapping or routing defect.",
+              "Compare assistant.search.context handling across tenants on the same executor version only after obtaining operation-specific traces."
+            ],
+            "missing_checks": [
+              "Canonical provider-egress telemetry for req-44 is missing.",
+              "No same-version cross-tenant assistant.search.context comparison is supplied.",
+              "No canonical executor validation/policy log line is supplied to prove a local rejection path."
+            ],
+            "strength": 2
+          }
+        ],
+        "findings": null
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "critic",
+      "role": "critic",
+      "status": "complete",
+      "at": 524654.400746188
+    },
+    {
+      "event": "task_started",
+      "task": "report",
+      "role": "reporting",
+      "at": 524654.424776402,
+      "question": "Write the evidence-backed internal report and proposed next steps.",
+      "dependencies": [],
+      "available_evidence_ids": [
+        "ev_47db0c677f21",
+        "ev_1703dddeb851",
+        "ev_653cba5bf644",
+        "ev_d6f598e6dbcd",
+        "ev_ca9fc6b38229",
+        "ev_69e64a15f5e7",
+        "ev_72d7f95aef85",
+        "ev_a5b32714d1bd",
+        "ev_a39fda00ceb5",
+        "ev_20b1da1ec830",
+        "ev_58285a7ec1f7",
+        "ev_44871d902f5f",
+        "ev_dc1189db3749"
+      ]
+    },
+    {
+      "event": "model_started",
+      "role": "reporting",
+      "model": "gpt-5.4",
+      "request": 13,
+      "task": "report"
+    },
+    {
+      "event": "model_finished",
+      "role": "reporting",
+      "model": "gpt-5.4-2026-03-05",
+      "status": "completed",
+      "usage": {
+        "input_tokens": 12479,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cached_tokens": 0
+        },
+        "output_tokens": 1612,
+        "output_tokens_details": {
+          "reasoning_tokens": 39
+        },
+        "total_tokens": 14091
+      },
+      "task": "report"
+    },
+    {
+      "event": "agent_result",
+      "task": "report",
+      "role": "reporting",
+      "result": {
+        "hypotheses": [],
+        "objections": [],
+        "followups": [],
+        "report": {
+          "incident_id": "slack-plan-044",
+          "outcome": "probable_cause",
+          "hypotheses": [
+            {
+              "description": "Most likely cause for the observed cedar failures is Slack AI-search feature entitlement/eligibility not being satisfied for assistant.search.context. The failing production request logged workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, and a controlled sandbox comparison succeeded when only Slack configuration was changed to Business Plus with AI search enabled. This is scoped to the observed failed execution and does not prove every reported Slack search symptom used the same connection or account.",
+              "supporting_evidence": [
+                "ev_a5b32714d1bd",
+                "ev_58285a7ec1f7",
+                "ev_d6f598e6dbcd",
+                "ev_72d7f95aef85",
+                "ev_47db0c677f21"
+              ],
+              "contradicting_evidence": [
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "confidence": "high",
+              "assumptions": [
+                "The cedar log fields reflect the effective Slack workspace capability seen by the failing assistant.search.context request.",
+                "The controlled sandbox comparison changed only Slack configuration as recorded.",
+                "Empty connection and refresh-history views do not disprove this mechanism; they leave account/scope history unverified."
+              ]
+            },
+            {
+              "description": "A weaker alternative is that assistant.search.context used a connection or account missing an AI-search-specific grant or scope, producing 403 only on that endpoint while other Slack operations remained healthy. Current evidence does not directly verify granted scopes or the exact connected account for req-44.",
+              "supporting_evidence": [
+                "ev_a5b32714d1bd",
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "contradicting_evidence": [
+                "ev_58285a7ec1f7",
+                "ev_d6f598e6dbcd"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "AI search may require grants distinct from ordinary Slack reads.",
+                "The supplied empty derived views are not proof that no relevant auth or connection state changed."
+              ]
+            },
+            {
+              "description": "An internal executor-path regression or configuration issue is less likely. No tool-executor deployment was observed in-window, the only deployment was unrelated, and the discriminating controlled comparison changed outcome with Slack capability state rather than executor version. Lack of canonical provider-egress telemetry means local mapping cannot be fully excluded.",
+              "supporting_evidence": [
+                "ev_ca9fc6b38229",
+                "ev_69e64a15f5e7"
+              ],
+              "contradicting_evidence": [
+                "ev_a39fda00ceb5",
+                "ev_1703dddeb851",
+                "ev_58285a7ec1f7",
+                "ev_47db0c677f21",
+                "ev_d6f598e6dbcd"
+              ],
+              "confidence": "low",
+              "assumptions": [
+                "A local rejection or mapping bug could theoretically produce similar fields without an upstream Slack rejection.",
+                "Absence of a recorded executor deployment reduces but does not eliminate internal-change possibilities."
+              ]
+            }
+          ],
+          "recommended_actions": [
+            "Synthetic telemetry only supports a bounded diagnosis; recommended actions below are proposals and have not been executed.",
+            "Check with the cedar Slack workspace admin whether the intended workspace actually has the Business Plus-or-better capability required for AI search and whether AI search is enabled for that workspace.",
+            "If the workspace does not support Slack AI search, use a supported non-AI search path or obtain the required Slack plan/feature entitlement before retesting assistant.search.context.",
+            "Collect canonical provider-egress telemetry for req-44 to confirm whether the 403 was emitted upstream by Slack or locally mapped by tool-executor.",
+            "Collect canonical auth/account-selection data for req-44 to verify the exact connected account, token type, and any AI-search-specific scopes or grants.",
+            "Align the failing cedar assistant.search.context attempts with same-window successful Slack operations on the same tenant/connection if available, to confirm the issue is isolated to AI-search capability rather than a broader Slack auth problem."
+          ],
+          "limitations": [
+            "No canonical provider-egress trace was supplied for req-44, so upstream 403 versus locally mapped rejection is unverified.",
+            "No canonical cedar ordinary-search success record was supplied; the complaint that ordinary search remained healthy is not directly verified from canonical production records here.",
+            "Connections and refresh-history views were empty, but those are convenience views and do not prove absence of auth/account changes.",
+            "No canonical connected-account identifier or scope/grant record was supplied for the failing request, so wrong-account and missing-grant alternatives remain possible but weaker."
+          ]
+        },
+        "notes": [],
+        "candidates": null,
+        "findings": [
+          {
+            "code": "mechanism_observation",
+            "statement": "The strongest observed failure mechanism is an assistant.search.context 403 for cedar with workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, matching an AI-search eligibility/entitlement mismatch rather than a broad Slack outage.",
+            "citations": [
+              {
+                "evidence_id": "ev_a5b32714d1bd",
+                "record_id": "slack-plan-044:logs:0"
+              }
+            ]
+          },
+          {
+            "code": "controlled_comparison",
+            "statement": "In a controlled sandbox comparison, the same assistant.search.context request failed under the original Slack configuration and succeeded when Slack configuration was corrected to Business Plus with AI search enabled.",
+            "citations": [
+              {
+                "evidence_id": "ev_58285a7ec1f7",
+                "record_id": "slack-plan-044:reproduce:0"
+              },
+              {
+                "evidence_id": "ev_58285a7ec1f7",
+                "record_id": "slack-plan-044:reproduce:1"
+              }
+            ]
+          },
+          {
+            "code": "provider_isolation",
+            "statement": "Counter-evidence against a broad Slack or platform outage is present: another tenant had same-window healthy Slack activity, and the dependency view reports provider API reachability.",
+            "citations": [
+              {
+                "evidence_id": "ev_d6f598e6dbcd",
+                "record_id": "slack-plan-044:logs:1"
+              },
+              {
+                "evidence_id": "ev_47db0c677f21",
+                "record_id": "slack-plan-044:dependencies:0"
+              }
+            ]
+          },
+          {
+            "code": "tenant_impact",
+            "statement": "Observed impact is localized to cedar: at 10:05Z cedar had 687 requests, 405 failures, 405 business operations blocked, queue depth 123, and p95 latency 1640 ms, while maple had 571 requests, 0 failures, queue depth 0, and p95 latency 160 ms.",
+            "citations": [
+              {
+                "evidence_id": "ev_72d7f95aef85",
+                "record_id": "slack-plan-044:metrics:0"
+              },
+              {
+                "evidence_id": "ev_72d7f95aef85",
+                "record_id": "slack-plan-044:metrics:1"
+              }
+            ]
+          },
+          {
+            "code": "version_control",
+            "statement": "No tool-executor deployment was observed in the incident window, and the only observed deployment record was an unrelated support-dashboard release.",
+            "citations": [
+              {
+                "evidence_id": "ev_1703dddeb851",
+                "record_id": "slack-plan-044:deployments:0"
+              }
+            ]
+          },
+          {
+            "code": "telemetry_gap",
+            "statement": "Material verification gaps remain: the supplied canonical records do not include provider-egress for req-44, do not show the exact connected account or granted scopes for the failing request, and do not include a canonical cedar ordinary-search success record.",
+            "citations": [
+              {
+                "evidence_id": "ev_a5b32714d1bd",
+                "record_id": "slack-plan-044:logs:0"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "event": "task_finished",
+      "task": "report",
+      "role": "reporting",
+      "status": "complete",
+      "at": 524683.416000996
+    }
+  ],
+  "limitations": [],
+  "report": {
+    "incident_id": "slack-plan-044",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause for the observed cedar failures is Slack AI-search feature entitlement/eligibility not being satisfied for assistant.search.context. The failing production request logged workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, and a controlled sandbox comparison succeeded when only Slack configuration was changed to Business Plus with AI search enabled. This is scoped to the observed failed execution and does not prove every reported Slack search symptom used the same connection or account.",
+        "supporting_evidence": [
+          "ev_a5b32714d1bd",
+          "ev_58285a7ec1f7",
+          "ev_d6f598e6dbcd",
+          "ev_72d7f95aef85",
+          "ev_47db0c677f21"
+        ],
+        "contradicting_evidence": [
+          "ev_ca9fc6b38229",
+          "ev_69e64a15f5e7"
+        ],
+        "confidence": "high",
+        "assumptions": [
+          "The cedar log fields reflect the effective Slack workspace capability seen by the failing assistant.search.context request.",
+          "The controlled sandbox comparison changed only Slack configuration as recorded.",
+          "Empty connection and refresh-history views do not disprove this mechanism; they leave account/scope history unverified."
+        ]
+      },
+      {
+        "description": "A weaker alternative is that assistant.search.context used a connection or account missing an AI-search-specific grant or scope, producing 403 only on that endpoint while other Slack operations remained healthy. Current evidence does not directly verify granted scopes or the exact connected account for req-44.",
+        "supporting_evidence": [
+          "ev_a5b32714d1bd",
+          "ev_ca9fc6b38229",
+          "ev_69e64a15f5e7"
+        ],
+        "contradicting_evidence": [
+          "ev_58285a7ec1f7",
+          "ev_d6f598e6dbcd"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "AI search may require grants distinct from ordinary Slack reads.",
+          "The supplied empty derived views are not proof that no relevant auth or connection state changed."
+        ]
+      },
+      {
+        "description": "An internal executor-path regression or configuration issue is less likely. No tool-executor deployment was observed in-window, the only deployment was unrelated, and the discriminating controlled comparison changed outcome with Slack capability state rather than executor version. Lack of canonical provider-egress telemetry means local mapping cannot be fully excluded.",
+        "supporting_evidence": [
+          "ev_ca9fc6b38229",
+          "ev_69e64a15f5e7"
+        ],
+        "contradicting_evidence": [
+          "ev_a39fda00ceb5",
+          "ev_1703dddeb851",
+          "ev_58285a7ec1f7",
+          "ev_47db0c677f21",
+          "ev_d6f598e6dbcd"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "A local rejection or mapping bug could theoretically produce similar fields without an upstream Slack rejection.",
+          "Absence of a recorded executor deployment reduces but does not eliminate internal-change possibilities."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry only supports a bounded diagnosis; recommended actions below are proposals and have not been executed.",
+      "Check with the cedar Slack workspace admin whether the intended workspace actually has the Business Plus-or-better capability required for AI search and whether AI search is enabled for that workspace.",
+      "If the workspace does not support Slack AI search, use a supported non-AI search path or obtain the required Slack plan/feature entitlement before retesting assistant.search.context.",
+      "Collect canonical provider-egress telemetry for req-44 to confirm whether the 403 was emitted upstream by Slack or locally mapped by tool-executor.",
+      "Collect canonical auth/account-selection data for req-44 to verify the exact connected account, token type, and any AI-search-specific scopes or grants.",
+      "Align the failing cedar assistant.search.context attempts with same-window successful Slack operations on the same tenant/connection if available, to confirm the issue is isolated to AI-search capability rather than a broader Slack auth problem."
+    ],
+    "limitations": [
+      "No canonical provider-egress trace was supplied for req-44, so upstream 403 versus locally mapped rejection is unverified.",
+      "No canonical cedar ordinary-search success record was supplied; the complaint that ordinary search remained healthy is not directly verified from canonical production records here.",
+      "Connections and refresh-history views were empty, but those are convenience views and do not prove absence of auth/account changes.",
+      "No canonical connected-account identifier or scope/grant record was supplied for the failing request, so wrong-account and missing-grant alternatives remain possible but weaker."
+    ]
+  },
+  "tool_calls": 13,
+  "followup_rounds": 0,
+  "status": "complete",
+  "candidates": [
+    {
+      "code": "provider_feature_entitlement",
+      "hypothesis": {
+        "description": "The observed cedar failures best fit Slack AI-search feature/plan entitlement rejection specific to assistant.search.context: the failing request shows workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, while a controlled comparison passes when only Slack configuration is changed to a Business Plus workspace with AI search enabled.",
+        "supporting_evidence": [
+          "ev_a5b32714d1bd",
+          "ev_58285a7ec1f7",
+          "ev_d6f598e6dbcd",
+          "ev_72d7f95aef85",
+          "ev_47db0c677f21"
+        ],
+        "contradicting_evidence": [
+          "ev_ca9fc6b38229",
+          "ev_69e64a15f5e7"
+        ],
+        "confidence": "high",
+        "assumptions": [
+          "The cedar log fields reflect the effective Slack workspace capability for the failing assistant.search.context call.",
+          "The sandbox controlled comparison is valid only for the changed Slack configuration variable; it does not prove every cedar failure had identical provider-side handling.",
+          "Empty connection/refresh views do not disprove this mechanism; they only leave identity/scope history unverified."
+        ]
+      },
+      "findings": [
+        {
+          "code": "mechanism_observation",
+          "statement": "The canonical failing cedar request is assistant.search.context returning 403 with workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, which directly matches an AI-search entitlement/eligibility failure rather than a broad Slack outage.",
+          "citations": [
+            {
+              "evidence_id": "ev_a5b32714d1bd",
+              "record_id": "slack-plan-044:logs:0"
+            }
+          ]
+        },
+        {
+          "code": "controlled_comparison",
+          "statement": "In a controlled sandbox comparison, the same assistant.search.context request failed under the original Slack configuration and succeeded when only Slack configuration was corrected to Business Plus with AI search enabled.",
+          "citations": [
+            {
+              "evidence_id": "ev_58285a7ec1f7",
+              "record_id": "slack-plan-044:reproduce:0"
+            },
+            {
+              "evidence_id": "ev_58285a7ec1f7",
+              "record_id": "slack-plan-044:reproduce:1"
+            }
+          ]
+        },
+        {
+          "code": "tenant_impact",
+          "statement": "Impact appears localized rather than platform-wide: cedar showed 405 failures out of 687 requests, 405 business operations blocked, queue depth 123, and p95 latency 1640 ms, while maple had 571 requests with 0 failures, queue depth 0, and p95 latency 160 ms.",
+          "citations": [
+            {
+              "evidence_id": "ev_72d7f95aef85",
+              "record_id": "slack-plan-044:metrics:0"
+            },
+            {
+              "evidence_id": "ev_72d7f95aef85",
+              "record_id": "slack-plan-044:metrics:1"
+            }
+          ]
+        },
+        {
+          "code": "provider_isolation",
+          "statement": "Counter-evidence against a broad Slack outage is present: another tenant had successful Slack reads in the same window, and the dependency view reports the provider API generally reachable.",
+          "citations": [
+            {
+              "evidence_id": "ev_d6f598e6dbcd",
+              "record_id": "slack-plan-044:logs:1"
+            },
+            {
+              "evidence_id": "ev_47db0c677f21",
+              "record_id": "slack-plan-044:dependencies:0"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "provider_feature_entitlement_remediation",
+        "request_workspace_admin_access",
+        "collect_missing_telemetry",
+        "align_telemetry_windows"
+      ],
+      "actions": [
+        "Verify with the workspace admin whether cedar's Slack workspace is actually on a plan that supports AI search and whether the AI-search feature is enabled for the intended workspace.",
+        "If AI search is unsupported on the current plan, use a supported non-AI search alternative or upgrade/enable the required Slack capability before retesting assistant.search.context.",
+        "Collect canonical provider-egress or auth/account-selection telemetry for req-44 to confirm whether the 403 was emitted upstream by Slack or locally mapped by the executor.",
+        "Align telemetry for cedar assistant.search.context attempts with any same-window successful Slack operations on the same connection to confirm the issue is isolated to the AI-search capability."
+      ],
+      "missing_checks": [],
+      "strength": 9
+    },
+    {
+      "code": "missing_grant",
+      "hypothesis": {
+        "description": "A weaker competing explanation is that assistant.search.context used a connection/account lacking an AI-search-specific grant or scope, causing 403s only on that endpoint while other Slack tools remained healthy.",
+        "supporting_evidence": [
+          "ev_a5b32714d1bd",
+          "ev_ca9fc6b38229",
+          "ev_69e64a15f5e7"
+        ],
+        "contradicting_evidence": [
+          "ev_58285a7ec1f7",
+          "ev_d6f598e6dbcd"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "AI search could require scopes or grants distinct from ordinary Slack reads.",
+          "The empty connection and refresh views are incomplete for proving or disproving grant state."
+        ]
+      },
+      "findings": [
+        {
+          "code": "telemetry_gap",
+          "statement": "The supplied canonical records do not include connected-account identifiers, token type, or granted scopes for the failing cedar request, so a missing AI-specific grant cannot be directly tested from the evidence.",
+          "citations": [
+            {
+              "evidence_id": "ev_a5b32714d1bd",
+              "record_id": "slack-plan-044:logs:0"
+            }
+          ]
+        },
+        {
+          "code": "mechanism_observation",
+          "statement": "The only canonical failing record is a 403 on assistant.search.context, which is compatible with a grant/scope issue but does not itself distinguish grant failure from feature entitlement.",
+          "citations": [
+            {
+              "evidence_id": "ev_a5b32714d1bd",
+              "record_id": "slack-plan-044:logs:0"
+            }
+          ]
+        },
+        {
+          "code": "controlled_comparison",
+          "statement": "The controlled comparison favors workspace capability over grant repair, because the observed pass condition changed Slack configuration to Business Plus with AI search enabled rather than showing a scope-only correction.",
+          "citations": [
+            {
+              "evidence_id": "ev_58285a7ec1f7",
+              "record_id": "slack-plan-044:reproduce:0"
+            },
+            {
+              "evidence_id": "ev_58285a7ec1f7",
+              "record_id": "slack-plan-044:reproduce:1"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "collect_missing_telemetry",
+        "reconnect_required_scope",
+        "slack_user_scope_configuration_remediation",
+        "select_intended_connected_account"
+      ],
+      "actions": [
+        "Inspect canonical auth records for the exact cedar connection used by req-44 to verify granted scopes/user scopes and token type for assistant.search.context.",
+        "Confirm the intended connected account was selected for the AI-search call and that reconnect/scope updates applied to that same account.",
+        "If Slack documents distinct AI-search scopes, reconnect with the required scopes and retest only after confirming the correct account identity."
+      ],
+      "missing_checks": [
+        "Canonical auth/connection records for the exact failing connection are absent.",
+        "No provider response body or scope error detail is supplied to distinguish missing grant from entitlement.",
+        "No controlled reproduction varying only grant/scope while keeping workspace plan constant is provided."
+      ],
+      "strength": 4
+    },
+    {
+      "code": "unconfirmed_change",
+      "hypothesis": {
+        "description": "An internal executor regression or configuration issue in the assistant-context search path is less likely but not fully eliminated because no canonical provider-egress trace is supplied for req-44.",
+        "supporting_evidence": [
+          "ev_ca9fc6b38229",
+          "ev_69e64a15f5e7"
+        ],
+        "contradicting_evidence": [
+          "ev_a39fda00ceb5",
+          "ev_1703dddeb851",
+          "ev_58285a7ec1f7",
+          "ev_47db0c677f21",
+          "ev_d6f598e6dbcd"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "A local mapping bug could theoretically stamp Slack-like entitlement fields without an upstream rejection, but no evidence directly shows that here.",
+          "Absence of a tool-executor deployment reduces but does not eliminate the possibility of an internal config drift."
+        ]
+      },
+      "findings": [
+        {
+          "code": "version_control",
+          "statement": "There is no observed tool-executor deployment in the incident window, and the only deployment record is an unrelated support-dashboard release.",
+          "citations": [
+            {
+              "evidence_id": "ev_1703dddeb851",
+              "record_id": "slack-plan-044:deployments:0"
+            }
+          ]
+        },
+        {
+          "code": "controlled_comparison",
+          "statement": "The controlled reproduction shows the request outcome changing with Slack configuration, which argues against an executor-path regression as the primary discriminator.",
+          "citations": [
+            {
+              "evidence_id": "ev_58285a7ec1f7",
+              "record_id": "slack-plan-044:reproduce:0"
+            },
+            {
+              "evidence_id": "ev_58285a7ec1f7",
+              "record_id": "slack-plan-044:reproduce:1"
+            }
+          ]
+        },
+        {
+          "code": "provider_isolation",
+          "statement": "Broad internal platform breakage is not supported because another tenant had healthy Slack reads while cedar showed localized failures and backlog.",
+          "citations": [
+            {
+              "evidence_id": "ev_d6f598e6dbcd",
+              "record_id": "slack-plan-044:logs:1"
+            },
+            {
+              "evidence_id": "ev_72d7f95aef85",
+              "record_id": "slack-plan-044:metrics:0"
+            },
+            {
+              "evidence_id": "ev_72d7f95aef85",
+              "record_id": "slack-plan-044:metrics:1"
+            }
+          ]
+        }
+      ],
+      "action_codes": [
+        "collect_missing_telemetry",
+        "rollback_executor",
+        "request_reproduction"
+      ],
+      "actions": [
+        "Before considering executor rollback, collect canonical provider-egress traces and any executor-side validation/policy markers for req-44 to determine whether the 403 originated internally or upstream.",
+        "Request a controlled reproduction against the same executor path while holding workspace plan/feature state constant, to test for an internal mapping or routing defect.",
+        "Compare assistant.search.context handling across tenants on the same executor version only after obtaining operation-specific traces."
+      ],
+      "missing_checks": [
+        "Canonical provider-egress telemetry for req-44 is missing.",
+        "No same-version cross-tenant assistant.search.context comparison is supplied.",
+        "No canonical executor validation/policy log line is supplied to prove a local rejection path."
+      ],
+      "strength": 2
+    }
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "The strongest observed failure mechanism is an assistant.search.context 403 for cedar with workspace_plan=standard, is_ai_search_enabled=false, and required_plan=business_plus, matching an AI-search eligibility/entitlement mismatch rather than a broad Slack outage.",
+      "citations": [
+        {
+          "evidence_id": "ev_a5b32714d1bd",
+          "record_id": "slack-plan-044:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In a controlled sandbox comparison, the same assistant.search.context request failed under the original Slack configuration and succeeded when Slack configuration was corrected to Business Plus with AI search enabled.",
+      "citations": [
+        {
+          "evidence_id": "ev_58285a7ec1f7",
+          "record_id": "slack-plan-044:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_58285a7ec1f7",
+          "record_id": "slack-plan-044:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "Counter-evidence against a broad Slack or platform outage is present: another tenant had same-window healthy Slack activity, and the dependency view reports provider API reachability.",
+      "citations": [
+        {
+          "evidence_id": "ev_d6f598e6dbcd",
+          "record_id": "slack-plan-044:logs:1"
+        },
+        {
+          "evidence_id": "ev_47db0c677f21",
+          "record_id": "slack-plan-044:dependencies:0"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed impact is localized to cedar: at 10:05Z cedar had 687 requests, 405 failures, 405 business operations blocked, queue depth 123, and p95 latency 1640 ms, while maple had 571 requests, 0 failures, queue depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_72d7f95aef85",
+          "record_id": "slack-plan-044:metrics:0"
+        },
+        {
+          "evidence_id": "ev_72d7f95aef85",
+          "record_id": "slack-plan-044:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "No tool-executor deployment was observed in the incident window, and the only observed deployment record was an unrelated support-dashboard release.",
+      "citations": [
+        {
+          "evidence_id": "ev_1703dddeb851",
+          "record_id": "slack-plan-044:deployments:0"
+        }
+      ]
+    },
+    {
+      "code": "telemetry_gap",
+      "statement": "Material verification gaps remain: the supplied canonical records do not include provider-egress for req-44, do not show the exact connected account or granted scopes for the failing request, and do not include a canonical cedar ordinary-search success record.",
+      "citations": [
+        {
+          "evidence_id": "ev_a5b32714d1bd",
+          "record_id": "slack-plan-044:logs:0"
+        }
+      ]
+    }
+  ]
+}

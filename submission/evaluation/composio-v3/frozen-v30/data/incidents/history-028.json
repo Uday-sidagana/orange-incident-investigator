@@ -1,0 +1,144 @@
+{
+  "incident": {
+    "id": "history-028",
+    "title": "Gmail polling stops after an extended pause",
+    "description": "A trigger stopped emitting events after it was paused for a long time. Sending tools still work, but polls reject the stored history cursor.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "trigger-worker"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "history-028:logs:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "poll_error": "history_cursor_expired",
+        "stored_cursor_valid": false,
+        "connection_status": "ACTIVE",
+        "status": 404
+      },
+      {
+        "record_id": "history-028:logs:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "stored_cursor_valid": true,
+        "connection_status": "ACTIVE",
+        "status": 200
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "history-028:metrics:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "atlas",
+        "requests": 100,
+        "failures": 85,
+        "reported_affected_operations": 85
+      },
+      {
+        "record_id": "history-028:metrics:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "birch",
+        "requests": 100,
+        "failures": 0
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "history-028:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated customer-inbox display update",
+        "version": "dashboard-r17"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "history-028:dependencies:0",
+        "service": "trigger-worker",
+        "depends_on": [
+          "auth-service",
+          "provider-api"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "record_id": "history-028:history:0",
+        "service": "trigger-worker",
+        "symptom": "Gmail polling stops after an extended pause",
+        "cause": "An older trigger stopped because it pointed to a disabled connected account.",
+        "verified": true,
+        "relation": "historical analogy, not evidence of current cause"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "history-028:knowledge:0",
+        "service": "trigger-worker",
+        "url": "https://docs.composio.dev/kb",
+        "kind": "reference_guidance",
+        "summary": "Compare current connection, execution stage, provider response, and a controlled observation. Similar wording or a nearby deployment does not establish the cause."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "history-028:reproduce:0",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "history_cursor_resync",
+        "condition": "original",
+        "check_passed": false,
+        "provider_mock": true
+      },
+      {
+        "record_id": "history-028:reproduce:1",
+        "service": "trigger-worker",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "controlled": true,
+        "control_variable": "history_cursor_resync",
+        "condition": "corrected",
+        "check_passed": true,
+        "provider_mock": true
+      }
+    ],
+    "connections": [
+      {
+        "record_id": "connection-view-6bc5f567d4f0",
+        "connection_id": "trigger-worker:atlas",
+        "service": "trigger-worker",
+        "tenant": "atlas",
+        "connection_status": "ACTIVE",
+        "granted_scopes": null,
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "history-028:logs:0"
+        ]
+      },
+      {
+        "record_id": "connection-view-b0e232e96bcc",
+        "connection_id": "trigger-worker:birch",
+        "service": "trigger-worker",
+        "tenant": "birch",
+        "connection_status": "ACTIVE",
+        "granted_scopes": null,
+        "token_state": "not_recorded",
+        "source_kind": "derived_view",
+        "derived_from": [
+          "history-028:logs:1"
+        ]
+      }
+    ],
+    "refresh_history": []
+  },
+  "failures": {}
+}

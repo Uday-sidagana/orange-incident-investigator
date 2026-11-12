@@ -1,0 +1,586 @@
+{
+  "incident_id": "gmail-shape-047",
+  "approach": "multi_agent",
+  "run_status": "completed",
+  "report": {
+    "incident_id": "gmail-shape-047",
+    "outcome": "probable_cause",
+    "hypotheses": [
+      {
+        "description": "Most likely cause: observed Gmail attachment-send failures in cedar were rejected locally because the attachment argument was a signed URL string instead of the required uploaded file object, so requests failed before any Google/provider call.",
+        "supporting_evidence": [
+          "ev_1a9957dc86e7",
+          "ev_74f478a0842b",
+          "ev_603d36f62204",
+          "ev_42cd001d24f1",
+          "ev_a68b18a4b624"
+        ],
+        "contradicting_evidence": [],
+        "confidence": "high",
+        "assumptions": [
+          "Conclusion is scoped to observed Gmail attachment-send failures, especially cedar, during the incident window.",
+          "The controlled sandbox comparison isolates attachment shape as the discriminating variable, but supplied production records do not include a same-tenant successful plain-text Gmail send control.",
+          "The empty tool-executor deployment query does not prove no upstream caller/config change occurred; it only weakens an executor-rollout explanation."
+        ]
+      },
+      {
+        "description": "Alternative, low-confidence hypothesis: an unverified caller-side or configuration change introduced the bad attachment shape, even though supplied records do not show a contemporaneous tool-executor deployment.",
+        "supporting_evidence": [
+          "ev_4b15d5f650ae",
+          "ev_a68b18a4b624"
+        ],
+        "contradicting_evidence": [
+          "ev_74f478a0842b"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "A caller/config/schema path outside deployment telemetry could have started emitting string_signed_url.",
+          "This explains how the bad shape may have been introduced, not the immediate failure mechanism itself."
+        ]
+      },
+      {
+        "description": "Alternative, low-confidence hypothesis: a provider-side Gmail outage caused the failures.",
+        "supporting_evidence": [
+          "ev_77f6e28d2720"
+        ],
+        "contradicting_evidence": [
+          "ev_1a9957dc86e7",
+          "ev_74f478a0842b",
+          "ev_42cd001d24f1"
+        ],
+        "confidence": "low",
+        "assumptions": [
+          "Provider API is part of the normal path only after local validation succeeds."
+        ]
+      }
+    ],
+    "recommended_actions": [
+      "Synthetic telemetry indicates the immediate remediation path is to use the supported uploaded file object for Gmail attachments rather than a signed download URL string, and validate the serialized attachment argument before send. This action has not been executed as part of this report.",
+      "Collect missing canonical production telemetry for a same-tenant successful plain-text Gmail send or correctly shaped attachment send in the incident window to tighten the control set. This has not been executed.",
+      "Trace the caller/config/schema path that produced string_signed_url so the origin of the bad argument shape can be identified. This has not been executed.",
+      "Do not prioritize provider outage as the leading explanation for the observed failed execution; monitor provider health separately if broader concern remains. This has not been executed."
+    ],
+    "limitations": [
+      "Supplied canonical records do not show a same-tenant successful plain-text Gmail send in the incident window.",
+      "Supplied records do not identify the exact caller/config/version that constructed string_signed_url.",
+      "Empty reproduce/retry/deployment scoped queries cannot prove absence of related events or changes."
+    ]
+  },
+  "ranked_cause_codes": [
+    "attachment_reference_shape",
+    "unconfirmed_change",
+    "provider_failure"
+  ],
+  "findings": [
+    {
+      "code": "mechanism_observation",
+      "statement": "Canonical executor logs for cedar show a Gmail request failing with status 400, validation_error=attachment_object_required, attachment_argument_type=string_signed_url, expected_attachment_type=uploaded_file_object, and provider_called=false, directly matching local attachment-shape validation failure.",
+      "citations": [
+        {
+          "evidence_id": "ev_1a9957dc86e7",
+          "record_id": "gmail-shape-047:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "pre_provider_failure",
+      "statement": "The observed failed execution was rejected before provider egress because provider_called=false on the failing request, so this execution did not reach Google/provider APIs.",
+      "citations": [
+        {
+          "evidence_id": "ev_1a9957dc86e7",
+          "record_id": "gmail-shape-047:logs:0"
+        }
+      ]
+    },
+    {
+      "code": "controlled_comparison",
+      "statement": "In the controlled sandbox comparison, the original request using attachment_argument_type=string_signed_url failed with provider_called=false, while the corrected request using uploaded_file_object succeeded with provider_called=true; attachment shape is the discriminating variable.",
+      "citations": [
+        {
+          "evidence_id": "ev_74f478a0842b",
+          "record_id": "gmail-shape-047:reproduce:0"
+        },
+        {
+          "evidence_id": "ev_74f478a0842b",
+          "record_id": "gmail-shape-047:reproduce:1"
+        }
+      ]
+    },
+    {
+      "code": "tenant_impact",
+      "statement": "Observed production impact is concentrated in cedar: 738 requests with 420 failures and 420 blocked operations, queue_depth 132, p95 latency 1760 ms, versus maple with 604 requests, 0 failures, queue_depth 0, and p95 latency 160 ms.",
+      "citations": [
+        {
+          "evidence_id": "ev_603d36f62204",
+          "record_id": "gmail-shape-047:metrics:0"
+        },
+        {
+          "evidence_id": "ev_603d36f62204",
+          "record_id": "gmail-shape-047:metrics:1"
+        }
+      ]
+    },
+    {
+      "code": "provider_isolation",
+      "statement": "A comparison tenant had a successful 200 response with same_provider_available=true and unrelated_read_succeeds=true in the same window, which is counter-evidence to a broad provider outage, though it is not a plain-text send control.",
+      "citations": [
+        {
+          "evidence_id": "ev_42cd001d24f1",
+          "record_id": "gmail-shape-047:logs:1"
+        }
+      ]
+    },
+    {
+      "code": "version_control",
+      "statement": "The supplied records show only an unrelated support-dashboard deployment near the incident window; they do not provide positive evidence of a contemporaneous tool-executor rollout causing this failure.",
+      "citations": [
+        {
+          "evidence_id": "ev_4b15d5f650ae",
+          "record_id": "gmail-shape-047:deployments:0"
+        }
+      ]
+    }
+  ],
+  "action_codes": [
+    "attachment_reference_shape_remediation",
+    "collect_missing_telemetry",
+    "request_reproduction",
+    "monitor_provider"
+  ],
+  "trace": [
+    {
+      "evidence_id": "ev_77f6e28d2720",
+      "query": {
+        "tool": "dependencies",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:dependencies:0",
+          "service": "tool-executor",
+          "depends_on": [
+            "auth-service",
+            "provider-api",
+            "session-policy"
+          ],
+          "provider_api_reachable": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_4b15d5f650ae",
+      "query": {
+        "tool": "deployments",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:deployments:0",
+          "service": "support-dashboard",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "change": "Unrelated inbox display release",
+          "version": "dashboard-v23"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_74f478a0842b",
+      "query": {
+        "tool": "reproduce",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 10
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "gmail_configuration",
+          "check_passed": false,
+          "toolkit": "gmail",
+          "status": 400,
+          "attachment_argument_type": "string_signed_url",
+          "expected_attachment_type": "uploaded_file_object",
+          "provider_called": false,
+          "validation_error": "attachment_object_required"
+        },
+        {
+          "record_id": "gmail-shape-047:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "gmail_configuration",
+          "check_passed": true,
+          "toolkit": "gmail",
+          "status": 200,
+          "attachment_argument_type": "uploaded_file_object",
+          "expected_attachment_type": "uploaded_file_object",
+          "provider_called": true,
+          "validation_error": null
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_3562733ffb41",
+      "query": {
+        "tool": "logs",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-47",
+          "toolkit": "gmail",
+          "status": 400,
+          "attachment_argument_type": "string_signed_url",
+          "expected_attachment_type": "uploaded_file_object",
+          "provider_called": false,
+          "validation_error": "attachment_object_required"
+        },
+        {
+          "record_id": "gmail-shape-047:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_603d36f62204",
+      "query": {
+        "tool": "metrics",
+        "service": null,
+        "tenant": null,
+        "version": null,
+        "start": null,
+        "end": null,
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 738,
+          "failures": 420,
+          "business_operations_blocked": 420,
+          "queue_depth": 132,
+          "p95_latency_ms": 1760
+        },
+        {
+          "record_id": "gmail-shape-047:metrics:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "requests": 604,
+          "failures": 0,
+          "business_operations_blocked": 0,
+          "queue_depth": 0,
+          "p95_latency_ms": 160
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_1a9957dc86e7",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-47",
+          "toolkit": "gmail",
+          "status": 400,
+          "attachment_argument_type": "string_signed_url",
+          "expected_attachment_type": "uploaded_file_object",
+          "provider_called": false,
+          "validation_error": "attachment_object_required"
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_2545920a7512",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": "cedar",
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:metrics:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "requests": 738,
+          "failures": 420,
+          "business_operations_blocked": 420,
+          "queue_depth": 132,
+          "p95_latency_ms": 1760
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_624d2b2b4bb7",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "attachment",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:reproduce:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "original",
+          "same_request_except": "gmail_configuration",
+          "check_passed": false,
+          "toolkit": "gmail",
+          "status": 400,
+          "attachment_argument_type": "string_signed_url",
+          "expected_attachment_type": "uploaded_file_object",
+          "provider_called": false,
+          "validation_error": "attachment_object_required"
+        },
+        {
+          "record_id": "gmail-shape-047:reproduce:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "sandbox",
+          "provider_mock": true,
+          "controlled": true,
+          "condition": "corrected",
+          "same_request_except": "gmail_configuration",
+          "check_passed": true,
+          "toolkit": "gmail",
+          "status": 200,
+          "attachment_argument_type": "uploaded_file_object",
+          "expected_attachment_type": "uploaded_file_object",
+          "provider_called": true,
+          "validation_error": null
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_a68b18a4b624",
+      "query": {
+        "tool": "deployments",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:00:00Z",
+        "end": "2026-11-12T10:30:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_5d18375ed7dc",
+      "query": {
+        "tool": "dependencies",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": null,
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_370b5ecdbb78",
+      "query": {
+        "tool": "reproduce",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "plain",
+        "limit": 20
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_42cd001d24f1",
+      "query": {
+        "tool": "logs",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "gmail",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [
+        {
+          "record_id": "gmail-shape-047:logs:0",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "cedar",
+          "request_id": "req-47",
+          "toolkit": "gmail",
+          "status": 400,
+          "attachment_argument_type": "string_signed_url",
+          "expected_attachment_type": "uploaded_file_object",
+          "provider_called": false,
+          "validation_error": "attachment_object_required"
+        },
+        {
+          "record_id": "gmail-shape-047:logs:1",
+          "service": "tool-executor",
+          "timestamp": "2026-11-12T10:05:00Z",
+          "tenant": "maple",
+          "status": 200,
+          "same_provider_available": true,
+          "unrelated_read_succeeds": true
+        }
+      ],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    },
+    {
+      "evidence_id": "ev_79a4f1faa0bb",
+      "query": {
+        "tool": "metrics",
+        "service": "tool-executor",
+        "tenant": null,
+        "version": null,
+        "start": "2026-11-12T09:50:00Z",
+        "end": "2026-11-12T10:15:00Z",
+        "search": "retry",
+        "limit": 100
+      },
+      "status": "ok",
+      "records": [],
+      "complete": true,
+      "error": null,
+      "warning": null,
+      "attempt": 1
+    }
+  ],
+  "latency_seconds": 167.0269853490172,
+  "input_tokens": 91735,
+  "output_tokens": 10466
+}

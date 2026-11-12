@@ -1,0 +1,4303 @@
+{
+  "status": "complete",
+  "updated_at": "2026-11-12T17:23:02.889872+00:00",
+  "expected_cases": 20,
+  "completed_pairs": 20,
+  "model": "gpt-5.4",
+  "summary": {
+    "multi_agent": {
+      "evaluated_cases": 20,
+      "root_cause_accuracy": 0.85,
+      "outcome_accuracy": 0.85,
+      "grounded_top1": 0.85,
+      "citation_validity": 0.95,
+      "finding_precision": 0.42047619047619045,
+      "finding_recall": 0.95,
+      "action_precision": 0.22833333333333333,
+      "mean_tool_calls": 12.65,
+      "mean_latency_seconds": 163.51780701432145,
+      "median_latency_seconds": 164.5135469629895,
+      "input_tokens": 1707458,
+      "output_tokens": 197509,
+      "total_tokens": 1904967
+    },
+    "single_agent": {
+      "evaluated_cases": 20,
+      "root_cause_accuracy": 0.85,
+      "outcome_accuracy": 0.85,
+      "grounded_top1": 0.75,
+      "citation_validity": 0.9,
+      "finding_precision": 0.46226190476190476,
+      "finding_recall": 0.8666666666666667,
+      "action_precision": 0.37083333333333335,
+      "mean_tool_calls": 10.0,
+      "mean_latency_seconds": 64.3552103249851,
+      "median_latency_seconds": 59.41734503148473,
+      "input_tokens": 561755,
+      "output_tokens": 76726,
+      "total_tokens": 638481
+    }
+  },
+  "cases": [
+    {
+      "id": "notion-access-033",
+      "status": "needs_review",
+      "ticket_id": "ef15b241-0b95-4dc9-9184-01b53afb6eaa",
+      "plain_thread_id": "th_01M78AYGNZSHT3C75AYERD83Q3",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "notion_resource_not_shared",
+        "metrics": {
+          "incident_id": "notion-access-033",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 86.76311900501605,
+          "input_tokens": 34090,
+          "output_tokens": 4382,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "resource_role_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "inconclusive",
+        "run_status": "completed",
+        "top_cause": "notion_resource_not_shared",
+        "metrics": {
+          "incident_id": "notion-access-033",
+          "approach": "multi_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 17,
+          "latency_seconds": 156.82642421399942,
+          "input_tokens": 82964,
+          "output_tokens": 9655,
+          "finding_details": [
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 10,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 11,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 19,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 20,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 23,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 29,
+          "provider": "linear",
+          "stage": "review-601",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 30,
+          "provider": "slack",
+          "stage": "review-601",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 33,
+          "provider": "slack",
+          "stage": "summary-review-601",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "ef8fde5e-9f5a-47b3-a21c-2087c0a760b0",
+          "identifier": "SID-7",
+          "url": "https://linear.app/sidagana/issue/SID-7/demo-c033-notion-pages-disappear-for-one-workspace"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794502518.573569"
+        }
+      },
+      "agent_log_url": "/api/tickets/ef15b241-0b95-4dc9-9184-01b53afb6eaa/agent-log",
+      "review": {
+        "verdict": "needs_work",
+        "notes": "Assistant validation: current facts and safe next steps are sound, but the report abstains despite explicit page existence, valid token, missing integration page access and a discriminating 404-to-200 access control. This is excessive abstention against the authored probable-cause case; wrong-account selection is a caveat, not an observed alternative cause. No fix or customer reply was executed.",
+        "ticket_id": "ef15b241-0b95-4dc9-9184-01b53afb6eaa",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-notion",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "notion_resource_not_shared"
+      }
+    },
+    {
+      "id": "notion-event-034",
+      "status": "needs_review",
+      "ticket_id": "940b8a7f-5b24-4d98-aced-5a26afc3170e",
+      "plain_thread_id": "th_01M78AYHB0Q7NY3S2Q7QQ66189",
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "trigger_event_kind_mismatch",
+        "metrics": {
+          "incident_id": "notion-event-034",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.2,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 122.37749035900924,
+          "input_tokens": 85697,
+          "output_tokens": 8255,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 12,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 13,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 14,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 15,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 18,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 31,
+          "provider": "linear",
+          "stage": "review-604",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 32,
+          "provider": "slack",
+          "stage": "review-604",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 34,
+          "provider": "slack",
+          "stage": "summary-review-604",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "6b4c6d43-0b05-49a8-be89-ae5b45546b07",
+          "identifier": "SID-8",
+          "url": "https://linear.app/sidagana/issue/SID-8/demo-c034-notion-edits-no-longer-reach-our-workflow"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794502519.420329"
+        }
+      },
+      "agent_log_url": "/api/tickets/940b8a7f-5b24-4d98-aced-5a26afc3170e/agent-log",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "trigger_event_kind_mismatch",
+        "metrics": {
+          "incident_id": "notion-event-034",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 58.972661898995284,
+          "input_tokens": 32165,
+          "output_tokens": 2727,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "subscription_event_missing",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct event-kind diagnosis. Current logs show update events checked against a create trigger; the changed-event control succeeds. Tenant backlog is correctly distinguished from HTTP failures. Proposed configuration verification is appropriate and no deployed fix is claimed. Optional subscription/replay steps could be trimmed for clarity.",
+        "ticket_id": "940b8a7f-5b24-4d98-aced-5a26afc3170e",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-notion",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "trigger_event_kind_mismatch"
+      }
+    },
+    {
+      "id": "github-org-035",
+      "status": "needs_review",
+      "ticket_id": "f2dc5bed-8e6d-4649-a4bb-3cbc081667ac",
+      "plain_thread_id": "th_01M78AYHYEFFMN5C0TV6D25JBE",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "github_organization_approval",
+        "metrics": {
+          "incident_id": "github-org-035",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 79.3815760940779,
+          "input_tokens": 30607,
+          "output_tokens": 4581,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "policy_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "backlog",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "github_organization_approval",
+        "metrics": {
+          "incident_id": "github-org-035",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.42857142857142855,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 156.59094846900553,
+          "input_tokens": 78454,
+          "output_tokens": 9417,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "policy_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 16,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 17,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 24,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 25,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 28,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 50,
+          "provider": "linear",
+          "stage": "review-853",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 51,
+          "provider": "slack",
+          "stage": "review-853",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 52,
+          "provider": "slack",
+          "stage": "summary-review-853",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "79d83ab8-d941-4dae-b921-951ce30e98be",
+          "identifier": "SID-9",
+          "url": "https://linear.app/sidagana/issue/SID-9/demo-c035-github-personal-repositories-work-but-organization-jobs-fail"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794502641.702109"
+        }
+      },
+      "agent_log_url": "/api/tickets/f2dc5bed-8e6d-4649-a4bb-3cbc081667ac/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: the GitHub organization-approval diagnosis is supported by restricted-policy/pending-approval state and a matched approval control. The report correctly limits personal-access and upstream-origin claims, proposes organization-owner approval rather than a blanket reconnect, and does not claim deployment or customer sending. Verify replay eligibility for queued jobs before rerunning them.",
+        "ticket_id": "f2dc5bed-8e6d-4649-a4bb-3cbc081667ac",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-github",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "github_organization_approval"
+      }
+    },
+    {
+      "id": "github-token-036",
+      "status": "failed",
+      "ticket_id": "312dd75b-5c86-4813-8994-f974a495ebc6",
+      "plain_thread_id": "th_01M78AYR21NJ2FY21STM2CVG55",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "redacted_token_relay_design",
+        "metrics": {
+          "incident_id": "github-token-036",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.75,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 56.4641560689779,
+          "input_tokens": 17306,
+          "output_tokens": 3334,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "inconclusive",
+        "run_status": "failed",
+        "top_cause": null,
+        "metrics": {
+          "incident_id": "github-token-036",
+          "approach": "multi_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.0,
+          "finding_recall": 0.0,
+          "citation_validity": 0.0,
+          "action_precision": 0.0,
+          "acceptable_action_present": false,
+          "tool_calls": 15,
+          "latency_seconds": 171.19508499698713,
+          "input_tokens": 122316,
+          "output_tokens": 9602,
+          "finding_details": [],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 21,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 22,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 35,
+          "provider": "linear",
+          "stage": "failure",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 36,
+          "provider": "slack",
+          "stage": "failure",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 39,
+          "provider": "slack",
+          "stage": "summary-failure",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "67f963af-d54f-47ac-930b-ae80bcdd9420",
+          "identifier": "SID-10",
+          "url": "https://linear.app/sidagana/issue/SID-10/demo-c036-our-github-relay-treats-healthy-connections-as"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794502673.041589"
+        }
+      },
+      "agent_log_url": "/api/tickets/312dd75b-5c86-4813-8994-f974a495ebc6/agent-log",
+      "review": {
+        "verdict": "needs_work",
+        "notes": "Assistant validation: the first attempt failed at the model context bound during reassessment and produced no usable diagnosis. This is an execution failure, not a correct abstention or a verified credential problem. Preserve the original benchmark result and recover the same issue separately with bounded context handling."
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-github",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "redacted_token_relay_design"
+      }
+    },
+    {
+      "id": "github-setup-037",
+      "status": "needs_review",
+      "ticket_id": "3ba73351-3641-4383-ad7f-a6791df85b3a",
+      "plain_thread_id": "th_01M78AYRP1PP4N1WB3W7KC35VN",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "obsolete_trigger_setup_path",
+        "metrics": {
+          "incident_id": "github-setup-037",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 87.75773397705052,
+          "input_tokens": 32061,
+          "output_tokens": 5173,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_specific_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "obsolete_trigger_setup_path",
+        "metrics": {
+          "incident_id": "github-setup-037",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.3,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.2,
+          "acceptable_action_present": true,
+          "tool_calls": 12,
+          "latency_seconds": 182.4401464969851,
+          "input_tokens": 84977,
+          "output_tokens": 9531,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "argument_path_mismatch",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "scope_present",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 26,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 27,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 40,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 41,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 44,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 53,
+          "provider": "linear",
+          "stage": "review-934",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 54,
+          "provider": "slack",
+          "stage": "review-934",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 57,
+          "provider": "slack",
+          "stage": "summary-review-934",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "0bd33ee5-46e2-4dc2-85fa-ef22da17ab94",
+          "identifier": "SID-11",
+          "url": "https://linear.app/sidagana/issue/SID-11/demo-c037-github-v2-trigger-setup-stalls-before-creating-a-trigger"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794502798.455119"
+        }
+      },
+      "agent_log_url": "/api/tickets/3ba73351-3641-4383-ad7f-a6791df85b3a/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct obsolete GitHub V2 setup-path diagnosis, supported by the failing endpoint and a matched successful trigger-instance upsert control. It correctly separates unrelated deployment timing and healthy provider access. The proposed action should state the supported-path change more directly; additional upstream traces are useful scope checks rather than a reason to retry the obsolete endpoint.",
+        "ticket_id": "3ba73351-3641-4383-ad7f-a6791df85b3a",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-github",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "obsolete_trigger_setup_path"
+      }
+    },
+    {
+      "id": "sheets-plane-038",
+      "status": "needs_review",
+      "ticket_id": "847ad6e6-8ee1-4495-ae3d-77aadc5e6a51",
+      "plain_thread_id": "th_01M78AYS9HPMSYS3T392NX5EPA",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "connection_surface_isolation",
+        "metrics": {
+          "incident_id": "sheets-plane-038",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 14,
+          "latency_seconds": 74.5956256990321,
+          "input_tokens": 43616,
+          "output_tokens": 4432,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "connection_surface_isolation",
+        "metrics": {
+          "incident_id": "sheets-plane-038",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.375,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 165.93597878701985,
+          "input_tokens": 76804,
+          "output_tokens": 9647,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "account_selection_mismatch",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 37,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 38,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 45,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 46,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 49,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 55,
+          "provider": "linear",
+          "stage": "review-937",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 56,
+          "provider": "slack",
+          "stage": "review-937",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 58,
+          "provider": "slack",
+          "stage": "summary-review-937",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "e18335d1-784e-4e00-ab5b-c5f595fe5f6a",
+          "identifier": "SID-12",
+          "url": "https://linear.app/sidagana/issue/SID-12/demo-c038-sheets-works-in-platform-but-appears-disconnected-in-mcp"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794502845.207809"
+        }
+      },
+      "agent_log_url": "/api/tickets/847ad6e6-8ee1-4495-ae3d-77aadc5e6a51/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct connection-surface isolation diagnosis. Current MCP requests have zero MCP connections despite an active Platform connection, and the changed-surface control succeeds. Authentication through the actual client surface is appropriate; no cross-project credential sharing or automatic remediation is claimed. Account-selection alternatives are explicitly scoped caveats.",
+        "ticket_id": "847ad6e6-8ee1-4495-ae3d-77aadc5e6a51",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-googlesheets",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "connection_surface_isolation"
+      }
+    },
+    {
+      "id": "sheets-discovery-039",
+      "status": "needs_review",
+      "ticket_id": "c96ec4bc-9252-4516-a2e7-e18415306702",
+      "plain_thread_id": "th_01M78AYSXSN66YA69ABFYEGJ5Z",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "tool_discovery_truncation",
+        "metrics": {
+          "incident_id": "sheets-discovery-039",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 7,
+          "latency_seconds": 46.703431945992634,
+          "input_tokens": 23555,
+          "output_tokens": 2830,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "tool_discovery_truncation",
+        "metrics": {
+          "incident_id": "sheets-discovery-039",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.375,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 175.3192928620265,
+          "input_tokens": 78912,
+          "output_tokens": 10546,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 42,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 43,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 59,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 60,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 63,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 69,
+          "provider": "linear",
+          "stage": "review-1105",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 70,
+          "provider": "slack",
+          "stage": "review-1105",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 73,
+          "provider": "slack",
+          "stage": "summary-review-1105",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "e8a223a1-955e-4e19-9530-adcb7f4f8c6f",
+          "identifier": "SID-13",
+          "url": "https://linear.app/sidagana/issue/SID-13/demo-c039-a-sheets-action-is-missing-after-catalog-discovery"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794502983.747309"
+        }
+      },
+      "agent_log_url": "/api/tickets/c96ec4bc-9252-4516-a2e7-e18415306702/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct truncated-discovery diagnosis and pagination/larger-limit remedy; provider outage and missing catalog action are appropriately distinguished. Metrics correctly separate blocked business operations from HTTP failures. Dataset caveat: the corrected control retains first-page counters alongside pagination_completed=true, so those counters must not be read as the final combined tool count.",
+        "ticket_id": "c96ec4bc-9252-4516-a2e7-e18415306702",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-googlesheets",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "tool_discovery_truncation"
+      }
+    },
+    {
+      "id": "sheets-id-040",
+      "status": "needs_review",
+      "ticket_id": "0517ca66-993e-4b35-a27d-2c00803b086f",
+      "plain_thread_id": "th_01M78AYTG132XEPP7F8FA2T2FX",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "spreadsheet_identifier_kind",
+        "metrics": {
+          "incident_id": "sheets-id-040",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 45.84038900991436,
+          "input_tokens": 17252,
+          "output_tokens": 2894,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "spreadsheet_identifier_kind",
+        "metrics": {
+          "incident_id": "sheets-id-040",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.2,
+          "acceptable_action_present": true,
+          "tool_calls": 10,
+          "latency_seconds": 177.09380987705663,
+          "input_tokens": 83271,
+          "output_tokens": 9642,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 47,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 48,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 64,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 65,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 68,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 71,
+          "provider": "linear",
+          "stage": "review-1108",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 72,
+          "provider": "slack",
+          "stage": "review-1108",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 74,
+          "provider": "slack",
+          "stage": "summary-review-1108",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "8fa090ce-acb0-4677-a353-abfb21a322a6",
+          "identifier": "SID-14",
+          "url": "https://linear.app/sidagana/issue/SID-14/demo-c040-sheets-lookup-fails-although-the-document-exists"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503011.583309"
+        }
+      },
+      "agent_log_url": "/api/tickets/0517ca66-993e-4b35-a27d-2c00803b086f/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct display-name versus spreadsheet-ID diagnosis and supported changed-identifier control. The proposed direct-ID operation is appropriate. Precision caveat: without a provider_called or boundary trace, the report should avoid asserting exactly which layer emitted the 400; this does not change the supported identifier remedy.",
+        "ticket_id": "0517ca66-993e-4b35-a27d-2c00803b086f",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-googlesheets",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "spreadsheet_identifier_kind"
+      }
+    },
+    {
+      "id": "airtable-expiry-041",
+      "status": "needs_review",
+      "ticket_id": "6e21eac4-0bd7-4cdd-859a-b68c3f5c45a2",
+      "plain_thread_id": "th_01M78AYV41JZQDCZMS6DJSCQAV",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "authentication_initiation_expired",
+        "metrics": {
+          "incident_id": "airtable-expiry-041",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 1.0,
+          "acceptable_action_present": true,
+          "tool_calls": 7,
+          "latency_seconds": 52.08639592991676,
+          "input_tokens": 16823,
+          "output_tokens": 3082,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "new_connection_healthy",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "authentication_initiation_expired",
+        "metrics": {
+          "incident_id": "airtable-expiry-041",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 185.563806056045,
+          "input_tokens": 90707,
+          "output_tokens": 11554,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "new_connection_healthy",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 61,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 62,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 80,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 81,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 84,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 85,
+          "provider": "linear",
+          "stage": "review-1292",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 86,
+          "provider": "slack",
+          "stage": "review-1292",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 89,
+          "provider": "slack",
+          "stage": "summary-review-1292",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "900a2e92-3dd3-4e80-9e6d-8b04f80e239c",
+          "identifier": "SID-15",
+          "url": "https://linear.app/sidagana/issue/SID-15/demo-c041-airtable-authentication-links-fail-for-late-arrivals"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503157.929479"
+        }
+      },
+      "agent_log_url": "/api/tickets/6e21eac4-0bd7-4cdd-859a-b68c3f5c45a2/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct expired authentication-initiation diagnosis, distinct from revoked consent or token refresh. The observed age exceeds the stated window before exchange; using a fresh link is the supported next step. Dataset caveat: the fresh ACTIVE control retains token_exchange_attempted=false, so it corroborates link-age handling but does not prove a completed production token exchange. The report appropriately states control limitations.",
+        "ticket_id": "6e21eac4-0bd7-4cdd-859a-b68c3f5c45a2",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-airtable",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "authentication_initiation_expired"
+      }
+    },
+    {
+      "id": "airtable-batch-042",
+      "status": "needs_review",
+      "ticket_id": "30901b50-bf24-4e80-83a6-536077c1d58c",
+      "plain_thread_id": "th_01M78AYVQ0GFW2S262BZJW9EFS",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "provider_batch_record_limit",
+        "metrics": {
+          "incident_id": "airtable-batch-042",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 8,
+          "latency_seconds": 63.61817137792241,
+          "input_tokens": 24121,
+          "output_tokens": 3766,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "provider_batch_record_limit",
+        "metrics": {
+          "incident_id": "airtable-batch-042",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.42857142857142855,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.2,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 142.11539077106863,
+          "input_tokens": 78529,
+          "output_tokens": 8336,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "payload_size_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 66,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 67,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 75,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 76,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 79,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 87,
+          "provider": "linear",
+          "stage": "review-1295",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 88,
+          "provider": "slack",
+          "stage": "review-1295",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 90,
+          "provider": "slack",
+          "stage": "summary-review-1295",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "71924c21-8d77-437d-88b2-307e41c77e23",
+          "identifier": "SID-16",
+          "url": "https://linear.app/sidagana/issue/SID-16/demo-c042-large-airtable-update-jobs-fail-but-small-updates-pass"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503189.093009"
+        }
+      },
+      "agent_log_url": "/api/tickets/30901b50-bf24-4e80-83a6-536077c1d58c/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct record-count limit, with the failing 25-record request exceeding the observed maximum of ten and a successful ten-record control. Splitting batches, respecting rate limits and checking partial completion are appropriate. Payload-byte limits and release attribution remain alternatives, not established causes. The exact emitting boundary of the 422 is not observed and should stay qualified.",
+        "ticket_id": "30901b50-bf24-4e80-83a6-536077c1d58c",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-airtable",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "provider_batch_record_limit"
+      }
+    },
+    {
+      "id": "slack-user-043",
+      "status": "needs_review",
+      "ticket_id": "daf6136c-a2dc-4aec-88a4-97234f715d3a",
+      "plain_thread_id": "th_01M78AYWATAK118ZBXBQ008ANV",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "slack_user_scope_configuration",
+        "metrics": {
+          "incident_id": "slack-user-043",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 59.86202816397417,
+          "input_tokens": 33834,
+          "output_tokens": 3802,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "scope_mismatch",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "slack_user_scope_configuration",
+        "metrics": {
+          "incident_id": "slack-user-043",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.42857142857142855,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.2,
+          "acceptable_action_present": true,
+          "tool_calls": 12,
+          "latency_seconds": 148.70735889510252,
+          "input_tokens": 79988,
+          "output_tokens": 9460,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "account_selection_mismatch",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 77,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 78,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 91,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 92,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 93,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 111,
+          "provider": "linear",
+          "stage": "review-1627",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 112,
+          "provider": "slack",
+          "stage": "review-1627",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 115,
+          "provider": "slack",
+          "stage": "summary-review-1627",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "797ce3d8-c702-44be-a80c-b2cacea12a0d",
+          "identifier": "SID-17",
+          "url": "https://linear.app/sidagana/issue/SID-17/demo-c043-slack-user-actions-fail-despite-configured-bot-permissions"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503331.484749"
+        }
+      },
+      "agent_log_url": "/api/tickets/daf6136c-a2dc-4aec-88a4-97234f715d3a/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct bot-scope versus user-scope diagnosis and targeted reconnect remedy. The report correctly limits absent account-selection evidence and flags a real dataset flaw: the corrected control succeeds but retains the original missing_scope error string. Preserve this first result, correct the control after the frozen run, and rerun the affected pair.",
+        "ticket_id": "daf6136c-a2dc-4aec-88a4-97234f715d3a",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "slack_user_scope_configuration"
+      }
+    },
+    {
+      "id": "slack-plan-044",
+      "status": "needs_review",
+      "ticket_id": "f6c27e16-440f-4e20-91a2-7a8864830c7c",
+      "plain_thread_id": "th_01M78AYWXWYQ4GP5QDGXAYDQ8T",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "provider_feature_entitlement",
+        "metrics": {
+          "incident_id": "slack-plan-044",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 15,
+          "latency_seconds": 65.22323101502843,
+          "input_tokens": 41322,
+          "output_tokens": 4042,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "provider_feature_entitlement",
+        "metrics": {
+          "incident_id": "slack-plan-044",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.16666666666666666,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 165.89079449500423,
+          "input_tokens": 83478,
+          "output_tokens": 9371,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 82,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 83,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 96,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 97,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 100,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 113,
+          "provider": "linear",
+          "stage": "review-1630",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 114,
+          "provider": "slack",
+          "stage": "review-1630",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 116,
+          "provider": "slack",
+          "stage": "summary-review-1630",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "9ed8f204-61ac-4adc-922a-5147fd046713",
+          "identifier": "SID-18",
+          "url": "https://linear.app/sidagana/issue/SID-18/demo-c044-slack-ai-search-fails-while-ordinary-search-remains-healthy"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503344.357239"
+        }
+      },
+      "agent_log_url": "/api/tickets/f6c27e16-440f-4e20-91a2-7a8864830c7c/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct Slack AI-search feature/plan entitlement diagnosis, supported by the configured plan, disabled capability flag and changed-plan control. It proposes an eligible feature path or supported alternative rather than scope escalation. Exact upstream-versus-local 403 origin is appropriately left unverified.",
+        "ticket_id": "f6c27e16-440f-4e20-91a2-7a8864830c7c",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "provider_feature_entitlement"
+      }
+    },
+    {
+      "id": "slack-ingress-045",
+      "status": "needs_review",
+      "ticket_id": "b04e00a2-d438-4adc-b742-81a86e9db604",
+      "plain_thread_id": "th_01M78AYXGZY52B38CT6517NDXY",
+      "single_agent": {
+        "outcome": "inconclusive",
+        "run_status": "failed",
+        "top_cause": null,
+        "metrics": {
+          "incident_id": "slack-ingress-045",
+          "approach": "single_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.0,
+          "finding_recall": 0.0,
+          "citation_validity": 0.0,
+          "action_precision": 0.0,
+          "acceptable_action_present": false,
+          "tool_calls": 12,
+          "latency_seconds": 69.24904314195737,
+          "input_tokens": 33237,
+          "output_tokens": 4530,
+          "finding_details": [],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "provider_event_ingress_misrouting",
+        "metrics": {
+          "incident_id": "slack-ingress-045",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.2,
+          "acceptable_action_present": true,
+          "tool_calls": 12,
+          "latency_seconds": 134.90240338409785,
+          "input_tokens": 78672,
+          "output_tokens": 8802,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 94,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 95,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 101,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 102,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 105,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 132,
+          "provider": "linear",
+          "stage": "review-1931",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 133,
+          "provider": "slack",
+          "stage": "review-1931",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 142,
+          "provider": "slack",
+          "stage": "summary-review-1931",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "d5fb6345-ce9f-4460-b15a-0642aca275f2",
+          "identifier": "SID-19",
+          "url": "https://linear.app/sidagana/issue/SID-19/demo-c045-slack-triggers-stop-after-an-app-settings-change"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503481.176399"
+        }
+      },
+      "agent_log_url": "/api/tickets/b04e00a2-d438-4adc-b742-81a86e9db604/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct provider-event ingress misrouting diagnosis. The observed subscription target differs from the intended ingress, event creation succeeds but ingress is absent, and the corrected target control receives the event. Restoring the expected target and testing a new event is appropriate; secret rotation is only conditional on future evidence of verification failures.",
+        "ticket_id": "b04e00a2-d438-4adc-b742-81a86e9db604",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "provider_event_ingress_misrouting"
+      }
+    },
+    {
+      "id": "slack-redirect-046",
+      "status": "needs_review",
+      "ticket_id": "10755f3b-2110-4253-8e49-ce51f9747826",
+      "plain_thread_id": "th_01M78AYY5MJK0Y4W0RHT6QJHGH",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "oauth_redirect_uri_mismatch",
+        "metrics": {
+          "incident_id": "slack-redirect-046",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 56.763603610917926,
+          "input_tokens": 24402,
+          "output_tokens": 3370,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "oauth_redirect_uri_mismatch",
+        "metrics": {
+          "incident_id": "slack-redirect-046",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.6,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 160.45800015400164,
+          "input_tokens": 78218,
+          "output_tokens": 8864,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 98,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 99,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 106,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 107,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 110,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 134,
+          "provider": "linear",
+          "stage": "review-1934",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 135,
+          "provider": "slack",
+          "stage": "review-1934",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 143,
+          "provider": "slack",
+          "stage": "summary-review-1934",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "396ee11e-e606-4e11-8e27-00a9d94e7e60",
+          "identifier": "SID-20",
+          "url": "https://linear.app/sidagana/issue/SID-20/demo-c046-custom-slack-oauth-rejects-the-redirect-url"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503511.136809"
+        }
+      },
+      "agent_log_url": "/api/tickets/10755f3b-2110-4253-8e49-ce51f9747826/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct static OAuth callback versus short connect-link mismatch. Matching the app redirect setting to the auth flow callback is the appropriate remedy; the example URI must not be treated as a global constant. Dataset caveat: the corrected control retains the old oauth_error label despite success; this is a generator defect to correct and reevaluate separately.",
+        "ticket_id": "10755f3b-2110-4253-8e49-ce51f9747826",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "oauth_redirect_uri_mismatch"
+      }
+    },
+    {
+      "id": "gmail-shape-047",
+      "status": "needs_review",
+      "ticket_id": "2c4ec441-3ca1-4af6-b448-4bd74d7a1416",
+      "plain_thread_id": "th_01M78AYYR0JTT1XNWHMWPNPT91",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "attachment_reference_shape",
+        "metrics": {
+          "incident_id": "gmail-shape-047",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": false,
+          "finding_precision": 0.25,
+          "finding_recall": 0.6666666666666666,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 56.619914424954914,
+          "input_tokens": 32113,
+          "output_tokens": 3528,
+          "finding_details": [
+            {
+              "code": "argument_shape_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "backlog",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "attachment_reference_shape",
+        "metrics": {
+          "incident_id": "gmail-shape-047",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.42857142857142855,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 10,
+          "latency_seconds": 147.64854567602742,
+          "input_tokens": 75282,
+          "output_tokens": 9549,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "egress_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 103,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 104,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 117,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 118,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 121,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 136,
+          "provider": "linear",
+          "stage": "review-1937",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 137,
+          "provider": "slack",
+          "stage": "review-1937",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 144,
+          "provider": "slack",
+          "stage": "summary-review-1937",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "a594776b-0892-42ba-aaa3-6301fe84a243",
+          "identifier": "SID-21",
+          "url": "https://linear.app/sidagana/issue/SID-21/demo-c047-gmail-attachment-sends-fail-before-reaching-google"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503617.266179"
+        }
+      },
+      "agent_log_url": "/api/tickets/2c4ec441-3ca1-4af6-b448-4bd74d7a1416/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct uploaded-file-object versus signed-URL argument diagnosis, with explicit pre-provider validation failure and a changed-shape control. It scopes the sampled failure instead of asserting all tenant failures share it. Dataset caveat: the successful control retains a stale validation_error label; correct this field and rerun the affected pair after preserving the first result.",
+        "ticket_id": "2c4ec441-3ca1-4af6-b448-4bd74d7a1416",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-gmail",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "attachment_reference_shape"
+      }
+    },
+    {
+      "id": "gmail-file-048",
+      "status": "needs_review",
+      "ticket_id": "06b2bf4e-cef7-4a6a-a9fa-c87852982534",
+      "plain_thread_id": "th_01M78AYZ9SAHRAYRY7VW989NGB",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "temporary_file_reference_expired",
+        "metrics": {
+          "incident_id": "gmail-file-048",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.42857142857142855,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 13,
+          "latency_seconds": 57.82394772104453,
+          "input_tokens": 26369,
+          "output_tokens": 3677,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "backlog",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "temporary_file_reference_expired",
+        "metrics": {
+          "incident_id": "gmail-file-048",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.375,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.16666666666666666,
+          "acceptable_action_present": true,
+          "tool_calls": 11,
+          "latency_seconds": 167.9955603670096,
+          "input_tokens": 77083,
+          "output_tokens": 10677,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "backlog",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 108,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 109,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 122,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 123,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 126,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 138,
+          "provider": "linear",
+          "stage": "review-1940",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 139,
+          "provider": "slack",
+          "stage": "review-1940",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 145,
+          "provider": "slack",
+          "stage": "summary-review-1940",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "8dfa07d8-fddc-45a9-9c30-9bf96819369a",
+          "identifier": "SID-22",
+          "url": "https://linear.app/sidagana/issue/SID-22/demo-c048-delayed-gmail-attachment-jobs-cannot-read-uploaded-files"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503671.348599"
+        }
+      },
+      "agent_log_url": "/api/tickets/06b2bf4e-cef7-4a6a-a9fa-c87852982534/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct expired temporary file-reference diagnosis; credentials are valid and the failed lookup occurs before the provider call. The fresh-reference remedy and verifying send status before retry are appropriate. The queue may contribute to expiry, but the report correctly says the missing per-request timing prevents proving that deeper cause. Extra scheduled-message/DB-capacity actions are weakly supported and should be trimmed.",
+        "ticket_id": "06b2bf4e-cef7-4a6a-a9fa-c87852982534",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-gmail",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "temporary_file_reference_expired"
+      }
+    },
+    {
+      "id": "session-policy-049",
+      "status": "needs_review",
+      "ticket_id": "c0da2093-d508-4d9a-831d-bfac9b62635c",
+      "plain_thread_id": "th_01M78AYZX8VKB3C7511C6ZPKJZ",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "session_tool_policy_block",
+        "metrics": {
+          "incident_id": "session-policy-049",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": false,
+          "finding_precision": 0.25,
+          "finding_recall": 0.6666666666666666,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 7,
+          "latency_seconds": 51.690985125955194,
+          "input_tokens": 16785,
+          "output_tokens": 3502,
+          "finding_details": [
+            {
+              "code": "scope_present",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "policy_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "competing_history",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "session_tool_policy_block",
+        "metrics": {
+          "incident_id": "session-policy-049",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.375,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 14,
+          "latency_seconds": 204.42483902501408,
+          "input_tokens": 94436,
+          "output_tokens": 13473,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "scope_present",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "pre_provider_failure",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 119,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 120,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 127,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 128,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 131,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 140,
+          "provider": "linear",
+          "stage": "review-1943",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 141,
+          "provider": "slack",
+          "stage": "review-1943",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 146,
+          "provider": "slack",
+          "stage": "summary-review-1943",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "0a0749d9-8b63-4bc6-ae8d-9558520a6d6b",
+          "identifier": "SID-23",
+          "url": "https://linear.app/sidagana/issue/SID-23/demo-c049-an-active-connection-cannot-run-a-write-action"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503765.650179"
+        }
+      },
+      "agent_log_url": "/api/tickets/c0da2093-d508-4d9a-831d-bfac9b62635c/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct session-policy denial despite provider scope availability. The provider is not called and the authorized narrow-tool exception control succeeds. It preserves least privilege and distinguishes discovery, policy state and provider grants; the exact policy change origin remains unverified. No global widening or permission bypass is recommended.",
+        "ticket_id": "c0da2093-d508-4d9a-831d-bfac9b62635c",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/platform-session-tool-policies",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "session_tool_policy_block"
+      }
+    },
+    {
+      "id": "log-gap-050",
+      "status": "needs_review",
+      "ticket_id": "13ba47f6-f0f9-4a8c-b540-607e46eb61b0",
+      "plain_thread_id": "th_01M78AZ0GSW1WC8MMAW7T889DN",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "unconfirmed_change",
+        "metrics": {
+          "incident_id": "log-gap-050",
+          "approach": "single_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.16666666666666666,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.6666666666666666,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 69.94366964802612,
+          "input_tokens": 23891,
+          "output_tokens": 4005,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "unconfirmed_change",
+        "metrics": {
+          "incident_id": "log-gap-050",
+          "approach": "multi_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.16666666666666666,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.5,
+          "acceptable_action_present": true,
+          "tool_calls": 14,
+          "latency_seconds": 191.59006850398146,
+          "input_tokens": 101623,
+          "output_tokens": 11544,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 124,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 125,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 147,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 148,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 151,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "60f19132-64e9-4d26-ab6e-03c8fd9da7ff",
+          "identifier": "SID-24",
+          "url": "https://linear.app/sidagana/issue/SID-24/demo-c050-audit-errors-are-visible-but-request-payloads-are-missing"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503840.123629"
+        }
+      },
+      "agent_log_url": "/api/tickets/13ba47f6-f0f9-4a8c-b540-607e46eb61b0/agent-log",
+      "review": {
+        "verdict": "needs_work",
+        "notes": "Assistant validation: the payload-storage explanation is supported, but the report answers that visibility question rather than establishing the intended execution-500 cause. It explicitly leaves the 500 mechanism unknown, so a probable-cause outcome for the execution incident is not justified against the authored reference. This is a scope mismatch, not a fabricated claim that storage settings caused the 500. Dataset caveat: the complaint/title leaves some ambiguity between these two symptoms; clarify the objective in a future version. The single-agent first attempt also failed structured hypothesis/code alignment, so it is not credited as a valid abstention.",
+        "ticket_id": "13ba47f6-f0f9-4a8c-b540-607e46eb61b0",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/dashboard-log-storage",
+      "expected": {
+        "outcome": "inconclusive",
+        "cause": null
+      }
+    },
+    {
+      "id": "delivery-dedupe-051",
+      "status": "needs_review",
+      "ticket_id": "2777613e-af76-4748-84b2-1a7fdb170eb9",
+      "plain_thread_id": "th_01M78AZ13AMQEXYAEZSSGGWCVV",
+      "single_agent": {
+        "outcome": "inconclusive",
+        "run_status": "failed",
+        "top_cause": null,
+        "metrics": {
+          "incident_id": "delivery-dedupe-051",
+          "approach": "single_agent",
+          "outcome_correct": false,
+          "root_cause_top1": false,
+          "root_cause_top3": false,
+          "grounded_top1": false,
+          "finding_precision": 0.0,
+          "finding_recall": 0.0,
+          "citation_validity": 0.0,
+          "action_precision": 0.0,
+          "acceptable_action_present": false,
+          "tool_calls": 9,
+          "latency_seconds": 90.04579299001489,
+          "input_tokens": 33848,
+          "output_tokens": 5449,
+          "finding_details": [],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "webhook_receiver_not_idempotent",
+        "metrics": {
+          "incident_id": "delivery-dedupe-051",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.2,
+          "acceptable_action_present": true,
+          "tool_calls": 14,
+          "latency_seconds": 163.13629943097476,
+          "input_tokens": 81141,
+          "output_tokens": 10096,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 129,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 130,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 152,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 153,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 154,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "fbcd67ae-52f8-40a6-a294-5137d86da44b",
+          "identifier": "SID-25",
+          "url": "https://linear.app/sidagana/issue/SID-25/demo-c051-one-trigger-event-causes-duplicate-downstream-records"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794503972.059549"
+        }
+      },
+      "agent_log_url": "/api/tickets/2777613e-af76-4748-84b2-1a7fdb170eb9/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct non-idempotent receiver diagnosis. One ingress event, two receipts with the same stable ID, and the deduplication control support processing retries once. Do not blame duplicate provider ingress. Quality caveat: subscription changes and disabling send retries are not established remedies here; retain legitimate at-least-once retries and focus on receiver deduplication.",
+        "ticket_id": "2777613e-af76-4748-84b2-1a7fdb170eb9",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/platform-triggers",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "webhook_receiver_not_idempotent"
+      }
+    },
+    {
+      "id": "slack-schedule-052",
+      "status": "needs_review",
+      "ticket_id": "c5801ab9-6b74-45b6-be3a-0b7614d88b35",
+      "plain_thread_id": "th_01M78AZ1NNGV6WS9B2VQ6F24WT",
+      "single_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "scheduled_attachment_semantics",
+        "metrics": {
+          "incident_id": "slack-schedule-052",
+          "approach": "single_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.5,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.3333333333333333,
+          "acceptable_action_present": true,
+          "tool_calls": 9,
+          "latency_seconds": 57.698729650932364,
+          "input_tokens": 24358,
+          "output_tokens": 3620,
+          "finding_details": [
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "verification_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "multi_agent": {
+        "outcome": "probable_cause",
+        "run_status": "completed",
+        "top_cause": "scheduled_attachment_semantics",
+        "metrics": {
+          "incident_id": "slack-schedule-052",
+          "approach": "multi_agent",
+          "outcome_correct": true,
+          "root_cause_top1": true,
+          "root_cause_top3": true,
+          "grounded_top1": true,
+          "finding_precision": 0.42857142857142855,
+          "finding_recall": 1.0,
+          "citation_validity": 1.0,
+          "action_precision": 0.25,
+          "acceptable_action_present": true,
+          "tool_calls": 16,
+          "latency_seconds": 150.14389746601228,
+          "input_tokens": 94906,
+          "output_tokens": 9488,
+          "finding_details": [
+            {
+              "code": "accepted_before_timeout",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "mechanism_observation",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "controlled_comparison",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "provider_isolation",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "tenant_impact",
+              "expected": true,
+              "grounded": true,
+              "missing_record_ids": []
+            },
+            {
+              "code": "version_control",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            },
+            {
+              "code": "telemetry_gap",
+              "expected": false,
+              "grounded": false,
+              "missing_record_ids": []
+            }
+          ],
+          "limitations": [
+            "Label-based scoring does not verify prose entailment, confidence calibration, or action safety. Trace provenance is trusted; this is not a tamper-proof evaluator."
+          ]
+        }
+      },
+      "deliveries": [
+        {
+          "id": 149,
+          "provider": "linear",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 150,
+          "provider": "slack",
+          "stage": "intake",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 155,
+          "provider": "linear",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 156,
+          "provider": "slack",
+          "stage": "report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        },
+        {
+          "id": 157,
+          "provider": "slack",
+          "stage": "summary-report",
+          "status": "complete",
+          "attempts": 1,
+          "error": null
+        }
+      ],
+      "integrations": {
+        "linear": {
+          "id": "cf4b02f2-f95a-495e-9c6a-bafe286d701d",
+          "identifier": "SID-26",
+          "url": "https://linear.app/sidagana/issue/SID-26/demo-c052-scheduled-slack-messages-arrive-without-their-files"
+        },
+        "slack": {
+          "channel": "C0CHXUF8NRW",
+          "ts": "1794504032.269519"
+        }
+      },
+      "agent_log_url": "/api/tickets/c5801ab9-6b74-45b6-be3a-0b7614d88b35/agent-log",
+      "review": {
+        "verdict": "accepted",
+        "notes": "Assistant validation: correct distinction between Slack legacy message formatting attachments and file upload. Scheduling text succeeds without a file; separate upload plus a body link succeeds in the control. Use an actual supported file link in the scheduled message, not an arbitrary file-object descriptor. No successful production fix is claimed.",
+        "ticket_id": "c5801ab9-6b74-45b6-be3a-0b7614d88b35",
+        "published": true
+      },
+      "source_url": "https://docs.composio.dev/kb/guide/toolkits-slack",
+      "expected": {
+        "outcome": "probable_cause",
+        "cause": "scheduled_attachment_semantics"
+      }
+    }
+  ],
+  "input_matching_note": "Two baseline inputs were already exact and reused; other baselines rerun once with exact saved Plain descriptions using frozen original runtime. Preliminary portal-text baseline results retained."
+}

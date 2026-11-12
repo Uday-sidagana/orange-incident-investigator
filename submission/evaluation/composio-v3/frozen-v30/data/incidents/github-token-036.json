@@ -1,0 +1,142 @@
+{
+  "incident": {
+    "id": "github-token-036",
+    "title": "Our GitHub relay treats healthy connections as unauthenticated",
+    "description": "A new relay cannot find the GitHub access token in connected-account responses. The connection looks active, but relay jobs fail while Composio tool executions work.",
+    "start": "2026-11-12T09:50:00Z",
+    "end": "2026-11-12T10:15:00Z",
+    "services": [
+      "tool-executor"
+    ]
+  },
+  "sources": {
+    "logs": [
+      {
+        "record_id": "github-token-036:logs:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "request_id": "req-36",
+        "toolkit": "github",
+        "status": 200,
+        "connected_account_active": true,
+        "provider_token_field": "REDACTED",
+        "relay_requires_raw_token": true,
+        "tool_execution_status": 200
+      },
+      {
+        "record_id": "github-token-036:logs:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "status": 200,
+        "same_provider_available": true,
+        "unrelated_read_succeeds": true
+      }
+    ],
+    "metrics": [
+      {
+        "record_id": "github-token-036:metrics:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "cedar",
+        "requests": 551,
+        "failures": 0,
+        "business_operations_blocked": 365,
+        "queue_depth": 99,
+        "p95_latency_ms": 1320
+      },
+      {
+        "record_id": "github-token-036:metrics:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "maple",
+        "requests": 483,
+        "failures": 0,
+        "business_operations_blocked": 0,
+        "queue_depth": 0,
+        "p95_latency_ms": 160
+      }
+    ],
+    "deployments": [
+      {
+        "record_id": "github-token-036:deployments:0",
+        "service": "support-dashboard",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "change": "Unrelated inbox display release",
+        "version": "dashboard-v23"
+      }
+    ],
+    "dependencies": [
+      {
+        "record_id": "github-token-036:dependencies:0",
+        "service": "tool-executor",
+        "depends_on": [
+          "auth-service",
+          "provider-api",
+          "session-policy"
+        ],
+        "provider_api_reachable": true
+      }
+    ],
+    "history": [
+      {
+        "record_id": "github-token-036:history:0",
+        "service": "tool-executor",
+        "symptom": "A similar workflow stopped following a release",
+        "cause": "An earlier provider outage",
+        "relation": "historical analogy only, not current proof"
+      }
+    ],
+    "knowledge": [
+      {
+        "record_id": "github-token-036:knowledge:0",
+        "service": "tool-executor",
+        "url": "https://docs.composio.dev/kb/guide/toolkits-github",
+        "kind": "public_reference",
+        "summary": "Connected-account responses redact GitHub provider tokens; authenticated execution remains available."
+      }
+    ],
+    "reproduce": [
+      {
+        "record_id": "github-token-036:reproduce:0",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "original",
+        "same_request_except": "github_configuration",
+        "check_passed": false,
+        "toolkit": "github",
+        "status": 200,
+        "connected_account_active": true,
+        "provider_token_field": "REDACTED",
+        "relay_requires_raw_token": true,
+        "tool_execution_status": 200
+      },
+      {
+        "record_id": "github-token-036:reproduce:1",
+        "service": "tool-executor",
+        "timestamp": "2026-11-12T10:05:00Z",
+        "tenant": "sandbox",
+        "provider_mock": true,
+        "controlled": true,
+        "condition": "corrected",
+        "same_request_except": "github_configuration",
+        "check_passed": true,
+        "toolkit": "github",
+        "status": 200,
+        "connected_account_active": true,
+        "provider_token_field": "REDACTED",
+        "relay_requires_raw_token": false,
+        "tool_execution_status": 200,
+        "execution_path": "authenticated_proxy",
+        "relay_completed": true
+      }
+    ],
+    "connections": [],
+    "refresh_history": []
+  },
+  "failures": {}
+}

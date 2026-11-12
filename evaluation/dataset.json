@@ -1,0 +1,35 @@
+{
+  "version": "3.1",
+  "incident_count": 52,
+  "previous_incident_count": 32,
+  "added_incidents": [
+    "notion-access-033",
+    "notion-event-034",
+    "github-org-035",
+    "github-token-036",
+    "github-setup-037",
+    "sheets-plane-038",
+    "sheets-discovery-039",
+    "sheets-id-040",
+    "airtable-expiry-041",
+    "airtable-batch-042",
+    "slack-user-043",
+    "slack-plan-044",
+    "slack-ingress-045",
+    "slack-redirect-046",
+    "gmail-shape-047",
+    "gmail-file-048",
+    "session-policy-049",
+    "log-gap-050",
+    "delivery-dedupe-051",
+    "slack-schedule-052"
+  ],
+  "note": "Five corrected control payloads; original frozen v3.0 benchmark and expected labels preserved.",
+  "control_corrections": [
+    "sheets-discovery-039",
+    "airtable-expiry-041",
+    "slack-user-043",
+    "slack-redirect-046",
+    "gmail-shape-047"
+  ]
+}
