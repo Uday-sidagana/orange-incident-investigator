@@ -14,7 +14,7 @@ This handoff contains the runnable implementation and the preserved evaluation e
 | Same-tools model comparison | [Results](../docs/comparison-results.md), [methodology](../docs/evaluation.md), [preserved artifacts](evaluation/) | 20 matched pairs; separate five corrected-data pairs |
 | Technical note, at most 500 words | [Technical note](technical-note.md) | 407 whitespace-separated words |
 | Coding-assistant transcript | [Authentic visible dialogue](transcript/conversation.md), [machine-readable dialogue](transcript/conversation.jsonl), [tool audit](transcript/tool-audit.jsonl), [export manifest](transcript/manifest.json) | Exported with explicit exclusions/redactions; final snapshot boundary recorded |
-| Demo video requested by email | [Recorded demo](https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow); [walkthrough notes](demo-script.md) | Video link supplied |
+| Demo video requested by email | [Recorded demo](https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow) | Video link supplied |
 | AI contribution disclosure | [Collaboration summary](collaboration-summary.md) | Edited retrospective summary, explicitly not a replacement transcript |
 
 The transcript preserves casual wording, mistakes and corrections rather than inventing more polished exchanges. Original visible messages are distinct from recorded tool activity. Private reasoning, system/developer instructions, environment-only messages, image binaries and credentials are excluded as described in its manifest. The original source transcript is left untouched locally; the readable export retains message order.
@@ -40,11 +40,3 @@ The artifact manifest enumerates checksums. The verifier reproduces all fifty sc
 Funded OpenAI access is required for real GPT investigation. Plain/Linear/Slack require reviewer-owned credentials and destinations, and must be explicitly enabled. The default offline mode performs no model requests or external writes. No credentials, live SQLite database, local auth files or `.env` are shipped.
 
 No general Plain inbox/webhook ingestion, live provider telemetry, shared searchable Composio KB, enrichment, Notion integration, automatic repairs/deployments, customer response sending, model-weight training, authenticated public hosting or tenant isolation is implemented. Custom complaints can be investigated without fixtures but may remain inconclusive. KB is fallback guidance and cannot establish an incident cause by itself.
-
-## Remaining candidate handoff actions
-
-- Confirm the demo link opens for reviewers; it has been added to the README and email draft.
-- If submitting the private GitHub repository, grant access to the specified reviewer account(s); their identities have not been supplied. The ZIP is an alternative if their process accepts an attachment.
-- Send the submission email before the deadline in the hiring email. The supplied email says **13 November, 11:30 AM**, without a timezone.
-
-[Submission email draft](submission-email.md) is prepared locally and has not been sent.

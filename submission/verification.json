@@ -52,11 +52,6 @@
       "attempts": 1
     }
   ],
-  "pending_candidate_actions": [
-    "Confirm reviewer access to demo video",
-    "Grant private GitHub access to reviewer identities when supplied, or attach ZIP",
-    "Send the drafted submission email with the ZIP attachment or download link"
-  ],
   "demo_video": {
     "url": "https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow",
     "status": "Link supplied by candidate; playback and reviewer permissions not independently verified."

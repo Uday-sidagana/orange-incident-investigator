@@ -119,6 +119,6 @@ No live Composio telemetry or shared searchable Composio KB is connected. Public
 
 The system implements six distinct roles, typed shared investigation state, parallel independent tasks, role-specific tools, critic-requested follow-ups, bounded retries, execution limits and persisted agent activity. Recommended actions and customer responses require review.
 
-No enrichment provider, Notion connection, automatic repair/deployment, automatic model training, public hosting or general Plain inbox ingestion is implemented. Setup uses reviewer-owned credentials; secrets and the author's live inbox are not shipped. See the [architecture](docs/architecture.md) for reliability details and [demo walkthrough](submission/demo-script.md) for example inputs and narration.
+No enrichment provider, Notion connection, automatic repair/deployment, automatic model training, public hosting or general Plain inbox ingestion is implemented. Setup uses reviewer-owned credentials; secrets and the author's live inbox are not shipped. See the [architecture](docs/architecture.md) for reliability details and the demo video above for the workflow.
 
 Older milestone documents are retained as development history. This README, the architecture, evaluation methodology and submission index describe the current handoff.
