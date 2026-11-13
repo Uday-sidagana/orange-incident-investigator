@@ -1,5 +1,7 @@
 # Submission index
 
+**[Watch the demo video →](https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow)**
+
 Project: **Orange Incident Investigator** — Uday Sidagana.
 
 This handoff contains the runnable implementation and the preserved evaluation evidence. Public Composio guidance inspired the fictional environment; no real Composio telemetry or private customer-ticket corpus is included.
@@ -12,14 +14,14 @@ This handoff contains the runnable implementation and the preserved evaluation e
 | Same-tools model comparison | [Results](../docs/comparison-results.md), [methodology](../docs/evaluation.md), [preserved artifacts](evaluation/) | 20 matched pairs; separate five corrected-data pairs |
 | Technical note, at most 500 words | [Technical note](technical-note.md) | 407 whitespace-separated words |
 | Coding-assistant transcript | [Authentic visible dialogue](transcript/conversation.md), [machine-readable dialogue](transcript/conversation.jsonl), [tool audit](transcript/tool-audit.jsonl), [export manifest](transcript/manifest.json) | Exported with explicit exclusions/redactions; final snapshot boundary recorded |
-| Demo video requested by email | [Exact scenarios and narration](demo-script.md) | Script prepared; candidate still needs to record and share the video |
+| Demo video requested by email | [Recorded demo](https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow); [walkthrough notes](demo-script.md) | Video link supplied |
 | AI contribution disclosure | [Collaboration summary](collaboration-summary.md) | Edited retrospective summary, explicitly not a replacement transcript |
 
 The transcript preserves casual wording, mistakes and corrections rather than inventing more polished exchanges. Original visible messages are distinct from recorded tool activity. Private reasoning, system/developer instructions, environment-only messages, image binaries and credentials are excluded as described in its manifest. The original source transcript is left untouched locally; the readable export retains message order.
 
 ## Reviewer path
 
-1. Read the root README and technical note.
+1. Watch the [demo](https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow), then read the root README and technical note.
 2. Run the offline setup, tests and `python scripts/verify_submission.py`.
 3. Open the local portal and Evaluation tab. Packaged comparison results work without a pre-existing `runs/` directory. The historical ticket IDs in evaluation refer to the author's local demo inbox; use the packaged ticket/report JSON and work logs on a fresh installation.
 4. Review the current architecture and the frozen-comparison limitations. Running new agents produces new samples with the current runtime and requires provider access.
@@ -41,8 +43,7 @@ No general Plain inbox/webhook ingestion, live provider telemetry, shared search
 
 ## Remaining candidate handoff actions
 
-- Record the demo using `demo-script.md`; upload it with reviewer-accessible permissions.
-- Add the final video link to the submission email.
+- Confirm the demo link opens for reviewers; it has been added to the README and email draft.
 - If submitting the private GitHub repository, grant access to the specified reviewer account(s); their identities have not been supplied. The ZIP is an alternative if their process accepts an attachment.
 - Send the submission email before the deadline in the hiring email. The supplied email says **13 November, 11:30 AM**, without a timezone.
 

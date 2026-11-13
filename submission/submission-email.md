@@ -5,7 +5,7 @@ Hi Team Orange,
 Please find my production incident investigation assignment below:
 
 - Repository: https://github.com/Uday-sidagana/orange-incident-investigator
-- Demo video: [ADD FINAL REVIEWER-ACCESSIBLE VIDEO LINK]
+- Demo video: https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow
 - Submission bundle: [ATTACH orange-incident-investigator-submission.zip OR ADD ITS DOWNLOAD LINK]
 
 The repository includes setup instructions, an architecture diagram, 52 synthetic incidents and automated tests, a measured same-tools single-agent comparison, the technical note, and the coding-assistant transcript. The submission index is `submission/README.md`.

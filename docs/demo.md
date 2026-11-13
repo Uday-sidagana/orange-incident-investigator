@@ -1,5 +1,7 @@
 # Local demonstration
 
+**[Watch the recorded demo](https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow)**
+
 The final walkthrough, exact form inputs, expected evidence and spoken narration are in [submission/demo-script.md](../submission/demo-script.md). See the [README](../README.md) for current setup and runtime instructions.
 
 The customer portal supports both prepared synthetic environments and custom issues. Custom issues require GPT mode and never inherit another scenario's observations. Plain live intake preserves the original complaint separately from generated summaries; only the correlated portal-created thread is read. Operations shows the full task/evidence/decision history and review controls. Customer replies remain drafts.

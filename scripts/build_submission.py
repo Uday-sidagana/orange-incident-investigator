@@ -20,6 +20,6 @@ def build():
     archive=destination/'orange-incident-investigator-submission.zip'
     with zipfile.ZipFile(archive,'w',compression=zipfile.ZIP_DEFLATED) as output:
         for path in paths:output.write(path,Path('orange-incident-investigator')/path.relative_to(ROOT))
-    report={'archive':str(archive.relative_to(ROOT)),'files':len(paths),'bytes':archive.stat().st_size,'sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'credential_scan':'passed for configured credential values and common API credential patterns','excludes':['.env','local authentication','SQLite inbox','runs/','virtual environments','private reasoning'],'note':'Visible dialogue and tool audit are redacted authentic records, not a rewritten transcript. Video recording and reviewer access remain candidate actions.'}
+    report={'archive':str(archive.relative_to(ROOT)),'files':len(paths),'bytes':archive.stat().st_size,'sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'credential_scan':'passed for configured credential values and common API credential patterns','excludes':['.env','local authentication','SQLite inbox','runs/','virtual environments','private reasoning'],'note':'Visible dialogue and tool audit are redacted authentic records, not a rewritten transcript. Demo link is included. Reviewer access and sending the submission remain candidate actions.'}
     (destination/'manifest.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2));return archive
 if __name__=='__main__':build()
