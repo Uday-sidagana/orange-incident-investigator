@@ -30,8 +30,8 @@ class OutboundIntegrations:
         for provider in self.clients:
             self.store.enqueue_delivery(ticket['id'],provider,stage)
 
-    async def process_one(self):
-        job=self.store.claim_delivery(self.clients.keys())
+    async def process_one(self,ticket_id=None):
+        job=self.store.claim_delivery(self.clients.keys(),ticket_id=ticket_id)
         if job is None:
             return False
         provider,stage=job['provider'],job['stage']

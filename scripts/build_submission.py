@@ -3,10 +3,11 @@ import hashlib,json,re,zipfile
 from pathlib import Path
 from dotenv import dotenv_values
 ROOT=Path(__file__).resolve().parents[1]
-TOP_FILES=['README.md','pyproject.toml','requirements-lock.txt','.env.example','.gitignore']
+TOP_FILES=['README.md','pyproject.toml','requirements-lock.txt','.env.example','.gitignore','app.py','vercel.json','.python-version']
 TOP_DIRS=['src','web','tests','scripts','data','evaluation','docs','config','submission']
 
-def build():
+def build(filename="orange-incident-investigator-submission.zip"):
+    if Path(filename).name!=filename or not filename.endswith(".zip"):raise ValueError("Use a ZIP filename without a directory")
     paths=[ROOT/name for name in TOP_FILES]
     for directory in TOP_DIRS:
         paths += [p for p in (ROOT/directory).rglob('*') if p.is_file() and '__pycache__' not in p.parts and not any(part.endswith('.egg-info') for part in p.parts) and p.suffix not in ('.pyc','.sqlite','.db')]
@@ -17,9 +18,11 @@ def build():
         for secret in secrets:assert secret.encode() not in data,f'Configured credential found in {path.relative_to(ROOT)}'
         assert not re.search(rb'\b(?:sk-[A-Za-z0-9_-]{24,}|xox[baprs]-[A-Za-z0-9-]{16,}|gh[pousr]_[A-Za-z0-9]{25,})',data),f'Possible API credential in {path.relative_to(ROOT)}'
     destination=ROOT/'runs/submission-release';destination.mkdir(parents=True,exist_ok=True)
-    archive=destination/'orange-incident-investigator-submission.zip'
+    archive=destination/filename
     with zipfile.ZipFile(archive,'w',compression=zipfile.ZIP_DEFLATED) as output:
         for path in paths:output.write(path,Path('orange-incident-investigator')/path.relative_to(ROOT))
     report={'archive':str(archive.relative_to(ROOT)),'files':len(paths),'bytes':archive.stat().st_size,'sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'credential_scan':'passed for configured credential values and common API credential patterns','excludes':['.env','local authentication','SQLite inbox','runs/','virtual environments','private reasoning'],'note':'Visible dialogue and tool audit are redacted authentic records, not a rewritten transcript. Demo link is included. Reviewer access and sending the submission remain candidate actions.'}
-    (destination/'manifest.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2));return archive
-if __name__=='__main__':build()
+    (destination/(archive.stem+'-manifest.json')).write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2));return archive
+if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser();parser.add_argument('--name',default='orange-incident-investigator-submission.zip');args=parser.parse_args();build(args.name)

@@ -12,7 +12,7 @@ A six-agent production incident investigator built for the Orange Invest assignm
 | Architecture diagram and agent coordination | [Architecture](docs/architecture.md) |
 | Synthetic incident dataset and automated tests | [52 incidents](data/incidents/), [evaluation labels/splits](evaluation/), and [tests](tests/) |
 | Multi-agent versus single-agent evaluation using the same tools | [Results](docs/comparison-results.md), [methodology](docs/evaluation.md), and [preserved reports, traces and manifests](submission/evaluation/) |
-| Technical note: decisions, tradeoffs, limitations and improvements | [407-word technical note](submission/technical-note.md) |
+| Technical note: decisions, tradeoffs, limitations and improvements | [428-word technical note](submission/technical-note.md) |
 | Coding-assistant transcript | [Authentic conversation](submission/transcript/conversation.md), [tool audit](submission/transcript/tool-audit.jsonl), and [export manifest](submission/transcript/manifest.json) |
 | Demo video | [Watch the recorded workflow](https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow) |
 
@@ -45,10 +45,12 @@ This offline check validates packaged checksums and reproduces recorded scores. 
 
 ## Run on your system
 
+For hosted access, see [Vercel deployment setup](docs/vercel-deployment.md). It uses Postgres, private queued jobs and a shared reviewer login. Cloud end-to-end verification is a separate deployment step.
+
 ### 1. Clone the repository
 
 ```sh
-git clone https://github.com/Uday-sidagana/orange-incident-investigator.git
+git clone --branch vercel-deployment https://github.com/Uday-sidagana/orange-incident-investigator.git
 cd orange-incident-investigator
 ```
 
@@ -56,10 +58,10 @@ The repository is private; reviewer access is required to clone it. Alternativel
 
 ### 2. Install and run without credentials
 
-Python 3.11+ is required. Run from the repository root; fixture and web assets are loaded relative to it.
+Use Python 3.12 for the full local/hosted setup (the core local runtime also supports 3.11). Run from the repository root; fixture and web assets are loaded relative to it.
 
 ```sh
-python3.11 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements-lock.txt
 pip install -e . --no-deps
@@ -107,7 +109,7 @@ orange integrations-check
 
 The live path creates a Plain thread, reads it back and checks its correlation ID, then queues investigation. It preserves the original portal complaint separately from Plain's generated summary. It does **not** ingest arbitrary existing Plain threads or use a webhook. Slack/Linear deliveries have persisted status, explicit retry and idempotent reconciliation. Customer responses remain drafts; no customer message or code fix is executed.
 
-The local portal has no authentication or tenant isolation and binds to loopback. Keep it local. Workspaces and credentials are not shared in this repository.
+The local portal has no authentication or tenant isolation and binds to loopback. The separate Vercel entrypoint requires a reviewer password and Postgres. Workspaces and credentials are not shared in this repository.
 
 ## Custom issues and knowledge boundaries
 
@@ -119,6 +121,6 @@ No live Composio telemetry or shared searchable Composio KB is connected. Public
 
 The system implements six distinct roles, typed shared investigation state, parallel independent tasks, role-specific tools, critic-requested follow-ups, bounded retries, execution limits and persisted agent activity. Recommended actions and customer responses require review.
 
-No enrichment provider, Notion connection, automatic repair/deployment, automatic model training, public hosting or general Plain inbox ingestion is implemented. Setup uses reviewer-owned credentials; secrets and the author's live inbox are not shipped. See the [architecture](docs/architecture.md) for reliability details and the demo video above for the workflow.
+No enrichment provider, Notion connection, automatic repair/deployment, automatic model training, tenant-isolated production hosting or general Plain inbox ingestion is implemented. Setup uses reviewer-owned credentials; secrets and the author's live inbox are not shipped. See the [architecture](docs/architecture.md) for reliability details and the demo video above for the workflow.
 
 Older milestone documents are retained as development history. This README, the architecture, evaluation methodology and submission index describe the current handoff.

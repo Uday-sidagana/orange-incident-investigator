@@ -12,7 +12,7 @@ This handoff contains the runnable implementation and the preserved evaluation e
 | Architecture diagram and coordination | [Architecture](../docs/architecture.md) | Prepared |
 | Synthetic dataset and tests | `data/incidents/`, `evaluation/`, `tests/` | 52 cases; automated verification included |
 | Same-tools model comparison | [Results](../docs/comparison-results.md), [methodology](../docs/evaluation.md), [preserved artifacts](evaluation/) | 20 matched pairs; separate five corrected-data pairs |
-| Technical note, at most 500 words | [Technical note](technical-note.md) | 407 whitespace-separated words |
+| Technical note, at most 500 words | [Technical note](technical-note.md) | 428 whitespace-separated words |
 | Coding-assistant transcript | [Authentic visible dialogue](transcript/conversation.md), [machine-readable dialogue](transcript/conversation.jsonl), [tool audit](transcript/tool-audit.jsonl), [export manifest](transcript/manifest.json) | Exported with explicit exclusions/redactions; final snapshot boundary recorded |
 | Demo video requested by email | [Recorded demo](https://app.trupeer.ai/view/R88YzaDh1/orange-incident-investigation-workflow) | Video link supplied |
 | AI contribution disclosure | [Collaboration summary](collaboration-summary.md) | Edited retrospective summary, explicitly not a replacement transcript |
@@ -39,4 +39,8 @@ The artifact manifest enumerates checksums. The verifier reproduces all fifty sc
 
 Funded OpenAI access is required for real GPT investigation. Plain/Linear/Slack require reviewer-owned credentials and destinations, and must be explicitly enabled. The default offline mode performs no model requests or external writes. No credentials, live SQLite database, local auth files or `.env` are shipped.
 
-No general Plain inbox/webhook ingestion, live provider telemetry, shared searchable Composio KB, enrichment, Notion integration, automatic repairs/deployments, customer response sending, model-weight training, authenticated public hosting or tenant isolation is implemented. Custom complaints can be investigated without fixtures but may remain inconclusive. KB is fallback guidance and cannot establish an incident cause by itself.
+No general Plain inbox/webhook ingestion, live provider telemetry, shared searchable Composio KB, enrichment, Notion integration, automatic repairs/deployments, customer response sending, model-weight training, multi-user production authentication or tenant isolation is implemented. Custom complaints can be investigated without fixtures but may remain inconclusive. KB is fallback guidance and cannot establish an incident cause by itself.
+
+## Optional hosted review
+
+[Vercel setup](../docs/vercel-deployment.md) documents the separate password-protected entrypoint, Postgres persistence and native queue consumers. This adapter is locally testable; cloud queue/OIDC routing and service credentials must be verified on the deployed URL. It has a shorter deadline than the frozen benchmark and does not migrate the author's SQLite inbox.

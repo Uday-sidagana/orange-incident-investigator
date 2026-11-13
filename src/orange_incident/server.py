@@ -96,9 +96,10 @@ async def codex_investigator(ticket, root, output):
         await provider.close()
 
 
-def create_app(root: Path | None = None, *, db_path: Path | None = None, run_worker=True, investigator=None, plain_client=None, plain_mode=None, runtime=None, outbound_clients=None, worker_count=None):
+def create_app(root: Path | None = None, *, db_path: Path | None = None, run_worker=True, investigator=None, plain_client=None, plain_mode=None, runtime=None, outbound_clients=None, worker_count=None, store=None, dispatch=None, hosted=False, output_root=None):
     root=(root or Path.cwd()).resolve()
-    store=TicketStore(db_path or root/'runs/server/inbox.sqlite')
+    store=store or TicketStore(db_path or root/'runs/server/inbox.sqlite')
+    output_root=Path(output_root or root/'runs/server')
     cases={p.stem:json.loads(p.read_text())['incident'] for p in (root/'data/incidents').glob('*.json')}
     config=dotenv_values(root/'.env') if (root/'.env').exists() else {}
     plain_mode='live' if plain_client is not None else (plain_mode or os.environ.get('PLAIN_MODE') or config.get('PLAIN_MODE') or 'simulated')
@@ -130,7 +131,11 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
         def activity(event):
             with store.connect() as db:
                 store.event(db,ticket['id'],event['event'],{k:v for k,v in event.items() if k!='event'})
-        result,state=await run_live_agents(simulation,output,root=root,event_sink=activity)
+        options={}
+        if hosted:
+            from .engine import Limits
+            options['limits']=Limits(timeout_seconds=240)
+        result,state=await run_live_agents(simulation,output,root=root,event_sink=activity,**options)
         payload=result.model_dump()
         payload['workflow']={'mode':state.mode,'tasks':[task.model_dump() for task in state.tasks],
                              'objections':state.objections,'followup_rounds':state.followup_rounds,'status':state.status}
@@ -143,31 +148,35 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
     if not 1<=worker_count<=3:raise ValueError('INVESTIGATION_WORKERS must be between 1 and 3')
     active=asyncio.Lock()
 
-    async def process_next():
+    async def process_next(ticket_id=None):
         async with active:
-            waiting=store.pending_plain() if plain_mode == 'live' else None
+            waiting=store.pending_plain(ticket_id) if plain_mode == 'live' else None
             if waiting:
                 try:
                     thread=await plain_client.read_thread(waiting['plain']['thread_id'])
                     store.plain_confirmed(waiting['id'],thread)
                 except Exception:
                     store.plain_failed(waiting['id'])
-            ticket=store.claim()
+            ticket=store.claim(ticket_id,lease_seconds=280 if hosted else None)
         if ticket is None:
             return False
         notifications.enqueue(ticket,'intake')
         try:
-            result=await selected(ticket,root,root/'runs/server'/ticket['id'])
+            if hosted and dispatch:
+                try:await dispatch(ticket['id'],'deliver')
+                except Exception:
+                    with store.connect() as db:store.event(db,ticket['id'],'dispatch_deferred',{'kind':'deliver','reason':'Intake update remains saved for delivery after investigation.'})
+            result=await selected(ticket,root,output_root/ticket['id'])
             if result.get('run_status') != 'completed':
-                store.finish(ticket['id'],result=result,error='Investigation did not complete. Review the trace before retrying.')
+                if not store.finish(ticket['id'],result=result,error='Investigation did not complete. Review the trace before retrying.',work_token=ticket.get('_work_token')):return False
             else:
-                store.finish(ticket['id'],result=result)
+                if not store.finish(ticket['id'],result=result,work_token=ticket.get('_work_token')):return False
         except asyncio.CancelledError:
-            store.finish(ticket['id'],error='Worker stopped before completion; retry explicitly')
+            store.finish(ticket['id'],error='Worker stopped before completion; retry explicitly',work_token=ticket.get('_work_token'))
             raise
         except Exception:
             # Provider diagnostics and credentials never enter public ticket errors.
-            store.finish(ticket['id'],error='Investigation failed. Check local runtime configuration and retry.')
+            if not store.finish(ticket['id'],error='Investigation failed. Check runtime configuration and retry.',work_token=ticket.get('_work_token')):return False
         finished=store.get(ticket['id'])
         stage='report' if finished['status']=='needs_review' else 'failure'
         attempt=sum(e['type']=='investigation_started' for e in finished['events'])
@@ -187,8 +196,9 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
 
     @asynccontextmanager
     async def lifespan(app):
-        store.mark_interrupted()
-        store.mark_deliveries_interrupted()
+        if not hosted:
+            store.mark_interrupted()
+            store.mark_deliveries_interrupted()
         tasks=([asyncio.create_task(worker()) for _ in range(worker_count)]+[asyncio.create_task(delivery_worker())]) if run_worker else []
         try:
             yield
@@ -205,11 +215,22 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
     app.state.store=store
     app.state.process_next=process_next
     app.state.process_delivery=notifications.process_one
+    app.state.notifications=notifications
+    async def close_resources():
+        if plain_client is not None:await plain_client.close()
+        await notifications.close()
+    app.state.close_resources=close_resources
+
+    async def publish(ticket_id,kind='investigate'):
+        if dispatch is None:return
+        try:await dispatch(ticket_id,kind)
+        except Exception:
+            raise HTTPException(503,'Work is saved but queue dispatch was not confirmed. Retry this request with the same key or use Resume queued work.') from None
 
     @app.get('/api/health')
     def health():
         return {'status':'ok','plain_mode':plain_mode,'runtime':runtime,'architecture':{'simulation':'simulated_six_role_workflow','openai':'live_six_role_workflow','codex':'single_agent_baseline'}[runtime],
-                'worker_enabled':run_worker,'worker_count':worker_count,'customer_replies_sent':False,'integrations':notifications.status}
+                'worker_enabled':run_worker,'job_mode':'durable_queue' if dispatch else 'local_worker','worker_count':worker_count,'customer_replies_sent':False,'integrations':notifications.status}
 
     @app.get('/api/scenarios')
     def scenarios():
@@ -234,6 +255,7 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
                 store.plain_created(ticket_id,**delivery)
             except Exception:
                 store.plain_failed(ticket_id)
+        if store.get(ticket_id)['status'] in ('queued','awaiting_plain_read'):await publish(ticket_id)
         return {'ticket':store.get(ticket_id),'created':created}
 
     @app.get('/api/tickets')
@@ -296,24 +318,26 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
         return {'case_id':case_id,'events':[json.loads(line) for line in path.read_text().splitlines()]}
 
     @app.post('/api/tickets/{ticket_id}/retry',status_code=202)
-    def retry(ticket_id:UUID):
+    async def retry(ticket_id:UUID):
         try:
             store.retry(str(ticket_id))
         except KeyError:
             raise HTTPException(404,'Ticket not found') from None
         except Conflict as exc:
             raise HTTPException(409,str(exc)) from None
+        await publish(str(ticket_id))
         return store.get(str(ticket_id))
 
     @app.post('/api/tickets/{ticket_id}/reinvestigate',status_code=202)
-    def reinvestigate(ticket_id:UUID,request:Reinvestigation,idempotency_key:Annotated[str,Header(min_length=1,max_length=100)]):
+    async def reinvestigate(ticket_id:UUID,request:Reinvestigation,idempotency_key:Annotated[str,Header(min_length=1,max_length=100)]):
         try:created=store.reinvestigate(str(ticket_id),idempotency_key,request.reason)
         except KeyError:raise HTTPException(404,'Ticket not found') from None
         except Conflict as exc:raise HTTPException(409,str(exc)) from None
+        await publish(str(ticket_id))
         return {'created':created,'ticket':store.get(str(ticket_id))}
 
     @app.post('/api/tickets/{ticket_id}/reviews')
-    def review(ticket_id:UUID,feedback:Review):
+    async def review(ticket_id:UUID,feedback:Review):
         try:
             store.review(str(ticket_id),feedback.verdict,feedback.notes,reviewer=feedback.reviewer)
         except KeyError:
@@ -323,6 +347,7 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
         ticket=store.get(str(ticket_id))
         sequence=ticket['events'][-1]['sequence']
         notifications.enqueue(ticket,f'review-{sequence}')
+        await publish(str(ticket_id),'deliver')
         return store.get(str(ticket_id))
 
     @app.get('/api/integrations')
@@ -330,7 +355,7 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
         return notifications.status
 
     @app.post('/api/tickets/{ticket_id}/sync',status_code=202)
-    def sync_ticket(ticket_id:UUID):
+    async def sync_ticket(ticket_id:UUID):
         ticket=store.get(str(ticket_id))
         if ticket is None:
             raise HTTPException(404,'Ticket not found')
@@ -341,16 +366,31 @@ def create_app(root: Path | None = None, *, db_path: Path | None = None, run_wor
         notifications.enqueue(ticket,'intake')
         if ticket.get('result'):
             notifications.enqueue(ticket,'report' if ticket['status']!='failed' else 'failure')
+        await publish(str(ticket_id),'deliver')
         return store.get(str(ticket_id))
 
     @app.post('/api/integrations/deliveries/{job_id}/retry',status_code=202)
-    def retry_delivery(job_id:int):
+    async def retry_delivery(job_id:int):
         try:
             store.retry_delivery(job_id)
         except KeyError:
             raise HTTPException(404,'Delivery not found') from None
         except Conflict as exc:
             raise HTTPException(409,str(exc)) from None
+        with store.connect() as db:job=db.execute('SELECT ticket_id FROM delivery_jobs WHERE id=?',(job_id,)).fetchone()
+        await publish(job['ticket_id'],'deliver')
+        return {'queued':True}
+
+    @app.post('/api/tickets/{ticket_id}/dispatch',status_code=202)
+    async def dispatch_ticket(ticket_id:UUID):
+        if hosted:store.expire_hosted_plain(str(ticket_id))
+        ticket=store.get(str(ticket_id))
+        if ticket is None:raise HTTPException(404,'Ticket not found')
+        if dispatch is None:raise HTTPException(409,'Local worker handles queued work automatically')
+        if ticket['status'] in ('sending_to_plain','plain_attention_required'):
+            raise HTTPException(409,'Plain intake is unresolved. Inspect Plain before submitting another thread.')
+        kind='investigate' if ticket['status'] in ('queued','awaiting_plain_read','investigating') else 'deliver'
+        await publish(str(ticket_id),kind)
         return {'queued':True}
 
     static=root/'web' 

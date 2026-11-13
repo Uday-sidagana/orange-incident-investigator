@@ -7,7 +7,7 @@ name = "orange-incident-investigator"
 version = "0.1.0"
 description = "Evidence-driven investigation in a simulated integration platform"
 requires-python = ">=3.11"
-dependencies = ["pydantic>=2,<3", "openai>=2,<3", "python-dotenv>=1,<2", "fastapi>=0.115,<1", "uvicorn>=0.30,<1"]
+dependencies = ["pydantic>=2,<3", "openai>=2,<3", "python-dotenv>=1,<2", "fastapi>=0.115,<1", "uvicorn>=0.30,<1", "psycopg[binary]>=3.2,<4", "vercel-queue==0.10.1; python_version >= '3.12'"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<9"]
@@ -20,3 +20,16 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.vercel]
+entrypoint = "app:app"
+
+[[tool.vercel.subscribers]]
+entrypoint = "orange_incident.investigation_jobs"
+
+[[tool.vercel.subscribers]]
+entrypoint = "orange_incident.delivery_jobs"
+
+[tool.vercel.fastapi.static]
+cdn = false

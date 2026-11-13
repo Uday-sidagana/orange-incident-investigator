@@ -1,0 +1,36 @@
+{
+  "mode": "Local hosted-path smoke: real Postgres, mocked native queue transport, simulated investigation, external writes disabled. Not a live Vercel test.",
+  "unauthorized_requests_rejected": true,
+  "authenticated_portal_served": true,
+  "scenarios": 52,
+  "cross_instance_report_persistence": true,
+  "outcome": "probable_cause",
+  "top_cause": "recipient_mapping_regression",
+  "all_tasks_completed": true,
+  "agent_log_tasks": 9,
+  "queue_topics_published": [
+    "orange-deliveries",
+    "orange-investigations"
+  ],
+  "packaged_comparison_pairs": 20,
+  "branch": "vercel-deployment",
+  "python": "3.12",
+  "postgres": "16 (local disposable test database)",
+  "queue_sdk": "vercel-queue 0.10.1",
+  "full_suite_before_final_intake_guard": {
+    "passed": 263,
+    "postgres_tests": "real database, not mocks"
+  },
+  "final_hosted_targeted_tests": {
+    "passed": 18,
+    "postgres_tests": "real database, not mocks"
+  },
+  "native_sdk_subscribers_verified": 2,
+  "cloud_deployment_status": "Pending Vercel project/database configuration and real hosted URL verification. No cloud deployment success is claimed.",
+  "access": "Application routes require a reviewer password. /healthz exposes only setup status.",
+  "final_full_suite": {
+    "passed": 265,
+    "python": "3.12",
+    "postgres_tests": "Real local Postgres 16; POSTGRES_TEST_URL enabled; no test skips."
+  }
+}

@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import sqlite3
 from uuid import uuid4
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 
 def now():
@@ -59,6 +59,8 @@ class TicketStore:
                 db.execute('ALTER TABLE tickets ADD COLUMN original_payload TEXT')
             if 'plain_summary' not in columns:
                 db.execute('ALTER TABLE tickets ADD COLUMN plain_summary TEXT')
+            for name in ('work_token','work_deadline'):
+                if name not in columns:db.execute(f'ALTER TABLE tickets ADD COLUMN {name} TEXT')
 
     @contextmanager
     def connect(self):
@@ -124,25 +126,60 @@ class TicketStore:
             ids=[r['id'] for r in db.execute('SELECT id FROM tickets ORDER BY created_at DESC LIMIT 100')]
         return [self.get(ticket_id) for ticket_id in ids]
 
-    def claim(self):
+    def claim(self, ticket_id=None, lease_seconds=None):
+        token=str(uuid4()) if lease_seconds else None
+        deadline=(datetime.now(timezone.utc)+timedelta(seconds=lease_seconds)).isoformat() if lease_seconds else None
         with self.connect() as db:
             db.execute('BEGIN IMMEDIATE')
-            row=db.execute("SELECT id FROM tickets WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
-            if not row:
-                return None
+            row=db.execute("SELECT id FROM tickets WHERE status='queued'"+(' AND id=?' if ticket_id else '')+' ORDER BY created_at LIMIT 1', (ticket_id,) if ticket_id else ()).fetchone()
+            if not row:return None
             ticket_id=row['id']
-            db.execute("UPDATE tickets SET status='investigating',updated_at=? WHERE id=?",(now(),ticket_id))
+            db.execute("UPDATE tickets SET status='investigating',work_token=?,work_deadline=?,updated_at=? WHERE id=?",(token,deadline,now(),ticket_id))
             self.event(db,ticket_id,'investigation_started',{})
-        return self.get(ticket_id)
+        ticket=self.get(ticket_id)
+        if token:ticket['_work_token']=token
+        return ticket
 
-    def finish(self,ticket_id,result=None,error=None):
+    def finish(self,ticket_id,result=None,error=None,work_token=None):
         status='failed' if error else 'needs_review'
         with self.connect() as db:
-            db.execute('UPDATE tickets SET status=?,result=?,error=?,updated_at=? WHERE id=?',
-                       (status,json.dumps(result) if result else None,error,now(),ticket_id))
+            sql='UPDATE tickets SET status=?,result=?,error=?,work_token=NULL,work_deadline=NULL,updated_at=? WHERE id=?'
+            parameters=(status,json.dumps(result) if result else None,error,now(),ticket_id)
+            if work_token:sql+=' AND work_token=?';parameters+=(work_token,)
+            if not db.execute(sql,parameters).rowcount:return False
             self.event(db,ticket_id,'investigation_failed' if error else 'report_ready',{'error':error} if error else {'outcome':result['report']['outcome']})
-            if not error:
-                self.event(db,ticket_id,'response_drafted',{'sent':False})
+            if not error:self.event(db,ticket_id,'response_drafted',{'sent':False})
+        return True
+
+    def expire_hosted_work(self,ticket_id):
+        """Never silently restart paid inference after a killed invocation."""
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            row=db.execute('SELECT status,work_deadline FROM tickets WHERE id=?',(ticket_id,)).fetchone()
+            if row and row['status']=='investigating' and row['work_deadline'] and row['work_deadline']<now():
+                db.execute("UPDATE tickets SET status='failed',work_token=NULL,work_deadline=NULL,error=?,updated_at=? WHERE id=?",('Hosted worker stopped before completion; review the work log and retry explicitly.',now(),ticket_id))
+                self.event(db,ticket_id,'investigation_interrupted',{'source':'expired_hosted_lease'})
+                return True
+        return False
+
+    def expire_hosted_plain(self,ticket_id,seconds=120):
+        cutoff=(datetime.now(timezone.utc)-timedelta(seconds=seconds)).isoformat()
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            row=db.execute("SELECT id FROM tickets WHERE id=? AND status='sending_to_plain' AND updated_at<?",(ticket_id,cutoff)).fetchone()
+            if not row:return False
+            db.execute("UPDATE tickets SET status='plain_attention_required',error=?,updated_at=? WHERE id=?",('Plain intake was interrupted. Inspect Plain before creating another thread.',now(),ticket_id))
+            self.event(db,ticket_id,'plain_attention_required',{'blind_retry_allowed':False,'source':'expired_hosted_intake'})
+        return True
+
+    def expire_hosted_deliveries(self,ticket_id,seconds=120):
+        cutoff=(datetime.now(timezone.utc)-timedelta(seconds=seconds)).isoformat()
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            rows=db.execute("SELECT * FROM delivery_jobs WHERE ticket_id=? AND status='sending' AND updated_at<?",(ticket_id,cutoff)).fetchall()
+            for row in rows:
+                db.execute("UPDATE delivery_jobs SET status='attention_required',error=?,updated_at=? WHERE id=?",('Hosted delivery stopped; inspect the destination before retrying.',now(),row['id']))
+                self.event(db,ticket_id,'delivery_attention_required',{'provider':row['provider'],'stage':row['stage']})
 
     def mark_interrupted(self):
         with self.connect() as db:
@@ -209,14 +246,14 @@ class TicketStore:
             self.event(db,ticket_id,'investigation_queued',{'source':'plain_api_read'})
         return True
 
-    def pending_plain(self):
+    def pending_plain(self,ticket_id=None):
         with self.connect() as db:
-            row=db.execute("SELECT id FROM tickets WHERE status='awaiting_plain_read' ORDER BY created_at LIMIT 1").fetchone()
+            row=db.execute("SELECT id FROM tickets WHERE status='awaiting_plain_read'"+(" AND id=?" if ticket_id else "")+" ORDER BY created_at LIMIT 1",(ticket_id,) if ticket_id else ()).fetchone()
         return self.get(row['id']) if row else None
 
     def plain_failed(self,ticket_id):
         with self.connect() as db:
-            db.execute("UPDATE tickets SET status='plain_attention_required',error=?,updated_at=? WHERE id=?",
+            db.execute("UPDATE tickets SET status='plain_attention_required',error=?,updated_at=? WHERE id=? AND status IN ('sending_to_plain','awaiting_plain_read')",
                        ('Plain delivery or read could not be confirmed. Inspect Plain before resubmitting.',now(),ticket_id))
             self.event(db,ticket_id,'plain_attention_required',{'blind_retry_allowed':False})
 
@@ -242,13 +279,13 @@ class TicketStore:
             if created:
                 self.event(db,ticket_id,'delivery_queued',{'provider':provider,'stage':stage})
 
-    def claim_delivery(self,providers):
+    def claim_delivery(self,providers,ticket_id=None):
         if not providers:
             return None
         with self.connect() as db:
             db.execute('BEGIN IMMEDIATE')
             placeholders=','.join('?' for _ in providers)
-            row=db.execute(f"SELECT * FROM delivery_jobs WHERE status='pending' AND provider IN ({placeholders}) ORDER BY id LIMIT 1",tuple(providers)).fetchone()
+            row=db.execute(f"SELECT * FROM delivery_jobs WHERE status='pending' AND provider IN ({placeholders})"+(" AND ticket_id=?" if ticket_id else "")+" ORDER BY id LIMIT 1",tuple(providers)+((ticket_id,) if ticket_id else ())).fetchone()
             if row is None:
                 return None
             db.execute("UPDATE delivery_jobs SET status='sending',attempts=attempts+1,updated_at=? WHERE id=?",(now(),row['id']))
